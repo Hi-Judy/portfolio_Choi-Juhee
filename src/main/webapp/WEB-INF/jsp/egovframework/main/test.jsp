@@ -1,4 +1,4 @@
-<%@ page language="java" contentType="text/html; charset=UTF-8" %>
+<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
 <div class="article_top" style="width:700px;">
 		<h2 class="tit_h2">게시판1_MVC</h2>
 		<div class="area_rgt" >
