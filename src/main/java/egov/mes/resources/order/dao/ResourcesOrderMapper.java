@@ -6,5 +6,6 @@ import java.util.Map;
 public interface ResourcesOrderMapper {
 	List<ResourcesOrderVO> find(ResourcesOrderVO vo);	//발주리스트 검색
 	List<Map> searchRec(ResourcesOrderVO vo);			//자재명 검색(모달창)
+	List<Map> searchSuc(ResourcesOrderVO vo);			//업체명 검색(모달창)
 	int insertOrder(ResourcesOrderVO vo);				//자재 발주 
 }
