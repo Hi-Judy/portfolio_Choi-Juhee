@@ -2,17 +2,33 @@
 <!DOCTYPE tiles-definitions PUBLIC
        "-//Apache Software Foundation//DTD Tiles Configuration 2.1//EN"
        "http://tiles.apache.org/dtds/tiles-config_2_1.dtd">
- 
+
 <tiles-definitions>
-	<definition name="layouts-tiles" template="/WEB-INF/jsp/egovframework/tiles/layouts.jsp">
-	  	<put-attribute name="tiles_header"    	value="/WEB-INF/jsp/egovframework/tiles/header.jsp" />
-	  	<put-attribute name="tiles_nav"    		value="/WEB-INF/jsp/egovframework/tiles/nav.jsp" />
-	  	<put-attribute name="tiles_side_bar"    		value="/WEB-INF/jsp/egovframework/tiles/sidebar.jsp" />
-	  	<put-attribute name="tiles_content"   	value="" />
-	  	<put-attribute name="tiles_footer"    		value="/WEB-INF/jsp/egovframework/tiles/footer.jsp" />
+	<definition name="layouts-tiles"
+		template="/WEB-INF/jsp/egovframework/tiles/layouts.jsp">
+		<put-attribute name="tiles_header"
+			value="/WEB-INF/jsp/egovframework/tiles/header.jsp" />
+		<put-attribute name="tiles_nav"
+			value="/WEB-INF/jsp/egovframework/tiles/nav.jsp" />
+		<put-attribute name="tiles_side_bar"
+			value="/WEB-INF/jsp/egovframework/tiles/sidebar.jsp" />
+		<put-attribute name="tiles_content" value="" />
+		<put-attribute name="tiles_footer"
+			value="/WEB-INF/jsp/egovframework/tiles/footer.jsp" />
 	</definition>
-	
+
 	<definition name="*/*.tiles" extends="layouts-tiles">
-	  	<put-attribute name="tiles_content" value="/WEB-INF/jsp/egovframework/{1}/{2}.jsp" />
+		<put-attribute name="tiles_content"
+			value="/WEB-INF/jsp/egovframework/{1}/{2}.jsp" />
+	</definition>
+
+	<definition name="layouts-none"
+		template="/WEB-INF/jsp/egovframework/tiles/none.jsp">
+		<put-attribute name="tiles_none" />
+	</definition>
+
+	<definition name="*/*" extends="layouts-none">
+		<put-attribute name="tiles_none"
+			value="/WEB-INF/jsp/egovframework/{1}/{2}.jsp" />
 	</definition>
 </tiles-definitions>
