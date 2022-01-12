@@ -47,4 +47,14 @@ public class CustomerController {
 		jsonView.addObject("trade" , list) ;
 		return jsonView ;
 	}
+	
+	@RequestMapping("updateCustomer")
+	public ModelAndView updateCustomer(CustomerVO customer) {
+		System.out.println(customer) ;
+		service.updateCustomer(customer) ;
+		ModelAndView jsonView = new ModelAndView("jsonView") ;
+		int r = 1 ;
+		jsonView.addObject("update" , r) ;
+		return jsonView ;
+	}
 }

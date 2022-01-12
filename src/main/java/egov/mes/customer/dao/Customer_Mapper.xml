@@ -27,4 +27,8 @@
 			where o.cus_code = #{cusCode}
 	</select>	
 	
+	<update id="updateCustomer" statementType="CALLABLE">
+		{ call p_update_customer(#{cusCode},#{codeName},#{cusPhone}) }
+	</update>	
+	
 </mapper>

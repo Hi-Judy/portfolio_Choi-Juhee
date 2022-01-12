@@ -29,4 +29,9 @@ public class CustomerServiceImpl implements CustomerService {
 		return mapper.selectTradeInfo(customer) ;
 	}
 
+	@Override
+	public int updateCustomer(CustomerVO customer) {
+		return mapper.updateCustomer(customer) ;
+	}
+
 }
