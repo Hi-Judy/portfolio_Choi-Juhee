@@ -16,6 +16,16 @@
 			expression="org.springframework.stereotype.Repository"
 			type="annotation" />
 	</context:component-scan>
+	<context:component-scan base-package="egov">
+		<context:include-filter
+			expression="org.springframework.stereotype.Controller"
+			type="annotation" />
+		<context:exclude-filter
+			expression="org.springframework.stereotype.Service" type="annotation" />
+		<context:exclude-filter
+			expression="org.springframework.stereotype.Repository"
+			type="annotation" />
+	</context:component-scan>
 
 	<bean class="egovframework.com.cmm.ImagePaginationRenderer"
 		id="imageRenderer" />

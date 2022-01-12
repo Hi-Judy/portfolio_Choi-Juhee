@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="egov.mes.manufacture.dao.ManufactureMapper">
+
+<!-- 미계획 내역 조회 -->
+<select id="selectPlan" resultType="egov.mes.manufacture.dao.ManufacturePlanVO">
+	select a.ord_code, a.ord_duedate,  a.ord_qnt, a.podt_code, b.code_name podtName
+    from ord_detail_view a join common_code b
+    on a.podt_code = b.code
+    where a.ord_status = '미진행'
+</select>
+
+<!-- 자재 조회 -->
+<select id="selectRes" resultType="egov.mes.manufacture.dao.ManufacturePlanVO">
+	select a.podt_code, prod_detail('PODT005') podtName, a.res_code, a.res_usage, b.재고량
+	from prdt_bom_res a join r_qnt b
+	on a.res_code = b.rsc_code
+	where a.podt_code = #{podtCode}
+</select>
+
+</mapper>
