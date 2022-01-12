@@ -13,4 +13,6 @@ public class CustomerVO {
 	String podtName ;
 	String ordDate ;
 	String ordQnt ;
+	
+	String codeDesct ;
 }

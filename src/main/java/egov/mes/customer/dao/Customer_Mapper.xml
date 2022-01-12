@@ -10,6 +10,8 @@
 		<if test="cusCode != null">
 			and cus_code = #{cusCode}
 		</if>
+		
+			order by cus_code ASC
 	</select>
 	
 	<select id="findCustomer" resultType="egov.mes.customer.dao.CustomerVO">
@@ -29,6 +31,14 @@
 	
 	<update id="updateCustomer" statementType="CALLABLE">
 		{ call p_update_customer(#{cusCode},#{codeName},#{cusPhone}) }
-	</update>	
+	</update>
+	
+	<insert id="insertCustomer">
+		select f_customer_insert(#{cusCode},#{cusPhone},#{codeName},#{codeDesct}) from dual
+	</insert>	
+	
+	<delete id="deleteCustomer">
+		select f_customer_delete(#{cusCode}) from dual
+	</delete>
 	
 </mapper>

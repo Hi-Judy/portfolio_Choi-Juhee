@@ -31,7 +31,7 @@
 		<div id="cusResult"></div>
 	</div>
 	
-	<div id="tradeInfo-dialog-form" title="거래처정보수정 / 삭제 / 거래내역조회" style="text-align: center;">
+	<div id="tradeInfo-dialog-form" title="거래처정보수정 / 거래내역조회" style="text-align: center;">
 		<div id="cusInfo"></div>
 		<div style="height: 50px">
 			<button type="button" id="btnSave">저장</button>
@@ -117,8 +117,96 @@
 		let insertCode = insertData[0].cusCode ;
 		let insertName = insertData[0].codeName ;
 		let insertPhone = insertData[0].cusPhone ;
+		let codeDesct ;
 		
-		console.log(insertCode + insertName + insertPhone) ;
+		if (insertCode == '' || insertName == '' || insertPhone == '') {
+			alert('입력값을 확인하세요') ;
+			return ;
+		}
+		
+		if (insertCode == '제품 구매 고객') {
+			insertCode = 'b_' ;
+			codeDesct = '판매처' ;
+		} else {
+			insertCode = 'm_' ;
+			codeDesct = '구매처' ;
+		}
+		
+		$.ajax({
+			url : 'customerInsert' ,
+			data : {
+				cusCode : insertCode ,
+				codeName : insertName ,
+				cusPhone : insertPhone ,
+				codeDesct : codeDesct
+			} ,
+			async : false ,
+			success : function(datas) {
+				alert('저장완료되었습니다') ;
+				
+				let cusCode = 'null' ;
+				
+				$.ajax({
+					url : 'customerList/' + cusCode ,
+					dataType : 'json' ,
+					async : false ,
+					success : function(datas) {
+						data = datas.data ;
+						grid.resetData(data) ;
+						grid.resetOriginData() ;
+					} ,
+					error : function(reject) {
+						console.log(reject) ;
+					}
+				})
+			} ,
+			error : function(reject) {
+				console.log(reject) ;
+			}
+		})
+	})
+	
+	var rowCodes = new Array() ;
+	
+	grid.on('check' , (ev) => {
+		rowCodes[ev.rowKey] = data[ev.rowKey].cusCode ;
+	})
+	
+	grid.on('uncheck' , (ev) => {
+		console.log(rowCodes.length) ;
+	})
+	
+	$("#btnDelete").on("click" , function() {
+		console.log(rowCodes) ;
+		
+/*		$.ajax({
+			url : 'deleteCustomer' + cusCode ,
+			dataType : 'json' ,
+			async : false ,
+			success : function(datas) {
+				alert('삭제완료되었습니다') ;
+				
+				let cusCode = 'null' ;
+				
+				$.ajax({
+					url : 'customerList/' + cusCode ,
+					dataType : 'json' ,
+					async : false ,
+					success : function(datas) {
+						data = datas.data ;
+						grid.resetData(data) ;
+						grid.resetOriginData() ;
+					} ,
+					error : function(reject) {
+						console.log(reject) ;
+					}
+				})
+			} , 
+			error : function(reject) {
+				console.log(reject) ;
+			}
+		})
+*/
 	})
 	//---------- ↑페이지 ----------
 	
@@ -242,6 +330,11 @@
 	let data4 ;
 	
 	grid.on('click',(ev) => {
+		
+		if (ev.columnName === '_checked'){
+			return ev.stop() ;
+		}
+		
 		let cusCode = data[ev.rowKey].cusCode ;
 		
 		dialog2.dialog("open") ;

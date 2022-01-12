@@ -50,11 +50,28 @@ public class CustomerController {
 	
 	@RequestMapping("updateCustomer")
 	public ModelAndView updateCustomer(CustomerVO customer) {
-		System.out.println(customer) ;
 		service.updateCustomer(customer) ;
 		ModelAndView jsonView = new ModelAndView("jsonView") ;
 		int r = 1 ;
 		jsonView.addObject("update" , r) ;
+		return jsonView ;
+	}
+	
+	@RequestMapping("customerInsert")
+	public ModelAndView insertCustomer(CustomerVO customer) {
+		service.insertCustomer(customer) ;
+		String result = "" ;
+		ModelAndView jsonView = new ModelAndView("jsonView") ;
+		jsonView.addObject("insert" , result) ;
+		return jsonView ;
+	}
+	
+	@RequestMapping("deleteCustomer/{cusCode}")
+	public ModelAndView deleteCustomer(CustomerVO customer) {
+		service.deleteCustomer(customer) ;
+		String del = "" ;
+		ModelAndView jsonView = new ModelAndView("jsonView") ;
+		jsonView.addObject("delete" , del) ;
 		return jsonView ;
 	}
 }
