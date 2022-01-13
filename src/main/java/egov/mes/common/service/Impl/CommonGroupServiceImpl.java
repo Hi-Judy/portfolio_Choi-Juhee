@@ -19,11 +19,27 @@ public class CommonGroupServiceImpl implements CommonGroupService {
 	public List<CommonGroupVO> find() {
 		return commonGroupMapper.find();
 	}
-
+	//단건조회(코드구분에서)
 	@Override
 	public List<CommonGroupVO> findSelect(String groupCode) {
 		// TODO Auto-generated method stub
 		return commonGroupMapper.findSelect(groupCode);
+	}
+	
+	//코드구분 테이블에 데이트 <추가>
+	@Override
+	public int DataAdd(List<CommonGroupVO> cgVO) {
+		for (CommonGroupVO rsts : cgVO)  //List 
+		 commonGroupMapper.DataAdd(rsts);
+		int a = 0;
+		return a ;
+	}
+	//수정
+	@Override
+	public int dataUpdate(List<CommonGroupVO> cgVO) {
+		for (CommonGroupVO rsts : cgVO)
+			commonGroupMapper.dataUpdate(rsts);
+		return 0;
 	}
 
 }

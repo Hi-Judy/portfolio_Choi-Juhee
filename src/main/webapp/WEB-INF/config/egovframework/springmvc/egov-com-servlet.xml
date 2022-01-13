@@ -27,6 +27,18 @@
 			type="annotation" />
 	</context:component-scan>
 
+	<bean
+		class="org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerAdapter">
+		<property name="webBindingInitializer">
+			<bean class="egovframework.com.cmm.web.EgovBindingInitializer" />
+		</property>
+		<property name="messageConverters">
+	        <list>
+	            <bean class="org.springframework.http.converter.json.MappingJackson2HttpMessageConverter" />
+	            <bean class="org.springframework.http.converter.xml.Jaxb2RootElementHttpMessageConverter" />
+	        </list>
+    	</property>
+	</bean>
 	<bean class="egovframework.com.cmm.ImagePaginationRenderer"
 		id="imageRenderer" />
 
@@ -71,7 +83,7 @@
 	<!-- IP 정보 기록 및 로그인 체크가 필요한 URL과 로그인 여부를 체크해줄 인터셉터를 등록한다. -->
 	<!-- 분리 -->
 
-	<bean
+	<!-- <bean
 		class="org.springframework.web.servlet.handler.SimpleMappingExceptionResolver">
 		<property name="defaultErrorView"
 			value="egovframework/com/cmm/error/egovError" />
@@ -87,7 +99,7 @@
 				<prop key="egovframework.com.cmm.exception.EgovXssException">egovframework/com/cmm/error/EgovXssException</prop>
 			</props>
 		</property>
-	</bean>
+	</bean> -->
 
 	<!-- for JFile -->
 	<bean

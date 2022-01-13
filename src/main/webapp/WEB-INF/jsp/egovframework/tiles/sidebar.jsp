@@ -22,8 +22,8 @@
 							관리</span>
 				</a>
 					<ul class="submenu ">
-						<li class="submenu-item "><a href="#">공통 자료 관리</a></li>
-						<li class="submenu-item "><a href="#">제품 BOM 관리</a></li>
+						<li class="submenu-item "><a href="CommonGroup">공통 자료 관리</a></li>
+						<li class="submenu-item "><a href="ProductBom">제품 BOM 관리</a></li>
 						<li class="submenu-item "><a href="#">공정 관리</a></li>
 						<li class="submenu-item "><a href="#">사원 정보 관리</a></li>
 					</ul></li>
