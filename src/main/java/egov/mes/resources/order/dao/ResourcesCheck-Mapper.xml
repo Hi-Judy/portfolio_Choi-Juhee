@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper
+	namespace="egov.mes.resources.order.dao.ResourcesCheckMapper">
+	
+	<!-- 자재입고검사(미완료인 품목들 뿌려준다) -->
+	<select id="findResourcesCheck" resultType="egov.mes.resources.order.dao.ResourcesCheckVO">
+	
+	</select>
+	
+	
+	<!-- 자재입고 검사 후 insert -->
+	<insert id="insertResourcesCheck">
+	
+	</insert>
+	
+	
+	<!-- 자재입고 검사에서 불량-> 불량 테이블로 insert -->
+	<insert id="insertResourcesRtngd">
+	
+	</insert>
+
+	
+</mapper>

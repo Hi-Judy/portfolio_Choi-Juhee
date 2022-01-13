@@ -8,45 +8,45 @@
 </head>
 <body>
 
-<div id="gridRsc">
+<div id="gridSuc">
 </div>
 <script type="text/javascript">
 
 	//그리드
-	var columnsRsc = [
+	var columnsSuc = [
 			{
-			 header: '자재코드',
+			 header:'업체코드',
 			 name: 'code'
 			},
 			{
-			 header: '자재명',
+			 header: '업체명',
 			 name: 'codeName'
 			 }
 			];
 				
 	//ajax(api)로 값 받아오는 거 
-	var dataSourceRsc = {
+	var dataSourceSuc = {
 		  api: {
 		    readData: { 
-		    	url: 'searchRsc', 
+		    	url: 'searchSuc', 
 		    	method: 'GET'
 		    	}
 		  },
 		  contentType: 'application/json'
 		};
 	
-	var gridRsc = new Grid({
-		  el: document.getElementById('gridRsc'),
-		  data:dataSourceRsc,
-		  columns:columnsRsc
+	var gridSuc = new Grid({
+		  el: document.getElementById('gridSuc'),
+		  data: dataSourceSuc,
+		  columns: columnsSuc
 		});
 	
 	//리스트에서 선택한 값 가지고 오기...$(여기 어떻게 쓰지? )
-	gridRsc.on("click", (ev) => {
-		console.log(gridRsc.getValue(ev["rowKey"],ev["columnName"]));
-		var rsc = gridRsc.getValue(ev["rowKey"],ev["columnName"]);
-		clickRsc(rsc)
-		
+	gridSuc.on("click", (ev) => {
+		console.log("+++++++++++++++++++++++++++++++++")
+		console.log(gridSuc.getValue(ev["rowKey"],ev["columnName"]));
+		var suc = gridSuc.getValue(ev["rowKey"],ev["columnName"]);
+		clickSuc(suc)
 	});
 
 </script>
