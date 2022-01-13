@@ -11,6 +11,8 @@ public interface CommonGroupService {
 	
 	
 	
-	List<CommonGroupVO> find();
-	List<CommonGroupVO> findSelect(String groupCode);
+	List<CommonGroupVO> find(); //All 조회
+	List<CommonGroupVO> findSelect(String groupCode); //단건조회
+	int DataAdd( List<CommonGroupVO> cgVO); //추가
+	int dataUpdate ( List<CommonGroupVO> cgVO ); //수정
 }

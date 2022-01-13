@@ -59,7 +59,7 @@
 	<div style="float:right;">
 		<button type="button" id="btnSelectPlan">조회</button>
 		<button type="button" id="btnSavePlan">저장</button>
-		<button type="button" id="btnSavePlan">삭제</button>
+		<button type="button" id="btnDeletePlan">삭제</button>
 	</div>
 	
 	
@@ -114,6 +114,11 @@
 				name: 'ordQnt'
 			},
 			{
+				header:'고객코드',
+				name: 'cusCode',
+				hidden: true
+			},
+			{
 				header: '납기일자',
 				name: 'ordDuedate'
 			},
@@ -166,6 +171,11 @@
 				name: 'ordCode'
 			},
 			{
+				header:'고객코드',
+				name: 'cusCode',
+				hidden: true
+			},
+			{
 				header:'주문량',
 				name: 'ordQnt'
 			},
@@ -214,11 +224,14 @@
 		};
 		
 		//미계획 그리드 내용. 
-		const gridPlan = new Grid({
+		let gridPlan = new Grid({
 			el: document.getElementById('gridPlan'),
 			data: dataSourcePlan,//컨트롤러에서 리턴된 결과를 dataSource에 담아서 보여준다.
 			columns: columnsPlan,
-			rowHeaders: ['checkbox']
+			rowHeaders: [{
+				type: 'checkbox',
+				title: ''
+			}]
 		})
 		
 		//미계획 조회 버튼 눌렀을 때 모달창 띄우기
@@ -246,7 +259,7 @@
 			el: document.getElementById('gridResource'),
 			data: dataSourceResource,
 			columns: columnsResource,
-			rowHeaders: ['checkbox']
+			rowHeaders: ['rowNum']
 		})
 			
 		//자재 조회 버튼 눌렀을 때 모달창 띄우기
@@ -261,61 +274,99 @@
 		
 		let data;
 		
-		/* //생산계획 조회 그리드
-		const dataSourcePlan = {
-				api: {
-					//API를 사용하기 위해, 각 요청에 대한 url과 method를 등록
-					modifyData: { url: '${pageContext.request.contextPath}/manufacture/main', method: 'PUT' },
-				},
-				contentType: 'application/json' //보낼때 json타입으로 보낸다.
-				initialRequest:false
-		}; */
-		
 		//생산계획 조회 그리드
-		$.ajax({
-			url: '${pageContext.request.contextPath}/manufacture/main',
-			dataType: 'JSON'
-		}).done(function(datas){
-			data = datas;
-		})
+		const dataSourceMain = {
+				api: {
+					readData: {url: '${pageContext.request.contextPath}/manufacture/manufacture', 
+							   method: 'GET'},
+					//API를 사용하기 위해, 각 요청에 대한 url과 method를 등록
+					modifyData: { url: '${pageContext.request.contextPath}/manufacture/main', 
+								  method: 'POST' },
+				},
+				contentType: 'application/json;charset=UTF-8', //보낼때 json타입으로 보낸다.
+				initialRequest:false
+		};  
+		
 		
 		//생산계획 그리드 내용. 
 		const gridMain = new Grid({
 			el: document.getElementById('gridMain'),
-			data: null,//컨트롤러에서 리턴된 결과를 dataSource에 담아서 보여준다.
+			data: dataSourceMain,//컨트롤러에서 리턴된 결과를 dataSource에 담아서 보여준다.
 			columns: columnsMain,
-			rowHeaders: ['checkbox']
-		})
+			rowHeaders: [
+				{
+					type: 'checkbox',
+					title: ' '
+				}
+			]
+		});
 		
-		let a;
+		//let a;
+		let checkedPlan;
+		let checkedOrd;
+		let checkedRow;
 		
-		gridPlan.on('check',function(ev){
-			a = gridPlan.getData()[ev.rowKey];
-/* 			console.log(grid.getValue(ev.rowKey, 'podtCode'));
-			console.log(grid.getValue(ev.rowKey, 'ordCode'));
-			console.log(grid.getCheckedRows()); */
-		})
+		gridPlan.on('click', function(ev){
+			if(ev.columnName == '_checked'){
+				console.log(ev.columnName);
+				//a = gridPlan.getData();
+				checkedPlan=gridPlan.getCheckedRows();
+				//console.log(gridPlan.getCheckedRows());  //그리드에서 체크된 rows 배열 가져오기
+	
+				checkedOrd = gridPlan.getValue(ev.rowKey, 'ordCode'); //체크된 row의 주문코드
+	 			//console.log(checkedOrd);
+				//console.log(gridPlan.getValue(ev.rowKey, 'podtCode')); //그리드에서 제품코드 가져오기
+				//console.log(gridPlan.getValue(ev.rowKey, 'ordCode')); //그리드에서 주문코드 가져오기
+				
+				//gridMain.appendRows(gridPlan.getCheckedRows()); 
+				
+				checkedRow = parseInt(gridPlan.getRowCount());
+				
+				/* console.log(checkedOrd);
+				console.log(gridPlan.getValue(1, 'ordCode')); */
+				console.log(ev.instance.store.data.checkedAllRows);
+				//내가 클릭한 체크박스(row)의 상태가 체크되어있다 -> 체크 for
+				//내가 클릭한 체크박스의 상태가 체크되어 X -> UN체크 for
+				
+				//체크된 배열 요소 갯수만큼 for문 -> 체크된 배열요소의 주문코드와 grid의 주문코드가 같으면
+				for(let i=0; i<checkedRow; i++){
+						//gridPlan.check(i);
+					if(checkedOrd == gridPlan.getValue(i, 'ordCode')){
+						console.log(checkedOrd);
+						console.log(gridPlan.getValue(i, 'ordCode'));
+						gridPlan.check(i);
+						//gridPlan.disableRowCheck(i);
+					} 
+					console.log(i);
+				}
+				
+			}
+		});
 		
 		//미계획 모달에서 체크 박스 선택 후 확인 버튼 눌렀을 때 가는 function
 		function goPlan(){
-			gridMain.appendRow(a);
-			gridPlan.dialog("close");
-		}
+			gridMain.resetData(checkedPlan); //gridMain에 기존에 들어있는 데이터를 b 로 리셋.
+			//gridMain.appendRows(checkedPlan);
+			dialogPlan.dialog("close");
+		};
 		
-		//조회 버튼 이벤트
+		 //조회 버튼 이벤트
 		btnSelectPlan.addEventListener("click", function(){
-			grid.request('modifyData');
-		})
+			gridMain.request('modifyData');
+		}); 
 		
 		//저장 버튼 이벤트
 		btnSavePlan.addEventListener("click", function(){
-			grid.request('modifyData');
-		})
+			console.log("!!SAVE!!")
+			gridMain.blur();
+			//gridMain에서 modifyData 요청 -> dataSourceMain의 modifyData 안의 url로 간다.
+			gridMain.request('modifyData'); 
+		});
 		
 		//삭제 버튼 이벤트
-		btnSavePlan.addEventListener("click", function(){
+		btnDeletePlan.addEventListener("click", function(){
 			gridMain.removeCheckedRows(true);
-		})
+		});
 		
 	</script>
 </body>
