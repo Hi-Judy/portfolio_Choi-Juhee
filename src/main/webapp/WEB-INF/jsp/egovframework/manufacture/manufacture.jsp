@@ -25,9 +25,9 @@
 	<h2>생산계획서 작성</h2>
 	<div class = "planDate">
 		<p style="display:inline-block;">계획일자</p>
-		<input id = "txtfromDate" style="display:inline-block;">
+		<input id = "txtFromDate" type="date" name="from" style="display:inline-block;">
 		<p style="display:inline-block;"> ~ </p>
-		<input id = "txttoDate" style="display:inline-block;">
+		<input id = "txtToDate" type="date" name="to" style="display:inline-block;">
 	</div>
 
 	<div>
@@ -228,10 +228,7 @@
 			el: document.getElementById('gridPlan'),
 			data: dataSourcePlan,//컨트롤러에서 리턴된 결과를 dataSource에 담아서 보여준다.
 			columns: columnsPlan,
-			rowHeaders: [{
-				type: 'checkbox',
-				title: ''
-			}]
+			rowHeaders: ['checkbox']
 		})
 		
 		//미계획 조회 버튼 눌렀을 때 모달창 띄우기
@@ -272,8 +269,6 @@
 		})
 		
 		
-		let data;
-		
 		//생산계획 조회 그리드
 		const dataSourceMain = {
 				api: {
@@ -293,54 +288,16 @@
 			el: document.getElementById('gridMain'),
 			data: dataSourceMain,//컨트롤러에서 리턴된 결과를 dataSource에 담아서 보여준다.
 			columns: columnsMain,
-			rowHeaders: [
-				{
-					type: 'checkbox',
-					title: ' '
-				}
-			]
+			rowHeaders: ['checkbox']
 		});
 		
-		//let a;
 		let checkedPlan;
-		let checkedOrd;
-		let checkedRow;
 		
-		gridPlan.on('click', function(ev){
-			if(ev.columnName == '_checked'){
-				console.log(ev.columnName);
-				//a = gridPlan.getData();
+		gridPlan.on('check', function(ev){
 				checkedPlan=gridPlan.getCheckedRows();
-				//console.log(gridPlan.getCheckedRows());  //그리드에서 체크된 rows 배열 가져오기
 	
 				checkedOrd = gridPlan.getValue(ev.rowKey, 'ordCode'); //체크된 row의 주문코드
-	 			//console.log(checkedOrd);
 				//console.log(gridPlan.getValue(ev.rowKey, 'podtCode')); //그리드에서 제품코드 가져오기
-				//console.log(gridPlan.getValue(ev.rowKey, 'ordCode')); //그리드에서 주문코드 가져오기
-				
-				//gridMain.appendRows(gridPlan.getCheckedRows()); 
-				
-				checkedRow = parseInt(gridPlan.getRowCount());
-				
-				/* console.log(checkedOrd);
-				console.log(gridPlan.getValue(1, 'ordCode')); */
-				console.log(ev.instance.store.data.checkedAllRows);
-				//내가 클릭한 체크박스(row)의 상태가 체크되어있다 -> 체크 for
-				//내가 클릭한 체크박스의 상태가 체크되어 X -> UN체크 for
-				
-				//체크된 배열 요소 갯수만큼 for문 -> 체크된 배열요소의 주문코드와 grid의 주문코드가 같으면
-				for(let i=0; i<checkedRow; i++){
-						//gridPlan.check(i);
-					if(checkedOrd == gridPlan.getValue(i, 'ordCode')){
-						console.log(checkedOrd);
-						console.log(gridPlan.getValue(i, 'ordCode'));
-						gridPlan.check(i);
-						//gridPlan.disableRowCheck(i);
-					} 
-					console.log(i);
-				}
-				
-			}
 		});
 		
 		//미계획 모달에서 체크 박스 선택 후 확인 버튼 눌렀을 때 가는 function
@@ -350,9 +307,22 @@
 			dialogPlan.dialog("close");
 		};
 		
-		 //조회 버튼 이벤트
-		btnSelectPlan.addEventListener("click", function(){
-			gridMain.request('modifyData');
+		//조회 버튼 이벤트
+		$('#btnSelectPlan').click(function(){
+			let dateFrom = document.getElementById('txtFromDate'); //시작일
+			let dateTo = document.getElementById('txtToDate');	//종료일
+			
+			dateFrom = dateFrom.value;
+			dateTo = dateTo.value;
+			
+		
+			$.ajax({
+				url: '${pageContext.request.contextPath}/manufacture/selectPlan',
+				method: 'POST',
+				data:{'startDate' : dateFrom, 'endDate': dateTo  }
+			})
+			
+			//gridMain.resetData(); //메인그리드에 조회된 한건 뿌려주기
 		}); 
 		
 		//저장 버튼 이벤트

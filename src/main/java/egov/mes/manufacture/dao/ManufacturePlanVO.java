@@ -4,6 +4,8 @@ import java.time.LocalDate;
 
 import org.springframework.format.annotation.DateTimeFormat;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
+
 import lombok.Data;
 
 @Data
@@ -24,13 +26,17 @@ public class ManufacturePlanVO {
 	
 	String manPlanNo;
 	String manPlanName;
-	@DateTimeFormat(pattern = "yyyy-MM-dd") LocalDate manPlanDate;
-	@DateTimeFormat(pattern = "yyyy-MM-dd") LocalDate planNoDetail;
-	@DateTimeFormat(pattern = "yyyy-MM-dd") LocalDate planStartDate;
+	
+	String manPlanDate;
+	String planNoDetail;
+	String planStartDate;
+	
 	String planPeriod;
 	String planComplete;
 	String manPerday;
 	String planEtc;
 	
+	String startDate;
+	String endDate;
 	
 }

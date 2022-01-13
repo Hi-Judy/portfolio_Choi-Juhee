@@ -36,10 +36,16 @@ public class ManufactureServiceImpl implements ManufactureService {
 		for(ManufacturePlanVO planVO : list.getUpdatedRows()) {
 			manMapper.insertPlanDetail(planVO);
 		}
-		
 		manMapper.insertPlan(list.getUpdatedRows().get(0));
 		
 		return 1;
+	}
+
+	//생산계획조회
+	@Override
+	public List<ManufacturePlanVO> selectManPlan(ManufacturePlanVO mPlanVo) {
+
+		return manMapper.selectManPlan(mPlanVo);
 	}
 
 

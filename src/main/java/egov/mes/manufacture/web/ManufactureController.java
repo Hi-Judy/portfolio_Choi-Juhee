@@ -24,9 +24,7 @@ public class ManufactureController {
 	//egov 메인에서 manufacture.jsp로 연결
 	@RequestMapping("/manufacture/manufacture")
 	public String selectPlan(ManufacturePlanVO planVO, Model model )  {
-		System.out.println("123");
 		model.addAttribute("manList",manService.selectPlan(planVO));
-		System.out.println("345");
 		return "manufacture/manufacture.tiles";
 	}
 	
@@ -67,11 +65,24 @@ public class ManufactureController {
 	//생산계획에서 한 건 추가
 	@PostMapping("/manufacture/main")
 	public String modifyData(@RequestBody ModifyVO<ManufacturePlanVO> list, Model model) {
-		System.out.println("!!!!생산계획추가^^!!!!!!!!!!!!!"+list);
+		//System.out.println("!!!!생산계획추가^^!!!!!!!!!!!!!"+list);
 		
 		manService.insertPlan(list);
 		model.addAttribute("result", true);
 		
 		return "jsonView";
 	}
+	
+	//생산계획 조회
+	@PostMapping("/manufacture/selectPlan")
+	public String selectPlan1(ManufacturePlanVO planVO, Model model) {
+		
+		System.out.println(planVO);
+		System.out.println(manService.selectManPlan(planVO));
+		//manService.selectManPlan(planVO);
+		model.addAttribute("result", manService.selectManPlan(planVO));
+		
+		return "jsonView";
+	}
+	
 }

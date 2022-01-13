@@ -3,6 +3,22 @@
 
 <mapper namespace="egov.mes.manufacture.dao.ManufactureMapper">
 
+<!-- 계획일자 기준으로 생산계획서 조회 -->
+<select id="selectManPlan" resultType="egov.mes.manufacture.dao.ManufacturePlanVO">
+	select a.podt_code, prod_detail('PODT005') podtName, a.ord_code, a.ord_qnt, a.ord_duedate,
+           b.plan_period, b.plan_startdate, b.plan_complete, b.man_perday, b.plan_etc
+	from ord_detail_view a join man_plan_view b
+	on a.ord_code = b.ord_code
+	<where>
+		<if test = "startDate != null"> 
+			and b.man_plan_date > to_date(#{startDate}, 'yyyy-MM-dd')
+		</if>
+		<if test= "endDate != null">
+			and to_date(#{endDate},'yyyy-MM-dd') > b.man_plan_date
+		</if>
+	</where>
+</select>
+
 <!-- 미계획 내역 조회 -->
 <select id="selectPlan" resultType="egov.mes.manufacture.dao.ManufacturePlanVO">
 	select a.ord_code, a.ord_duedate,a.cus_code,  a.ord_qnt, a.podt_code, b.code_name podtName
