@@ -47,4 +47,33 @@ public class CustomerController {
 		jsonView.addObject("trade" , list) ;
 		return jsonView ;
 	}
+	
+	@RequestMapping("updateCustomer")
+	public ModelAndView updateCustomer(CustomerVO customer) {
+		service.updateCustomer(customer) ;
+		ModelAndView jsonView = new ModelAndView("jsonView") ;
+		int r = 1 ;
+		jsonView.addObject("update" , r) ;
+		return jsonView ;
+	}
+	
+	@RequestMapping("customerInsert")
+	public ModelAndView insertCustomer(CustomerVO customer) {
+		service.insertCustomer(customer) ;
+		String result = "" ;
+		ModelAndView jsonView = new ModelAndView("jsonView") ;
+		jsonView.addObject("insert" , result) ;
+		return jsonView ;
+	}
+	
+	@RequestMapping("deleteCustomer/{cusCode}")
+	public ModelAndView deleteCustomer(CustomerVO customer) {
+		System.out.println("여기까지1");
+		service.deleteCustomer(customer) ;
+		System.out.println("여기까지2");
+		String del = "" ;
+		ModelAndView jsonView = new ModelAndView("jsonView") ;
+		jsonView.addObject("delete" , del) ;
+		return jsonView ;
+	}
 }

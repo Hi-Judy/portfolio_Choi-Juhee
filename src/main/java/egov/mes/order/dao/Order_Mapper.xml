@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="egov.mes.order.dao.OrderMapper">
+	
+	<select id="orderList" resultType="egov.mes.order.dao.OrderVO">
+		select ord_status , ord_code , cus_code , fn_get_code_name(cus_code) , ord_date , ord_duedate 
+			from order_management
+			where 1=1
+			
+		<if test="cusCode != null">
+			and cus_code = #{cusCode}
+		</if>
+		
+		order by ord_duedate ASC
+	</select>
+	
+</mapper>

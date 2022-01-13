@@ -17,20 +17,26 @@
 <body>
 	<h3>거래처정보</h3>
 	<div id="info">
-		<input id="txtCusCode">
+		<span>업체명 : </span><input id="txtCusCode">
 		<button type="button" id="listBtn">조회</button>
 		<button type="button" id="btnSearch">업체검색</button>
+		<button type="button" id="btnAdd">추가</button>
+		<button type="button" id="btnInsert">저장</button>
 		<button type="button" id="btnDelete">삭제</button>
 	</div>
 	
 	<div id="find-dialog-form" title="업체검색"">
 		<input id="cusName"><button id="btnCusSearch">업체명검색</button>
+		<button type="button" id="btnClose1">닫기</button>
 		<div id="cusResult"></div>
 	</div>
 	
-	<div id="tradeInfo-dialog-form" title="거래처정보수정/거래내역조회" style="text-align: center;">
+	<div id="tradeInfo-dialog-form" title="거래처정보수정 / 거래내역조회" style="text-align: center;">
 		<div id="cusInfo"></div>
-		<div style="height: 50px"><button type="button" id="btnSave">저장</button></div>
+		<div style="height: 50px">
+			<button type="button" id="btnSave">저장</button>
+			<button type="button" id="btnClose2">닫기</button>
+		</div>
 		<div id="tradeResult" style="height: 200px;"></div>
 	</div>
 	
@@ -41,15 +47,26 @@
 	const columns = [
 		{
 			header: '업체코드' ,
-			name: 'cusCode'
+			name: 'cusCode' ,
+			editor: {
+				type : 'select' ,
+				options: {
+					listItems: [
+						{ text: '제품 구매 고객' , value: '제품 구매 고객'} ,
+						{ text: '자재 판매 고객' , value: '자재 판매 고객'}
+					]
+				}
+			}
 		} ,
 		{
 			header: '업체명' ,
-			name: 'codeName'
+			name: 'codeName' ,
+			editor: 'text'
 		} ,
 		{
 			header: '연락처' ,
-			name : 'cusPhone'
+			name : 'cusPhone' ,
+			editor: 'text'
 		}
 	] ;
 	
@@ -84,11 +101,121 @@
 		el : document.getElementById('info') ,
 		rowHeaders: [
 			{ type : 'rowNum' } ,
-			{ type : 'checkbox' }
+			{ type : 'checkbox'}
 		] ,
 		data : data ,
 		columns 
 	}) ;
+	
+	$("#btnAdd").on("click" , function() {
+		grid.appendRow({}) ;
+	})
+	
+	$("#btnInsert").on("click" , function() {
+		let insertDatas = grid.getModifiedRows() ;
+		let insertData = insertDatas.createdRows ;
+		let insertCode = insertData[0].cusCode ;
+		let insertName = insertData[0].codeName ;
+		let insertPhone = insertData[0].cusPhone ;
+		let codeDesct ;
+		
+		if (insertCode == '' || insertName == '' || insertPhone == '') {
+			alert('입력값을 확인하세요') ;
+			return ;
+		}
+		
+		if (insertCode == '제품 구매 고객') {
+			insertCode = 'b_' ;
+			codeDesct = '판매처' ;
+		} else {
+			insertCode = 'm_' ;
+			codeDesct = '구매처' ;
+		}
+		
+		$.ajax({
+			url : 'customerInsert' ,
+			data : {
+				cusCode : insertCode ,
+				codeName : insertName ,
+				cusPhone : insertPhone ,
+				codeDesct : codeDesct
+			} ,
+			async : false ,
+			success : function(datas) {
+				alert('저장완료되었습니다') ;
+				
+				let cusCode = 'null' ;
+				
+				$.ajax({
+					url : 'customerList/' + cusCode ,
+					dataType : 'json' ,
+					async : false ,
+					success : function(datas) {
+						data = datas.data ;
+						grid.resetData(data) ;
+						grid.resetOriginData() ;
+					} ,
+					error : function(reject) {
+						console.log(reject) ;
+					}
+				})
+			} ,
+			error : function(reject) {
+				console.log(reject) ;
+			}
+		})
+	})
+	
+	var rowCodes = new Array() ;
+	
+	grid.on('check' , (ev) => {
+		rowCodes[ev.rowKey] = data[ev.rowKey].cusCode ;
+	})
+	
+	grid.on('uncheck' , (ev) => {
+		delete rowCodes[ev.rowKey] ;
+	})
+	
+	$("#btnDelete").on("click" , function() {
+		console.log(rowCodes) ;
+		let ok = 1 ;
+		for (let i = 0 ; i < rowCodes.length ; i++) {
+			if (rowCodes[i] != null) {
+				let cusCode = rowCodes[i] ;
+				
+				$.ajax({
+					url : 'deleteCustomer/' + cusCode ,
+					async : false ,
+					success : function(datas) {						
+						ok = 2 ;
+						
+						let cusCode = 'null' ;
+						
+						$.ajax({
+							url : 'customerList/' + cusCode ,
+							dataType : 'json' ,
+							async : false ,
+							success : function(datas) {
+								data = datas.data ;
+								grid.resetData(data) ;
+								grid.resetOriginData() ;
+							} ,
+							error : function(reject) {
+								console.log(reject) ;
+							}
+						})
+					} , 
+					error : function(reject) {
+						console.log(reject) ;
+					}
+				})
+				delete rowCodes[i] ;
+			}
+		}
+		if (ok == 2) {
+			alert('삭제완료되었습니다') ;
+		}
+	})
 	//---------- ↑페이지 ----------
 	
 	//---------- ↓업체찾기 ----------
@@ -153,8 +280,14 @@
 	grid2.on('click',(ev) => {
 		let cusCode = data2[ev.rowKey].cusCode ;
 		$("#txtCusCode").val(cusCode) ;
+		grid2.clear() ;
 		dialog.dialog("close") ;
 	})
+	
+	$("#btnClose1").on("click" , function() {
+		dialog.dialog("close") ;
+		grid2.clear() ;
+	})	
 	//---------- ↑업체찾기 ----------
 	
 	//---------- ↓상세정보 ----------
@@ -206,7 +339,12 @@
 	
 	let data4 ;
 	
-	grid.on('dblclick',(ev) => {
+	grid.on('click',(ev) => {
+		
+		if (ev.columnName === '_checked'){
+			return ev.stop() ;
+		}
+		
 		let cusCode = data[ev.rowKey].cusCode ;
 		
 		dialog2.dialog("open") ;
@@ -264,10 +402,60 @@
 	})
 	
 	$("#btnSave").on("click" , function() {
-		console.log(jQuery.type(grid4.getChildRows(0))) ;
+		let datas = grid4.getModifiedRows() ;
+		let data = datas.updatedRows ;
+		let cusCode = data[0].cusCode ;
+		let codeName = data[0].codeName ;
+		let cusPhone = data[0].cusPhone ;
 		
+		$.ajax({
+			url : 'updateCustomer' ,
+			data : {
+				cusCode : cusCode ,
+				codeName : codeName ,
+				cusPhone : cusPhone
+			} ,
+			dataType : 'json' ,
+			contentType : 'application/json ; charset=utf-8;' , 
+			async : false ,
+			success : function(datas) {
+				alert('수정완료되었습니다.') ;
+				data4 = datas.update ;
+				grid4.resetData(data4) ;
+				grid4.resetOriginData() ;
+			} ,
+			error : function(reject) {
+				console.log(reject) ;
+			}
+		})
 	})
 	
+	$("#btnClose2").on("click" , function() {
+		dialog2.dialog("close") ;
+		
+		let cusCode = $("#txtCusCode").val() ;
+		
+		if (cusCode == '') {
+			cusCode = 'null' ;
+		} else {
+			cusCode = $("#txtCusCode").val() ; 
+		}
+		
+		$.ajax({
+			url : 'customerList/' + cusCode ,
+			dataType : 'json' ,
+			async : false ,
+			success : function(datas) {
+				data = datas.data ;
+				grid.resetData(data) ;
+				grid.resetOriginData() ;
+				
+			} ,
+			error : function(reject) {
+				console.log(reject) ;
+			}
+		})
+	})
 	//---------- ↑상세정보 ----------
 </script>
 </body>
