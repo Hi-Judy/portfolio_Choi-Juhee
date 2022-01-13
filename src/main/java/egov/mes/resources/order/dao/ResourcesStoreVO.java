@@ -8,17 +8,17 @@ import com.fasterxml.jackson.annotation.JsonFormat;
 
 import lombok.Data;
 @Data
-public class ResourcesCheckVO {
+public class ResourcesStoreVO {
 
-	String rscTstNo;
+	String storeNo;
 	String rscCode;
-	String rscIstCnt;
-	String rscTstCnt;
-	String rscPassCnt;
-	String rscDefCnt;
-	String tstFlag;
+	String istFlag;
+	String rscLot;
+	String istCnt;
+	String ostCnt;
 	@DateTimeFormat(pattern = "yyyy-MM-dd")
 	@JsonFormat(pattern = "yyyy-MM-dd")
-	Date rscExpirationDate;
-	
+	Date storeDate;
+	String storeFlag;
+	String field;
 }

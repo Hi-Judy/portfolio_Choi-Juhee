@@ -13,10 +13,10 @@ public class ResourcesCheckController {
 	@Autowired ResourcesCheckService service;
 	
 	//입고검사 미완료 조회
-	@RequestMapping("resourcesCheckList")
+	@RequestMapping("resourcesCheck")
 	public String resourcesCheckList(Model model, ResourcesCheckVO vo) {
 		model.addAttribute("list", service.findResourcesCheck(vo));
 		System.out.println("=================입고검사 미완료 조회 페이지================");
-		return "resources/resourcesCheckList.tiles";
+		return "resources/resourcesCheck.tiles";
 	}
 }
