@@ -6,6 +6,7 @@ import java.util.Map;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import egov.mes.resources.order.dao.ModifyVO;
 import egov.mes.resources.order.dao.ResourcesOrderMapper;
 import egov.mes.resources.order.dao.ResourcesOrderVO;
 import egov.mes.resources.order.service.ResourcesOrderService;
@@ -25,9 +26,19 @@ public class ResourcesOrderServiceImpl implements ResourcesOrderService{
 	}
 
 	@Override
-	public int insertOrder(ResourcesOrderVO vo) {
-		return mapper.insertOrder(vo);
+	public List<Map> searchSuc(ResourcesOrderVO vo) {
+		return mapper.searchSuc(vo);
 	}
+
+	@Override
+	public void modify(ModifyVO<ResourcesOrderVO> mvo) {
+		if(mvo.getCreatedRows() != null ) {
+			for(ResourcesOrderVO vo :mvo.getCreatedRows()) {
+				mapper.insertOrder(vo);
+			}
+		
+		}
 	
-	
+	}
+
 }
