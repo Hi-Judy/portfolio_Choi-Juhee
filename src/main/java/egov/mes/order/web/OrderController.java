@@ -27,7 +27,6 @@ public class OrderController {
 			order.setCusCode(null) ;	
 		}
 		List<OrderVO> list = service.orderList(order) ;
-		System.out.println(list);		
 		ModelAndView jsonView = new ModelAndView("jsonView") ;
 		jsonView.addObject("orderlist" , list) ;
 		return jsonView ;

@@ -158,9 +158,11 @@
 		
 		$.ajax({
 			url : 'orderList/' + cusCode ,
+			dataType : 'json' ,
 			async : false ,
 			success : function(datas) {
 				data2 = datas.orderlist ;
+				console.log(data2) ;
 				grid2.resetData(data2) ;
 				grid2.resetOriginData() ;
 				
