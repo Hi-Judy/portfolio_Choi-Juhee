@@ -1,11 +1,12 @@
 package egov.mes.manufacture.dao;
 
 import java.util.List;
-import java.util.Map;
 
+import lombok.Data;
+@Data
 public class ModifyVO<T> {
 	
-	List<Map> createRows;
-	List<Map> updateRows;
-	List<Map> deleteRows;
+	List<T> createdRows;
+	List<T> updatedRows;
+	List<T> deletedRows;
 }

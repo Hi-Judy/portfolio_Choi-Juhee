@@ -1,5 +1,9 @@
 package egov.mes.manufacture.dao;
 
+import java.time.LocalDate;
+
+import org.springframework.format.annotation.DateTimeFormat;
+
 import lombok.Data;
 
 @Data
@@ -9,6 +13,7 @@ public class ManufacturePlanVO {
 	String ordDuedate;
 	String ordStatus;
 	String ordQnt;
+	String cusCode;
 	
 	String podtCode;
 	String podtName;
@@ -19,12 +24,13 @@ public class ManufacturePlanVO {
 	
 	String manPlanNo;
 	String manPlanName;
-	String manPlanDate;
-	String planNoDetail;
-	String planStartDate;
+	@DateTimeFormat(pattern = "yyyy-MM-dd") LocalDate manPlanDate;
+	@DateTimeFormat(pattern = "yyyy-MM-dd") LocalDate planNoDetail;
+	@DateTimeFormat(pattern = "yyyy-MM-dd") LocalDate planStartDate;
 	String planPeriod;
 	String planComplete;
 	String manPerday;
 	String planEtc;
+	
 	
 }
