@@ -137,11 +137,11 @@
 		} ,
 		{
 			header : '접수일' ,
-			name : 'ordDate'
+			name : 'ordDate.year'
 		} ,
 		{
 			header : '납기일' ,
-			name : 'ordDuedate'
+			name : 'ordDuedate.year'
 		}
 	] ;
 	

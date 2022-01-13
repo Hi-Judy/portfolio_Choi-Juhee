@@ -13,6 +13,7 @@ public class OrderVO {
 	String ordCode ;
 	String cusCode ;
 	String ordStatus ;
+	String codeName ;
 	@DateTimeFormat(pattern = "yyyy-MM-dd")
 	@JsonFormat(pattern = "yyyy-MM-dd")
 	LocalDate ordDate ;
