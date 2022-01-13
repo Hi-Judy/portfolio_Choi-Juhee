@@ -17,7 +17,7 @@
 <body>
 	<h3>거래처정보</h3>
 	<div id="info">
-		<input id="txtCusCode">
+		<span>업체명 : </span><input id="txtCusCode">
 		<button type="button" id="listBtn">조회</button>
 		<button type="button" id="btnSearch">업체검색</button>
 		<button type="button" id="btnAdd">추가</button>
@@ -173,40 +173,48 @@
 	})
 	
 	grid.on('uncheck' , (ev) => {
-		console.log(rowCodes.length) ;
+		delete rowCodes[ev.rowKey] ;
 	})
 	
 	$("#btnDelete").on("click" , function() {
 		console.log(rowCodes) ;
-		
-/*		$.ajax({
-			url : 'deleteCustomer' + cusCode ,
-			dataType : 'json' ,
-			async : false ,
-			success : function(datas) {
-				alert('삭제완료되었습니다') ;
-				
-				let cusCode = 'null' ;
+		let ok = 1 ;
+		for (let i = 0 ; i < rowCodes.length ; i++) {
+			if (rowCodes[i] != null) {
+				let cusCode = rowCodes[i] ;
 				
 				$.ajax({
-					url : 'customerList/' + cusCode ,
-					dataType : 'json' ,
+					url : 'deleteCustomer/' + cusCode ,
 					async : false ,
-					success : function(datas) {
-						data = datas.data ;
-						grid.resetData(data) ;
-						grid.resetOriginData() ;
-					} ,
+					success : function(datas) {						
+						ok = 2 ;
+						
+						let cusCode = 'null' ;
+						
+						$.ajax({
+							url : 'customerList/' + cusCode ,
+							dataType : 'json' ,
+							async : false ,
+							success : function(datas) {
+								data = datas.data ;
+								grid.resetData(data) ;
+								grid.resetOriginData() ;
+							} ,
+							error : function(reject) {
+								console.log(reject) ;
+							}
+						})
+					} , 
 					error : function(reject) {
 						console.log(reject) ;
 					}
 				})
-			} , 
-			error : function(reject) {
-				console.log(reject) ;
+				delete rowCodes[i] ;
 			}
-		})
-*/
+		}
+		if (ok == 2) {
+			alert('삭제완료되었습니다') ;
+		}
 	})
 	//---------- ↑페이지 ----------
 	
@@ -272,11 +280,13 @@
 	grid2.on('click',(ev) => {
 		let cusCode = data2[ev.rowKey].cusCode ;
 		$("#txtCusCode").val(cusCode) ;
+		grid2.clear() ;
 		dialog.dialog("close") ;
 	})
 	
 	$("#btnClose1").on("click" , function() {
 		dialog.dialog("close") ;
+		grid2.clear() ;
 	})	
 	//---------- ↑업체찾기 ----------
 	

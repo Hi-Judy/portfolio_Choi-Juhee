@@ -68,7 +68,9 @@ public class CustomerController {
 	
 	@RequestMapping("deleteCustomer/{cusCode}")
 	public ModelAndView deleteCustomer(CustomerVO customer) {
+		System.out.println("여기까지1");
 		service.deleteCustomer(customer) ;
+		System.out.println("여기까지2");
 		String del = "" ;
 		ModelAndView jsonView = new ModelAndView("jsonView") ;
 		jsonView.addObject("delete" , del) ;

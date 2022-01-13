@@ -33,7 +33,7 @@
 				</a>
 					<ul class="submenu ">
 						<li class="submenu-item "><a href="customerInfo">고객 관리</a></li>
-						<li class="submenu-item "><a href="#">주문 관리</a></li>
+						<li class="submenu-item "><a href="orderManagement">주문 관리</a></li>
 						<li class="submenu-item "><a href="#">미생산 출하 조회</a></li>
 						<li class="submenu-item "><a href="#">제품 입/출고 관리</a></li>
 					</ul></li>
