@@ -3,22 +3,44 @@
 <mapper
 	namespace="egov.mes.resources.order.dao.ResourcesCheckMapper">
 	
-	<!-- 자재입고검사(미완료인 품목들 뿌려준다) -->
+	<!-- 자재입고검사(자재상태가 발주인 것을 뿌려준다) -->
 	<select id="findResourcesCheck" resultType="egov.mes.resources.order.dao.ResourcesCheckVO">
-	
+		SELECT RSC_CODE, FN_GET_CODE_NAME(RSC_CODE) AS CODE_NAME , FN_GET_RSC_PRC(RSC_CODE) AS RSC_PRC, RSC_CNT
+		FROM RESOURCE_ORDER
+		WHERE RSC_ST = '발주'
 	</select>
 	
 	
-	<!-- 자재입고 검사 후 insert -->
+	<!-- 자재입고 검사 후-> 입고검사관리테이블에 insert -->
 	<insert id="insertResourcesCheck">
+		INSERT INTO RESOURCE_IST_CHECK(RSC_TST_NO, ORDR_NO, RSC_IST_CNT, RSC_TST_CNT, RSC_PASS_CNT, RSC_DEF_CNT, TST_FLAG, RSC_EXPIRATION_DATE)
+		VALUES(TO_CHAR(SYSDATE,'"RC"YYMMDD""') || LPAD(RCNUMBER.NEXTVAL,3,'0'),
+             	#{ordrNo},
+             	#{rscIstCnt},
+             	#{rscTstCnt},
+             	#{rscPassCnt},
+             	#{rscDefCnt},
+             	#{rscExpirationDate})
+	</insert>
+	
+	<!-- 자재입고 검사 후 -> 자재입출고 resource_store 테이블로 insert -->
+	<insert id="insertResourceStore">
+		
 	
 	</insert>
 	
-	
-	<!-- 자재입고 검사에서 불량-> 불량 테이블로 insert -->
+	<!-- 자재입고 검사 후 불량-> 불량 테이블로 insert -->
 	<insert id="insertResourcesRtngd">
-	
+		INSERT INTO RESOURCE_RTNGD(RTNGD_NO, RSC_TST_NO, RSC_CODE, RTNGD_CNT, DEF_CODE)
+		VALUES(TO_CHAR(SYSDATE,'"RT"YYMMDD""') || LPAD(RTNUMBER.NEXTVAL,3,'0'),
+             	#{rscTstNo},
+            	#{rscCode},
+            	#{rtngdCnt},
+            	#{defCode})
 	</insert>
-
 	
+	<!-- 자재입고 검사 후 자재상태-> 자재발주 테이블로 update -->
+	<update id="updateResourcesOrder">
+	
+	</update>
 </mapper>

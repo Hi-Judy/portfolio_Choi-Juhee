@@ -9,9 +9,9 @@ import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.Data;
 @Data
 public class ResourcesCheckVO {
-
 	String rscTstNo;
 	String rscCode;
+	String ordrNo;
 	String rscIstCnt;
 	String rscTstCnt;
 	String rscPassCnt;
@@ -20,5 +20,7 @@ public class ResourcesCheckVO {
 	@DateTimeFormat(pattern = "yyyy-MM-dd")
 	@JsonFormat(pattern = "yyyy-MM-dd")
 	Date rscExpirationDate;
+	
+	String rscSt;
 	
 }

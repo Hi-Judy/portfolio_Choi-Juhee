@@ -27,80 +27,33 @@
 		<hr>
 		자재명<input id="txtRsc">
 		<button id="btnFindRsc">돋보기</button>
-		<div id="dialog-form" title="자재 검색"></div>
+		<div id="dialog-form-rsc" title="자재 검색"></div>
 		<br>
 		<hr>
 		<button id="btnAdd">추가</button>
-		<button id="btnUpd">수정</button>
 		<button id="btnDel">삭제</button>
 	</div>
 	<div id="grid"></div>
 
 	<script type="text/javascript">
 	
-	class RowNumberRenderer {
-	      constructor(props) {
-	        const el = document.createElement('span');
-	        el.innerHTML = `No.${props.formattedValue}`;
-	        this.el = el;
-	      }
+	//모달창(자재조회)
+	function clickRsc(rsc){
+		$("#txtRsc").val(rsc);
+		dialog3.dialog("close");
+	};
 
-	      getElement() {
-	        return this.el;
-	      }
-
-	      render(props) {
-	        this.el.innerHTML = `No.${props.formattedValue}`;
-	      }
-	    }
-
-	    class CheckboxRenderer {
-	      constructor(props) {
-	        const { grid, rowKey } = props;
-
-	        const label = document.createElement('label');
-	        label.className = 'checkbox tui-grid-row-header-checkbox';
-	        label.setAttribute('for', String(rowKey));
-
-	        const hiddenInput = document.createElement('input');
-	        hiddenInput.className = 'hidden-input';
-	        hiddenInput.id = String(rowKey);
-
-	        const customInput = document.createElement('span');
-	        customInput.className = 'custom-input';
-
-	        label.appendChild(hiddenInput);
-	        label.appendChild(customInput);
-
-	        hiddenInput.type = 'checkbox';
-	        label.addEventListener('click', (ev) => {
-	          ev.preventDefault();
-
-	          if (ev.shiftKey) {
-	            grid[!hiddenInput.checked ? 'checkBetween' : 'uncheckBetween'](rowKey);
-	            return;
-	          }
-
-	          grid[!hiddenInput.checked ? 'check' : 'uncheck'](rowKey);
-	        });
-
-	        this.el = label;
-
-	        this.render(props);
-	      }
-
-	      getElement() {
-	        return this.el;
-	      }
-
-	      render(props) {
-	        const hiddenInput = this.el.querySelector('.hidden-input');
-	        const checked = Boolean(props.value);
-
-	        hiddenInput.checked = checked;
-	      }
-	    }
+	let dialog3 = $( "#dialog-form-rsc" ).dialog({
+			autoOpen: false,
+			modal: true
+		});
 	
+	$("#btnFindRsc").on("click", function(){
+			dialog3.dialog("open");
+		$("#dialog-form-rsc").load("recList",
+				function(){console.log("로드됨")})
+		});
+		
 	//그리드
 	var Grid = tui.Grid;
 	Grid.applyTheme('striped', {
@@ -175,27 +128,7 @@
 	const grid = new Grid({
 		  el: document.getElementById('grid'),
 		  data: dataSource,
-		  rowHeaders: [
-		      {
-		        type: 'rowNum',
-		        renderer: {
-		          type: RowNumberRenderer
-		        }
-		      },
-		      
-		      {
-		        type: 'checkbox',
-		        header: `
-		            <label for="all-checkbox" class="checkbox">
-		            <input type="checkbox" id="all-checkbox" class="hidden-input" name="_checked" />
-		            <span class="custom-input"></span>
-		          </label>
-		        `,
-		        renderer: {
-		          type: CheckboxRenderer
-		        }
-		      }
-		    ],
+		  rowHeaders: ['checkbox'],
 		  columns
 		});
 	
