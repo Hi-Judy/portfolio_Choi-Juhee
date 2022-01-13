@@ -52,10 +52,11 @@ document.getElementById('text').addEventListener('click', (e) => {
         title: 'Enter your IP address',
         input: 'text',
         inputLabel: 'Your IP address',
-        showCancelButton: true,
+        showCancelButton: true
     })
 
 })
+
 document.getElementById('email').addEventListener('click', async (e) => {
  
     const { value: email } = await Swal.fire({

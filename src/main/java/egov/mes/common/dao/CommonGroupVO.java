@@ -15,5 +15,7 @@ public class CommonGroupVO {
 	String codeFlag;
 	String codeEtc;
 	
+	String CRUD ;
+	
 
 }

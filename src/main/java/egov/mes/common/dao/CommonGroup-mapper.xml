@@ -7,10 +7,33 @@
 	</select>
 	
 	<select id="findSelect" resultType="egov.mes.common.dao.CommonGroupVO">
-		select code , code_name , code_desct , code_flag , code_etc
+		select code , group_code , code_name , code_desct , code_flag , code_etc, 'R' AS CRUD
 		from common_code
 		where group_code = #{groupCode}
 	</select>
+	
+	<insert id="DataAdd" parameterType="egov.mes.common.dao.CommonGroupVO">
+		insert into common_code (
+								code,
+								group_code,
+								code_name,
+								code_desct,
+								code_flag,
+								code_etc
+								)
+						values(#{code} , #{groupCode} , #{codeName} , #{codeDesct} , #{codeFlag} , #{codeEtc} )
+		
+	</insert>
+	
+	<update id="dataUpdate" parameterType="egov.mes.common.dao.CommonGroupVO">
+		update common_code 
+		set
+		code_name = #{codeName},
+		code_desct = #{codeDesct},
+		code_flag = #{codeFlag},
+		code_etc = #{codeEtc}
+		where code = #{code}
+	</update>
 
 
 
