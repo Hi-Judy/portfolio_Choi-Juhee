@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="egov.mes.BOM.dao.ProductBomMapper">
+
+<!-- 제품전체조회 -->
+<select id="1" resultType="egov.mes.BOM.dao.ProductBomVO">
+	select *
+	from Product 
+</select>
+
+<!-- 제품단건 상세 조회 -->
+<select id="2" resultType="egov.mes.BOM.dao.ProductBomVO">
+	select	podt_code , podt_unit , podt_flag , man_flag , podt_qnt , podt_price , FN_GET_CODE_NAME(podt_code) AS pName
+	from	Product 
+	where	podt_code = #{podtCode}
+</select>
+
+<!-- 제품BOM(자재) -->
+<select id="3" resultType="egov.mes.BOM.dao.ProductBomVO">
+	SELECT	res_code , res_usage , res_etc , FN_GET_CODE_NAME(res_code) AS mName
+	FROM	Prdt_bom_res
+	WHERE	podt_code = #{podtCode}
+</select>
+
+<!-- 공정흐름 조회 -->
+<select id="4" resultType="egov.mes.BOM.dao.ProductBomVO">
+	SELECT	field , proc_code  , podt_code , proc_index , FN_GET_CODE_NAME(proc_code) AS fName
+	FROM 	rocess_flowInfo 
+	WHERE	podt_code = #{podtCode}
+</select>
+
+
+
+</mapper>
