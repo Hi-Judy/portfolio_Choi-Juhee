@@ -5,7 +5,7 @@
 
 <!-- 미계획 내역 조회 -->
 <select id="selectPlan" resultType="egov.mes.manufacture.dao.ManufacturePlanVO">
-	select a.ord_code, a.ord_duedate,  a.ord_qnt, a.podt_code, b.code_name podtName
+	select a.ord_code, a.ord_duedate,a.cus_code,  a.ord_qnt, a.podt_code, b.code_name podtName
     from ord_detail_view a join common_code b
     on a.podt_code = b.code
     where a.ord_status = '미진행'
@@ -18,5 +18,42 @@
 	on a.res_code = b.rsc_code
 	where a.podt_code = #{podtCode}
 </select>
+
+<!-- 생산계획 데이터 추가 -->
+<insert id="insertPlan" parameterType="egov.mes.manufacture.dao.ManufacturePlanVO">
+	insert into manufacture_plan ( MAN_PLAN_NO,
+								   ORD_CODE,
+								   CUS_CODE,
+								   MAN_PLAN_NAME,
+								   MAN_PLAN_DATE )
+	values( (select nvl(max(MAN_PLAN_NO),0)+1 from manufacture_plan),
+			#{ordCode},
+			#{cusCode},
+			#{manPlanName},
+			#{manPlanDate} )	
+		   
+</insert>
+
+<!-- 생산계획 디테일 데이터 추가 -->
+<insert id="insertPlanDetail" parameterType="egov.mes.manufacture.dao.ManufacturePlanVO">
+		insert into manufacture_plan_d ( PLAN_NO_DETAIL,
+										 PODT_CODE,
+										 MAN_PLAN_NO,
+										 PLAN_STARTDATE,
+										 PLAN_PERIOD,
+										 MAN_PERDAY,
+										 PLAN_ETC,
+										 ORD_QNT,
+										 PLAN_COMPLETE )
+		values( (select nvl(max(PLAN_NO_DETAIL),0)+1 from manufacture_plan_d),
+				#{podtCode},
+				(select nvl(max(MAN_PLAN_NO),0) from manufacture_plan),
+				#{planStartDate},
+				#{planPeriod},
+				#{manPerday},
+				#{planEtc},
+				#{ordQnt},
+				#{planComplete} )
+</insert>
 
 </mapper>
