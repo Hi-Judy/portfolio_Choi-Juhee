@@ -47,6 +47,11 @@
 		<div id = "dialog-form-resource" title="자재 조회">
 			<div id="gridResource"></div>
 		</div>
+		
+		<!-- 작성된 생산계획 조회 모달 -->
+		<div id="dialog-form-manPlan" title="생산계획 조회">
+			<div id="gridManPlan"></div>
+		</div>
 	</div>
 	<br>
 	
@@ -61,6 +66,29 @@
 	
 	
 	<script> 
+	
+		//작성된 생산계획 조회 모달 설정해주기
+		let dialogManPlan = $("#dialog-form-manPlan").dialog({
+			autoOpen: false, 
+			modal: true,
+			height: 500,
+		    width: 900,
+		    buttons: {
+				"확인" : goManPlan, //확인 버튼 눌렀을 때 체크된 값에 해당하는 데이터를 gridMain에 뿌려준다.
+				"취소" : function(){
+					dialogPlan.dialog("close");
+				}
+			}		
+		})
+		
+		//자재 모달 설정해주기. 
+		let dialogResource = $("#dialog-form-resource").dialog({
+			autoOpen: false, 
+			modal: true,
+			height: 400,
+		    width: 600
+		})
+
 		//미계획 모달 설정해주기
 		let dialogPlan = $("#dialog-form-plan").dialog({
 			autoOpen: false, 
@@ -74,16 +102,7 @@
 				}
 			}		    
 		});
-		 
 		
-		//자재 모달 설정해주기. 
-		let dialogResource = $("#dialog-form-resource").dialog({
-			autoOpen: false, 
-			modal: true,
-			height: 400,
-		    width: 600
-		})
-
 		var Grid = tui.Grid; //그리드 객체 생성
 		
 		Grid.applyTheme('striped', { //그리드 객체에 전체 옵션 주기
@@ -99,6 +118,109 @@
 				  border: 'red'
 			  }
 		});
+		
+		
+		//생산계획조회 컬럼
+		const columnsManPlan = [
+			{
+				header:'생산계획번호',
+				name: 'manPlanNo'
+			},
+			{
+				header:'생산계획명',
+				name: 'manPlanName'
+			},
+			{
+				header:'계획일자',
+				name: 'manPlanDate'
+			}
+		] 
+		
+		//메인화면 컬럼
+		const columnsMain = [
+			{
+				header:'제품코드',
+				name: 'podtCode'
+			},
+			{
+				header: '제품명',
+				name: 'podtName'
+			},
+			{
+				header:'주문코드',
+				name: 'ordCode'
+			},
+			{
+				header:'주문상태',
+				name: 'ordStatus'
+			},
+			{
+				header:'고객코드',
+				name: 'cusCode',
+				hidden: true
+			},
+			{
+				header:'주문량',
+				name: 'ordQnt'
+			},
+			{
+				header: '납기일자',
+				name: 'ordDuedate'
+			},
+			{
+				header: '예상작업기간',
+				name: 'planPeriod',
+				editor: 'text',
+				validation : {
+					required : true
+				}
+			},
+			{
+				header: '예상작업시작일',
+				name: 'planStartDate',
+				editor: 'datePicker'
+			},
+			{
+				header: '예상작업종료일',
+				name: 'planComplete',
+				editor: 'datePicker'
+			},
+			{
+				header: '생산량',
+				name: 'manPerday',
+				editor: 'text'
+			},
+			{
+				header: '비고',
+				name: 'planEtc',
+				editor: 'text'
+			}
+		]
+		
+		
+		//자재 조회 모달 컬럼
+		const columnsResource = [
+			{
+				header:'제품코드',
+				name: 'podtCode'
+			},
+			{
+				header: '제품명',
+				name: 'podtName'
+			},
+			{
+				header:'자재코드',
+				name: 'resCode'
+			},
+			{
+				header:'소요량',
+				name: 'resUsage'
+			},
+			{
+				header: '재고량',
+				name: '재고량'
+			}
+		]
 		
 		//미계획 모달 컬럼
 		const columnsPlan = [
@@ -129,83 +251,112 @@
 			}
 		]
 		
-		//자재 조회 모달 컬럼
-		const columnsResource = [
-			{
-				header:'제품코드',
-				name: 'podtCode'
-			},
-			{
-				header: '제품명',
-				name: 'podtName'
-			},
-			{
-				header:'자재코드',
-				name: 'resCode'
-			},
-			{
-				header:'소요량',
-				name: 'resUsage'
-			},
-			{
-				header: '재고량',
-				name: '재고량'
-			}
-		]
+		//생산계획조회 그리드
+		const dataSourceManPlan = {
+				api: {
+					readData: {url: '${pageContext.request.contextPath}/manufacture/manPlan',
+								method: 'GET'
+					}
+				},
+				contentType: 'application/json'
+		};
 		
-		//메인화면 컬럼
-		const columnsMain = [
-			{
-				header:'제품코드',
-				name: 'podtCode'
+		//생산계획 그리드 내용
+		let gridManPlan = new Grid({
+			el: document.getElementById('gridManPlan'),
+			data: dataSourceManPlan,
+			columns: columnsManPlan,
+			rowHeaders: ['checkbox']
+		})
+		
+		//조회 버튼 눌렀을 때 생산계획 조회 모달창 띄우기
+		$('#btnSelectPlan').click(function(){
+			let dateFrom = document.getElementById('txtFromDate'); //시작일
+			let dateTo = document.getElementById('txtToDate');	//종료일
+			
+			dateFrom = dateFrom.value;
+			dateTo = dateTo.value;
+		
+			let data;
+			$.ajax({
+				url: '${pageContext.request.contextPath}/manufacture/selectPlan',
+				method: 'POST',
+				data:{'startDate' : dateFrom, 'endDate': dateTo  },
+				dataType: 'JSON',
+				async: false
+			}).done(function(datas){
+				data = datas;
+				console.log("data")
+				console.log(data);
+				gridManPlan.resetData(data.result);
+			}).fail(function(reject){
+				console.log(reject);
+			});
+		}); 
+
+		
+		//메인 그리드
+		const dataSourceMain = {
+				api : {
+					readData : {url: '${pageContext.request.contextPath}/manufacture/manufacture', 
+							   method: 'GET'},
+					//API를 사용하기 위해, 각 요청에 대한 url과 method를 등록
+					modifyData : { url: '${pageContext.request.contextPath}/manufacture/main', 
+								  method: 'POST' },
+				},
+				contentType : 'application/json;charset=UTF-8', //보낼때 json타입으로 보낸다.
+				initialRequest : false
+		};  
+		
+		
+		//생산계획 그리드 내용. 
+		var gridMain = new Grid({
+			el : document.getElementById('gridMain'),
+			data : dataSourceMain, //컨트롤러에서 리턴된 결과를 dataSource에 담아서 보여준다.
+			columns : columnsMain,
+			rowHeaders : ['checkbox'],
+			sortable: true
+		});
+		
+		let checkedPlan;
+		
+		gridPlan.on('check', function(ev){
+				checkedPlan=gridPlan.getCheckedRows();
+
+				checkedOrd = gridPlan.getValue(ev.rowKey, 'ordCode'); //체크된 row의 주문코드
+				//console.log(gridPlan.getValue(ev.rowKey, 'podtCode')); //그리드에서 제품코드 가져오기
+		});
+		
+		
+		//자재조회 그리드
+		const dataSourceResource = {
+			api: {
+				//컨트롤러 resource를 POST 방식으로 찾아가기
+				readData: { url: '${pageContext.request.contextPath}/manufacture/resource', 
+						    method: 'POST'
+						    /* initParams: { podtCode : txtPodt} */ 
+				}
 			},
-			{
-				header: '제품명',
-				name: 'podtName'
-			},
-			{
-				header:'주문코드',
-				name: 'ordCode'
-			},
-			{
-				header:'고객코드',
-				name: 'cusCode',
-				hidden: true
-			},
-			{
-				header:'주문량',
-				name: 'ordQnt'
-			},
-			{
-				header: '납기일자',
-				name: 'ordDuedate'
-			},
-			{
-				header: '예상작업기간',
-				name: 'planPeriod',
-				editor: 'text'
-			},
-			{
-				header: '예상작업시작일',
-				name: 'planStartDate',
-				editor: 'datePicker'
-			},
-			{
-				header: '예상작업종료일',
-				name: 'planComplete',
-				editor: 'datePicker'
-			},
-			{
-				header: '생산량',
-				name: 'manPerday',
-				editor: 'text'
-			},
-			{
-				header: '비고',
-				name: 'planEtc',
-				editor: 'text'
-			}
-		]
+			contentType: 'application/x-www-form-urlencoded;charset=UTF-8' //POST 방식으로 보낼 때 contentType.
+		};
+		
+		
+		//자재조회 그리드 내용
+		const gridResource = new Grid({
+			el: document.getElementById('gridResource'),
+			data: dataSourceResource,
+			columns: columnsResource,
+			rowHeaders: ['rowNum']
+		})
+			
+		//자재 조회 버튼 눌렀을 때 모달창 띄우기
+		$("#btnSearchRes").on("click", function(){
+			let txtPodt = document.querySelector('#txtPodt').value;
+			dialogResource.dialog("open");
+			gridResource.readData(1, {'podtCode': txtPodt}, true )//검색한 다음에 첫번째 페이지 보여준다.// 파라미터 // 값 불러온 다음에 새로고침 유무
+			gridResource.refreshLayout();
+		})
+		
 		
 		//미계획 조회 그리드
 		const dataSourcePlan = {
@@ -236,65 +387,6 @@
 		});
 		
 		
-		//자재조회 그리드
-		const dataSourceResource = {
-			api: {
-				//컨트롤러 resource를 POST 방식으로 찾아가기
-				readData: { url: '${pageContext.request.contextPath}/manufacture/resource', 
-						    method: 'POST'
-						    /* initParams: { podtCode : txtPodt} */ 
-				}
-			},
-			contentType: 'application/x-www-form-urlencoded;charset=UTF-8' //POST 방식으로 보낼 때 contentType.
-		};
-		
-		//자재조회 그리드 내용
-		const gridResource = new Grid({
-			el: document.getElementById('gridResource'),
-			data: dataSourceResource,
-			columns: columnsResource,
-			rowHeaders: ['rowNum']
-		})
-			
-		//자재 조회 버튼 눌렀을 때 모달창 띄우기
-		$("#btnSearchRes").on("click", function(){
-			let txtPodt = document.querySelector('#txtPodt').value;
-			dialogResource.dialog("open");
-			gridResource.readData(1, {'podtCode': txtPodt}, true )//검색한 다음에 첫번째 페이지 보여준다.// 파라미터 // 값 불러온 다음에 새로고침 유무
-			gridResource.refreshLayout();
-		})
-		
-		
-		//생산계획 조회 그리드
-		const dataSourceMain = {
-				api : {
-					readData : {url: '${pageContext.request.contextPath}/manufacture/manufacture', 
-							   method: 'GET'},
-					//API를 사용하기 위해, 각 요청에 대한 url과 method를 등록
-					modifyData : { url: '${pageContext.request.contextPath}/manufacture/main', 
-								  method: 'POST' },
-				},
-				contentType : 'application/json;charset=UTF-8', //보낼때 json타입으로 보낸다.
-				initialRequest : false
-		};  
-		
-		
-		//생산계획 그리드 내용. 
-		var gridMain = new Grid({
-			el : document.getElementById('gridMain'),
-			data : dataSourceMain, //컨트롤러에서 리턴된 결과를 dataSource에 담아서 보여준다.
-			columns : columnsMain,
-			rowHeaders : ['checkbox']
-		});
-		
-		let checkedPlan;
-		
-		gridPlan.on('check', function(ev){
-				checkedPlan=gridPlan.getCheckedRows();
-
-				checkedOrd = gridPlan.getValue(ev.rowKey, 'ordCode'); //체크된 row의 주문코드
-				//console.log(gridPlan.getValue(ev.rowKey, 'podtCode')); //그리드에서 제품코드 가져오기
-		});
 		
 		//미계획 모달에서 체크 박스 선택 후 확인 버튼 눌렀을 때 가는 function
 		function goPlan(){
@@ -303,8 +395,12 @@
 			dialogPlan.dialog("close");
 		};
 		
+		function goManPlan(){
+			console.log("생산계획테스트")
+		}
+		
 		//조회 버튼 이벤트
-		$('#btnSelectPlan').click(function(){
+		/* $('#btnSelectPlan').click(function(){
 			let dateFrom = document.getElementById('txtFromDate'); //시작일
 			let dateTo = document.getElementById('txtToDate');	//종료일
 			
@@ -326,7 +422,7 @@
 			}).fail(function(reject){
 				console.log(reject);
 			});
-		}); 
+		});  */
 		
 		//저장 버튼 이벤트
 		btnSavePlan.addEventListener("click", function(){

@@ -7,6 +7,7 @@ import java.util.Map;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -65,24 +66,37 @@ public class ManufactureController {
 	//생산계획에서 한 건 추가
 	@PostMapping("/manufacture/main")
 	public String modifyDataInsert(@RequestBody ModifyVO<ManufacturePlanVO> list, Model model) {
-		System.out.println("!!!!생산계획추가^^!!!!!!!!!!!!!"+list);
-
+		//System.out.println("!!!!생산계획추가^^!!!!!!!!!!!!!"+list);
+		//System.out.println("!!!!생산계획 주문상태 수정^^!!!!!!!!!!!!!"+list);
 		manService.insertPlan(list);
 		
+		//System.out.println("!!!!생산계획삭제^^!!!!!!!!!!!!!"+list);
 		model.addAttribute("result", true);
 		
 		return "jsonView";
 	}
 	
-	//생산계획 조회
-	@PostMapping("/manufacture/selectPlan")
+	/*
+	 * //원래 생산계획 조회
+	 * 
+	 * @PostMapping("/manufacture/selectPlan") public String
+	 * selectManPlan(ManufacturePlanVO planVO, Model model) {
+	 * 
+	 * System.out.println(planVO); System.out.println("생산계획 조회: "+
+	 * manService.selectManPlan(planVO)); model.addAttribute("result",
+	 * manService.selectManPlan(planVO));
+	 * 
+	 * return "jsonView"; }
+	 */
+	
+	//작성된 생산계획 조회
+	@GetMapping("/manufacture/manPlan")
 	public String selectManPlan(ManufacturePlanVO planVO, Model model) {
 		
-		//System.out.println(planVO);
-		//System.out.println(manService.selectManPlan(planVO));
+		System.out.println(planVO);
+		System.out.println("생산계획 조회: "+ manService.selectManPlan(planVO));
 		model.addAttribute("result", manService.selectManPlan(planVO));
 		
 		return "jsonView";
 	}
-	
 }

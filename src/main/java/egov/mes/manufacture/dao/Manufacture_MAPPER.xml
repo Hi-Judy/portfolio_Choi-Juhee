@@ -3,6 +3,20 @@
 
 <mapper namespace="egov.mes.manufacture.dao.ManufactureMapper">
 
+<!-- 작성된 생산계획 조회 -->
+<select id = "selectManPlan" resultType="egov.mes.manufacture.dao.ManufacturePlanVO">
+	select man_plan_no, man_plan_name, man_plan_date
+	from manufacture_plan
+</select>
+
+<!-- 계획서 추가 후 주문 상태 '진행'으로 변경 -->
+<update id = "updateOrdStatus" parameterType="egov.mes.manufacture.dao.ManufacturePlanVO">
+	update order_management
+	set ord_status = '진행'
+	where ord_code = #{ordCode}
+</update>
+
+
 <!-- 조회된 생산계획서 삭제. (생산디테일 삭제) -->
 <delete id="deletePlan" parameterType="egov.mes.manufacture.dao.ManufacturePlanVO">
 	delete 
@@ -10,36 +24,21 @@
 	where man_plan_no = #{manPlanNo}
 </delete>
 
+
 <!-- 계획일자 기준으로 생산계획서 조회 -->
-<select id="selectManPlan" resultType="egov.mes.manufacture.dao.ManufacturePlanVO">
-	select a.podt_code, prod_detail('PODT005') podtName, a.ord_code, a.ord_qnt, a.ord_duedate,
-           b.plan_period, b.plan_startdate, b.plan_complete, b.man_perday, b.plan_etc
+<!-- <select id="selectManPlan" resultType="egov.mes.manufacture.dao.ManufacturePlanVO">
+	select a.podt_code, prod_detail(a.podt_code) podtName, a.ord_code, a.ord_qnt, a.ord_duedate, a.ord_status,
+           b.plan_period, b.plan_startdate, b.plan_complete, b.man_perday, b.plan_etc, b.man_plan_no, b.man_plan_date, b.ord_code
 	from ord_detail_view a join man_plan_view b
 	on a.ord_code = b.ord_code
-	where a.ord_status = '진행'
+	where a.ord_status = '진행중'
 		<if test = "startDate != null"> 
-			and b.man_plan_date > to_date(#{startDate}, 'yyyy-MM-dd')
+			and to_char(b.man_plan_date, 'rrrr-MM-dd') >= #{startDate}
 		</if>
 		<if test= "endDate != null">
-			and to_date(#{endDate},'yyyy-MM-dd') > b.man_plan_date
+			and #{endDate} >=  to_char(b.man_plan_date, 'rrrr-MM-dd')
 		</if>
-</select>
-
-<!-- 미계획 내역 조회 -->
-<select id="selectPlan" resultType="egov.mes.manufacture.dao.ManufacturePlanVO">
-	select a.ord_code, a.ord_duedate,a.cus_code,  a.ord_qnt, a.podt_code, b.code_name podtName
-    from ord_detail_view a join common_code b
-    on a.podt_code = b.code
-    where a.ord_status = '미진행'
-</select>
-
-<!-- 자재 조회 -->
-<select id="selectRes" resultType="egov.mes.manufacture.dao.ManufacturePlanVO">
-	select a.podt_code, prod_detail('PODT005') podtName, a.res_code, a.res_usage, b.재고량
-	from prdt_bom_res a join r_qnt b
-	on a.res_code = b.rsc_code
-	where a.podt_code = #{podtCode}
-</select>
+</select> -->
 
 <!-- 생산계획 데이터 추가 -->
 <insert id="insertPlan" parameterType="egov.mes.manufacture.dao.ManufacturePlanVO">
@@ -53,8 +52,8 @@
 			#{cusCode},
 			#{manPlanName},
 			#{manPlanDate} )	
-		   
 </insert>
+
 
 <!-- 생산계획 디테일 데이터 추가 -->
 <insert id="insertPlanDetail" parameterType="egov.mes.manufacture.dao.ManufacturePlanVO">
@@ -77,5 +76,23 @@
 				#{ordQnt},
 				#{planComplete} )
 </insert>
+
+
+<!-- 자재 조회 -->
+<select id="selectRes" resultType="egov.mes.manufacture.dao.ManufacturePlanVO">
+	select a.podt_code, prod_detail('PODT005') podtName, a.res_code, a.res_usage, b.재고량
+	from prdt_bom_res a join r_qnt b
+	on a.res_code = b.rsc_code
+	where a.podt_code = #{podtCode}
+</select>
+
+
+<!-- 미계획 내역 조회 -->
+<select id="selectPlan" resultType="egov.mes.manufacture.dao.ManufacturePlanVO">
+	select a.ord_code, a.ord_duedate, a.ord_status, a.cus_code, a.ord_qnt, a.podt_code, b.code_name podtName
+    from ord_detail_view a join common_code b
+    on a.podt_code = b.code
+    where a.ord_status = '미진행'
+</select>
 
 </mapper>
