@@ -4,7 +4,7 @@
 <html>
 <head>
 <meta charset="UTF-8">
-<title></title>
+<title>orderList</title>
 <link rel="stylesheet" href="https://uicdn.toast.com/tui-grid/latest/tui-grid.css" />
 <link rel="stylesheet" href="https://uicdn.toast.com/tui.date-picker/latest/tui-date-picker.css" />
 <link rel="stylesheet" href="//code.jquery.com/ui/1.13.0/themes/base/jquery-ui.css">
@@ -170,6 +170,7 @@
 			console.log(ordeDate);
 			console.log(typeof(ordeDate));
 			console.log(ordeDate2);
+			
 			$.ajax({
 				url :'resourcesOrder',
 				data: {'rscName' : rscName, 'sucName': sucName, 'ordeDate':ordeDate, 'ordeDate2':ordeDate2 },

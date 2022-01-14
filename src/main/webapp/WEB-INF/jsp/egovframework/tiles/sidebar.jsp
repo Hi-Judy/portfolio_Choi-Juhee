@@ -61,7 +61,7 @@
 				</a>
 					<ul class="submenu ">
 						<li class="submenu-item "><a href="orderInsert">자재 발주</a></li>
-						<li class="submenu-item "><a href="orderList">자재 발주 조회</a></li>
+						<li class="submenu-item "><a href="resourceorderList">자재 발주 조회</a></li>
 						<li class="submenu-item "><a href="resourcesCheck">자재입고검사 관리</a></li>
 						<li class="submenu-item "><a href="#">자재 입고 관리</a></li>
 						<li class="submenu-item "><a href="#">자재 입/출고 조회</a></li>

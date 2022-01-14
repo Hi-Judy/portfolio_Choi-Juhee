@@ -1,4 +1,4 @@
-package egov.mes.resources.order.dao;
+package egov.mes.resources.check.dao;
 
 import java.util.List;
 

@@ -72,23 +72,19 @@
 		
 	  {
 	    header: '자재코드',
-	    name: 'rscCode',
-	    editor: 'text'
+	    name: 'rscCode'
 	  },
 	  {
 		header: '자재명',
-		name: 'rscName',
-		editor: 'text'
+		name: 'rscName'
 	  },
 	  {
 		header: '단위',
-		name: 'rscUnit',
-		editor: 'text'
+		name: 'rscUnit'
 	   },
 	  {
 		header: '발주량',
-		name: 'rscCnt',
-		editor: 'text'
+		name: 'rscCnt'
 	   },
 	   {
 		header: '단가',
@@ -107,8 +103,7 @@
 		},
 		{
 		  header: '입고요청일',
-		  name: 'istReqDate',
-		  editor: 'datePicker'
+		  name: 'istReqDate'
 		  
 		}	
 	];
