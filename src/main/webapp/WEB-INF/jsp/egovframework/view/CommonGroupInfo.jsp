@@ -225,7 +225,16 @@ tr:hover {
 		{
 			header: '사용여부',
 			name : 'codeFlag',
-			editor : 'text',
+		    formatter: 'listItemText',
+		    editor: {
+		      type: 'select',
+		      options: {
+		        listItems: [
+			        { text: '사용', value: 'Y' },
+			        { text: '미사용', value: 'N' }
+			    ]
+		      }
+		    },
 			align : 'center'
 			
 		},
@@ -261,7 +270,6 @@ tr:hover {
     /* 	console.log("콘솔로그 성공");
     	console.log(datas); */
 		data = datas.data
-		
 		
 	});
     
