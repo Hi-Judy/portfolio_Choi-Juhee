@@ -3,10 +3,14 @@
 <mapper namespace="egov.mes.order.dao.OrderMapper">
 	
 	<select id="orderList" resultType="egov.mes.order.dao.OrderVO">
-		select ord_status , ord_code , cus_code , fn_get_code_name(cus_code) , ord_date , ord_duedate 
+		select ord_status , ord_code , cus_code , fn_get_code_name(cus_code) as code_name , ord_date , ord_duedate 
 			from order_management
 			where 1=1
 			
+		<if test="ordStatus != null">
+			and ord_status = #{ordStatus}
+		</if>
+		
 		<if test="cusCode != null">
 			and cus_code = #{cusCode}
 		</if>

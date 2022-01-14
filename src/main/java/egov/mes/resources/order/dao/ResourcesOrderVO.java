@@ -33,4 +33,5 @@ public class ResourcesOrderVO {
 	String rscDefCnt;
 	String code;
 	String codeName;
+	
 }

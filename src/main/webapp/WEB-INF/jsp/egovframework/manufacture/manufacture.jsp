@@ -5,27 +5,23 @@
 <head>
 <meta charset="UTF-8">
 <title>Insert title here</title>
-<style>
-
-</style>
-
 <link rel="stylesheet" href="https://uicdn.toast.com/tui.date-picker/latest/tui-date-picker.css" />
 <link rel="stylesheet" href="https://uicdn.toast.com/tui-grid/latest/tui-grid.css" />
 <link rel="stylesheet" href="//code.jquery.com/ui/1.13.0/themes/base/jquery-ui.css">
 
 <script src="https://uicdn.toast.com/tui.date-picker/latest/tui-date-picker.js"></script>
 <script src="https://uicdn.toast.com/tui-grid/latest/tui-grid.js"></script>
-<script src="https://code.jquery.com/jquery-3.6.0.js"
-	    integrity="sha256-H+K7U5CnXl1h5ywQfKtSj8PCmoN9aaq30gDh27Xc0jk="
-  		crossorigin="anonymous"></script>
+<script src="https://code.jquery.com/jquery-3.6.0.js"> </script>
 <script src="https://code.jquery.com/ui/1.13.0/jquery-ui.js"></script>
 
 </head>
+
 <body>
-	<h2>생산계획서 작성</h2>
+	<h2>생산계획서 작성</h2><br>
 	<div class = "planDate">
 		<p style="display:inline-block;">계획일자</p>
 		<input id = "txtFromDate" type="date" name="from" style="display:inline-block;">
+		
 		<p style="display:inline-block;"> ~ </p>
 		<input id = "txtToDate" type="date" name="to" style="display:inline-block;">
 	</div>
@@ -37,16 +33,17 @@
 	<br>
 	
 	<div> 
-		<input id="txtPlan"> 
-		<button type="button" id="btnSearchPlan">미계획 조회</button>
+		<button type="button" id="btnSearchPlan">미계획 조회</button><br>
 		
 		<input id="txtPodt"> 
 		<button type="button" id="btnSearchRes">자재 조회</button>
 		
+		<!-- 미계획 모달 -->
 		<div id = "dialog-form-plan" title="미계획 내역 조회" > 
 			<div id="gridPlan"></div>
 		</div>
 		
+		<!-- 자재조회 모달 -->
 		<div id = "dialog-form-resource" title="자재 조회">
 			<div id="gridResource"></div>
 		</div>
@@ -71,7 +68,7 @@
 			height: 500,
 		    width: 900,
 			buttons: {
-				"확인" : goPlan, //확인 버튼 눌렀을 때 체크된 값에 해당하는 데이터를 grid3에 뿌려준다.
+				"확인" : goPlan, //확인 버튼 눌렀을 때 체크된 값에 해당하는 데이터를 gridMain에 뿌려준다.
 				"취소" : function(){
 					dialogPlan.dialog("close");
 				}
@@ -213,7 +210,7 @@
 		//미계획 조회 그리드
 		const dataSourcePlan = {
 				api: {
-					//컨트롤러 manufacture2 찾아가기
+					//컨트롤러 plan 찾아가기
 					readData: {url: '${pageContext.request.contextPath}/manufacture/plan', 
 							   method: 'GET',
 					 		   initParams: { ordStatus : '미진행'} 
@@ -226,7 +223,7 @@
 		//미계획 그리드 내용. 
 		let gridPlan = new Grid({
 			el: document.getElementById('gridPlan'),
-			data: dataSourcePlan,//컨트롤러에서 리턴된 결과를 dataSource에 담아서 보여준다.
+			data: dataSourcePlan, //컨트롤러에서 리턴된 결과를 dataSource에 담아서 보여준다.
 			columns: columnsPlan,
 			rowHeaders: ['checkbox']
 		})
@@ -243,9 +240,9 @@
 		const dataSourceResource = {
 			api: {
 				//컨트롤러 resource를 POST 방식으로 찾아가기
-				readData: {url: '${pageContext.request.contextPath}/manufacture/resource', 
-						   method: 'POST',
-						   /* initParams: { podtCode : txtPodt} */ 
+				readData: { url: '${pageContext.request.contextPath}/manufacture/resource', 
+						    method: 'POST'
+						    /* initParams: { podtCode : txtPodt} */ 
 				}
 			},
 			contentType: 'application/x-www-form-urlencoded;charset=UTF-8' //POST 방식으로 보낼 때 contentType.
@@ -263,7 +260,6 @@
 		$("#btnSearchRes").on("click", function(){
 			let txtPodt = document.querySelector('#txtPodt').value;
 			dialogResource.dialog("open");
-			//console.log(txtPodt);
 			gridResource.readData(1, {'podtCode': txtPodt}, true )//검색한 다음에 첫번째 페이지 보여준다.// 파라미터 // 값 불러온 다음에 새로고침 유무
 			gridResource.refreshLayout();
 		})
@@ -271,38 +267,38 @@
 		
 		//생산계획 조회 그리드
 		const dataSourceMain = {
-				api: {
-					readData: {url: '${pageContext.request.contextPath}/manufacture/manufacture', 
+				api : {
+					readData : {url: '${pageContext.request.contextPath}/manufacture/manufacture', 
 							   method: 'GET'},
 					//API를 사용하기 위해, 각 요청에 대한 url과 method를 등록
-					modifyData: { url: '${pageContext.request.contextPath}/manufacture/main', 
+					modifyData : { url: '${pageContext.request.contextPath}/manufacture/main', 
 								  method: 'POST' },
 				},
-				contentType: 'application/json;charset=UTF-8', //보낼때 json타입으로 보낸다.
-				initialRequest:false
+				contentType : 'application/json;charset=UTF-8', //보낼때 json타입으로 보낸다.
+				initialRequest : false
 		};  
 		
 		
 		//생산계획 그리드 내용. 
-		const gridMain = new Grid({
-			el: document.getElementById('gridMain'),
-			data: dataSourceMain,//컨트롤러에서 리턴된 결과를 dataSource에 담아서 보여준다.
-			columns: columnsMain,
-			rowHeaders: ['checkbox']
+		var gridMain = new Grid({
+			el : document.getElementById('gridMain'),
+			data : dataSourceMain, //컨트롤러에서 리턴된 결과를 dataSource에 담아서 보여준다.
+			columns : columnsMain,
+			rowHeaders : ['checkbox']
 		});
 		
 		let checkedPlan;
 		
 		gridPlan.on('check', function(ev){
 				checkedPlan=gridPlan.getCheckedRows();
-	
+
 				checkedOrd = gridPlan.getValue(ev.rowKey, 'ordCode'); //체크된 row의 주문코드
 				//console.log(gridPlan.getValue(ev.rowKey, 'podtCode')); //그리드에서 제품코드 가져오기
 		});
 		
 		//미계획 모달에서 체크 박스 선택 후 확인 버튼 눌렀을 때 가는 function
 		function goPlan(){
-			gridMain.resetData(checkedPlan); //gridMain에 기존에 들어있는 데이터를 b 로 리셋.
+			gridMain.resetData(checkedPlan); //gridMain에 기존에 들어있는 데이터를 checkedPlan 로 리셋.
 			//gridMain.appendRows(checkedPlan);
 			dialogPlan.dialog("close");
 		};
@@ -314,15 +310,22 @@
 			
 			dateFrom = dateFrom.value;
 			dateTo = dateTo.value;
-			
 		
+			let data;
 			$.ajax({
 				url: '${pageContext.request.contextPath}/manufacture/selectPlan',
 				method: 'POST',
-				data:{'startDate' : dateFrom, 'endDate': dateTo  }
-			})
-			
-			//gridMain.resetData(); //메인그리드에 조회된 한건 뿌려주기
+				data:{'startDate' : dateFrom, 'endDate': dateTo  },
+				dataType: 'JSON',
+				async: false
+			}).done(function(datas){
+				data = datas;
+				console.log("data")
+				console.log(data);
+				gridMain.resetData(data.result);
+			}).fail(function(reject){
+				console.log(reject);
+			});
 		}); 
 		
 		//저장 버튼 이벤트
@@ -335,7 +338,7 @@
 		
 		//삭제 버튼 이벤트
 		btnDeletePlan.addEventListener("click", function(){
-			gridMain.removeCheckedRows(true);
+			gridMain.removeCheckedRows(true); //저절로 modify안에 deletedRows에 들어간다.
 		});
 		
 	</script>

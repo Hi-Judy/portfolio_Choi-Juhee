@@ -19,10 +19,10 @@
 	<div id="info">
 		<span>진행상태 : </span>
 		<select id="selectStatus">
-			<option value="none" selected>선택</option>
-			<option value="before">미진행</option>
-			<option value="ing">진행중</option>
-			<option value="done">완료</option>
+			<option value="" selected>선택</option>
+			<option value="미진행">미진행</option>
+			<option value="진행중">진행중</option>
+			<option value="완료">완료</option>
 		</select>
 		<br>
 		<span>고객코드 : </span><input id="txtCusCode"><button type="button" id="btnSearch">업체검색</button>
@@ -137,11 +137,13 @@
 		} ,
 		{
 			header : '접수일' ,
-			name : 'ordDate'
+			name : 'ordDate' ,
+			editor: 'datePicker'
 		} ,
 		{
 			header : '납기일' ,
-			name : 'ordDuedate'
+			name : 'ordDuedate' , 
+			editor: 'datePicker'
 		}
 	] ;
 	
@@ -149,6 +151,7 @@
 	
 	$('#listBtn').click(function () {
 		let cusCode = $("#txtCusCode").val() ;
+		let ordStatus = $("#selectStatus").val() ;
 		
 		if (cusCode == '') {
 			cusCode = 'null' ;
@@ -156,9 +159,19 @@
 			cusCode = $("#txtCusCode").val() ; 
 		}
 		
+		if (ordStatus == '') {
+			ordStatus = 'null' ;
+		} else {
+			ordStatus = $("#selectStatus").val() ; 
+		}
+		
 		$.ajax({
-			url : 'orderList/' + cusCode ,
+			url : 'orderList' ,
 			dataType : 'json' ,
+			data : {
+				cusCode : cusCode ,
+				ordStatus : ordStatus
+			}
 			async : false ,
 			success : function(datas) {
 				data2 = datas.orderlist ;
