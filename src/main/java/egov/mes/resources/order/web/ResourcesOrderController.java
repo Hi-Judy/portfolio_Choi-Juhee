@@ -20,7 +20,7 @@ public class ResourcesOrderController {
 	@Autowired ResourcesOrderService service;
 	
 	//발주리스트 조회
-	@RequestMapping("orderList")
+	@RequestMapping("resourceorderList")
 	public String list(Model model, ResourcesOrderVO vo) {
 		model.addAttribute("list", service.find(vo));
 		System.out.println("=================발주조회페이지================");
