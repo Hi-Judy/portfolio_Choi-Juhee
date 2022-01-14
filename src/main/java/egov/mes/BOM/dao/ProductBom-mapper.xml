@@ -3,29 +3,35 @@
 <mapper namespace="egov.mes.BOM.dao.ProductBomMapper">
 
 <!-- 제품전체조회 -->
-<select id="1" resultType="egov.mes.BOM.dao.ProductBomVO">
-	select *
+<select id="ProFind" resultType="egov.mes.BOM.dao.ProductBomVO">
+	select podt_code , podt_flag , FN_GET_CODE_NAME(podt_code) AS codeName
 	from Product 
 </select>
 
+<!-- 자재테이블 조회 (자재명도함께) -->
+<select id="rscFind" resultType="egov.mes.BOM.dao.ProductBomVO">
+	select rsc_code
+	from resources
+</select>
+
 <!-- 제품단건 상세 조회 -->
-<select id="2" resultType="egov.mes.BOM.dao.ProductBomVO">
-	select	podt_code , podt_unit , podt_flag , man_flag , podt_qnt , podt_price , FN_GET_CODE_NAME(podt_code) AS pName
+<select id="ProDetail" resultType="egov.mes.BOM.dao.ProductBomVO">
+	select	podt_code , podt_unit , podt_flag , man_flag , podt_qnt , podt_price , FN_GET_CODE_NAME(podt_code) AS codeName
 	from	Product 
 	where	podt_code = #{podtCode}
 </select>
 
 <!-- 제품BOM(자재) -->
-<select id="3" resultType="egov.mes.BOM.dao.ProductBomVO">
-	SELECT	res_code , res_usage , res_etc , FN_GET_CODE_NAME(res_code) AS mName
+<select id="rscDetail" resultType="egov.mes.BOM.dao.ProductBomVO">
+	SELECT	res_code , res_usage , res_etc , FN_GET_CODE_NAME(res_code) AS codeName
 	FROM	Prdt_bom_res
 	WHERE	podt_code = #{podtCode}
 </select>
 
 <!-- 공정흐름 조회 -->
-<select id="4" resultType="egov.mes.BOM.dao.ProductBomVO">
-	SELECT	field , proc_code  , podt_code , proc_index , FN_GET_CODE_NAME(proc_code) AS fName
-	FROM 	rocess_flowInfo 
+<select id="ProcDetail" resultType="egov.mes.BOM.dao.ProductBomVO">
+	SELECT	field , proc_code  , podt_code , proc_index , FN_GET_CODE_NAME(proc_code) AS codeName
+	FROM 	process_flowInfo 
 	WHERE	podt_code = #{podtCode}
 </select>
 

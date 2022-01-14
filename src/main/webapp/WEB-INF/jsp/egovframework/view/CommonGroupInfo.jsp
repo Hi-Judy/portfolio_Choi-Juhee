@@ -468,7 +468,7 @@ tr:hover {
 					data : JSON.stringify(dataInputArray), //배열로 보내줬기 떄문에 컨트롤러 에서도 배열로 받아야한다.
 					contentType : 'application/json;'
 					}).done(function() {
-						a = 1;
+						i = 1;
 						console.log("추가성공")
 					});
 		    	
@@ -482,7 +482,7 @@ tr:hover {
 		    		data : JSON.stringify(dataUpdateArray),
 		    		contentType : 'application/json;'
 		    	}).done(function() {
-		    		b = 1;
+		    		i = 1;
 					console.log("수정성공")
 				}); 
 		    	
@@ -494,6 +494,7 @@ tr:hover {
         else
         	{
         	console.log("저장예외완료")
+ //       	toastr["info"]("저장할 정보가 없습니다");  //error 에러랑 같이꺼서 일단 주석처리
         	return false;
         	}
 	    
