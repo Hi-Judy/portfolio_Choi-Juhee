@@ -1,6 +1,6 @@
 package egov.mes.order.dao;
 
-import java.time.LocalDate;
+import java.util.Date;
 
 import org.springframework.format.annotation.DateTimeFormat;
 
@@ -13,12 +13,13 @@ public class OrderVO {
 	String ordCode ;
 	String cusCode ;
 	String ordStatus ;
+	String codeName ;
 	@DateTimeFormat(pattern = "yyyy-MM-dd")
 	@JsonFormat(pattern = "yyyy-MM-dd")
-	LocalDate ordDate ;
+	Date ordDate ;
 	@DateTimeFormat(pattern = "yyyy-MM-dd")
 	@JsonFormat(pattern = "yyyy-MM-dd")
-	LocalDate ordDuedate ;
+	Date ordDuedate ;
 	
 	String ordNo ;
 	String podtCode ;

@@ -21,9 +21,9 @@ public class OrderController {
 		return "order/orderManagement.tiles" ;
 	}
 	
-	@RequestMapping("orderList/{cusCode}")
-	public ModelAndView orderList(@PathVariable String cusCode , OrderVO order) {
-		if (cusCode.equals("null")) {
+	@RequestMapping("orderList")
+	public ModelAndView orderList( OrderVO order) {
+		if (order.getCusCode().equals("null")) {
 			order.setCusCode(null) ;	
 		}
 		List<OrderVO> list = service.orderList(order) ;
