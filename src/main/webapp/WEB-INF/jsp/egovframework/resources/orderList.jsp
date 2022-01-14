@@ -28,7 +28,7 @@
 	<div id="dialog-form-suc" title="업체 검색"></div>
 	<br>
 	<button id="btnSelect">조회</button>
-	<input id="btn_reset" type="reset" value="초기화">
+	<button id="btn_reset" type="reset">초기화</button>
 
 	<button>엑셀</button>
 	<hr>	
@@ -44,12 +44,10 @@
 	
 	//초기화 버튼
 	$("#btn_reset").on("click", function(){
-		let txtSuc = document.getElementById("txtSuc");
-		let txtRsc = document.getElementById("txtRsc");
-		console.log(document.getElementById("txtSuc"));
-		console.log(document.getElementById("txtRsc"));
-		txtSuc.value = null;
-		txtRsc.value = null;
+		$("#txtOrde1").val('');
+		$("#txtOrde2").val('');
+		$("#txtSuc").val('');
+		$("#txtRsc").val('');
 	})
 	
 	

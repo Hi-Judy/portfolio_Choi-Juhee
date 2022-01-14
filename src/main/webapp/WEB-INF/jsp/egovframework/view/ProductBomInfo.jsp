@@ -51,10 +51,10 @@ div#top {
 div#productView{
 	width: 1500px;
 	margin-left: 10px;
-	margin-top: 10px;
-	border-top: 2px solid black;
-	height: 50px;
-	border-bottom: 2px solid black;
+	margin-top: 15px;
+	border-top: 3px solid black;
+	height: 94.5px;
+	border-bottom: 1px solid black;
 }
 
 
@@ -151,18 +151,25 @@ tr:hover {
 
 		</div>
 	</div>
-	
+	<!-- 제품정보 보여주는 div 공간 -->
 	<div id="productView">
+		<div style="height: 40px; border-bottom: 1px solid black; margin-top: 5px; margin-bottom: 5px;">
+			<span>제품코드 <input type="text"> </span> &nbsp;&nbsp; <span> 제품명 <input type="text"> </span>
+		</div>
+		<div style="height: 40px; margin-top: 7px; margin-bottom: 5px;">
+			<span>제품분류 <input type="text"> </span> &nbsp;&nbsp; <span>생산구분 <input type="text">&nbsp; </span> <span>관리단위 <input type="text"> </span>
+		</div>
 	
 	</div>
 	
-
+	<br>
 	<div id="AA">
 		<div class="left">
-			<span style="font-size: 1.5em; color: blue"> 코드 </span>
-			 <span style="float: right; margin-top: 5px; color: rgb(158, 158, 158);">그룹코드
-				&nbsp; <input type="text" size="10">
-				<button id="btnS" type="button" class="btn">검색</button>
+			<span style="font-size: 1.5em; color: blue"> 자재 소모량 관리 </span>
+			 <span style="float: right; margin-top: 5px; color: rgb(158, 158, 158);">
+				<button id="btnS" type="button" class="btn">추가</button>
+				&nbsp;
+				<button id="btnS" type="button" class="btn">삭제</button>
 			</span> <br>
 			<br>
 
@@ -172,7 +179,7 @@ tr:hover {
 		</div>
 
 		<div class="right">
-			<span style="font-size: 1.5em; color: blue"> 상세보기 </span> <br>
+			<span style="font-size: 1.5em; color: blue"> 공정흐름 관리 </span> <br>
 			<br>
 
 			<div id="grid2" style="border-top: 3px solid #168;"></div>
