@@ -274,6 +274,7 @@ tr:hover {
     
     grid.on('click' , (ev) => {
     	
+    	
     	//내가선언해준 전역변수 data 에서 로우키(몇번쨰 열 인지) 잡아서 VO에 있는 칼럼명 찾기
     	var rst = data[ev.rowKey].groupCode ;
     	
