@@ -141,7 +141,7 @@ tr:hover {
 			</select> -->
 			
 			</span> <span style="float: right; margin-top: 3.5px;">
-				<button id="btnAdd" type="button" class="btn"
+				<button id="btnAdd" type="button" class="btn btn btn-new"
 					style="padding: 5px 30px;">리셋</button> &nbsp;&nbsp;
 				<button id="btnSave" type="button" class="btn"
 					style="padding: 5px 30px;">저장</button> &nbsp;&nbsp;
@@ -154,7 +154,7 @@ tr:hover {
 	<!-- 제품정보 보여주는 div 공간 -->
 	<div id="productView">
 		<div style="height: 40px; border-bottom: 1px solid black; margin-top: 5px; margin-bottom: 5px;">
-			<span>제품코드 <input type="text"> </span> &nbsp;&nbsp; <span> 제품명 <input type="text"> </span>
+			<span>제품코드 <input id="inpId" type="text" readonly> </span> &nbsp;&nbsp; <span> 제품명 <input type="text"> </span>
 		</div>
 		<div style="height: 40px; margin-top: 7px; margin-bottom: 5px;">
 			<span>제품분류 <input type="text"> </span> &nbsp;&nbsp; <span>생산구분 <input type="text">&nbsp; </span> <span>관리단위 <input type="text"> </span>
@@ -165,7 +165,7 @@ tr:hover {
 	<br>
 	<div id="AA">
 		<div class="left">
-			<span style="font-size: 1.5em; color: blue"> 자재 소모량 관리 </span>
+			<span style="font-size: 1.5em; color: blue"> 사용자재 관리 </span>
 			 <span style="float: right; margin-top: 5px; color: rgb(158, 158, 158);">
 				<button id="btnS" type="button" class="btn">추가</button>
 				&nbsp;
@@ -188,8 +188,10 @@ tr:hover {
 	</div>
 </body>
 
-<script>
-   
+	<script>
+   		$("#inpId").on('click' , () => {
+			console.log("@@@@@@@@@@@@")
+		})
     
     </script>
 </html>
