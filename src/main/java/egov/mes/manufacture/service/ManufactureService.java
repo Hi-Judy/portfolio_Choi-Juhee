@@ -8,10 +8,11 @@ import egov.mes.manufacture.dao.ModifyVO;
 
 
 public interface ManufactureService {
-	
+	//작성된 생산계획 조회
+	List<ManufacturePlanVO> selectManPlan(ManufacturePlanVO planVo);
 	
 	//생산계획 조회
-	List<Map<String, String>> selectManPlan(ManufacturePlanVO mPlanVo);
+	//List<Map<String, String>> selectManPlan(ManufacturePlanVO mPlanVo);
 	
 	//생산계획 추가
 	int insertPlan(ModifyVO<ManufacturePlanVO> list);

@@ -34,15 +34,15 @@ public class ManufactureServiceImpl implements ManufactureService {
 	@Override
 	public int insertPlan(ModifyVO<ManufacturePlanVO> list ) {
 		
+		System.out.println("*******************MODIFY_INSERT_test**************");
 		if(list.getUpdatedRows() != null) {
 			for(ManufacturePlanVO planVO : list.getUpdatedRows()) {
 				manMapper.insertPlanDetail(planVO);
 			}
-			//manMapper.insertPlan(list.getUpdatedRows().get(0));
+			manMapper.insertPlan(list.getUpdatedRows().get(0));
 		}
 		
-		System.out.println("test@@@@@@@@@@@@@");
-		System.out.println(list.getDeletedRows());
+		System.out.println("*******************MODIFY_DELETE_test**************");
 		if(list.getDeletedRows() != null) {
 			for(ManufacturePlanVO planVO : list.getDeletedRows()) {
 				manMapper.deletePlan(planVO);
@@ -50,15 +50,30 @@ public class ManufactureServiceImpl implements ManufactureService {
 			}
 		}
 		
+		System.out.println("*******************MODIFY_UPDATE_test**************");
+		if(list.getUpdatedRows() != null) {
+			for(ManufacturePlanVO planVO : list.getUpdatedRows()) {
+				manMapper.updateOrdStatus(planVO);
+				System.out.println(planVO);
+			}
+		}
+		
 		return 1;
 	}
 
-	//생산계획조회
 	@Override
-	public List<Map<String, String>> selectManPlan(ManufacturePlanVO mPlanVo) {
-
-		return manMapper.selectManPlan(mPlanVo);
+	public List<ManufacturePlanVO> selectManPlan(ManufacturePlanVO planVo) {
+		
+		return manMapper.selectManPlan(planVo);
 	}
+
+	//생산계획조회
+	/*
+	 * @Override public List<Map<String, String>> selectManPlan(ManufacturePlanVO
+	 * mPlanVo) {
+	 * 
+	 * return manMapper.selectManPlan(mPlanVo); }
+	 */
 
 	
 }

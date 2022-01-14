@@ -22,15 +22,20 @@ public class ManufacturePlanVO {
 	String manPlanName;
 	
 	String manPlanDate;
+	
 	String planNoDetail;
+	
 	String planStartDate;
 	
 	String planPeriod;
+	
 	String planComplete;
+	
 	String manPerday;
 	String planEtc;
 	
 	String startDate;
+	
 	String endDate;
 	
 }

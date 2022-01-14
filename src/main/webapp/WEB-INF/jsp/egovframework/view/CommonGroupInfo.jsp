@@ -294,7 +294,7 @@ tr:hover {
 			dataType : 'json',
 	    	async : false
 		}).done(function (datas) {
-			 data2 = datas.data
+			data2 = datas.data
 			grid2.resetData(data2);
 			grid2.resetOriginData();
 			
