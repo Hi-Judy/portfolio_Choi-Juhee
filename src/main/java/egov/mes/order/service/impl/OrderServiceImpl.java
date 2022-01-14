@@ -19,4 +19,9 @@ public class OrderServiceImpl implements OrderService{
 		return mapper.orderList(order) ;
 	}
 
+	@Override
+	public List<OrderVO> orderSelect(OrderVO order) {
+		return mapper.orderSelect(order) ;
+	}
+
 }

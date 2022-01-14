@@ -15,13 +15,18 @@ public class OrderVO {
 	String ordStatus ;
 	String codeName ;
 	@DateTimeFormat(pattern = "yyyy-MM-dd")
-	@JsonFormat(pattern = "yyyy-MM-dd")
+	@JsonFormat(pattern = "yyyy-MM-dd", timezone = "Asia/Seoul")
 	Date ordDate ;
 	@DateTimeFormat(pattern = "yyyy-MM-dd")
-	@JsonFormat(pattern = "yyyy-MM-dd")
+	@JsonFormat(pattern = "yyyy-MM-dd", timezone = "Asia/Seoul")
 	Date ordDuedate ;
+	String ordDatestart ;
+	String ordDateend ;
+	String ordDuedatestart ;
+	String ordDuedateend ;
 	
 	String ordNo ;
 	String podtCode ;
 	String ordQnt ;
+	String podtQnt ;
 }
