@@ -19,15 +19,38 @@ public class OrderController {
 	public String orderManagement () {
 		return "order/orderManagement.tiles" ;
 	}
-	
+
 	@RequestMapping("orderList")
-	public ModelAndView orderList( OrderVO order) {
+	public ModelAndView orderList(OrderVO order) {
 		if (order.getCusCode().equals("null")) {
 			order.setCusCode(null) ;	
+		}
+		if (order.getOrdStatus().equals("null")) {
+			order.setOrdStatus(null) ;	
+		}
+		if (order.getOrdDatestart().equals("1910-12-25")) {
+			order.setOrdDatestart(null) ;
+		}
+		if (order.getOrdDateend().equals("1910-12-25")) {
+			order.setOrdDateend(null) ;
+		}
+		if (order.getOrdDuedatestart().equals("1910-12-25")) {
+			order.setOrdDuedatestart(null) ;	
+		}
+		if (order.getOrdDuedateend().equals("1910-12-25")) {
+			order.setOrdDuedateend(null) ;	
 		}
 		List<OrderVO> list = service.orderList(order) ;
 		ModelAndView jsonView = new ModelAndView("jsonView") ;
 		jsonView.addObject("orderlist" , list) ;
+		return jsonView ;
+	}
+	
+	@RequestMapping("orderSelect/{ordCode}")
+	public ModelAndView orderSelect(OrderVO order) {
+		List<OrderVO> list = service.orderSelect(order) ;
+		ModelAndView jsonView = new ModelAndView("jsonView") ;
+		jsonView.addObject("orderSelect" , list) ;
 		return jsonView ;
 	}
 }

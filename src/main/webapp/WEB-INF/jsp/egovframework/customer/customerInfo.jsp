@@ -15,14 +15,15 @@
 <script src="https://code.jquery.com/ui/1.13.0/jquery-ui.js"></script>
 </head>
 <body>
-	<h3>거래처정보</h3>
+	<div id="title" align="center"><h2>고객 관리</h2></div>
 	<div id="info">
-		<span>업체명 : </span><input id="txtCusCode">
-		<button type="button" id="listBtn">조회</button>
-		<button type="button" id="btnSearch">업체검색</button>
-		<button type="button" id="btnAdd">추가</button>
-		<button type="button" id="btnInsert">저장</button>
-		<button type="button" id="btnDelete">삭제</button>
+		<span>업체명 : </span><input id="txtCusCode"><button type="button" id="listBtn">조회</button>     <button type="button" id="btnSearch">업체검색</button>
+		<br>
+		<div align="right">
+			<button type="button" id="btnAdd">추가</button>
+			<button type="button" id="btnInsert">저장</button>
+			<button type="button" id="btnDelete">삭제</button>
+		</div>
 	</div>
 	
 	<div id="find-dialog-form" title="업체검색"">
@@ -56,17 +57,20 @@
 						{ text: '자재 판매 고객' , value: '자재 판매 고객'}
 					]
 				}
-			}
+			} ,
+			align: 'center'
 		} ,
 		{
 			header: '업체명' ,
 			name: 'codeName' ,
-			editor: 'text'
+			editor: 'text' ,
+			align: 'center'
 		} ,
 		{
 			header: '연락처' ,
 			name : 'cusPhone' ,
-			editor: 'text'
+			editor: 'text' ,
+			align: 'center'
 		}
 	] ;
 	
@@ -234,11 +238,13 @@
 	const columns2 = [
 		{
 			header: '업체코드' ,
-			name: 'cusCode'
+			name: 'cusCode' ,
+			align: 'center'
 		} ,
 		{
 			header: '업체명' ,
-			name: 'codeName'
+			name: 'codeName' ,
+			align: 'center'
 		}
 	] ;
 	
@@ -301,24 +307,29 @@
 	const columns3 = [
 		{
 			header: '주문코드' ,
-			name: 'ordCode'
+			name: 'ordCode' ,
+			align: 'center'
 		} ,
 		{
 			header: '제품코드' ,
-			name: 'podtCode'
+			name: 'podtCode' ,
+			align: 'center'
 		} ,
 		{
 			header: '제품명' ,
 			name: 'podtName' ,
-			width: 200
+			width: 200 ,
+			align: 'center'
 		} ,
 		{
 			header: '주문일' ,
-			name: 'ordDate'
+			name: 'ordDate' ,
+			align: 'center'
 		} ,
 		{
 			header: '주문량' ,
-			name: 'ordQnt'
+			name: 'ordQnt' ,
+			align: 'center'
 		}
 	] ;
 	
@@ -328,12 +339,14 @@
 		{
 			header: '업체명' ,
 			name: 'codeName' ,
-			editor: 'text'
+			editor: 'text' ,
+			align: 'center'
 		} ,
 		{
 			header: '연락처' ,
 			name: 'cusPhone' ,
-			editor: 'text'
+			editor: 'text' , 
+			align: 'center'
 		}
 	] ;
 	

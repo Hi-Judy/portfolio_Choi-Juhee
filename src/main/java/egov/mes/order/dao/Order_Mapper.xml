@@ -15,7 +15,38 @@
 			and cus_code = #{cusCode}
 		</if>
 		
+		<if test="ordDatestart != null">
+			<![CDATA[
+				and to_char(ord_date , 'yyyy-MM-dd') >= #{ordDatestart}
+			]]>
+		</if>
+		
+		<if test="ordDateend != null">
+			<![CDATA[
+				and to_char(ord_date , 'yyyy-MM-dd') <= #{ordDateend}
+			]]>
+		</if>
+		
+		<if test="ordDuedatestart != null">
+			<![CDATA[
+				and to_char(ord_duedate , 'yyyy-MM-dd') >= #{ordDuedatestart}
+			]]>
+		</if>
+		
+		<if test="ordDuedateend != null">
+			<![CDATA[
+				and to_char(ord_duedate , 'yyyy-MM-dd') <= #{ordDuedateend}
+			]]>
+		</if>
+		
 		order by ord_duedate ASC
+	</select>
+	
+	<select id="orderSelect" resultType="egov.mes.order.dao.OrderVO">
+		select t.ord_no , t.ord_code , t.podt_code , fn_get_code_name(t.podt_code) , t.ord_qnt , 
+		       (select podt_qnt from product where podt_code = t.podt_code) 
+        from trade_info t
+        where ord_code = #{ordCode}
 	</select>
 	
 </mapper>
