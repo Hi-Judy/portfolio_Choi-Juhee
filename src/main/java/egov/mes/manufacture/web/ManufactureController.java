@@ -24,13 +24,13 @@ public class ManufactureController {
 	//egov 메인에서 manufacture.jsp로 연결
 	@RequestMapping("/manufacture/manufacture")
 	public String selectPlan(ManufacturePlanVO planVO, Model model )  {
-		model.addAttribute("manList",manService.selectPlan(planVO));
+		model.addAttribute("result",manService.selectPlan(planVO));
 		return "manufacture/manufacture.tiles";
 	}
 	
 	//미계획 조회 모달에서 매핑
 	@RequestMapping("/manufacture/plan")
-	public String selectPlan2(ManufacturePlanVO planVO, Model model )  {
+	public String selectPlan1(ManufacturePlanVO planVO, Model model )  {
 		
 		Map<String, List<ManufacturePlanVO>> maps = new HashMap<>();
 		//쿼리 결과를 contents 안의 배열로 넣기. contents 이름으로 maps에 담기.
@@ -64,10 +64,11 @@ public class ManufactureController {
 	
 	//생산계획에서 한 건 추가
 	@PostMapping("/manufacture/main")
-	public String modifyData(@RequestBody ModifyVO<ManufacturePlanVO> list, Model model) {
-		//System.out.println("!!!!생산계획추가^^!!!!!!!!!!!!!"+list);
-		
+	public String modifyDataInsert(@RequestBody ModifyVO<ManufacturePlanVO> list, Model model) {
+		System.out.println("!!!!생산계획추가^^!!!!!!!!!!!!!"+list);
+
 		manService.insertPlan(list);
+		
 		model.addAttribute("result", true);
 		
 		return "jsonView";
@@ -75,11 +76,10 @@ public class ManufactureController {
 	
 	//생산계획 조회
 	@PostMapping("/manufacture/selectPlan")
-	public String selectPlan1(ManufacturePlanVO planVO, Model model) {
+	public String selectManPlan(ManufacturePlanVO planVO, Model model) {
 		
-		System.out.println(planVO);
-		System.out.println(manService.selectManPlan(planVO));
-		//manService.selectManPlan(planVO);
+		//System.out.println(planVO);
+		//System.out.println(manService.selectManPlan(planVO));
 		model.addAttribute("result", manService.selectManPlan(planVO));
 		
 		return "jsonView";

@@ -1,6 +1,7 @@
 package egov.mes.manufacture.service.impl;
 
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -33,20 +34,31 @@ public class ManufactureServiceImpl implements ManufactureService {
 	@Override
 	public int insertPlan(ModifyVO<ManufacturePlanVO> list ) {
 		
-		for(ManufacturePlanVO planVO : list.getUpdatedRows()) {
-			manMapper.insertPlanDetail(planVO);
+		if(list.getUpdatedRows() != null) {
+			for(ManufacturePlanVO planVO : list.getUpdatedRows()) {
+				manMapper.insertPlanDetail(planVO);
+			}
+			//manMapper.insertPlan(list.getUpdatedRows().get(0));
 		}
-		manMapper.insertPlan(list.getUpdatedRows().get(0));
+		
+		System.out.println("test@@@@@@@@@@@@@");
+		System.out.println(list.getDeletedRows());
+		if(list.getDeletedRows() != null) {
+			for(ManufacturePlanVO planVO : list.getDeletedRows()) {
+				manMapper.deletePlan(planVO);
+				System.out.println(planVO);
+			}
+		}
 		
 		return 1;
 	}
 
 	//생산계획조회
 	@Override
-	public List<ManufacturePlanVO> selectManPlan(ManufacturePlanVO mPlanVo) {
+	public List<Map<String, String>> selectManPlan(ManufacturePlanVO mPlanVo) {
 
 		return manMapper.selectManPlan(mPlanVo);
 	}
 
-
+	
 }
