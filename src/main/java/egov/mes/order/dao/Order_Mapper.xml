@@ -7,6 +7,10 @@
 			from order_management
 			where 1=1
 			
+		<if test="ordStatus != null">
+			and ord_status = #{ordStatus}
+		</if>
+		
 		<if test="cusCode != null">
 			and cus_code = #{cusCode}
 		</if>
