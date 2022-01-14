@@ -22,7 +22,6 @@ public class CommonGroupServiceImpl implements CommonGroupService {
 	//단건조회(코드구분에서)
 	@Override
 	public List<CommonGroupVO> findSelect(String groupCode) {
-		// TODO Auto-generated method stub
 		return commonGroupMapper.findSelect(groupCode);
 	}
 	
