@@ -16,8 +16,8 @@ public class ResourcesOrderServiceImpl implements ResourcesOrderService{
 	@Autowired ResourcesOrderMapper mapper;
 
 	@Override
-	public List<ResourcesOrderVO> find(ResourcesOrderVO vo) {
-		return mapper.find(vo);
+	public List<ResourcesOrderVO> findResourcesOrder(ResourcesOrderVO vo) {
+		return mapper.findResourcesOrder(vo);
 	}
 
 	@Override
@@ -31,10 +31,10 @@ public class ResourcesOrderServiceImpl implements ResourcesOrderService{
 	}
 
 	@Override
-	public void modify(ModifyVO<ResourcesOrderVO> mvo) {
+	public void modifyOrder(ModifyVO<ResourcesOrderVO> mvo) {
 		if(mvo.getCreatedRows() != null ) {
 			for(ResourcesOrderVO vo :mvo.getCreatedRows()) {
-				mapper.insertOrder(vo);
+				mapper.ResourcesOrder(vo);
 			}
 		
 		}

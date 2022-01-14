@@ -3,7 +3,7 @@
 <mapper namespace="egov.mes.resources.order.dao.ResourcesOrderMapper">
 
 	<!-- 발주 리스트 조회 -->
-	<select id="find" resultType="egov.mes.resources.order.dao.ResourcesOrderVO">
+	<select id="findResourcesOrder" resultType="egov.mes.resources.order.dao.ResourcesOrderVO">
 		SELECT O.ORDE_DATE, O.ORDR_NO, O.RSC_CODE, FN_GET_CODE_NAME(O.RSC_CODE) AS RSC_NAME, R.RSC_UNIT, O.RSC_CNT, O.IST_REQ_DATE, FN_GET_CODE_NAME(R.SUPLCOM_CODE) AS SUC_NAME, C.RSC_DEF_CNT, C.RSC_PASS_CNT, R.RSC_PRC  
 		FROM RESOURCE_ORDER O
 		LEFT JOIN RESOURCES R 
@@ -39,7 +39,7 @@
 	</select>
 	
 	<!-- 자재 발주 페이지 -->
-	<insert id="insertOrder">
+	<insert id="insertResourcesOrder">
 		INSERT INTO RESOURCE_ORDER(ORDR_NO, RSC_CODE , RSC_CNT, RSC_TOTAL, ORDE_DATE, IST_REQ_DATE)
                    VALUES(TO_CHAR(SYSDATE, '"PO"YYMMDD""')||LPAD(PONUMBER.nextval,3,'0'),
                           #{rscCode}, 

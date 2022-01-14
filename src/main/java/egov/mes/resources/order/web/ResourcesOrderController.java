@@ -21,8 +21,7 @@ public class ResourcesOrderController {
 	
 	//발주리스트 조회
 	@RequestMapping("resourceorderList")
-	public String list(Model model, ResourcesOrderVO vo) {
-		model.addAttribute("list", service.find(vo));
+	public String list() {
 		System.out.println("=================발주조회페이지================");
 		return "resources/orderList.tiles";
 	}
@@ -31,9 +30,9 @@ public class ResourcesOrderController {
 		public String order(Model model, ResourcesOrderVO vo) {
 		  model.addAttribute("result",true);
 	      Map<String,Object> map = new HashMap<String,Object>();
-	      map.put("contents", service.find(vo));
+	      map.put("contents", service.findResourcesOrder(vo));
 	      model.addAttribute("data", map);
-		  System.out.println("=================?????????================");
+		  System.out.println("=================발주테이블 select================");
 	      return "jsonView";
 	}
 	
@@ -87,9 +86,9 @@ public class ResourcesOrderController {
 	//자재발주 insert
 	@PostMapping(value= "resourcesOrderModify" , consumes = "application/json; charset=UTF-8")
 	@ResponseBody
-	public String modify(@RequestBody ModifyVO<ResourcesOrderVO> mvo) throws Exception {
+	public String modifyOrder(@RequestBody ModifyVO<ResourcesOrderVO> mvo) throws Exception {
 		System.out.println(mvo);
-		service.modify(mvo);
+		service.modifyOrder(mvo);
 		System.out.println("=================자재발주 insert================");
 		return "dddd";
 	}
