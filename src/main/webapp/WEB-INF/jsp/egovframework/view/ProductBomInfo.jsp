@@ -229,7 +229,7 @@ tr:hover {
 			ProDatas = rsts.data
 		})
 		
-		//------제품 그리드 헤드 --------
+		//------제품 모달 그리드 헤드 --------
 		const ProGrid = new Grid({
 			el : document.getElementById('ProGrid'),
 			data : ProDatas ,
@@ -272,7 +272,6 @@ tr:hover {
 			})		
 			
 			MatDatas = rscData;
-			console.log(MatDatas);
 			MatGrid.resetData(MatDatas); //모달에서 새로 데이터를 입력할것이기 때문에 리셋하고 MatDatas 데이터로 변경하고
 			MatGrid.resetOriginData();   //모달을 새로고침 해서 띄운다. / 이미있던 그리드에 값을 뒤늦게 입력해줄려면 이 두줄이 필수
 			dialog.dialog( "close" ) ;
@@ -282,6 +281,7 @@ tr:hover {
 		var aaa ;
 		var dataA ;
 		var dataArray = new Array();
+		
 		//------자재코드 조회--------
 		$.ajax({
 			url : './rscFind',
@@ -289,46 +289,84 @@ tr:hover {
 			async : false,
 		}).done( (rsts) => {
 			console.log("자재코드 조회결과")
-			console.log(rsts)
 			//grud 에 있는 listItems 형식대로 배열을 만들어서 헤드에 넣어줘야 한다.
 			aaa = rsts.data
 			aaa.forEach( (rsts) => {
-				
+				//그리드 형식에 맞춰서 Array 타입 에 데이트 추가
 		 		dataA = {
-								text : rsts.rscCode , value : rsts.rscCode
-							}
+						   text : rsts.rscCode , value : rsts.rscCode
+						}
 		 		dataArray.push(dataA);
 				
 			})
 		})
-		console.log(dataArray);
-			
 		
-			
+		
+						
 		//------자재 그리드 헤드 --------
 		const MatGrid = new Grid({
 			el : document.getElementById('MatGrid'),
 			data : MatDatas ,
 			columns : [ 
 				{ 
-					header : '자재코드'	, name : 'resCode'	, align : 'center' , editor : 'text' 
-			 		/* , formatter : 'listItemText', 
-					editoe :{
-						options : {
-							listItems : dataArray
-						}
-					}  */
+					header : '자재코드'	, name : 'resCode'	, align : 'center'// , editor : 'text' 
+			 		  , formatter: 'listItemText',
+					    editor: {
+						      type: 'select',
+						      options: {
+						    	  //dataArray -> ajax 에서 값을받아서 Array 타입 과 그리드 형식을 갖춰서 만든 변수이다
+						        listItems: dataArray
+						      }
+						    }
 					
 				},
-				{ header : '자재명'	, name : 'codeName'	, align : 'center'   },
+				{ header : '자재명'	, name : 'codeName'	, align : 'center' , editor : 'text' },
 				{ header : '자재소모량'	, name : 'resUsage'	, align : 'center' , editor : 'text' },
 				{ header : '비고'		, name : 'resEtc'	, align : 'center' , editor : 'text' }
 			]
 		});
 		
-		 //새자료 인썰트
+		
+		
+		//----------자재 그리드 행추가 ---------------
 	    btnAdd.addEventListener("click", () => {
-	    	MatGrid.appendRow({})
+	    	MatGrid.appendRow({})   	
+	    })
+	    
+	    
+	    //----------자재코드로 자재명 출력 -------------
+	    MatGrid.on('editingFinish' , (ev) => {
+	    	var resCode  ;
+	    	var jsonData ;
+	    	if(ev.columnName == "resCode"){
+	    	resCode = ev.value ;
+	    	jsonData = { resCode : resCode } //앞에가 키값 , 뒤에서 벨류값으로 보여진다.
+
+
+	    	}
+	    	
+	    	$.ajax({
+	    		url: '' ,
+	    		type: "post",
+	    		data: JSON.stringify(jsonData),
+	    		contentType: "application/json",
+	    		async : false, //  동기식으로 처리하여 결과를 되돌린다.
+	    		success: function(data) {
+	    			console.log(data);
+	    		/* 	result = JSON.parse( data );
+	    			if ( result.res == 'success') {
+	    				matrDta = result.resultData;
+	    			} else {
+	    				toastr.warning('해당하는 자재코드가 없습니다.');
+	    			} */
+	    		},
+	    		error: function(err) {
+	    			alert("코드명호출 에러"+err);
+	    		}
+	    	});
+	    	
+
+	    	
 	    })
 			
 		
