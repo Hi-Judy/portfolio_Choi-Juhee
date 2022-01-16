@@ -1,12 +1,16 @@
 package egov.mes.BOM.web;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
+import egov.mes.BOM.dao.ProductBomVO;
 import egov.mes.BOM.service.ProductBomService;
 
 @Controller
@@ -23,11 +27,25 @@ public class ProductBomController {
 	//자재코드 조회
 	@RequestMapping("rscFind")
 	public ModelAndView rscFind() {
-		System.out.println("자재코드 조회 시작");
+//		System.out.println("자재코드 조회 시작");
 		ModelAndView jsonView = new ModelAndView("jsonView");
 		jsonView.addObject("data" , service.rscFind());
-		System.out.println(jsonView);
+//		System.out.println(jsonView);
 		return jsonView;
+	}
+	
+	//자재코드로 자재명 호출
+	@ResponseBody
+	@RequestMapping(value = "proNameFind")
+	public ModelAndView proNameFind(@RequestBody ProductBomVO bomVO ) {
+//		System.out.println("자재코드로 자재명 호출");
+		
+		ModelAndView jsonView = new ModelAndView("jsonView");
+		jsonView.addObject("data" , service.rscName(bomVO));
+
+//		System.out.println(jsonView);
+
+		return jsonView ;
 	}
 	
 	//제품조회 처리
@@ -51,6 +69,17 @@ public class ProductBomController {
 //		System.out.println(jsonView);
 		return jsonView;
 	}
+	
+	//공정코드만 조회
+	@RequestMapping("ProcFind")
+	public ModelAndView ProcFind() {
+		System.out.println("공정코드 조회 시작");
+		ModelAndView jsonView = new ModelAndView("jsonView");
+		jsonView.addObject("data" , service.ProcFind());
+		System.out.println(jsonView);
+		return jsonView;
+	}
+	
 	
 	
 
