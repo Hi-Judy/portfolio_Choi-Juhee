@@ -177,9 +177,10 @@
 		let insertDatas = grid.getModifiedRows() ;
 		let insertData = insertDatas.createdRows ;
 		
-		if (insertData == '') {
-			let datas = grid.getModifiedRows() ;
-			let data = datas.updatedRows ;
+		let datas = grid.getModifiedRows() ;
+		let data = datas.updatedRows ;
+		
+		 if (data != '') {
 			
 	  		let ok = 1 ;
 			for (let i = 0 ; i < data.length ; i++) {
@@ -209,69 +210,70 @@
 				}) 
 			}  
 			if (ok == 2) {
-				alert('저장완료되었습니다') ; 
+				alert('수정완료되었습니다') ;
+			}
+		}
+		if (insertData != '') {
+			let insertCode = insertData[0].podtCode ;
+			let insertDate = insertData[0].manDate ;
+			let insertInput = insertData[0].podtInput ;
+			let insertOutput = insertData[0].podtOutput ;
+			let insertEtc = insertData[0].podtEtc ;
+			let insertLot = insertData[0].podtLot ;
+			
+			if (insertCode == '' || insertDate == '' || insertInput == '' || insertOutput == '' || insertCode == '') {
+				alert('입력값을 확인하세요') ;
 				return ;
 			}
-		}
-		
-		let insertCode = insertData[0].podtCode ;
-		let insertDate = insertData[0].manDate ;
-		let insertInput = insertData[0].podtInput ;
-		let insertOutput = insertData[0].podtOutput ;
-		let insertEtc = insertData[0].podtEtc ;
-		let insertLot = insertData[0].podtLot ;
-		
-		if (insertCode == '' || insertDate == '' || insertInput == '' || insertOutput == '' || insertCode == '') {
-			alert('입력값을 확인하세요') ;
-			return ;
-		}
-		
-		if (insertEtc == '') {
-			insertEtc = 'null'
-		}
-		
-		$.ajax({
-			url : 'productInOut' ,
-			data : {
-				podtCode : insertCode ,
-				manDate : insertDate ,
-				podtInput : insertInput ,
-				podtOutput : insertOutput ,
-				podtEtc : insertEtc ,
-				podtLot : insertLot
-			} ,
-			async : false ,
-			success : function(datas) {
-				alert('저장완료되었습니다') ;
-				
-				let podtCode = 'null' ;
-				let manDatestart = '1910-12-25';
-				let manDateend = '1910-12-25';
-				
-				$.ajax({
-					url : 'productList' ,
-					dataType : 'json' ,
-					data : {
-						podtCode : podtCode ,
-						manDatestart : manDatestart ,
-						manDateend : manDateend
-					} ,
-					async : false ,
-					success : function(datas) {
-						data = datas.productlist ;
-						grid.resetData(data) ;
-						grid.resetOriginData() ;
-						
-					} ,
-					error : function(reject) {
-						console.log(reject) ;
-					}
-				})
-			} ,
-			error : function(reject) {
-				console.log(reject) ;
+			
+			if (insertEtc == '') {
+				insertEtc = 'null'
 			}
-		})
+			
+			$.ajax({
+				url : 'productInOut' ,
+				data : {
+					podtCode : insertCode ,
+					manDate : insertDate ,
+					podtInput : insertInput ,
+					podtOutput : insertOutput ,
+					podtEtc : insertEtc ,
+					podtLot : insertLot
+				} ,
+				async : false ,
+				success : function(datas) {
+					alert('저장완료되었습니다') ;
+					
+					let podtCode = 'null' ;
+					let manDatestart = '1910-12-25';
+					let manDateend = '1910-12-25';
+					
+					$.ajax({
+						url : 'productList' ,
+						dataType : 'json' ,
+						data : {
+							podtCode : podtCode ,
+							manDatestart : manDatestart ,
+							manDateend : manDateend
+						} ,
+						async : false ,
+						success : function(datas) {
+							data = datas.productlist ;
+							grid.resetData(data) ;
+							grid.resetOriginData() ;
+							
+						} ,
+						error : function(reject) {
+							console.log(reject) ;
+						}
+					})
+				} ,
+				error : function(reject) {
+					console.log(reject) ;
+				}
+			})
+		} 
+		
 	})
 	
 	var rowNo = new Array() ;

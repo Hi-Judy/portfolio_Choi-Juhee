@@ -23,10 +23,8 @@
 		<span>설비상태 : </span>
 		<select id="selectStatus">
 			<option value="" selected>선택</option>
-			<option value="전체">전체</option>
 			<option value="가동">가동</option>
 			<option value="비가동">비가동</option>
-			<option value="유휴">유휴</option>
 		</select>
 		<br>
 		<span>점검일자 : </span><input id="checkDateStart" type="date"><span> ~ </span><input id="checkDateEnd" type="date">
@@ -115,7 +113,7 @@
 		}
 		
 		$.ajax({
-			url : '' ,
+			url : 'facilityList' ,
 			dataType : 'json' ,
 			data : {
 				facCode : facCode ,
@@ -125,7 +123,7 @@
 			} ,
 			async : false ,
 			success : function(datas) {
-				data = datas. ;
+				data = datas.facilitylist ;
 				grid.resetData(data) ;
 				grid.resetOriginData() ;
 				
@@ -139,24 +137,11 @@
 	const grid = new Grid({
 		el : document.getElementById('info') ,
 		rowHeaders: [
-			{ type : 'rowNum' } ,
-			{ type : 'checkbox' }
+			{ type : 'rowNum' }
 		] ,
 		height : 300 ,
 		data : data ,
 		columns : columns
-	})
-	
-	// 입력된 데이터 수정못하게 하기
-	grid.on('editingStart' , (ev) => {
-		let value = grid.getValue(ev.rowKey , 'facNo') ;
-		let name = ev.columnName ;
-		
-		if (value != '' && value != null) {
-			if(name != 'facStatus' || name != 'facCause' || name != 'facCheckdate') {
-				ev.stop() ;			
-			}	
-		} 
 	})
 	
 	$("#clearBtn").on("click" , function() {

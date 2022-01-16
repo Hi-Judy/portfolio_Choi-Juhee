@@ -1,5 +1,9 @@
 package egov.mes.facility.service;
 
-public interface FacilityService {
+import java.util.List;
 
+import egov.mes.facility.dao.FacilityVO;
+
+public interface FacilityService {
+	List<FacilityVO> facilityList(FacilityVO facility) ;
 }
