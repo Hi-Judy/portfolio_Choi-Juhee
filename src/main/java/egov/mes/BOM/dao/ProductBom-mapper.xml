@@ -8,17 +8,10 @@
 	from Product 
 </select>
 
-<!-- 자재코드 테이블 조회-->
+<!-- 자재테이블 조회 (자재명도함께) -->
 <select id="rscFind" resultType="egov.mes.BOM.dao.ProductBomVO">
 	select rsc_code
 	from resources
-</select>
-
-<!-- 자재테이블 조회 (자재명도함께) -->
-<select id="rscName" resultType="egov.mes.BOM.dao.ProductBomVO">
-	select FN_GET_CODE_NAME(rsc_code) AS codeName
-	from resources
-	where rsc_code = #{resCode}
 </select>
 
 <!-- 제품단건 상세 조회 -->

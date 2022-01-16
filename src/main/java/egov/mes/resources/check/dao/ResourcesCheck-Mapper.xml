@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper
-	namespace="egov.mes.resources.check.dao.ResourcesCheckMapper">
+<mapper namespace="egov.mes.resources.check.dao.ResourcesCheckMapper">
 	
 	<!-- 자재입고검사(자재상태가 발주인 것을 뿌려준다) -->
 	<select id="findResourcesCheck" resultType="egov.mes.resources.check.dao.ResourcesCheckVO">
@@ -15,8 +14,8 @@
 			   FN_GET_RSC_UNIT(RSC_CODE) AS RSC_UNIT
 		FROM RESOURCE_ORDER
 		WHERE RSC_ST = '발주'
+		ORDER BY ORDR_NO
 	</select>
-	
 	
 	<!-- 자재입고 검사 후-> 입고검사관리테이블에 insert -->
 	<insert id="insertResourcesCheck">
@@ -30,24 +29,8 @@
              	#{rscExpirationDate})
 	</insert>
 	
-	<!-- 자재입고 검사 후 -> 자재입출고 resource_store 테이블로 insert -->
-	<insert id="insertResourceStore">
-		
-	
-	</insert>
-	
-	<!-- 자재입고 검사 후 불량-> 불량 테이블로 insert -->
-	<insert id="insertResourcesRtngd">
-		INSERT INTO RESOURCE_RTNGD(RTNGD_NO, RSC_TST_NO, RSC_CODE, RTNGD_CNT, DEF_CODE)
-		VALUES(TO_CHAR(SYSDATE,'"RT"YYMMDD""') || LPAD(RTNUMBER.NEXTVAL,3,'0'),
-             	#{rscTstNo},
-            	#{rscCode},
-            	#{rtngdCnt},
-            	#{defCode})
-	</insert>
-	
 	<!-- 자재입고 검사 후 자재상태-> 자재발주 테이블로 update -->
-	<update id="updateResourcesOrder">
-	
+	<update id="">
+		
 	</update>
 </mapper>
