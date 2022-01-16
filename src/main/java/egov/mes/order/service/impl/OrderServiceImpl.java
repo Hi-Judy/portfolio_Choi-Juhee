@@ -24,4 +24,14 @@ public class OrderServiceImpl implements OrderService{
 		return mapper.orderSelect(order) ;
 	}
 
+	@Override
+	public int noManRelease(OrderVO order) {
+		return mapper.noManRelease(order) ; 
+	}
+
+	@Override
+	public List<OrderVO> noManSelect(OrderVO order) {
+		return mapper.noManSelect(order) ;
+	}
+
 }

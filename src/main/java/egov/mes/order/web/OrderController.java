@@ -53,4 +53,35 @@ public class OrderController {
 		jsonView.addObject("orderSelect" , list) ;
 		return jsonView ;
 	}
+	
+	@RequestMapping("noManRelease")
+	public ModelAndView noManRelease(OrderVO order) {
+		service.noManRelease(order) ;
+		ModelAndView jsonView = new ModelAndView("jsonView") ;
+		int result = 1 ;
+		jsonView.addObject("noManRelease" , result) ;
+		return jsonView ;
+	}
+	
+	@RequestMapping("noManReleaseInfo")
+	public String noManRelease () {
+		return "order/noManRelease.tiles" ;
+	}
+	
+	@RequestMapping("noManSelect")
+	public ModelAndView noManSelect(OrderVO order) {
+		if (order.getCusCode().equals("null")) {
+			order.setCusCode(null) ;	
+		}
+		if (order.getOrdDuedatestart().equals("1910-12-25")) {
+			order.setOrdDuedatestart(null) ;	
+		}
+		if (order.getOrdDuedateend().equals("1910-12-25")) {
+			order.setOrdDuedateend(null) ;	
+		}
+		List<OrderVO> list = service.noManSelect(order) ;
+		ModelAndView jsonView = new ModelAndView("jsonView") ;
+		jsonView.addObject("nomanlist" , list) ;
+		return jsonView ;
+	}
 }

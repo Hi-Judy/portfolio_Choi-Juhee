@@ -4,8 +4,8 @@
 	
 	<select id="orderList" resultType="egov.mes.order.dao.OrderVO">
 		select ord_status , ord_code , cus_code , fn_get_code_name(cus_code) as code_name , ord_date , ord_duedate 
-			from order_management
-			where 1=1
+		from order_management
+		where 1=1
 			
 		<if test="ordStatus != null">
 			and ord_status = #{ordStatus}
@@ -43,10 +43,39 @@
 	</select>
 	
 	<select id="orderSelect" resultType="egov.mes.order.dao.OrderVO">
-		select t.ord_no , t.ord_code , t.podt_code , fn_get_code_name(t.podt_code) , t.ord_qnt , 
-		       (select podt_qnt from product where podt_code = t.podt_code) 
+		select t.ord_no , t.ord_code , t.podt_code , fn_get_code_name(t.podt_code) as code_name , t.ord_qnt , 
+		       (select podt_qnt from product where podt_code = t.podt_code) as podt_qnt
         from trade_info t
         where ord_code = #{ordCode}
+	</select>
+	
+	<update id="noManRelease" statementType="CALLABLE">
+		{ call p_no_man_release(#{ordCode}) }
+	</update>
+	
+	<select id="noManSelect" resultType="egov.mes.order.dao.OrderVO">
+		select ord_code , cus_code , fn_get_code_name(cus_code) as code_name , ord_date , ord_duedate , 
+			(select sum(ord_qnt) from trade_info where ord_code = o.ord_code) as ord_qnt
+		from order_management o 
+		where ord_status = '미생산완료'
+		
+		<if test="cusCode != null">
+			and cus_code = #{cusCode}
+		</if>
+		
+		<if test="ordDuedatestart != null">
+			<![CDATA[
+				and to_char(ord_duedate , 'yyyy-MM-dd') >= #{ordDuedatestart}
+			]]>
+		</if>
+		
+		<if test="ordDuedateend != null">
+			<![CDATA[
+				and to_char(ord_duedate , 'yyyy-MM-dd') <= #{ordDuedateend}
+			]]>
+		</if>
+		
+		order by ord_code ASC
 	</select>
 	
 </mapper>
