@@ -514,6 +514,7 @@ toastr.options = {
 	    btnLeftAdd.addEventListener("click", () => {
 	    	MatGrid.appendRow({})   	
 	    	
+	    	
 	    })
 	    
 	    
