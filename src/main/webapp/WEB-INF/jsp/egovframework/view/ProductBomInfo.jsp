@@ -690,6 +690,7 @@ toastr.options = {
 	 			alert('공정추가 오류 '+ err);
 	 		} 
 	    	 
+	    	 
 	    	 $.ajax({
 	    		 url : './ProcInsert',
 	    		 type : 'post',
