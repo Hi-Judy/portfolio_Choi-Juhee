@@ -698,6 +698,7 @@ toastr.options = {
 	    		 contentType : 'application/json;',
 	             async : false, 
 	             success: (datas) => {
+	            	 console.log(datas);
 	            	 toastr["success"]("저장완료"); 
 	             },
 	             error: (err) => {
