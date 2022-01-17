@@ -74,10 +74,10 @@ public class ProductBomServiceImpl implements ProductBomService {
 	@Override
 	public int ProcInsert(List<ProductBomVO> bomVO) {
 		for (ProductBomVO BomVO : bomVO)
-			bomMapper.ProcName(BomVO);
-
+			bomMapper.ProcInsert(BomVO);
+			int a = 0;
 		System.out.println("저장완료");
-		return 0;
+		return a;
 	}
 
 
