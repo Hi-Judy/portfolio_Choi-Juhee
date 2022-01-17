@@ -27,6 +27,13 @@ public class ProductBomServiceImpl implements ProductBomService {
 		// TODO Auto-generated method stub
 		return bomMapper.rscFind();
 	}
+	//자재코드로 제품명 조회
+	@Override
+	public ProductBomVO rscName(ProductBomVO bomVO ) {
+		// TODO Auto-generated method stub
+		return bomMapper.rscName(bomVO);
+	}
+	
 	
 	//제품단건조회
 	@Override
@@ -48,6 +55,15 @@ public class ProductBomServiceImpl implements ProductBomService {
 		// TODO Auto-generated method stub
 		return bomMapper.ProcDetail(groupCode) ;
 	}
+	
+	//공정코드만 조회
+	@Override
+	public List<ProductBomVO> ProcFind() {
+		// TODO Auto-generated method stub
+		return bomMapper.ProcFind();
+	}
+
+
 
 
 

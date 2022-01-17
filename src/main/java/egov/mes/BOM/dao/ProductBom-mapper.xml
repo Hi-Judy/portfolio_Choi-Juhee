@@ -35,6 +35,13 @@
 	WHERE	podt_code = #{podtCode}
 </select>
 
+<!-- 공정코드 테이블 조회-->
+<select id="ProcFind" resultType="egov.mes.BOM.dao.ProductBomVO">
+	select code
+	from common_code
+	where group_code = 'proc'
+</select>
+
 
 
 </mapper>

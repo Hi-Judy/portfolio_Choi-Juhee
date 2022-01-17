@@ -16,18 +16,21 @@
 </head>
 <body>
 	<div id="title" align="center"><h2>고객 관리</h2></div>
+	<br>
 	<div id="info">
-		<span>업체명 : </span><input id="txtCusCode"><button type="button" id="listBtn">조회</button>     <button type="button" id="btnSearch">업체검색</button>
+		<span>업체코드 : </span><input id="txtCusCode"><button type="button" id="btnSearch">업체코드검색</button>
 		<br>
 		<div align="right">
+			<button type="button" id="listBtn">조회</button>
 			<button type="button" id="btnAdd">추가</button>
 			<button type="button" id="btnInsert">저장</button>
 			<button type="button" id="btnDelete">삭제</button>
+			<button type="button" id="clearBtn">초기화</button>
 		</div>
 	</div>
 	
-	<div id="find-dialog-form" title="업체검색"">
-		<input id="cusName"><button id="btnCusSearch">업체명검색</button>
+	<div id="findCustomer" title="업체검색"">
+		<input id="cusName"><button id="btnCusSearch">검색</button>
 		<button type="button" id="btnClose1">닫기</button>
 		<div id="cusResult"></div>
 	</div>
@@ -81,8 +84,6 @@
 		
 		if (cusCode == '') {
 			cusCode = 'null' ;
-		} else {
-			cusCode = $("#txtCusCode").val() ; 
 		}
 		
 		$.ajax({
@@ -220,10 +221,15 @@
 			alert('삭제완료되었습니다') ;
 		}
 	})
+	
+	$("#clearBtn").on("click" , function() {
+		$("#txtCusCode").val("") ;
+		grid.clear() ;
+	})
 	//---------- ↑페이지 ----------
 	
 	//---------- ↓업체찾기 ----------
-	let dialog = $("#find-dialog-form").dialog({
+	let dialog = $("#findCustomer").dialog({
 		autoOpen : false ,
 		modal : true ,
 		width : 600 ,
@@ -288,11 +294,13 @@
 		$("#txtCusCode").val(cusCode) ;
 		grid2.clear() ;
 		dialog.dialog("close") ;
+		$("#cusName").val("") ;
 	})
 	
 	$("#btnClose1").on("click" , function() {
 		dialog.dialog("close") ;
 		grid2.clear() ;
+		$("#cusName").val("") ;
 	})	
 	//---------- ↑업체찾기 ----------
 	
@@ -450,8 +458,6 @@
 		
 		if (cusCode == '') {
 			cusCode = 'null' ;
-		} else {
-			cusCode = $("#txtCusCode").val() ; 
 		}
 		
 		$.ajax({

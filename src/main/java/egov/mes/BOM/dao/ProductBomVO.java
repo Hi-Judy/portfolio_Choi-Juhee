@@ -6,6 +6,7 @@ import lombok.Data;
 public class ProductBomVO {
 	
 	//코드구분 테이블 
+	String code;
 	String codeName;
 	
 	//자재코드

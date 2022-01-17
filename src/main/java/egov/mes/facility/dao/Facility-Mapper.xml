@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="egov.mes.facility.dao.FacilityMapper">
+
+	<select id="facilityList" resultType="egov.mes.facility.dao.FacilityVO">
+		select fac_no , fn_get_code_name(fac_code) as codeName , fac_code , fac_status , fac_cause , fac_checkdate , fac_output
+		from facility_status
+		where 1=1
+		
+		<if test="facCode != null">
+			and fac_code = #{facCode}
+		</if>
+		
+		<if test="facStatus != null">
+			and fac_status = #{facStatus}
+		</if>
+		
+		<if test="checkDatestart != null">
+			<![CDATA[
+				and to_char(fac_checkdate , 'yyyy-MM-dd') >= #{checkDatestart}
+			]]>
+		</if>
+		
+		<if test="checkDateend != null">
+			<![CDATA[
+				and to_char(fac_checkdate , 'yyyy-MM-dd') <= #{checkDateend}
+			]]>
+		</if>
+		order by fac_code ASC		
+	</select>
+
+	<select id="findFacility" resultType="egov.mes.facility.dao.FacilityVO">
+		select fac_code , fn_get_code_name(fac_code) as codeName
+		from facility_status
+		where fn_get_code_name(fac_code) like '%' || #{codeName} || '%'
+		order by fac_code ASC
+	</select>
+
+</mapper>

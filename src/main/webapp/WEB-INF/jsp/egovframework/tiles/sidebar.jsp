@@ -34,8 +34,8 @@
 					<ul class="submenu ">
 						<li class="submenu-item "><a href="customerInfo">고객 관리</a></li>
 						<li class="submenu-item "><a href="orderManagement">주문 관리</a></li>
-						<li class="submenu-item "><a href="#">미생산 출하 조회</a></li>
-						<li class="submenu-item "><a href="#">제품 입/출고 관리</a></li>
+						<li class="submenu-item "><a href="noManReleaseInfo">미생산 출하 조회</a></li>
+						<li class="submenu-item "><a href="productInfo">제품 입/출고 관리</a></li>
 					</ul></li>
 
 				<li class="sidebar-item  has-sub"><a href="#"
@@ -43,7 +43,7 @@
 				</a>
 					<ul class="submenu ">
 						<li class="submenu-item "><a href="manufacture/manufacture">생산 계획 관리</a></li>
-						<li class="submenu-item "><a href="#">생산 계획 상세 조회</a></li>
+						<li class="submenu-item "><a href="manufacture/manufactureSelect">생산 계획 상세 조회</a></li>
 						<li class="submenu-item "><a href="#">생산 지시 관리</a></li>
 						<li class="submenu-item "><a href="#">생산 지시 상세 조회</a></li>
 						<li class="submenu-item "><a href="#">생산 현황 조회</a></li>
@@ -54,7 +54,7 @@
 					class='sidebar-link'> <i class="bi bi-grid-1x2-fill"></i> <span>설비관리</span>
 				</a>
 					<ul class="submenu ">
-						<li class="submenu-item "><a href="#">설비 관리</a></li>
+						<li class="submenu-item "><a href="facilityManagement">설비 관리</a></li>
 					</ul></li>
 				<li class="sidebar-item  has-sub"><a href="#"
 					class='sidebar-link'> <i class="bi bi-grid-1x2-fill"></i> <span>자재관리</span>

@@ -8,4 +8,6 @@ import egovframework.rte.psl.dataaccess.mapper.Mapper;
 public interface OrderMapper {
 	List<OrderVO> orderList(OrderVO order) ;
 	List<OrderVO> orderSelect(OrderVO order) ;
+	int noManRelease(OrderVO order) ;
+	List<OrderVO> noManSelect(OrderVO order) ;
 }
