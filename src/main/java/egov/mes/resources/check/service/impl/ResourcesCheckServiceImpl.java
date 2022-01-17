@@ -9,9 +9,11 @@ import egov.mes.resources.check.dao.ResourcesCheckMapper;
 import egov.mes.resources.check.dao.ResourcesCheckVO;
 import egov.mes.resources.check.service.ResourcesCheckService;
 import egov.mes.resources.order.dao.ModifyVO;
+import egov.mes.resources.rtngd.dao.ResourcesRtngdVO;
 @Service
 public class ResourcesCheckServiceImpl implements ResourcesCheckService{
 	@Autowired ResourcesCheckMapper mapper;
+	
 	@Override
 	public List<ResourcesCheckVO> findResourcesCheck(ResourcesCheckVO vo) {
 		return mapper.findResourcesCheck(vo);
@@ -27,4 +29,10 @@ public class ResourcesCheckServiceImpl implements ResourcesCheckService{
 		}
 	}
 
+	@Override
+	public List<ResourcesRtngdVO> searchRtngd(ResourcesRtngdVO vo) {
+		return mapper.searchRtngd(vo);
+	}
+
+	
 }

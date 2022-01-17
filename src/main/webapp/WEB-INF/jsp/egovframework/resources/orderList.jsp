@@ -48,7 +48,6 @@
 		document.getElementById('txtOrde2').value = d.toISOString().slice(0, 10);
 		$("#txtSuc").val('');
 		$("#txtRsc").val('');
-		
 	})
 	
 	
@@ -141,7 +140,6 @@
 				  sortable: true,
 				  sortingType: 'desc'
 				}
-						
 			];
 			
 	//ajax(api)로 값 받아오는 거 

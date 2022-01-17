@@ -36,4 +36,10 @@
         SET RSC_ST = '검사'
       	WHERE ORDR_NO = #{ordrNo}
 	</update>
+	
+	<select id="searchRtngd" resultType="egov.mes.resources.rtngd.dao.ResourcesRtngdVO">
+		SELECT CODE, CODE_NAME
+		FROM COMMON_CODE
+		WHERE CODE LIKE '%' || 'D_R' || '%'
+	</select>
 </mapper>

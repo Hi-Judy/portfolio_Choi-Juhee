@@ -3,14 +3,10 @@
 <mapper namespace="egov.mes.resources.store.dao.ResourceStoreMapper">
 
 	<select id="findResourcesStore" resultType="egov.mes.resources.store.dao.ResourcesStoreVO">
-		SELECT C.ORDR_NO, C.RSC_TST_NO, C.RSC_DEF_CNT, O.RSC_CODE
+		SELECT O.RSC_CODE, FN_GET_CODE_NAME(O.RSC_CODE) AS RSC_NAME, C.RSC_PASS_CNT, FN_GET_RSC_PRC(O.RSC_CODE) AS RSC_PRC
 		FROM RESOURCE_IST_CHECK C
 		LEFT JOIN RESOURCE_ORDER O
 		ON C.ORDR_NO = O.ORDR_NO
-		WHERE RSC_DEF_CNT IS NOT NULL
 	</select>
 	
-	<insert id="">
-	
-	</insert>
 </mapper>

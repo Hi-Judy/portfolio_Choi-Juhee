@@ -9,4 +9,7 @@ public class ResourcesRtngdVO {
 		String rscCode;
 		String rtngdCnt;
 		String defCode;
+		
+		String code;
+		String codeName;
 }

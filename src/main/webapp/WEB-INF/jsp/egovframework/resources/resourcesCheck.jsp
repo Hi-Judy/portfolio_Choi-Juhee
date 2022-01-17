@@ -20,11 +20,27 @@
 <body>
 	<h2>자재입고검사관리</h2>
 	<hr>
-		<button id="">조회</button>
 		<button id="saveResourcesCheck">저장</button>
 	<hr>
+	<div id="dialog-form-rtn" title="자재 불량 검사 관리"></div>
+	<button id="btnFindRtn">불량코드</button>
 	<div id="grid"></div>
+	
 <script type="text/javascript">
+
+	let dialogRtn = $( "#dialog-form-rtn" ).dialog({
+		autoOpen: false,
+		modal: true
+	});
+	
+	$("#btnFindRtn").on("click", function(){
+		dialogRtn.dialog("open");
+	$("#dialog-form-rtn").load("rtnList",
+			function(){console.log("로드됨")})
+	});
+
+
+
 	//그리드 
 	var Grid = tui.Grid;
 	Grid.applyTheme('default');
