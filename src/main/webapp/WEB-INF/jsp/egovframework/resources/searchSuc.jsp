@@ -42,7 +42,7 @@
 		});
 	
 	//리스트에서 선택한 값 가지고 오기...$(여기 어떻게 쓰지? )
-	gridSuc.on("click", (ev) => {
+	gridSuc.on("dblclick", (ev) => {
 		console.log("+++++++++++++++++++++++++++++++++")
 		console.log(gridSuc.getValue(ev["rowKey"],ev["columnName"]));
 		var suc = gridSuc.getValue(ev["rowKey"],ev["columnName"]);

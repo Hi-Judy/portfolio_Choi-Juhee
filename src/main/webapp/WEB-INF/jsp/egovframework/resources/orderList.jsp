@@ -44,10 +44,11 @@
 	
 	//초기화 버튼
 	$("#btn_reset").on("click", function(){
-		$("#txtOrde1").val('');
-		$("#txtOrde2").val('');
+		document.getElementById('txtOrde1').value = nd.toISOString().slice(0, 10);
+		document.getElementById('txtOrde2').value = d.toISOString().slice(0, 10);
 		$("#txtSuc").val('');
 		$("#txtRsc").val('');
+		
 	})
 	
 	
@@ -64,7 +65,7 @@
 	
 	$("#btnFindRsc").on("click", function(){
 			dialog1.dialog("open");
-		$("#dialog-form-rsc").load("recList",
+		$("#dialog-form-rsc").load("recList2",
 				function(){console.log("로드됨")})
 		});
 
@@ -92,19 +93,27 @@
 	const columns = [
 		  		{
 			    header: '발주일',
-			    name: 'ordeDate'
+			    name: 'ordeDate',
+			    sortable: true,
+			    sortingType: 'desc'
 			  },
 			  {
 			    header: '발주번호',
 			    name: 'ordrNo',
+			    sortable: true,
+			    sortingType: 'desc'
 			  },
 			  {
 			    header: '자재코드',
-			    name: 'rscCode'
+			    name: 'rscCode',
+			    sortable: true,
+			    sortingType: 'desc'
 			  },
 			  {
 				header: '자재명',
-				name: 'rscName'
+				name: 'rscName',
+			    sortable: true,
+			    sortingType: 'desc'
 			  },
 			  {
 				header: '단위',
@@ -128,7 +137,9 @@
 				},
 				{
 				  header: '입고요청일',
-				  name: 'istReqDate'
+				  name: 'istReqDate',
+				  sortable: true,
+				  sortingType: 'desc'
 				}
 						
 			];

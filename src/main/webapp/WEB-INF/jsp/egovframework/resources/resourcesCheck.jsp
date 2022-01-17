@@ -65,6 +65,11 @@
 				 editor: 'text'
 				},
 				{
+				 header: '검사',
+		         name: 'g',
+		         //renderer: { type: CustomBtnChcek},
+				 },
+				{
 				 header: '합격량',
 				 name: 'rscPassCnt',
 				 editor: 'text'
@@ -76,7 +81,12 @@
 				{
 				  header: '입고요청일',
 				  name: 'istReqDate'
-				}
+				},
+				{
+				 header: '유통기한',
+				 name: 'rscExpirationDate',
+				 editor: 'datePicker'
+			   },
 			];
 			
 	//ajax(api)로 값 받아오는 거 
@@ -98,9 +108,21 @@
 		  columns
 		});
 	
+	grid.on("editingFinish", function(ev){
+		if(grid.getValue(ev["rowKey"], "rscTstCnt")!=null && grid.getValue(ev["rowKey"], "rscPassCnt")!=null){
+			grid.setValue(ev["rowKey"],"rscDefCnt",grid.getValue(ev["rowKey"], "rscTstCnt")-grid.getValue(ev["rowKey"], "rscPassCnt"));
+		}
+	})
+	
 	saveResourcesCheck.addEventListener("click", function(){
 		grid.request('modifyData'); 
 }) 
+	grid.on("response",function(ev){
+		let a =JSON.parse(ev.xhr.response)
+		 if(a.mod=='upd'){
+			grid.readData();
+		} 
+	})
 	
 	
 </script>

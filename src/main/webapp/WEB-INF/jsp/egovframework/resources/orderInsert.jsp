@@ -25,29 +25,35 @@
 		<button id="btnSaveOrder">저장</button>
 		<hr>
 		<button id="btnAdd">추가</button>
-		<button id="btnUpd">수정</button>
 		<button id="btnDel">삭제</button>
 	</div>
 	
 	<div id="dialog-form-rsc" title="자재 검색"></div>
 	<div id="dialog-form-order" title="미입고 검색"></div>
-	<div id="grid"></div>
+	<div id="grid" ></div>
 
 	<script type="text/javascript">
 	let rscRowKey;
+	
+	
 	//모달창(자재 조회)
-
 	let dialog3 = $( "#dialog-form-rsc" ).dialog({
 			autoOpen: false,
 			modal: true
 		});
 	
-
+	
 	//조회 클릭시 미입고 모달창 
 	let dialog4 = $( "#dialog-form-order" ).dialog({
 			autoOpen: false,
 			modal: true
 		});
+	
+	function clickOrder(ordrNo){
+		console.log(ordrNo);
+		grid.readData(1, {'ordrNo':ordrNo}, true);
+		dialog4.dialog("close");
+	};
 	
 	$("#btnSelectOrder").on("click", function(){
 			dialog4.dialog("open");
@@ -56,7 +62,7 @@
 		});
 	
 	
-	//그리드
+	//발주 insert 그리드 
 	var Grid = tui.Grid;
 	Grid.applyTheme('default');
 	
@@ -104,8 +110,9 @@
 	const dataSource = {
 		  api: {
 			  readData: { 
-			    	url: 'resourcesOrderModify', 
-			    	method: 'GET' 
+			    	url: 'resourcesOrder', 
+			    	method: 'GET'
+			    	//initParams: { ordrNo: 'param' }
 			    	},
 		    	modifyData: { url: 'resourcesOrderModify', method: 'POST' }
 		  },
@@ -120,11 +127,13 @@
 		  columns
 		});
 	
+	//발주량 입력-> 발주량 * 단가 = 합계 구해준다
 	grid.on("editingFinish",function(ev){
 		if(grid.getValue(ev["rowKey"], "rscPrc")!=null && grid.getValue(ev["rowKey"], "rscCnt")!=null){
 			grid.setValue(ev["rowKey"],"rscTotal",grid.getValue(ev["rowKey"], "rscPrc")*grid.getValue(ev["rowKey"], "rscCnt"));
 		}
 	});
+	
 	grid.on("click", function(ev){
 		console.log(grid.getValue(ev["rowKey"], "rscCode"));
 		if(ev["columnName"]=="rscCode" && 
@@ -136,23 +145,26 @@
 			function(){console.log("로드됨")})}
 		
 	});
-	
-	
+
 	btnAdd.addEventListener("click", function(){
 		grid.appendRow({});
 	})
 	
-	btnUpd.addEventListener("click", function(){
-		grid.updatedRows(true);
-	})
+	//btnUpd.addEventListener("click", function(){
+		//grid.updatedRows(true);
+	//})
 	
 	btnDel.addEventListener("click", function(){
 		grid.removeCheckedRows(true);
 	}) 
 	
 	btnSaveOrder.addEventListener("click", function(){
-		grid.request('modifyData'); 
+		grid.request('modifyData');
+		
 	}) 
+	grid.on("response",function(){
+		grid.clear();
+	})
 	
 	</script>
 </body>
