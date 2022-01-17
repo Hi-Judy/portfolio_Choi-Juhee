@@ -28,5 +28,10 @@ public class FacilityServiceImpl implements FacilityService {
 	public List<FacilityVO> facilityBreakInfo(FacilityVO facility) {
 		return mapper.facilityBreakInfo(facility) ;
 	}
+
+	@Override
+	public void facilityStatusUpdate(FacilityVO facility) {
+		mapper.facilityStatusUpdate(facility) ;
+	}
 	
 }

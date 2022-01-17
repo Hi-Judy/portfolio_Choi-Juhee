@@ -41,7 +41,12 @@
 		from facility_breakinfo b 
 		join facility_status s
 		on b.fac_no = s.fac_no
+		where b.fac_no = #{facNo}
 		order by b.fac_no
 	</select>
+	
+	<update id="facilityStatusUpdate" statementType="CALLABLE">
+		{ call p_update_fac_break( #{facNo},#{facStatus},#{facCause},#{facCheckdate} ) }
+	</update>
 
 </mapper>
