@@ -27,17 +27,7 @@
 <script type="text/javascript">
 	//그리드 
 	var Grid = tui.Grid;
-	Grid.applyTheme('striped', {
-		  cell: {
-		    header: {
-		      background: '#ebedef'
-		    }
-	
-		  },
-		  frozenBorder: {
-			    border: '#ff0000'
-			  }
-		});
+	Grid.applyTheme('default');
 	
 	const columns = [
 		  		{

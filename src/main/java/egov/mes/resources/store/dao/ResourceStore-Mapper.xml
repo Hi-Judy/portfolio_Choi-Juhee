@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="egov.mes.resources.store.dao.ResourceStoreMapper">
+
+	<select id="findResourcesStore" resultType="egov.mes.resources.store.dao.ResourcesStoreVO">
+		SELECT C.ORDR_NO, C.RSC_TST_NO, C.RSC_DEF_CNT, O.RSC_CODE
+		FROM RESOURCE_IST_CHECK C
+		LEFT JOIN RESOURCE_ORDER O
+		ON C.ORDR_NO = O.ORDR_NO
+		WHERE RSC_DEF_CNT IS NOT NULL
+	</select>
+	
+	<insert id="">
+	
+	</insert>
+</mapper>

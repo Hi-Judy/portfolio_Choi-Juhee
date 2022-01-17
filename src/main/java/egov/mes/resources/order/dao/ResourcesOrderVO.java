@@ -26,11 +26,12 @@ public class ResourcesOrderVO {
 	@JsonFormat(pattern = "yyyy-MM-dd", timezone = "Asia/Seoul")
 	Date istReqDate;	
 
-	String rscUnit; 
+	String rscUnit;
 	String rscName;
 	String sucName;
 	String rscPassCnt;
 	String rscDefCnt;
+	String rscPrc;
 	String code;
 	String codeName;
 	

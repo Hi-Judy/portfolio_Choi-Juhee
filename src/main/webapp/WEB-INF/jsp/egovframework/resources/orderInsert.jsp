@@ -21,52 +21,44 @@
 	<h2>자재 발주</h2>
 	<div>
 		<hr>
-		<button id="">조회</button>
-		<button id="saveOrder">저장</button>
-		<hr>
-		<hr>
-		자재명<input id="txtRsc">
-		<button id="btnFindRsc">돋보기</button>
-		<div id="dialog-form-rsc" title="자재 검색"></div>
-		<br>
+		<button id="btnSelectOrder">조회</button>
+		<button id="btnSaveOrder">저장</button>
 		<hr>
 		<button id="btnAdd">추가</button>
+		<button id="btnUpd">수정</button>
 		<button id="btnDel">삭제</button>
 	</div>
+	
+	<div id="dialog-form-rsc" title="자재 검색"></div>
+	<div id="dialog-form-order" title="미입고 검색"></div>
 	<div id="grid"></div>
 
 	<script type="text/javascript">
-	
-	//모달창(자재조회)
-	function clickRsc(rsc){
-		$("#txtRsc").val(rsc);
-		dialog3.dialog("close");
-	};
+	let rscRowKey;
+	//모달창(자재 조회)
 
 	let dialog3 = $( "#dialog-form-rsc" ).dialog({
 			autoOpen: false,
 			modal: true
 		});
 	
-	$("#btnFindRsc").on("click", function(){
-			dialog3.dialog("open");
-		$("#dialog-form-rsc").load("recList",
+
+	//조회 클릭시 미입고 모달창 
+	let dialog4 = $( "#dialog-form-order" ).dialog({
+			autoOpen: false,
+			modal: true
+		});
+	
+	$("#btnSelectOrder").on("click", function(){
+			dialog4.dialog("open");
+		$("#dialog-form-order").load("searchOrderList",
 				function(){console.log("로드됨")})
 		});
-		
+	
+	
 	//그리드
 	var Grid = tui.Grid;
-	Grid.applyTheme('striped', {
-		  cell: {
-		    header: {
-		      background: '#ebedef'
-		    }
-
-		  },
-		  frozenBorder: {
-			    border: '#ff0000'
-			  }
-		});
+	Grid.applyTheme('default');
 	
 	const columns = [
 		
@@ -84,26 +76,26 @@
 	   },
 	  {
 		header: '발주량',
-		name: 'rscCnt'
+		name: 'rscCnt',
+		editor: 'text'
 	   },
 	   {
 		header: '단가',
-		name: 'rscPrc',
-		editor: 'text'
+		name: 'rscPrc'
 		},
 	   {
 		 header: '합계',
 		 name: 'rscTotal',
-		 editor: 'text'
+		 
 		},
 		{
 		  header: '업체',
-		  name: 'sucName',	
-		  editor: 'text'
+		  name: 'sucName'
 		},
 		{
 		  header: '입고요청일',
-		  name: 'istReqDate'
+		  name: 'istReqDate',
+		  editor: 'datePicker'
 		  
 		}	
 	];
@@ -112,11 +104,12 @@
 	const dataSource = {
 		  api: {
 			  readData: { 
-			    	url: 'orderList', 
+			    	url: 'resourcesOrderModify', 
 			    	method: 'GET' 
 			    	},
 		    	modifyData: { url: 'resourcesOrderModify', method: 'POST' }
 		  },
+		  initialRequest : false,
 		  contentType: 'application/json'
 		};
 	
@@ -127,19 +120,39 @@
 		  columns
 		});
 	
+	grid.on("editingFinish",function(ev){
+		if(grid.getValue(ev["rowKey"], "rscPrc")!=null && grid.getValue(ev["rowKey"], "rscCnt")!=null){
+			grid.setValue(ev["rowKey"],"rscTotal",grid.getValue(ev["rowKey"], "rscPrc")*grid.getValue(ev["rowKey"], "rscCnt"));
+		}
+	});
+	grid.on("click", function(ev){
+		console.log(grid.getValue(ev["rowKey"], "rscCode"));
+		if(ev["columnName"]=="rscCode" && 
+				grid.getValue(ev["rowKey"], ev["columnName"])!=null){
+			rscRowKey=ev["rowKey"];
+		dialog3.dialog("open");
+		
+	$("#dialog-form-rsc").load("recList",
+			function(){console.log("로드됨")})}
+		
+	});
+	
+	
 	btnAdd.addEventListener("click", function(){
 		grid.appendRow({});
+	})
+	
+	btnUpd.addEventListener("click", function(){
+		grid.updatedRows(true);
 	})
 	
 	btnDel.addEventListener("click", function(){
 		grid.removeCheckedRows(true);
 	}) 
 	
-	saveOrder.addEventListener("click", function(){
+	btnSaveOrder.addEventListener("click", function(){
 		grid.request('modifyData'); 
-}) 
-	
-	
+	}) 
 	
 	</script>
 </body>

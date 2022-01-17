@@ -12,14 +12,20 @@ import egov.mes.resources.order.dao.ResourcesOrderVO;
 import egov.mes.resources.order.service.ResourcesOrderService;
 
 @Service
-public class ResourcesOrderServiceImpl implements ResourcesOrderService{
-	@Autowired ResourcesOrderMapper mapper;
+public class ResourcesOrderServiceImpl implements ResourcesOrderService {
+	@Autowired
+	ResourcesOrderMapper mapper;
 
 	@Override
 	public List<ResourcesOrderVO> findResourcesOrder(ResourcesOrderVO vo) {
 		return mapper.findResourcesOrder(vo);
 	}
-
+	
+	@Override
+	public List<Map> searchResourcesOrder(ResourcesOrderVO vo) {
+		return mapper.searchResourcesOrder(vo);
+	}
+	
 	@Override
 	public List<Map> searchRec(ResourcesOrderVO vo) {
 		return mapper.searchRec(vo);
@@ -32,13 +38,20 @@ public class ResourcesOrderServiceImpl implements ResourcesOrderService{
 
 	@Override
 	public void modifyOrder(ModifyVO<ResourcesOrderVO> mvo) {
-		if(mvo.getCreatedRows() != null ) {
-			for(ResourcesOrderVO vo :mvo.getCreatedRows()) {
-				mapper.ResourcesOrder(vo);
+		if (mvo.getCreatedRows() != null) {
+			for (ResourcesOrderVO vo : mvo.getCreatedRows()) {
+				mapper.insertResourcesOrder(vo);
 			}
-		
 		}
-	
+		if (mvo.getUpdatedRows() != null) {
+			for (ResourcesOrderVO vo : mvo.getUpdatedRows()) {
+				mapper.updateResourcesOrder(vo);
+			}
+		}
+		if (mvo.getDeletedRows() != null) {
+			for (ResourcesOrderVO vo : mvo.getDeletedRows()) {
+				mapper.deleteResourcesOrder(vo);
+			}
+		}
 	}
-
 }

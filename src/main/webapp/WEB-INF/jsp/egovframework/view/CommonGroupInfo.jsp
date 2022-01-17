@@ -360,7 +360,6 @@ tr:hover {
     
     //이미 저장된 코드 중복방지
     grid2.on('editingFinish' , (ev) => {
-    	console.log(grid2.getValue(ev.rowKey ,'code' ));
     	try{
     		if(ev.columnName === 'code') //타입까지 완전히 같은놈이면~?
     		{ 
