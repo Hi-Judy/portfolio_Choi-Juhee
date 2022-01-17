@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="egov.mes.product.dao.ProductMapper">
+	
+	<select id="podtList" resultType="egov.mes.product.dao.ProductVO">
+		select qnt_infono , podt_code , fn_get_code_name(podt_code) as codeName , man_date , podt_input , podt_output , podt_etc , podt_lot
+		from product_qnt_info
+		where 1=1
+		
+		<if test="podtCode != null">
+			and podt_code = #{podtCode}
+		</if>
+		
+		<if test="manDatestart != null">
+			<![CDATA[
+				and to_char(man_date , 'yyyy-MM-dd') >= #{manDatestart}
+			]]>
+		</if>
+		
+		<if test="manDateend != null">
+			<![CDATA[
+				and to_char(man_date , 'yyyy-MM-dd') <= #{manDateend}
+			]]>
+		</if>
+		
+		order by qnt_infono ASC	
+	</select>
+	
+	<select id="findProduct" resultType="egov.mes.product.dao.ProductVO">
+		select podt_code , fn_get_code_name(podt_code) as codeName
+		from product
+		where fn_get_code_name(podt_code) like '%' || #{podtCode} || '%'
+		order by podt_code ASC 
+	</select>
+	
+	<insert id="insertInOut">
+		insert into product_qnt_info 
+		(qnt_infono , podt_code , man_date , podt_input , podt_output , podt_etc , podt_lot)
+		values (
+			(select (nvl(max(qnt_Infono),1)+1) from product_qnt_info) , #{podtCode} , #{manDate} , #{podtInput} , 
+			#{podtOutput} , #{podtEtc} , #{podtLot}
+		)
+	</insert>
+	
+	<update id="updateLotno" statementType="CALLABLE">
+		{ call p_update_lotno(#{qntInfono},#{podtLot},#{podtCode},#{podtInput},#{podtOutput}) }
+	</update>
+	
+	<delete id="deleteInOut" statementType="CALLABLE">
+		{ call p_delete_qnt_info(#{qntInfono}) }
+	</delete>
+	
+</mapper>

@@ -35,13 +35,13 @@ public class CustomerServiceImpl implements CustomerService {
 	}
 
 	@Override
-	public String insertCustomer(CustomerVO customer) {
-		return mapper.insertCustomer(customer) ;
+	public void insertCustomer(CustomerVO customer) {
+		mapper.insertCustomer(customer) ;
 	}
 
 	@Override
-	public String deleteCustomer(CustomerVO customer) {
-		return mapper.deleteCustomer(customer) ;
+	public void deleteCustomer(CustomerVO customer) {
+		mapper.deleteCustomer(customer) ;
 	}
 
 }

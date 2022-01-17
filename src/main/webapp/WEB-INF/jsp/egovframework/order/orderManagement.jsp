@@ -16,6 +16,7 @@
 </head>
 <body>
 	<div id="title" align="center"><h2>주문 관리</h2></div>
+	<br>
 	<div id="info">
 		<span>진행상태 : </span>
 		<select id="selectStatus">
@@ -24,8 +25,9 @@
 			<option value="진행중">진행중</option>
 			<option value="취소">취소</option>
 			<option value="완료">완료</option>
+			<option value="미생산완료">미생산완료</option>
 		</select>
-		<span>고객코드 : </span><input id="txtCusCode"><button type="button" id="btnSearch">업체검색</button>
+		<span>고객코드 : </span><input id="txtCusCode"><button type="button" id="btnSearch">고객코드검색</button>
 		<br><br>
 		<span>접수일자 : </span><input id="ordDateStart" type="date"><span> ~ </span><input id="ordDateEnd" type="date">
 		<span>납기일자 : </span><input id="dueDateStart" type="date"><span> ~ </span><input id="dueDateEnd" type="date">
@@ -37,13 +39,14 @@
 		</div>
 	</div>
 	
-	<div id="find-dialog-form" title="업체검색"">
-		<input id="cusName"><button id="btnCusSearch">업체명검색</button>
+	<div id="findCustomer" title="업체검색"">
+		<input id="cusName"><button id="btnCusSearch">검색</button>
 		<button type="button" id="btnClose1">닫기</button>
 		<div id="cusResult"></div>
 	</div>
 	
-	<div id="selectInfo" title="거래상세정보">
+	<div id="tradeDetail" title="주문상세정보" align="center">
+		<div id="selectInfo"></div>
 		<button type="button" id="btnClose2">닫기</button>
 	</div>
 <script>
@@ -51,7 +54,7 @@
 	var Grid = tui.Grid ;
 	
 	//---------- ↓업체찾기 ----------
-	let dialog = $("#find-dialog-form").dialog({
+	let dialog = $("#findCustomer").dialog({
 		autoOpen : false ,
 		modal : true ,
 		width : 600 ,
@@ -116,11 +119,13 @@
 		$("#txtCusCode").val(cusCode) ;
 		grid.clear() ;
 		dialog.dialog("close") ;
+		$("#cusName").val("") ;
 	})
 	
 	$("#btnClose1").on("click" , function() {
 		dialog.dialog("close") ;
 		grid.clear() ;
+		$("#cusName").val("") ;
 	})
 	//---------- ↑업체찾기 ----------
 	//---------- ↓페이지 ----------
@@ -169,24 +174,24 @@
 		 
 		if (cusCode == '') {
 			cusCode = 'null' ;
-		} else {
-			cusCode = $("#txtCusCode").val() ; 
 		}
 		
 		if (ordStatus == '') {
 			ordStatus = 'null' ;
-		} else {
-			ordStatus = $("#selectStatus").val() ; 
 		}
+		
 		if (ordDatestart == '') {
 			ordDatestart='1910-12-25' ;
 		}
+		
 		if (ordDateend == '') {
 			ordDateend ='1910-12-25';
 		}
+		
 		if (ordDuedatestart == '') {
 			ordDuedatestart = '1910-12-25';
 		}
+		
 		if (ordDuedateend == '') {
 			ordDuedateend = '1910-12-25';
 		}
@@ -234,17 +239,114 @@
 		$("#dueDateEnd").val("") ;
 		grid2.clear() ;
 	})
+	
+	grid2.on('check' , (ev) => {
+		rowCodes[ev.rowKey] = data2[ev.rowKey].ordCode ;
+		rowStatus[ev.rowKey] = data2[ev.rowKey].ordStatus ;
+	})
+	
+	grid2.on('uncheck' , (ev) => {
+		delete rowCodes[ev.rowKey] ;
+		delete rowStatus[ev.rowKey] ;
+	})
+	
+	var rowCodes = new Array() ;
+	var rowStatus = new Array() ;
+	
+	$("#releaseBtn").on("click" , function() {
+		console.log(rowCodes) ;
+		console.log(rowStatus) ;
+		
+		grid2.uncheckAll() ;
+		
+		let no = 1 ;
+		for (let i = 0 ; i < rowStatus.length ; i++) {
+			if(rowStatus[i] != null) {
+				let ordStatus = rowStatus[i] ;
+				if(ordStatus == '완료' || ordStatus == '미생산완료' || ordStatus == ''){
+					no = 2 ;
+				}
+			} 
+		}
+		if (no == 2) {
+			alert('이미 완료된 주문입니다') ;
+			rowCodes = [] ;
+			rowStatus = [] ;
+			return ;
+		}
+		
+		let ok = 1 ;
+		for (let i = 0 ; i < rowCodes.length ; i++) {
+			if(rowCodes[i] != null) {
+				let ordCode = rowCodes[i] ;
+				
+				$.ajax({
+					url : 'noManRelease' ,
+					data : {
+						ordCode : ordCode 
+					} ,
+					dataType : 'json' ,
+					async : false ,
+					contentType : 'application/json ; charset=utf-8;' ,
+					success : function(datas) {
+						ok = 2 ;
+						
+						let cusCode = 'null' ;
+						let ordStatus = 'null' ;
+						let ordDatestart = '1910-12-25' ;
+						let ordDateend = '1910-12-25' ;
+						let ordDuedatestart = '1910-12-25' ;
+						let ordDuedateend = '1910-12-25' ;
+						
+						$.ajax({
+							url : 'orderList' ,
+							dataType : 'json' ,
+							data : {
+								cusCode : cusCode ,
+								ordStatus : ordStatus ,
+								ordDatestart : ordDatestart ,
+								ordDateend : ordDateend ,
+								ordDuedatestart : ordDuedatestart ,
+								ordDuedateend : ordDuedateend
+							} ,
+							async : false ,
+							success : function(datas) {
+								data2 = datas.orderlist ;
+								grid2.resetData(data2) ;
+								grid2.resetOriginData() ;
+								
+							} ,
+							error : function(reject) {
+								console.log(reject) ;
+							}
+						})
+					} ,
+					error : function(reject) {
+						console.log(reject) ;
+					}
+				})
+				delete rowCodes[i] ;
+				delete rowStatus[i] ;
+			}
+		}
+		if (ok == 2) {
+			alert('출하완료되었습니다') ;
+		}
+	})
+	
 	//---------- ↑페이지 ----------
 	//---------- ↓상세조회 ----------
 	const columns3 = [
 		{
 			header : '번호' ,
 			name : 'ordNo' ,
+			hidden: true ,
 			align: 'center'
 		} ,
 		{
 			header : '주문코드' ,
 			name : 'ordCode' ,
+			width: 100 ,
 			align: 'center'
 		} ,
 		{
@@ -255,6 +357,7 @@
 		{
 			header : '제품명' ,
 			name : 'codeName' ,
+			width: 200 ,
 			align: 'center'
 		} ,
 		{
@@ -271,7 +374,12 @@
 	
 	let data3 ;
 
-	grid2.on('dblclick' , (ev) => {
+	grid2.on('click' , (ev) => {
+		
+		if (ev.columnName === '_checked'){
+			return ev.stop() ;
+		}
+		
 		let ordCode = data2[ev.rowKey].ordCode ;
 		
 		$.ajax({
@@ -298,13 +406,23 @@
 			{ type : 'rowNum' }
 		] ,
 		data : data3 ,
-		columns : columns3
+		columns : columns3 ,
+		summary : {
+			height : 30 ,
+			columnContent : {
+				ordQnt: {
+					template(summary) {
+						return ' 총 주문량 : ' + summary.sum + ' 개'
+					}
+				}
+			}
+		}
 	}) ;
 	
-	let dialog2 = $("#selectInfo").dialog({
+	let dialog2 = $("#tradeDetail").dialog({
 		autoOpen : false ,
 		modal : true ,
-		width : 600 ,
+		width : 800 ,
 		height : 400
 	})
 	

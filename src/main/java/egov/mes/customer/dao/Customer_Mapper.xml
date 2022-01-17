@@ -4,29 +4,31 @@
 	<select id="customerList"
 		resultType="egov.mes.customer.dao.CustomerVO">
 		select cus_code , fn_get_code_name(cus_code) as codeName , cus_phone 
-			from customer_info
-			where 1=1
+		from customer_info
+		where 1=1
 
 		<if test="cusCode != null">
 			and cus_code = #{cusCode}
 		</if>
 		
-			order by cus_code ASC
+		order by cus_code ASC
 	</select>
 	
 	<select id="findCustomer" resultType="egov.mes.customer.dao.CustomerVO">
 		select cus_code , fn_get_code_name(cus_code) as codeName 
-			from customer_info
-			where fn_get_code_name(cus_code) like '%' || #{codeName} || '%'
+		from customer_info
+		where fn_get_code_name(cus_code) like '%' || #{codeName} || '%'
+		order by cus_code ASC
 	</select>
 	
 	<select id="selectTradeInfo" resultType="egov.mes.customer.dao.CustomerVO">
 		select o.ord_code , t.podt_code , fn_get_code_name(t.podt_code) as podt_name , 
 			   to_char(o.ord_date,'yyyy-MM-dd') as ord_date , t.ord_qnt
-			from order_management o 
-			join trade_info t 
-			on o.ord_code = t.ord_code
-			where o.cus_code = #{cusCode}
+		from order_management o 
+		join trade_info t 
+		on o.ord_code = t.ord_code
+		where o.cus_code = #{cusCode}
+		order by ord_code ASC
 	</select>	
 	
 	<update id="updateCustomer" statementType="CALLABLE">
