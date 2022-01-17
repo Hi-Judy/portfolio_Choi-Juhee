@@ -7,4 +7,5 @@ import egovframework.rte.psl.dataaccess.mapper.Mapper;
 @Mapper("facilityMapper")
 public interface FacilityMapper {
 	List<FacilityVO> facilityList(FacilityVO facility) ;
+	List<FacilityVO> findFacility(FacilityVO facility) ;
 }

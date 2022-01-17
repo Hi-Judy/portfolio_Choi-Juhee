@@ -39,4 +39,12 @@ public class FacilityController {
 		jsonView.addObject("facilitylist" , list) ;
 		return jsonView ;
 	}
+	
+	@RequestMapping("findFacility/{codeName}")
+	public ModelAndView findFacility(FacilityVO facility) {
+		List<FacilityVO> list = service.findFacility(facility) ;
+		ModelAndView jsonView = new ModelAndView("jsonView") ;
+		jsonView.addObject("findfacility" , list) ;
+		return jsonView ; 
+	}
 }

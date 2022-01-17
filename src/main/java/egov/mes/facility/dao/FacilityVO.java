@@ -25,4 +25,6 @@ public class FacilityVO {
 	
 	String facInfono ;
 	Date facCuasedate ;
+	
+	String codeName ;
 }

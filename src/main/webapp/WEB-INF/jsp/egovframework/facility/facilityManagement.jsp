@@ -31,7 +31,6 @@
 		<br>
 		<div align="right">
 			<button type="button" id="listBtn">조회</button>
-			<button type="button" id="selectBtn">내역조회</button>
 			<button type="button" id="btnInsert">저장</button>
 			<button type="button" id="clearBtn">초기화</button>
 		</div>
@@ -61,6 +60,11 @@
 		{
 			header : '설비코드' ,
 			name : 'facCode' ,
+			align: 'center'
+		} ,
+		{
+			header : '설비명' ,
+			name : 'codeName' ,
 			align: 'center'
 		} ,
 		{
@@ -153,6 +157,79 @@
 	})
 	//---------- ↑페이지 ----------
 	//---------- ↓설비찾기 ----------
+	let dialog = $("#findFacility").dialog({
+		autoOpen : false ,
+		modal : true ,
+		width : 600 ,
+		height : 400
+	})
+	
+	$("#btnSearch").on("click" , function() {
+		dialog.dialog("open") ;
+		grid2.refreshLayout() ;
+	})
+	
+	const columns2 = [
+		{
+			header: '설비코드' ,
+			name: 'facCode' , 
+			align: 'center'
+		} ,
+		{
+			header: '설비명' ,
+			name: 'codeName' ,
+			align: 'center'
+		}
+	] ;
+	
+	let data2 ;
+	
+	$("#btnfacSearch").on("click" , function() {
+		var codeName = $("#facName").val() ;
+		
+		if (codeName == '') {
+			alert('업체명을 입력하세요') ;
+			return ;
+		}
+		
+		$.ajax({
+			url : 'findFacility/' + codeName ,
+			dataType : 'json' ,
+			async : false ,
+			success : function(datas) {
+				data2 = datas.findfacility ;
+				grid2.resetData(data2) ;
+				grid2.resetOriginData() ;
+			} ,
+			error : function(reject) {
+				console.log(reject) ;
+			}
+		})
+	})
+	
+	const grid2 = new Grid({
+		el : document.getElementById('facResult') ,
+		rowHeaders: [
+			{ type : 'rowNum' }
+		] ,
+		height : 300 ,
+		data : data2 ,
+		columns : columns2
+	})
+	
+	grid2.on('click',(ev) => {
+		let facCode = data2[ev.rowKey].facCode ;
+		$("#txtfacCode").val(facCode) ;
+		grid2.clear() ;
+		dialog.dialog("close") ;
+		$("#facName").val("") ;
+	})
+	
+	$("#btnClose1").on("click" , function() {
+		dialog.dialog("close") ;
+		grid2.clear() ;
+		$("#facName").val("") ;
+	})
 	//---------- ↑설비찾기 ----------
 	//---------- ↓상세정보 ----------
 	//---------- ↑상세정보 ----------

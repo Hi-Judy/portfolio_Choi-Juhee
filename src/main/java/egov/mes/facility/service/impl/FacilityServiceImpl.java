@@ -18,5 +18,10 @@ public class FacilityServiceImpl implements FacilityService {
 	public List<FacilityVO> facilityList(FacilityVO facility) {
 		return mapper.facilityList(facility) ;
 	}
+
+	@Override
+	public List<FacilityVO> findFacility(FacilityVO facility) {
+		return mapper.findFacility(facility) ;
+	}
 	
 }
