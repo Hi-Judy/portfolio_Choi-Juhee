@@ -18,10 +18,16 @@ public class ManufactureServiceImpl implements ManufactureService {
 	@Autowired
 	private ManufactureMapper manMapper;
 
-	//미계획조회
+	//생산계획 조회
 	@Override
-	public List<ManufacturePlanVO> selectPlan(ManufacturePlanVO mPlanVO) {
-		return manMapper.selectPlan(mPlanVO);
+	public List<Map<String, String>> selectManPlan(ManufacturePlanVO planVo) {
+		return manMapper.selectManPlan(planVo);
+	}
+
+	//생산계획 디테일 조회
+	@Override
+	public List<ManufacturePlanVO> selectManPlanDetail(ManufacturePlanVO planVo) {
+		return manMapper.selectManPlanDetail(planVo);
 	}
 
 	//자재조회
@@ -30,9 +36,25 @@ public class ManufactureServiceImpl implements ManufactureService {
 		return manMapper.selectRes(mPlanVo);
 	}
 	
+	//미계획조회
+	@Override
+	public List<ManufacturePlanVO> selectPlan(ManufacturePlanVO mPlanVO) {
+		return manMapper.selectPlan(mPlanVO);
+	}
+	
 	//생산계획추가
 	@Override
 	public int insertPlan(ModifyVO<ManufacturePlanVO> list ) {
+		
+		
+		System.out.println("*******************MODIFY_DELETE_test**************");
+		if(list.getDeletedRows() != null) {
+			for(ManufacturePlanVO planVO : list.getDeletedRows()) {
+				System.out.println(planVO);
+				manMapper.deletePlan(planVO);
+				System.out.println(planVO);
+			}
+		}
 		
 		System.out.println("*******************MODIFY_INSERT_test**************");
 		if(list.getUpdatedRows() != null) {
@@ -41,14 +63,7 @@ public class ManufactureServiceImpl implements ManufactureService {
 			}
 			manMapper.insertPlan(list.getUpdatedRows().get(0));
 		}
-		
-		System.out.println("*******************MODIFY_DELETE_test**************");
-		if(list.getDeletedRows() != null) {
-			for(ManufacturePlanVO planVO : list.getDeletedRows()) {
-				manMapper.deletePlan(planVO);
-				System.out.println(planVO);
-			}
-		}
+	
 		
 		System.out.println("*******************MODIFY_UPDATE_test**************");
 		if(list.getUpdatedRows() != null) {
@@ -61,19 +76,19 @@ public class ManufactureServiceImpl implements ManufactureService {
 		return 1;
 	}
 
+	
+	//생산계획 조회(조회페이지)
 	@Override
-	public List<ManufacturePlanVO> selectManPlan(ManufacturePlanVO planVo) {
-		
-		return manMapper.selectManPlan(planVo);
+	public List<ManufacturePlanVO> selectManufacturePlan(ManufacturePlanVO mPlanVo) {
+		return manMapper.selectManufacturePlan(mPlanVo);
 	}
 
-	//생산계획조회
-	/*
-	 * @Override public List<Map<String, String>> selectManPlan(ManufacturePlanVO
-	 * mPlanVo) {
-	 * 
-	 * return manMapper.selectManPlan(mPlanVo); }
-	 */
+	
+	//생산계획 디테일 조회(조회페이지)
+	@Override
+	public List<ManufacturePlanVO> selectManufactureDetail(ManufacturePlanVO planVo) {
+		return manMapper.selectManufactureDetail(planVo);
+	}
 
 	
 }

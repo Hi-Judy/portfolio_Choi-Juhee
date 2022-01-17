@@ -43,7 +43,7 @@
 				</a>
 					<ul class="submenu ">
 						<li class="submenu-item "><a href="manufacture/manufacture">생산 계획 관리</a></li>
-						<li class="submenu-item "><a href="#">생산 계획 상세 조회</a></li>
+						<li class="submenu-item "><a href="manufacture/manufactureSelect">생산 계획 상세 조회</a></li>
 						<li class="submenu-item "><a href="#">생산 지시 관리</a></li>
 						<li class="submenu-item "><a href="#">생산 지시 상세 조회</a></li>
 						<li class="submenu-item "><a href="#">생산 현황 조회</a></li>
