@@ -1,4 +1,4 @@
-package egov.mes.manufacture.dao;
+package egov.mes.manufacture.plan.dao;
 
 import lombok.Data;
 

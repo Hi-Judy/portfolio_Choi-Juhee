@@ -1,4 +1,4 @@
-package egov.mes.manufacture.web;
+package egov.mes.manufacture.plan.web;
 
 import java.util.HashMap;
 import java.util.List;
@@ -12,8 +12,8 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
-import egov.mes.manufacture.dao.ManufacturePlanVO;
-import egov.mes.manufacture.service.ManufactureService;
+import egov.mes.manufacture.plan.dao.ManufacturePlanVO;
+import egov.mes.manufacture.plan.service.ManufactureService;
 
 @Controller
 public class SelectManController {
@@ -66,6 +66,7 @@ public class SelectManController {
 		model.addAttribute("result",true);
 		model.addAttribute("data", maps);
 
+		System.out.println(planVO);
 		System.out.println("생산계획 데테일 조회: " + service.selectManufactureDetail(planVO));
 
 		return "jsonView";

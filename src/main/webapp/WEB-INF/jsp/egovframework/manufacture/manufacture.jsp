@@ -26,7 +26,7 @@
 	</div>
 
 	<div>
-		<p style="display:inline-block;">생산지시명</p>
+		<p style="display:inline-block;">생산계획명</p>
 		<input id = "txtPlanName" style="display:inline-block;">
 	</div>
 	<br>
@@ -304,6 +304,10 @@
 			gridMain.resetData(checkedPlan); //gridMain에 기존에 들어있는 데이터를 checkedPlan 로 리셋.
 			//gridMain.appendRows(checkedPlan);
 			dialogPlan.dialog("close");
+			
+			let txtPlanDate = document.querySelector('#txtFromDate');
+			console.log(txtPlanDate);
+			txtPlanDate.value = '';
 		};
 		
 		let checkedPlan;
@@ -416,14 +420,21 @@
 		//저장 버튼 이벤트
 		btnSavePlan.addEventListener("click", function(){
 			let txtPlanDate = document.querySelector('#txtFromDate').value;
+			let txtPlanName = document.querySelector('#txtPlanName').value;
 			console.log(txtPlanDate);
-			console.log(txtPlanDate.type);
+			//console.log(txtPlanDate.type);
 			
-			gridMain.setValue(1, 'manPlanDate', txtPlanDate);
+			for(let i=0; i<gridMain.getRowCount();i++){
+				console.log(i);
+				gridMain.setValue(i, 'manPlanDate', txtPlanDate);
+				gridMain.setValue(i, 'manPlanName', txtPlanName);
+			}
 			console.log("!!SAVE!!")
 			gridMain.blur();
 			//gridMain에서 modifyData 요청 -> dataSourceMain의 modifyData 안의 url로 간다.
 			gridMain.request('modifyData'); 
+			
+			txtPlanDate.value = '';
 		});
 		
 		
