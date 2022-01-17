@@ -23,5 +23,10 @@ public class FacilityServiceImpl implements FacilityService {
 	public List<FacilityVO> findFacility(FacilityVO facility) {
 		return mapper.findFacility(facility) ;
 	}
+
+	@Override
+	public List<FacilityVO> facilityBreakInfo(FacilityVO facility) {
+		return mapper.facilityBreakInfo(facility) ;
+	}
 	
 }

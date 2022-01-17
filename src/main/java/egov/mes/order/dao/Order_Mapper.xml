@@ -57,7 +57,7 @@
 		select ord_code , cus_code , fn_get_code_name(cus_code) as code_name , ord_date , ord_duedate , 
 			(select sum(ord_qnt) from trade_info where ord_code = o.ord_code) as ord_qnt
 		from order_management o 
-		where ord_status = '미생산완료'
+		where ord_status = '미생산출하'
 		
 		<if test="cusCode != null">
 			and cus_code = #{cusCode}

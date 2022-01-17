@@ -24,6 +24,10 @@
 		<span>작업일자 : </span><input id="manDatestart" type="date"><span> ~ </span><input id="manDateend" type="date">
 		<br>
 		<div align="right">
+<!-- 테스트 -->
+			<button type="button" id="test">테스트버튼</button>
+			<button type="button" id="test2">테스트버튼2</button>
+<!-- 테스트 -->
 			<button type="button" id="listBtn">조회</button>
 			<button type="button" id="btnAdd">추가</button>
 			<button type="button" id="btnInsert">저장</button>
@@ -92,18 +96,49 @@
 			editor: 'text' ,
 			align: 'center'
 		} ,
+// ----- 테스트 -----
 		{
 			header: '비고	' ,
 			name : 'podtEtc' ,
-			editor: 'text' ,
-			align: 'center'
+			align: 'center' ,
+			formatter : 'listItemText' ,
+			editor: {
+				type : 'select' ,
+				options: {
+					listItems: [
+						{ text : '선택' , value: ''} ,
+						{ text : '생산완료' , value: '생산완료'} ,
+						{ text : '출하' , value: '출하'} ,
+						{ text : '미생산출하' , value: '미생산출하'} ,
+						{ text : '기타' , value: '기타'}
+					]
+				}
+			} ,
+			relations: [
+				{
+					targetNames: ['podtLot'] ,
+					listItems({ value }) {
+						return second[value] ;
+					} ,
+					disabled({ value }) {
+						return !value ;
+					}
+				}
+			]
 		} ,
 		{
 			header: '완제품 Lot' ,
 			name : 'podtLot' ,
-			editor: 'text' ,
-			align: 'center'
-		} ,
+			align: 'center' ,
+			formatter: 'listItemText' ,
+			editor: {
+				type : 'select' ,
+				options : {
+					listItems : []
+				}
+			}
+		}
+// ----- 테스트 -----
 	] ;
 	
 	let data ;
@@ -157,14 +192,61 @@
 		columns : columns
 	})
 	
+	// ----- 테스트 -----
+	const second = {
+		'생산완료' : [
+			{ text : '선택' , value : ''} ,
+			{ text : '생산완료용Lot' , value : '1-1'}
+		] ,
+		'출하' : [
+			{ text : '선택' , value : ''} ,
+			{ text : '출하용Lot' , value : '2-1'}
+		] ,
+		'미생산출하' : [
+			{ text : '선택' , value : ''} ,
+			{ text : '출하용Lot' , value : '3-1'}
+		] ,
+		'기타' : [
+			{ text : '선택' , value : ''} ,
+			{ text : '생산완료Lot' , value : '4-1'} , 
+			{ text : '출하용Lot' , value : '4-2'} 
+		]
+	} ;	
+	 
+	$("#test").on("click" , function() {
+		second.출하[1].text = 'C220117001_001' ;
+		second.출하[1].value = 'C220117001_001' ;
+	})	
+	
+	$("#test2").on("click" , function() {
+		$.ajax({
+			url : 'selectOptions' ,
+			dataType : 'json' ,
+			async : false ,
+			success : function(datas) {
+				console.log(datas.selectoptions[0].qnt) ;
+				for (let i = 0 ; i < datas.selectoptions.length ; i++) {
+					if( datas.selectoptions[i].qnt < 0 ){
+						second.출하[1].text = '' ;
+						second.출하[1].value = '' ;
+					} 
+				}
+			} ,
+			error : function(reject) {
+				console.log(reject) ;
+			}
+		})
+	})
+	// ----- 테스트 -----
+	
 	// 입력된 데이터 수정못하게 하기
 	grid.on('editingStart' , (ev) => {
 		let value = grid.getValue(ev.rowKey , 'qntInfono') ;
 		let lot = ev.columnName ;
 		
 		if (value != '' && value != null) {
-			if(lot != 'podtLot') {
-				ev.stop() ;			
+			if (lot != 'podtLot') {
+				ev.stop() ;	
 			}
 		} 
 	})
@@ -214,64 +296,71 @@
 			}
 		}
 		if (insertData != '') {
-			let insertCode = insertData[0].podtCode ;
-			let insertDate = insertData[0].manDate ;
-			let insertInput = insertData[0].podtInput ;
-			let insertOutput = insertData[0].podtOutput ;
-			let insertEtc = insertData[0].podtEtc ;
-			let insertLot = insertData[0].podtLot ;
 			
-			if (insertCode == '' || insertDate == '' || insertInput == '' || insertOutput == '' || insertCode == '') {
-				alert('입력값을 확인하세요') ;
-				return ;
-			}
-			
-			if (insertEtc == '') {
-				insertEtc = 'null'
-			}
-			
-			$.ajax({
-				url : 'productInOut' ,
-				data : {
-					podtCode : insertCode ,
-					manDate : insertDate ,
-					podtInput : insertInput ,
-					podtOutput : insertOutput ,
-					podtEtc : insertEtc ,
-					podtLot : insertLot
-				} ,
-				async : false ,
-				success : function(datas) {
-					alert('저장완료되었습니다') ;
-					
-					let podtCode = 'null' ;
-					let manDatestart = '1910-12-25';
-					let manDateend = '1910-12-25';
-					
-					$.ajax({
-						url : 'productList' ,
-						dataType : 'json' ,
-						data : {
-							podtCode : podtCode ,
-							manDatestart : manDatestart ,
-							manDateend : manDateend
-						} ,
-						async : false ,
-						success : function(datas) {
-							data = datas.productlist ;
-							grid.resetData(data) ;
-							grid.resetOriginData() ;
-							
-						} ,
-						error : function(reject) {
-							console.log(reject) ;
-						}
-					})
-				} ,
-				error : function(reject) {
-					console.log(reject) ;
+			let ok = 1 ;
+			for (let i = 0 ; i < insertData.length ; i++) {
+				let insertCode = insertData[0].podtCode ;
+				let insertDate = insertData[0].manDate ;
+				let insertInput = insertData[0].podtInput ;
+				let insertOutput = insertData[0].podtOutput ;
+				let insertEtc = insertData[0].podtEtc ;
+				let insertLot = insertData[0].podtLot ;
+				
+				if (insertCode == '' || insertDate == '' || insertInput == '' || insertOutput == '' || insertCode == '') {
+					alert('입력값을 확인하세요') ;
+					return ;
 				}
-			})
+				
+				if (insertEtc == '') {
+					insertEtc = 'null'
+				}
+				
+				$.ajax({
+					url : 'productInOut' ,
+					data : {
+						podtCode : insertCode ,
+						manDate : insertDate ,
+						podtInput : insertInput ,
+						podtOutput : insertOutput ,
+						podtEtc : insertEtc ,
+						podtLot : insertLot
+					} ,
+					async : false ,
+					success : function(datas) {
+						
+						ok = 2 ;						
+						let podtCode = 'null' ;
+						let manDatestart = '1910-12-25';
+						let manDateend = '1910-12-25';
+						
+						$.ajax({
+							url : 'productList' ,
+							dataType : 'json' ,
+							data : {
+								podtCode : podtCode ,
+								manDatestart : manDatestart ,
+								manDateend : manDateend
+							} ,
+							async : false ,
+							success : function(datas) {
+								data = datas.productlist ;
+								grid.resetData(data) ;
+								grid.resetOriginData() ;
+								
+							} ,
+							error : function(reject) {
+								console.log(reject) ;
+							}
+						})
+					} ,
+					error : function(reject) {
+						console.log(reject) ;
+					}
+				})
+			}
+			if (ok == 2) {
+				alert('저장완료되었습니다') ;
+			}
 		} 
 		
 	})

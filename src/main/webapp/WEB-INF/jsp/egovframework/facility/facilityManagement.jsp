@@ -70,7 +70,15 @@
 		{
 			header : '상태' ,
 			name : 'facStatus' ,
-			editor : 'text' ,
+			editor : {
+				type : 'select' ,
+				options : {
+					listItems : [
+						{ text : 'Y' , value : 'Y' } ,
+						{ text : 'N' , value : 'N' } 	
+					]
+				}
+			} ,
 			align: 'center'
 		} ,
 		{
@@ -86,7 +94,7 @@
 			align: 'center'
 		} ,
 		{
-			header : '일생산량' ,
+			header : 'UPH' ,
 			name : 'facOutput' , 
 			align: 'center'
 		}
@@ -232,6 +240,66 @@
 	})
 	//---------- ↑설비찾기 ----------
 	//---------- ↓상세정보 ----------
+	grid.on('click' , (ev) => {
+		
+		if ( ev.columnName === 'facStatus' || ev.columnName === 'facCause' || ev.columnName === 'facCheckdate' ) {
+			return ev.stop() ;
+		}
+		
+		let facNo = data[ev.rowKey].facNo ;
+		
+		$.ajax({
+			url : 'facilitybreakinfo/' + facNo ,
+			dataType : 'json' ,
+			async : false ,
+			success : function(datas) {
+				data3 = datas.facilitybreakinfo ;
+				grid3.resetData(data3) ;
+				grid3.resetOriginData() ;
+			} ,
+			error : function(reject) {
+				console.log(reject) ;
+			}
+		}) ;
+		
+		let dialog2 = $("#selectFacility").dialog({
+			autoOpen : false ,
+			modal : true ,
+			width : 600 ,
+			height : 400
+		}) ;
+		
+		const columns3 = [
+			{
+				header: '설비코드' ,
+				name: 'facCode' , 
+				align: 'center'
+			} ,
+			{
+				header: '설비명' ,
+				name: 'codeName' ,
+				align: 'center'
+			}
+		] ;
+		
+		let data3 ;
+		
+		const grid3 = new Grid({
+			el : document.getElementById('facResult') ,
+			rowHeaders: [
+				{ type : 'rowNum' }
+			] ,
+			height : 300 ,
+			data : data3 ,
+			columns : columns3
+		})
+		
+		$("#btnClose1").on("click" , function() {
+			dialog2.dialog("close") ;
+			grid3.clear() ;
+			$("#facName").val("") ;
+		}) ;
+	})
 	//---------- ↑상세정보 ----------
 </script>
 </body>

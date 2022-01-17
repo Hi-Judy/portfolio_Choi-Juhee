@@ -72,4 +72,12 @@ public class ProductController {
 		jsonView.addObject("deleteinout" , result) ;
 		return jsonView ;
 	}
+	
+	@RequestMapping("selectOptions")
+	public ModelAndView selectOptions(ProductVO product) {
+		List<ProductVO> list = service.selectOptions(product) ;
+		ModelAndView jsonView = new ModelAndView("jsonView") ;
+		jsonView.addObject("selectoptions" , list) ;
+		return jsonView ;
+	}
 }
