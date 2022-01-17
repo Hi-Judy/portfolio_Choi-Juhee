@@ -5,6 +5,7 @@
 <!DOCTYPE html>
 <html>
 <head>
+<link href="<c:url value='/images/egovframework/com/Logo/logo.png' />" rel="shortcut icon" type="image/x-icon">
 <link type="text/css" rel="stylesheet"
 	href="<c:url value='/css/egovframework/com/app.css' />">
 <link type="text/css" rel="stylesheet"
