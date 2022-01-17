@@ -38,4 +38,9 @@ public class ProductServiceImpl implements ProductService{
 	public void deleteInOut(ProductVO product) {
 		mapper.deleteInOut(product) ;
 	}
+
+	@Override
+	public List<ProductVO> selectOptions(ProductVO product) {
+		return mapper.selectOptions(product) ;
+	}
 }

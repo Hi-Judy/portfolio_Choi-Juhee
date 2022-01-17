@@ -50,4 +50,10 @@
 		{ call p_delete_qnt_info(#{qntInfono}) }
 	</delete>
 	
+	<select id="selectOptions" resultType="egov.mes.product.dao.ProductVO">
+		select podt_code , podt_lot, (sum(podt_input)-sum(podt_output)) as qnt
+		from product_qnt_info 
+		group by podt_code , podt_lot
+	</select>
+	
 </mapper>

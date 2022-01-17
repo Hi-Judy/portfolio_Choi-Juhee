@@ -263,7 +263,7 @@
 		for (let i = 0 ; i < rowStatus.length ; i++) {
 			if(rowStatus[i] != null) {
 				let ordStatus = rowStatus[i] ;
-				if(ordStatus == '완료' || ordStatus == '미생산완료' || ordStatus == ''){
+				if(ordStatus == '완료' || ordStatus == '미생산출하' || ordStatus == ''){
 					no = 2 ;
 				}
 			} 

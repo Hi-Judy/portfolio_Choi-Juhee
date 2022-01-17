@@ -35,5 +35,13 @@
 		where fn_get_code_name(fac_code) like '%' || #{codeName} || '%'
 		order by fac_code ASC
 	</select>
+	
+	<select id="facilityBreakInfo" resultType="egov.mes.facility.dao.FacilityVO">
+		select b.fac_infono , b.fac_no , b.fac_cause , b.fac_causedate , fn_get_code_name(s.fac_code) as codeName
+		from facility_breakinfo b 
+		join facility_status s
+		on b.fac_no = s.fac_no
+		order by b.fac_no
+	</select>
 
 </mapper>
