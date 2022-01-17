@@ -5,6 +5,7 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -73,11 +74,35 @@ public class ProductBomController {
 	//공정코드만 조회
 	@RequestMapping("ProcFind")
 	public ModelAndView ProcFind() {
-		System.out.println("공정코드 조회 시작");
+//		System.out.println("공정코드 조회 시작");
 		ModelAndView jsonView = new ModelAndView("jsonView");
 		jsonView.addObject("data" , service.ProcFind());
-		System.out.println(jsonView);
+//		System.out.println(jsonView);
 		return jsonView;
+	}
+	
+	//공정코드로 공정명 호출
+	@ResponseBody
+	@RequestMapping(value = "ProcNmFind")
+	public ModelAndView ProcNmFind(@RequestBody ProductBomVO bomVO ) {
+//		System.out.println("공정코드로 자재명 호출");
+			
+		ModelAndView jsonView = new ModelAndView("jsonView");
+		jsonView.addObject("data" , service.ProcName(bomVO));
+
+//		System.out.println(jsonView);
+
+		return jsonView ;
+	}
+	
+	//공정흐름 데이터 추가
+	@ResponseBody
+	@PostMapping(value = "ProcInsert" ) //보내줄떄 배열로 보냈기떄문에 받을때로 List 배열로 받아야한다.
+	public String ProcInsert (@RequestBody List<ProductBomVO> bomVO) {
+			System.out.println(bomVO);
+		service.ProcInsert(bomVO);
+			
+		return null ;
 	}
 	
 	

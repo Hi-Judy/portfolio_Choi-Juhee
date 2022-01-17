@@ -62,6 +62,23 @@ public class ProductBomServiceImpl implements ProductBomService {
 		// TODO Auto-generated method stub
 		return bomMapper.ProcFind();
 	}
+	
+	//공정코드로 공정명 조회
+	@Override
+	public ProductBomVO ProcName(ProductBomVO bomVO) {
+		// TODO Auto-generated method stub
+		return bomMapper.ProcName(bomVO);
+	}
+	
+	//공정흐름 데이터 추가
+	@Override
+	public int ProcInsert(List<ProductBomVO> bomVO) {
+		for (ProductBomVO BomVO : bomVO)
+			bomMapper.ProcName(BomVO);
+
+		System.out.println("저장완료");
+		return 0;
+	}
 
 
 
