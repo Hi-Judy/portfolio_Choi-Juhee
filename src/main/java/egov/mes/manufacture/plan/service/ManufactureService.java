@@ -1,10 +1,10 @@
-package egov.mes.manufacture.service;
+package egov.mes.manufacture.plan.service;
 
 import java.util.List;
 import java.util.Map;
 
-import egov.mes.manufacture.dao.ManufacturePlanVO;
-import egov.mes.manufacture.dao.ModifyVO;
+import egov.mes.manufacture.plan.dao.ManufacturePlanVO;
+import egov.mes.manufacture.plan.dao.ModifyVO;
 
 
 public interface ManufactureService {
