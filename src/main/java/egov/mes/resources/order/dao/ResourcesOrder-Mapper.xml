@@ -22,6 +22,10 @@
     			and to_char(O.ORDE_DATE,'yyyyMMdd') >= to_char(#{ordeDate},'yyyyMMdd') AND to_char(O.ORDE_DATE,'yyyyMMdd') <= to_char(#{ordeDate2}, 'yyyyMMdd')
 				]]>
 			</if>
+			<if test="ordrNo !=null and ordrNo != '' ">
+				and O.ORDR_NO = #{ordrNo}
+			</if>
+			ORDER BY O.ORDR_NO
 		</where>
 	</select>
 	

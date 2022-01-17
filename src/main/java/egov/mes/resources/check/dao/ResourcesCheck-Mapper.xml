@@ -25,12 +25,15 @@
              	#{rscIstCnt},
              	#{rscTstCnt},
              	#{rscPassCnt},
-             	#{rscDefCnt},
+             	NVL(#{rscDefCnt},0),
+             	'Y',
              	#{rscExpirationDate})
 	</insert>
 	
 	<!-- 자재입고 검사 후 자재상태-> 자재발주 테이블로 update -->
-	<update id="">
-		
+	<update id="updateResourcesCheck">
+		UPDATE resource_order 
+        SET RSC_ST = '검사'
+      	WHERE ORDR_NO = #{ordrNo}
 	</update>
 </mapper>

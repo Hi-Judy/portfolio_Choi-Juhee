@@ -9,7 +9,6 @@ import egov.mes.resources.check.dao.ResourcesCheckMapper;
 import egov.mes.resources.check.dao.ResourcesCheckVO;
 import egov.mes.resources.check.service.ResourcesCheckService;
 import egov.mes.resources.order.dao.ModifyVO;
-import egov.mes.resources.order.dao.ResourcesOrderVO;
 @Service
 public class ResourcesCheckServiceImpl implements ResourcesCheckService{
 	@Autowired ResourcesCheckMapper mapper;
@@ -20,9 +19,10 @@ public class ResourcesCheckServiceImpl implements ResourcesCheckService{
 
 	@Override
 	public void modifyCheck(ModifyVO<ResourcesCheckVO> mvo) {
-		if(mvo.getCreatedRows() != null) {
-			for(ResourcesCheckVO vo :mvo.getCreatedRows()) {
+		if(mvo.getUpdatedRows() != null) {
+			for(ResourcesCheckVO vo :mvo.getUpdatedRows()) {
 				mapper.insertResourcesCheck(vo);
+				mapper.updateResourcesCheck(vo);
 			}
 		}
 	}
