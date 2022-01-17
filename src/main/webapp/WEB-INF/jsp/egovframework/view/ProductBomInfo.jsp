@@ -51,6 +51,7 @@ div#top {
    border-bottom: 1px solid black;
    background-color: ghostwhite;
 }
+
 div#productView {
    width: 1500px;
    margin-left: 10px;
@@ -59,11 +60,13 @@ div#productView {
    height: 94.5px;
    border-bottom: 1px solid black;
 }
+
 div#AA {
    width: 1500px;
    height: 600px;
    margin-top: 10px; /*위에서 부터 벌어질 크기*/
 }
+
 div.left {
    margin-left: 8px;
    float: left;
@@ -72,6 +75,7 @@ div.left {
    /* border-bottom: 1px solid black; */
    padding: 5px;
 }
+
 div.right {
    float: right;
    width: 53%;
@@ -79,37 +83,46 @@ div.right {
    box-sizing: border-box;
    /* background: #ece6cc; */
 }
+
 /*그리드 사용으로 사용 안하게됨*/
 tr:hover {
    background-color: bisque;
 }
+
 .table {
    width: 100%;
    border-collapse: collapse;
    border-top: 3px solid #168;
 }
+
 .table th {
    color: #168;
    background: #f0f6f9;
    text-align: center;
 }
+
 .table th, .table td {
    padding: 10px;
    border: 1px solid #ddd;
 }
+
 .table th:first-child, .table td:first-child {
    border-left: 0;
 }
+
 .table th:last-child, .table td:last-child {
    border-right: 0;
 }
+
 .table tr td:first-child {
    text-align: center;
 }
+
 .table caption {
    caption-side: bottom;
    display: none;
 }
+
 .btn {
    border-radius: 5px;
    background-color: white;
@@ -134,7 +147,7 @@ tr:hover {
              <span style="float: right; margin-top: 3.5px;">
             <button id="" type="button" class="btn btn btn-new"
                style="padding: 5px 30px;">리셋</button> &nbsp;&nbsp;
-            <button id="btnSave" type="button" class="btn"
+            <button id="BomSave" type="button" class="btn"
                style="padding: 5px 30px;">저장</button> &nbsp;&nbsp;
             <button id="btnSave" type="button" class="btn"
                style="padding: 5px 30px;">BOM 삭제</button> &nbsp;&nbsp;
@@ -154,7 +167,7 @@ tr:hover {
       </div>
       <div style="height: 40px; margin-top: 7px; margin-bottom: 5px;">
          <span>제품분류 <input id="proFlag" type="text" readonly>
-         </span> &nbsp;&nbsp; <span>생산구분 <input id="manFlag" type="text"
+         </span> &nbsp;&nbsp; <span>생산구분 <input id="manFlag" type="text"	
             readonly>&nbsp;
          </span> <span>관리단위 <input id="proUnit" type="text" readonly>
          </span>
@@ -215,6 +228,7 @@ toastr.options = {
         "hideMethod": "fadeOut",
         "tapToDismiss": false
       }
+
       //-------- 모달 설정 ----------
       var dialog = $( "#dialog-form" ).dialog({
          autoOpen : false ,
@@ -314,9 +328,7 @@ toastr.options = {
          aaa = rsts.data
          aaa.forEach( (rsts) => {
             //그리드 형식에 맞춰서 Array 타입 에 데이트 추가
-             dataA = {
-                     text : rsts.rscCode , value : rsts.rscCode
-                  }
+             dataA = { text : rsts.rscCode , value : rsts.rscCode }
              dataArray.push(dataA);
             
          })
@@ -344,10 +356,31 @@ toastr.options = {
             { header : '자재명'   , name : 'codeName'   , align : 'center'},
             { header : '자재소모량'   , name : 'resUsage'   , align : 'center' , editor : 'text' },
             { header : '비고'      , name : 'resEtc'   , align : 'center' , editor : 'text' }
-         ]
+         ],
+         rowHeaders: ['checkbox']
       });
+      	
       
-      
+      //----------체크박스 클릭 했을떄 -------------
+      var CheckArray = new Array();
+    	MatGrid.on('check' , (ev) => {
+    		var AT = MatGrid.getData() 
+    		let resCode ;
+    		let AGG;
+    		resCode = AT[ev.rowKey].resCode;
+    		AGG = {resCode : resCode}
+    		console.log(AGG);
+    		CheckArray[ev.rowKey] = AGG
+    	})
+    	
+    	MatGrid.on('uncheck' , (ev) => {
+    		delete CheckArray[ev.rowKey];
+
+    		console.log(CheckArray);
+    	})
+    	
+    	
+    	
        
        //----------자재코드로 자재명 출력 부분 -------------
        MatGrid.on('editingFinish' , (ev) => {
@@ -362,6 +395,7 @@ toastr.options = {
                MatGrid.setValue(ev.rowKey , 'codeName' , Metadata);
             }
              
+
              
           }
           
@@ -394,6 +428,7 @@ toastr.options = {
        });
        
           
+
           //----------자재코드로 자재명 처리 -------------
           function getCodeNm(jsonData) {
             
@@ -423,6 +458,8 @@ toastr.options = {
           
           
        };
+       
+ ///////// ↑↑↑ 자재코드 //////////////// ↓↓↓ 공정 관련코드 //////////////////      
        
        
        var bbb ;
@@ -464,33 +501,115 @@ toastr.options = {
                    } 
             
             },
-            { header : '공정명'   , name : 'codeName'   , align : 'center' , editor : 'text' }
-         ]
+            { header : '공정명'   , name : 'codeName'   , align : 'center' }
+         ],
+         rowHeaders: ['checkbox']
       });
-      
        
-      
+   	   //----------공정코드로 공정명 불러오는기능 -------------
+       ProcGrid.on('editingFinish' , (ev) => {
+    	   
+    	   var procCode  ;
+           var JsonData ;
+           if(ev.columnName == "procCode"){
+        	   procCode = ev.value ;
+        	   JsonData = { procCode : procCode } //앞에가 키값 , 뒤에서 벨류값으로 보여진다.
+            var PrNmData = getCoNm(JsonData)  //ajax 호출해서 리턴값을 돌려받는다.
+             if ( PrNmData != '' || PrNmData != null || PrNmData != undefined ) {
+            	 ProcGrid.setValue(ev.rowKey , 'codeName' , PrNmData);
+             } 
+           }
+           
+           
+         //----------공정코드 중복체크 -------------
+           var i = 0 ;
+           var Datas ;
+              if(ev.columnName === 'procCode' )
+                 {
+                  Datas = ProcGrid.getData();
+                 var chkCodeId = true;
+                 Datas.forEach( (rst) => {
+                    if (chkCodeId == true )
+                       {
+                       if(i !=ev.rowKey)
+                          {
+                          if(ProcGrid.getValue(ev.rowKey , 'procCode') == rst.procCode)
+                             {
+                                toastr["warning"]("이미 선택된 공정입니다");
+                                chkCodeId = false;
+                                ProcGrid.setValue(ev.rowKey , 'procCode'  , '');
+                                ProcGrid.setValue(ev.rowKey , 'codeName' , '');
+                                 return false;
+                             }
+                          }
+                       }
+                       i++;
+                    });
+                 }
+       });
        
-       //----------코드 중복체크 함수 ---------------
-       function CheckDup(resCode) {
-          let result = false ;
-          let MgDt = MatGrid.getData();
-          var atat ;
-            
-             MgDt.forEach( (code) =>{
-                atat = code.resCode
-             
-          });
-             console.log(atat);
-             if(atat == resCode){
-               console.log(resCode);
-                result = true;
-             }
-          
-          return result;
+       
+       //----------공정코드로 공정명 호출 함수 -------------
+       function getCoNm(JsonData) {
          
-      }
+       var PrNmData ; 
+       var CoNm ;
+       $.ajax({
+          url: './ProcNmFind' ,
+          type: "post",
+          dataType: 'json',
+          data: JSON.stringify(JsonData),
+          contentType: "application/json",
+          async : false, //  동기식으로 처리하여 결과를 되돌린다.
+          success: function(datas) {
+        	  CoNm = datas.data
+             if(CoNm != null ){
+            	 PrNmData = CoNm.codeName;
+             }else{
+                toastr["warning"]("공정명이 없는 코드입니다")
+             }
+          },
+          error: function(err) {
+             alert("공정명 호출 에러 " + err);
+          }
+       });
        
+       return PrNmData;
+       
+       
+    };
+    
+     //----------BOM 저장 버튼 ---------------
+     BomSave.addEventListener("click" , () => {
+    	 
+    	var ProcModiRow = ProcGrid.getModifiedRows();
+    	var ProcInput = ProcModiRow.createdRows ;
+	    	if(ProcInput.length > 0) {
+	    		Pinpt(ProcInput);
+	    		console.log("인설트")
+	    	}
+    	var ProcUpdate = ProcModiRow.updatedRows ;  
+	    	if(ProcUpdate.length > 0) {
+	    		Pupdet(ProcUpdate);
+	    		console.log("업뎃트")
+	    	}
+    	var ProcDelete = ProcModiRow.deletedRows ;
+	    	if(ProcDelete.length > 0) {
+	    		Pdelete(ProcDelete);
+	    		console.log("딜리트")
+	    	}
+    	
+    	
+    	
+    	
+    	var MatModiRow = MatGrid.getModifiedRows();
+    	var MatInput = MatModiRow.createdRows ;
+    	var MatUpdate = MatModiRow.updatedRows ;
+    	var MatDelete = MatModiRow.deletedRows ;
+    	
+     })
+    	
+      
              
       //----------자재 그리드 행추가 ---------------
        btnLeftAdd.addEventListener("click", () => {
@@ -499,6 +618,12 @@ toastr.options = {
           
        })
        
+       btnLeftDel.addEventListener("click", () => {
+          	
+
+    	   MatGrid.removeCheckedRows(true);
+          
+       })
        
        //----------공정흐름 그리드 행추가 ---------------
        btnRightAdd.addEventListener("click", () => {
@@ -513,6 +638,7 @@ toastr.options = {
            if(indexData == undefined || indexData == null){
               indexData = 1; //첫번째 행에선 undefined 이 뜨기떄문에 +1
            }else{
+
               indexData++; //2번째 행부턴 이미 있는값에 +1씩
            }
            
@@ -524,10 +650,72 @@ toastr.options = {
            Pdata.forEach( (datas) => {
               RowKey = datas.rowKey
            })
+
            ProcGrid.setValue(RowKey , 'procIndex' , indexData);
+
        })
        
-         
+       btnRightDel.addEventListener('click' , (ev) => {
+    	   ProcGrid.removeCheckedRows(true);
+       })
+       	
+       //공정 데이터 추가(인설트)
+       function Pinpt(ProcInput) {
+    	 var proIdValue = document.getElementById("proId").value ;
+    	 console.log(proIdValue);
+    	 var num = 0 ;	
+    	 var PI ;
+    	 var ProcInpData = new Array();
+    	 
+	     	 try{
+	    		 ProcInput.forEach( (rst) => {
+	    			 if(rst.procCode == null || rst.procCode == '' || rst.procCode == undefined)
+	    			 {
+	    				toastr["error"]("공정코드 미입력");  
+						return false; 
+	    			 }
+	    			 else
+	    				 {
+	    				 PI = {
+		    					procCode  : rst.procCode,
+		    					podtCode  : proIdValue,
+		    					procIndex : rst.procIndex
+		    				 }
+		    			   ProcInpData.push(PI);
+		    			   num++ ;
+	    				 }
+	    		 });
+	    		 
+	    	 }catch (err) {
+	 			alert('공정추가 오류 '+ err);
+	 		} 
+	    	 
+	    	 
+	    	 $.ajax({
+	    		 url : './ProcInsert',
+	    		 type : 'post',
+	    		 data : JSON.stringify(ProcInpData),
+	    		 contentType : 'application/json;',
+	             async : false, 
+	             success: (datas) => {
+	            	 console.log(datas);
+	            	 toastr["success"]("저장완료"); 
+	             },
+	             error: (err) => {
+	                alert("공정데이터 추가 ajax 오류 " + err);
+	             }
+	          });
+    	 
+		}
+     
+   	   //공정 업데이트
+       function Pupdet(ProcUpdate) {
+		 console.log(ProcUpdate)
+		}
+   	   
+   	   function Pdelete(ProcDelete) {
+   		console.log(ProcDelete)
+		}
       
       
     

@@ -47,4 +47,12 @@ public class FacilityController {
 		jsonView.addObject("findfacility" , list) ;
 		return jsonView ; 
 	}
+	
+	@RequestMapping("facilityBreakInfo/{fanNo}")
+	public ModelAndView facilityBreakInfo(FacilityVO facility) {
+		List<FacilityVO> list = service.facilityBreakInfo(facility) ;
+		ModelAndView jsonView = new ModelAndView("jsonView") ;
+		jsonView.addObject("facilitybreakinfo" , list) ;
+		return jsonView ;
+	}
 }

@@ -1,4 +1,4 @@
-package egov.mes.manufacture.web;
+package egov.mes.manufacture.plan.web;
 
 import java.util.HashMap;
 import java.util.List;
@@ -13,9 +13,9 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 
-import egov.mes.manufacture.dao.ManufacturePlanVO;
-import egov.mes.manufacture.dao.ModifyVO;
-import egov.mes.manufacture.service.ManufactureService;
+import egov.mes.manufacture.plan.dao.ManufacturePlanVO;
+import egov.mes.manufacture.plan.dao.ModifyVO;
+import egov.mes.manufacture.plan.service.ManufactureService;
 
 @Controller
 public class ManufactureController {
@@ -99,8 +99,8 @@ public class ManufactureController {
 	//생산계획에서 한 건 추가
 	@PostMapping("/manufacture/main")
 	public String modifyDataInsert(@RequestBody ModifyVO<ManufacturePlanVO> list, Model model) {
-		//System.out.println("!!!!생산계획추가^^!!!!!!!!!!!!!"+list);
-		//System.out.println("!!!!생산계획 주문상태 수정^^!!!!!!!!!!!!!"+list);
+		System.out.println("!!!!생산계획추가^^!!!!!!!!!!!!!"+list);
+		System.out.println("!!!!생산계획 주문상태 수정^^!!!!!!!!!!!!!"+list);
 		manService.insertPlan(list);
 		
 		//System.out.println("!!!!생산계획삭제^^!!!!!!!!!!!!!"+list);

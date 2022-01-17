@@ -65,19 +65,18 @@
 		});
 	
 	//리스트에서 선택한 값 가지고 오기...$(여기 어떻게 쓰지? )
-	gridOrder.on("click", (ev) => {
-		grid.appendRow({'rscCode':gridOrder.getValue(ev["rowKey"],'rscCode'),
-						'rscName':gridOrder.getValue(ev["rowKey"],'rscName'),
-						'rscUnit':gridOrder.getValue(ev["rowKey"],'rscUnit'),
-						'rscCnt':gridOrder.getValue(ev["rowKey"],'rscCnt'),
-						'rscPrc':gridOrder.getValue(ev["rowKey"],'rscPrc'),
-						'sucName':gridOrder.getValue(ev["rowKey"],'sucName'),
-						'istReqDate':gridOrder.getValue(ev["rowKey"],'istReqDate')
-						});
-		
-
-		dialog4.dialog("close");
-		
+	gridOrder.on("dblclick", (ev) => {
+		//grid.appendRow({'rscCode':gridOrder.getValue(ev["rowKey"],'rscCode'),
+						//'rscName':gridOrder.getValue(ev["rowKey"],'rscName'),
+						//'rscUnit':gridOrder.getValue(ev["rowKey"],'rscUnit'),
+						//'rscCnt':gridOrder.getValue(ev["rowKey"],'rscCnt'),
+						//'rscPrc':gridOrder.getValue(ev["rowKey"],'rscPrc'),
+						//'sucName':gridOrder.getValue(ev["rowKey"],'sucName'),
+						//'istReqDate':gridOrder.getValue(ev["rowKey"],'istReqDate')
+						//});
+		let ordrNo = gridOrder.getValue(ev["rowKey"],'ordrNo');
+		console.log(ordrNo);
+		clickOrder(ordrNo)
 	});
 </script>
 </body>

@@ -8,10 +8,17 @@
 	from Product 
 </select>
 
-<!-- 자재테이블 조회 (자재명도함께) -->
+<!-- 자재테이블 조회 -->
 <select id="rscFind" resultType="egov.mes.BOM.dao.ProductBomVO">
 	select rsc_code
 	from resources
+</select>
+
+<!-- 자재코드로 자재명 호출 -->
+<select id="rscName" resultType="egov.mes.BOM.dao.ProductBomVO">
+	select FN_GET_CODE_NAME(rsc_code) AS codeName
+	from resources
+	where rsc_code = #{resCode}
 </select>
 
 <!-- 제품단건 상세 조회 -->
@@ -30,7 +37,7 @@
 
 <!-- 공정흐름 조회 -->
 <select id="ProcDetail" resultType="egov.mes.BOM.dao.ProductBomVO">
-	SELECT	field , proc_code  , podt_code , proc_index , FN_GET_CODE_NAME(proc_code) AS codeName
+	SELECT	proc_code  , podt_code , proc_index , FN_GET_CODE_NAME(proc_code) AS codeName
 	FROM 	process_flowInfo 
 	WHERE	podt_code = #{podtCode}
 </select>
@@ -41,6 +48,31 @@
 	from common_code
 	where group_code = 'proc'
 </select>
+
+<!-- 공정코드로 공정명 호출 -->
+<select id="ProcName" resultType="egov.mes.BOM.dao.ProductBomVO">
+	select code_Name	
+	from common_code
+	where code = #{procCode}
+</select>
+
+
+<!-- ////// 데이터 추가 영역 /////////////// -->
+
+<insert id="ProcInsert" parameterType="egov.mes.BOM.dao.ProductBomVO">
+	insert into process_flowInfo (
+									proc_code,
+									podt_code,
+									proc_index
+									)
+							values(
+									#{procCode},
+									#{podtCode},
+									#{procIndex}
+									)
+	
+
+</insert>
 
 
 

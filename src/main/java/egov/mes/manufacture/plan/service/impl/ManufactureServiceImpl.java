@@ -1,4 +1,4 @@
-package egov.mes.manufacture.service.impl;
+package egov.mes.manufacture.plan.service.impl;
 
 import java.util.List;
 import java.util.Map;
@@ -6,10 +6,10 @@ import java.util.Map;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import egov.mes.manufacture.dao.ManufactureMapper;
-import egov.mes.manufacture.dao.ManufacturePlanVO;
-import egov.mes.manufacture.dao.ModifyVO;
-import egov.mes.manufacture.service.ManufactureService;
+import egov.mes.manufacture.plan.dao.ManufactureMapper;
+import egov.mes.manufacture.plan.dao.ManufacturePlanVO;
+import egov.mes.manufacture.plan.dao.ModifyVO;
+import egov.mes.manufacture.plan.service.ManufactureService;
 
 
 @Service("manufactureService")
@@ -45,7 +45,17 @@ public class ManufactureServiceImpl implements ManufactureService {
 	//생산계획추가
 	@Override
 	public int insertPlan(ModifyVO<ManufacturePlanVO> list ) {
-		
+	
+		System.out.println("*******************MODIFY_INSERT_test**************");
+		if(list.getUpdatedRows() != null) {
+			for(ManufacturePlanVO planVO : list.getUpdatedRows()) {
+				System.out.println("12321S");
+				manMapper.insertPlanDetail(planVO);
+				System.out.println(planVO);
+			}
+			manMapper.insertPlan(list.getUpdatedRows().get(0));
+		}
+	
 		
 		System.out.println("*******************MODIFY_DELETE_test**************");
 		if(list.getDeletedRows() != null) {
@@ -56,13 +66,6 @@ public class ManufactureServiceImpl implements ManufactureService {
 			}
 		}
 		
-		System.out.println("*******************MODIFY_INSERT_test**************");
-		if(list.getUpdatedRows() != null) {
-			for(ManufacturePlanVO planVO : list.getUpdatedRows()) {
-				manMapper.insertPlanDetail(planVO);
-			}
-			manMapper.insertPlan(list.getUpdatedRows().get(0));
-		}
 	
 		
 		System.out.println("*******************MODIFY_UPDATE_test**************");

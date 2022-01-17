@@ -1,21 +1,22 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
-<mapper namespace="egov.mes.manufacture.dao.ManufactureMapper">
+<mapper namespace="egov.mes.manufacture.plan.dao.ManufactureMapper">
 
 <!-- 생산계획서 디테일 조회(생산계획서 조회 페이지) -->
-<select id="selectManufactureDetail" resultType="egov.mes.manufacture.dao.ManufacturePlanVO">
-	select a.man_plan_date, a.man_plan_name, a.podt_code, prod_detail(a.podt_code),
-	          a.plan_period, a.man_perday, a.plan_startdate, a.plan_etc,
+<select id="selectManufactureDetail" resultType="egov.mes.manufacture.plan.dao.ManufacturePlanVO">
+	select a.man_plan_no, a.man_plan_date, a.man_plan_name, a.podt_code, prod_detail(a.podt_code),
+	          a.plan_period, a.man_perday, a.plan_sta rtdate, a.plan_etc,
 	          b.ord_code, b.ord_duedate
 	from man_plan_view a join order_management b
 	on a.ord_code = b.ord_code
+	where a.man_plan_no = #{manPlanNo}
 </select>
 
 
 <!-- 생산계획서 조회(생산계획서 조회 페이지) -->
-<select id="selectManufacturePlan" resultType="egov.mes.manufacture.dao.ManufacturePlanVO">
-	select  a.podt_code, prod_detail(a.podt_code), b.ord_code, b.man_plan_name, b.man_plan_date
+<select id="selectManufacturePlan" resultType="egov.mes.manufacture.plan.dao.ManufacturePlanVO">
+	select  a.podt_code, prod_detail(a.podt_code), b.ord_code, b.man_plan_no, b.man_plan_name, b.man_plan_date
 	from trade_info a join manufacture_plan b
 	on a.ord_code = b.ord_code
 	where a.podt_code = #{podtCode}
@@ -23,7 +24,7 @@
 
 
 <!-- 조회된 생산계획서 삭제. (생산디테일 삭제) -->
-<delete id="deletePlan" parameterType="egov.mes.manufacture.dao.ManufacturePlanVO">
+<delete id="deletePlan" parameterType="egov.mes.manufacture.plan.dao.ManufacturePlanVO">
 	delete 
 	from manufacture_plan_d
 	where man_plan_no = #{manPlanNo}
@@ -31,7 +32,7 @@
 
 
 <!-- 생산계획 데이터 추가 -->
-<insert id="insertPlan" parameterType="egov.mes.manufacture.dao.ManufacturePlanVO">
+<insert id="insertPlan" parameterType="egov.mes.manufacture.plan.dao.ManufacturePlanVO">
 	insert into manufacture_plan ( MAN_PLAN_NO,
 								   ORD_CODE,
 								   CUS_CODE,
@@ -46,7 +47,7 @@
 
 
 <!-- 생산계획 디테일 데이터 추가 -->
-<insert id="insertPlanDetail" parameterType="egov.mes.manufacture.dao.ManufacturePlanVO">
+<insert id="insertPlanDetail" parameterType="egov.mes.manufacture.plan.dao.ManufacturePlanVO">
 		insert into manufacture_plan_d ( PLAN_NO_DETAIL,
 										 PODT_CODE,
 										 MAN_PLAN_NO,
@@ -69,7 +70,7 @@
 
 
 <!-- 계획서 추가 후 주문 상태 '진행'으로 변경 -->
-<update id = "updateOrdStatus" parameterType="egov.mes.manufacture.dao.ManufacturePlanVO">
+<update id = "updateOrdStatus" parameterType="egov.mes.manufacture.plan.dao.ManufacturePlanVO">
 	update order_management
 	set ord_status = '진행중'
 	where ord_code = #{ordCode}
@@ -77,7 +78,7 @@
 
 
 <!-- 생산계획 조회 -->
-<select id = "selectManPlan" resultType="egov.mes.manufacture.dao.ManufacturePlanVO">
+<select id = "selectManPlan" resultType="egov.mes.manufacture.plan.dao.ManufacturePlanVO">
 	select a.man_plan_no, a.man_plan_name, a.man_plan_date
 	from manufacture_plan a join order_management b
     on a.ord_code = b.ord_code
@@ -93,7 +94,7 @@
 
 
 <!-- 생산계획 디테일 조회 -->
-<select id="selectManPlanDetail" resultType="egov.mes.manufacture.dao.ManufacturePlanVO">
+<select id="selectManPlanDetail" resultType="egov.mes.manufacture.plan.dao.ManufacturePlanVO">
 	select a.man_plan_no, a.podt_code, prod_detail(a.podt_code), a.plan_startdate, a.plan_period, a.man_perday, a.plan_etc, a.plan_complete, 
           b.ord_code, b.ord_status, b.ord_duedate, b.ord_qnt
 	from man_plan_view a left join ord_detail_view b
@@ -104,7 +105,7 @@
 
 
 <!-- 자재 조회 -->
-<select id="selectRes" resultType="egov.mes.manufacture.dao.ManufacturePlanVO">
+<select id="selectRes" resultType="egov.mes.manufacture.plan.dao.ManufacturePlanVO">
 	select a.podt_code, prod_detail(a.podt_code) podtName, a.res_code, a.res_usage, b.재고량
 	from prdt_bom_res a join r_qnt b
 	on a.res_code = b.rsc_code
@@ -113,7 +114,7 @@
 
 
 <!-- 미계획 내역 조회 -->
-<select id="selectPlan" resultType="egov.mes.manufacture.dao.ManufacturePlanVO">
+<select id="selectPlan" resultType="egov.mes.manufacture.plan.dao.ManufacturePlanVO">
 	select a.ord_code, a.ord_duedate, a.ord_status, a.cus_code, a.ord_qnt, a.podt_code, b.code_name podtName
     from ord_detail_view a join common_code b
     on a.podt_code = b.code

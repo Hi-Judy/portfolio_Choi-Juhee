@@ -9,7 +9,6 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.ResponseBody;
 
 import egov.mes.resources.check.dao.ResourcesCheckVO;
 import egov.mes.resources.check.service.ResourcesCheckService;
@@ -40,11 +39,12 @@ public class ResourcesCheckController {
 	
 	//입고검사 insert
 	@PostMapping("resourcesCheckModify")
-	@ResponseBody
-	public String modifyCheck(@RequestBody ModifyVO<ResourcesCheckVO> mvo) {
+	
+	public String modifyCheck(Model model,@RequestBody ModifyVO<ResourcesCheckVO> mvo) {
 		System.out.println(mvo);
 		System.out.println("=================입고검사 insert================");
 		service.modifyCheck(mvo);
-		return "자재입고검사";
+		model.addAttribute("mod", "upd");
+		return "jsonView";
 	}
 }

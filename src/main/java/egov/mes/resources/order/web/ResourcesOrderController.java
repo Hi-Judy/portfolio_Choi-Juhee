@@ -30,6 +30,7 @@ public class ResourcesOrderController {
 	@RequestMapping("resourcesOrder")
 		public String order(Model model, ResourcesOrderVO vo) {
 		  model.addAttribute("result",true);
+		  System.out.println(vo);
 	      Map<String,Object> map = new HashMap<String,Object>();
 	      map.put("contents", service.findResourcesOrder(vo));
 	      model.addAttribute("data", map);
@@ -43,6 +44,13 @@ public class ResourcesOrderController {
 		model.addAttribute("recList", service.searchRec(vo));
 		System.out.println("=================발주리스트->모달창(자재조회)================");
 		return "resources/searchRsc";
+	}
+	
+	@RequestMapping("recList2")
+	public String recList2(Model model, ResourcesOrderVO vo) {
+		model.addAttribute("recList2", service.searchRec(vo));
+		System.out.println("=================발주리스트->모달창(자재조회)================");
+		return "resources/searchRsc2";
 	}
 	
 	//모달창(자재조회)

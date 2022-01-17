@@ -11,4 +11,5 @@ public interface ProductMapper {
 	void insertInOut(ProductVO product) ;
 	void updateLotno(ProductVO product) ;
 	void deleteInOut(ProductVO product) ;
+	List<ProductVO> selectOptions(ProductVO product) ;
 }

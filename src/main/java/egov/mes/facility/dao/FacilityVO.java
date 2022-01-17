@@ -24,7 +24,7 @@ public class FacilityVO {
 	String prosCode ;
 	
 	String facInfono ;
-	Date facCuasedate ;
+	Date facCausedate ;
 	
 	String codeName ;
 }

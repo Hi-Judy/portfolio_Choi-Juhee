@@ -29,7 +29,6 @@ public class ProductBomVO {
 	
 	//공정흐름(process_flowInfo)
 	String procCode;	//공정코드
-	String field;		//공정그룹코드
 	String procIndex;	//공정순서
 	
 

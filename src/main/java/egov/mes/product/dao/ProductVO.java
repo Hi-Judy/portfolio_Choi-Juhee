@@ -22,4 +22,5 @@ public class ProductVO {
 	String podtOutput ;
 	String podtEtc ;
 	String podtLot ;
+	String qnt ;
 }

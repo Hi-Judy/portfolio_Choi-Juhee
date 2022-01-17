@@ -280,6 +280,8 @@
 		//생산계획 그리드에서 체크된 계획의 행을 가져온다.
 		gridManPlan.on('check', function(ev){
 			checkedManPlan = gridManPlan.getCheckedRows();
+			console.log(checkedManPlan);
+			console.log(checkedManPlan[0].manPlanNo);
 		})
 		
 		
