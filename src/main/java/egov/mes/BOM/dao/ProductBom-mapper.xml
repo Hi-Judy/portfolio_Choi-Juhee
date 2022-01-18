@@ -30,14 +30,14 @@
 
 <!-- 제품BOM(자재) -->
 <select id="rscDetail" resultType="egov.mes.BOM.dao.ProductBomVO">
-	SELECT	res_code , res_usage , res_etc , FN_GET_CODE_NAME(res_code) AS codeName
+	SELECT	res_code , res_usage , res_etc , FN_GET_CODE_NAME(res_code) AS codeName , 'R' AS CRUD
 	FROM	Prdt_bom_res
 	WHERE	podt_code = #{podtCode}
 </select>
 
 <!-- 공정흐름 조회 -->
 <select id="ProcDetail" resultType="egov.mes.BOM.dao.ProductBomVO">
-	SELECT	proc_code  , podt_code , proc_index , FN_GET_CODE_NAME(proc_code) AS codeName
+	SELECT	proc_code  , podt_code , proc_index , FN_GET_CODE_NAME(proc_code) AS codeName , 'R' AS CRUD
 	FROM 	process_flowInfo 
 	WHERE	podt_code = #{podtCode}
 </select>
@@ -70,9 +70,44 @@
 									#{podtCode},
 									#{procIndex}
 									)
-	
-
 </insert>
+
+<insert id="ResInsert" parameterType="egov.mes.BOM.dao.ProductBomVO">
+	     insert into Prdt_bom_res (
+									res_code,
+									podt_code,
+									res_usage,
+									res_etc
+									)
+							values(
+									#{resCode},
+									#{podtCode},
+									#{resUsage},
+									#{resEtc}
+									)
+</insert>
+
+
+
+<!-- ////// 데이터 삭제 영역 /////////////// -->
+
+<delete id="ProcDelete" parameterType="egov.mes.BOM.dao.ProductBomVO">
+	DELETE 
+	FROM process_flowInfo
+    WHERE podt_code = #{podtCode}
+</delete>
+
+<delete id="ResDelete" parameterType="egov.mes.BOM.dao.ProductBomVO">
+	delete 
+	from Prdt_bom_res
+	where res_code = #{resCode}
+</delete>
+
+<delete id="ResAllDelete" parameterType="egov.mes.BOM.dao.ProductBomVO">
+	DELETE 
+	FROM Prdt_bom_res
+    WHERE podt_code = #{podtCode}
+</delete>
 
 
 

@@ -75,11 +75,43 @@ public class ProductBomServiceImpl implements ProductBomService {
 	public int ProcInsert(List<ProductBomVO> bomVO) {
 		for (ProductBomVO BomVO : bomVO)
 			bomMapper.ProcInsert(BomVO);
-			int a = 0;
-		System.out.println("저장완료");
-		return a;
+			int i = 0;
+		return i;
 	}
-
+	
+	//공정흐름 데이터 전체 삭제
+	@Override
+	public int ProcDelete(ProductBomVO BomVO) {
+			bomMapper.ProcDelete(BomVO);
+		return 0;
+	}
+	
+	
+	//자재데이터 추가
+	@Override
+	public int ResInsert(List<ProductBomVO> bomVO) {
+		for (ProductBomVO BomVO : bomVO)
+			bomMapper.ResInsert(BomVO);
+		
+		return 0;
+	}
+	
+	//자재데이터 삭제
+	@Override
+	public int ResDelete(List<ProductBomVO> bomVO) {
+		for (ProductBomVO BomVO : bomVO)
+			bomMapper.ResDelete(BomVO);
+		return 0;
+	}
+	
+	//자재BOM 전체 삭제
+	@Override
+	public int ResAllDelete(ProductBomVO BomVO) {
+		bomMapper.ResAllDelete(BomVO);
+		return 0;
+	}
+	
+	
 
 
 
