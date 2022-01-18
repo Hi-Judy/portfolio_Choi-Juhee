@@ -3,4 +3,21 @@
 
 <mapper namespace="egov.mes.manufacture.command.dao.ManCommandMapper">
 
+<!-- 생산계획서 조회 (생산지시서 관리 페이지) -->
+<select id="selectManPlan" resultType="egov.mes.manufacture.command.dao.ManCommandVO">
+	select a.podt_code, prod_detail(a.podt_code), a.ord_qnt, a.ord_duedate,
+          b.man_plan_no, b.ord_code, b.man_plan_name, b.man_plan_date
+	from ord_detail_view a join manufacture_plan b
+	on a.ord_code = b.ord_code
+	<where>
+		<if test = "writeStartDate != null"> 
+			and to_char(b.man_plan_date, 'rrrr-MM-dd') >= #{writeStartDate}
+		</if>
+		<if test= "writeEndDate != null">
+			and #{writeEndDate} >=  to_char(b.man_plan_date, 'rrrr-MM-dd')
+		</if>
+	</where>
+	order by b.man_plan_no
+</select>
+
 </mapper>

@@ -43,9 +43,9 @@
 					class='sidebar-link'> <i class="bi bi-grid-1x2-fill"></i> <span>생산관리</span>
 				</a>
 					<ul class="submenu ">
-						<li class="submenu-item "><a href="manufacture/manufacture">생산 계획 관리</a></li>
-						<li class="submenu-item "><a href="manufacture/manufactureSelect">생산 계획 상세 조회</a></li>
-						<li class="submenu-item "><a href="manufacture/manCommand">생산 지시 관리</a></li>
+						<li class="submenu-item "><a href="manufacture">생산 계획 관리</a></li>
+						<li class="submenu-item "><a href="manufactureSelect">생산 계획 상세 조회</a></li>
+						<li class="submenu-item "><a href="manCommand">생산 지시 관리</a></li>
 						<li class="submenu-item "><a href="#">생산 지시 상세 조회</a></li>
 						<li class="submenu-item "><a href="#">생산 현황 조회</a></li>
 						<li class="submenu-item "><a href="#">공장 실적 관리</a></li>

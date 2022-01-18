@@ -75,8 +75,8 @@
 		    width: 900,
 		    buttons: {
 				"확인" : function(){
-					//console.log('확인완료');
-					//console.log(checkedManPlan[0].manPlanNo);
+					console.log('확인완료');
+					console.log(checkedManPlan[0].manPlanNo);
 					$.ajax({
 						url: '${pageContext.request.contextPath}/manufacture/selectManDetail/'+checkedManPlan[0].manPlanNo,
 						method:'GET', 
@@ -241,13 +241,18 @@
 		
 		//생산계획 조회 버튼 클릭
 		$('#btnSearchManPlan').click(function(){
-			console.log('생산계획조회 테스트');
+			//console.log('생산계획조회 테스트');
 			let dateFrom = document.getElementById('txtFromDate');
 			let dateTo = document.getElementById('txtToDate');
 			let txtPodt = document.querySelector('#txtPodtCode').value;
 			
 			dateFrom = dateFrom.value;
 			dateTo = dateTo.value;
+			
+			//console.log(dateFrom);
+			//console.log(dateTo);
+			//console.log(txtPodt);
+
 			
 			dialogManPlan.dialog("open");
 			$.ajax({
