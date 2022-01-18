@@ -14,7 +14,7 @@ for(var i = 0; i < sidebarItems.length; i++) {
         slideToggle(submenu, 300)
     })
 }
-
+/*
 window.addEventListener('DOMContentLoaded', (event) => {
     var w = window.innerWidth;
     if(w < 1200) {
@@ -39,7 +39,7 @@ document.querySelector('.sidebar-hide').addEventListener('click', () => {
     document.getElementById('sidebar').classList.toggle('active');
 
 })
-
+*/
 
 // Perfect Scrollbar Init
 if(typeof PerfectScrollbar == 'function') {

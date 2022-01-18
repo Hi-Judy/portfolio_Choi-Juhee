@@ -2,7 +2,7 @@
 	pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <div id="sidebar" class="active">
-	<div class="sidebar-wrapper active" style="padding-right:0px">
+	<div class="sidebar-wrapper active" style="padding-right:0px; resize: horizontal;">
 		<div class="sidebar-header">
 			<div class="d-flex justify-content-between">
 				<div class="logo">

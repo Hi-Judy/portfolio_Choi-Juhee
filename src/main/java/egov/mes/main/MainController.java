@@ -10,5 +10,10 @@ public class MainController {
 	public String initMain() throws Exception {
 
 		return "main/main.tiles";
+	}	
+	@RequestMapping("/login.do")
+	public String init() throws Exception {
+
+		return "com/uat/uia/EgovLoginUsr.tiles";
 	}
 }
