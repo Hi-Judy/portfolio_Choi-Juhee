@@ -5,6 +5,8 @@ import lombok.Data;
 @Data
 public class ProductBomVO {
 	
+	String CRUD ;
+	
 	//코드구분 테이블 
 	String code;
 	String codeName;

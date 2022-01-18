@@ -99,12 +99,52 @@ public class ProductBomController {
 	@ResponseBody
 	@PostMapping(value = "ProcInsert" ) //보내줄떄 배열로 보냈기떄문에 받을때로 List 배열로 받아야한다.
 	public String ProcInsert (@RequestBody List<ProductBomVO> bomVO) {
-			System.out.println(bomVO);
+//			System.out.println(bomVO);
 		service.ProcInsert(bomVO);
 			
 		return null ;
 	}
 	
+	//공정흐름 전체삭제
+	@ResponseBody
+	@PostMapping(value = "ProcDelete" ) //보내줄떄 배열로 보냈기떄문에 받을때로 List 배열로 받아야한다.
+	public String ProcUpdata (@RequestBody ProductBomVO bomVO) {
+//			System.out.println(bomVO);
+		service.ProcDelete(bomVO);
+				
+		return null ;
+	}
+	
+	
+	//BOM(자재) 데이터 추가
+	@ResponseBody
+	@PostMapping(value = "ResInsert" ) //보내줄떄 배열로 보냈기떄문에 받을때로 List 배열로 받아야한다.
+	public String ResInsert (@RequestBody List<ProductBomVO> bomVO) {
+//			System.out.println(bomVO);
+		service.ResInsert(bomVO);
+				
+		return null ;
+	}
+	
+	//BOM(자재) 데이터 삭제
+	@ResponseBody
+	@PostMapping(value = "ResDelete" ) //보내줄떄 배열로 보냈기떄문에 받을때로 List 배열로 받아야한다.
+	public String ResDelete (@RequestBody List<ProductBomVO> bomVO) {
+//			System.out.println(bomVO);
+		service.ResDelete(bomVO);
+					
+		return null ;
+	}
+	
+	//자재BOM 전체삭제
+	@ResponseBody
+	@PostMapping(value = "ResAllDelete" ) //보내줄떄 배열로 보냈기떄문에 받을때로 List 배열로 받아야한다.
+	public String ResAllDelete (@RequestBody ProductBomVO bomVO) {
+//			System.out.println(bomVO);
+		service.ResAllDelete(bomVO);
+				
+		return null ;
+	}
 	
 	
 

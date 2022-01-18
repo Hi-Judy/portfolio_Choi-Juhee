@@ -149,7 +149,7 @@ tr:hover {
                style="padding: 5px 30px;">리셋</button> &nbsp;&nbsp;
             <button id="BomSave" type="button" class="btn"
                style="padding: 5px 30px;">저장</button> &nbsp;&nbsp;
-            <button id="btnSave" type="button" class="btn"
+            <button id="BomDataAllDelete" type="button" class="btn"
                style="padding: 5px 30px;">BOM 삭제</button> &nbsp;&nbsp;
          </span>
 
@@ -334,16 +334,15 @@ toastr.options = {
          })
       })
       
-      
-                  
+                 
       //------자재 그리드 헤드 --------
       const MatGrid = new Grid({
          el : document.getElementById('MatGrid'),
          data : MatDatas ,
          columns : [ 
             { 
-               header : '자재코드'   , name : 'resCode'   , align : 'center'// , editor : 'text' 
-                  , formatter: 'listItemText',
+               header : '자재코드'   , name : 'resCode'   , align : 'center' , validation : { required : true } , 
+                   formatter: 'listItemText',
                    editor: {
                         type: 'select',
                         options: {
@@ -354,34 +353,32 @@ toastr.options = {
                
             },
             { header : '자재명'   , name : 'codeName'   , align : 'center'},
-            { header : '자재소모량'   , name : 'resUsage'   , align : 'center' , editor : 'text' },
-            { header : '비고'      , name : 'resEtc'   , align : 'center' , editor : 'text' }
+            { header : '자재소모량'   , name : 'resUsage'   , align : 'center' , editor : 'text' , validation : { required : true }  },
+            { header : '비고'      , name : 'resEtc'   , align : 'center' , editor : 'text' },
+            { header: 'DB'		, name: 'crud'		  , hidden : true }
          ],
          rowHeaders: ['checkbox']
       });
-      	
       
-      //----------체크박스 클릭 했을떄 -------------
-      var CheckArray = new Array();
-    	MatGrid.on('check' , (ev) => {
-    		var AT = MatGrid.getData() 
-    		let resCode ;
-    		let AGG;
-    		resCode = AT[ev.rowKey].resCode;
-    		AGG = {resCode : resCode}
-    		console.log(AGG);
-    		CheckArray[ev.rowKey] = AGG
-    	})
+      
+      //제품코드로 조회해서 가져온 코드는 변경 안되도록 해주기
+      MatGrid.on('editingStart' , (ev) => {
+      	try{
+      		if (ev.columnName == "resCode"){
+      			var CRUD = MatGrid.getValue(ev.rowKey ,'crud'); 
+      			if ( CRUD != null && CRUD != ''){ 
+      				//success: 성공(초록) , info:정보(하늘색) , warning:경고(주황) , error:에러(빨강)
+      				toastr["warning"]("저장된 자재코드는 수정이 불가능합니다.")
+      				ev.stop();
+      			}
+      		}
+      	}catch (err)
+          {
+              alert('코드수정 방지 에러 ' + err);
+          }
+      });
+      
     	
-    	MatGrid.on('uncheck' , (ev) => {
-    		delete CheckArray[ev.rowKey];
-
-    		console.log(CheckArray);
-    	})
-    	
-    	
-    	
-       
        //----------자재코드로 자재명 출력 부분 -------------
        MatGrid.on('editingFinish' , (ev) => {
           var resCode  ;
@@ -393,11 +390,9 @@ toastr.options = {
           
             if ( Metadata != '' || Metadata != null || Metadata != undefined ) {
                MatGrid.setValue(ev.rowKey , 'codeName' , Metadata);
-            }
-             
-
-             
+            }   
           }
+          
           
           //----------자재코드 중복체크 -------------
           var i = 0 ;
@@ -423,8 +418,7 @@ toastr.options = {
                       }
                       i++;
                    });
-                }
-             
+                }     
        });
        
           
@@ -490,9 +484,9 @@ toastr.options = {
          el : document.getElementById('ProcGrid'),
          data : ProcData ,
          columns : [ 
-            { header : '공정순서'   , name : 'procIndex'   , align : 'center'},
-            { header : '공정코드'   , name : 'procCode'   , align : 'center' 
-               ,   formatter: 'listItemText',
+            { header : '공정순서'   , name : 'procIndex'   , align : 'center', sortable : true },
+            { header : '공정코드'   , name : 'procCode'   , align : 'center' , validation : { required : true } ,
+               	   formatter: 'listItemText',
                 editor: {
                      type: 'select',
                      options: {
@@ -501,10 +495,30 @@ toastr.options = {
                    } 
             
             },
-            { header : '공정명'   , name : 'codeName'   , align : 'center' }
-         ],
-         rowHeaders: ['checkbox']
+            { header : '공정명'   , name : 'codeName'   , align : 'center' },
+            { header: 'DB'		, name: 'crud'		  , hidden : true }
+         ]
       });
+       
+       
+      //제품코드로 조회해서 가져온 코드는 변경 안되도록 해주기
+      ProcGrid.on('editing	Start' , (ev) => {
+      	try{
+      		if (ev.columnName == "procCode"){
+      			var CRUD = ProcGrid.getValue(ev.rowKey ,'crud'); 
+      			if ( CRUD != null && CRUD != ''){ 
+      				//success: 성공(초록) , info:정보(하늘색) , warning:경고(주황) , error:에러(빨강)
+      				toastr["warning"]("저장된 공정코드는 수정이 불가능합니다.")
+      				ev.stop();
+      			}
+      		}
+      	}catch (err)
+          {
+              alert('코드수정 방지 에러 ' + err);
+          }
+      });
+       
+       
        
    	   //----------공정코드로 공정명 불러오는기능 -------------
        ProcGrid.on('editingFinish' , (ev) => {
@@ -579,34 +593,59 @@ toastr.options = {
        
     };
     
-     //----------BOM 저장 버튼 ---------------
+     //----------BOM 저장버튼 ---------------
      BomSave.addEventListener("click" , () => {
-    	 
+    	 var Check = 0 ;
+    	//공정흐름 영역
     	var ProcModiRow = ProcGrid.getModifiedRows();
     	var ProcInput = ProcModiRow.createdRows ;
 	    	if(ProcInput.length > 0) {
-	    		Pinpt(ProcInput);
-	    		console.log("인설트")
+	    		let attr = Pinpt(ProcInput);
+	    		if(attr){
+	    			Check++;
+	    		}
 	    	}
-    	var ProcUpdate = ProcModiRow.updatedRows ;  
-	    	if(ProcUpdate.length > 0) {
-	    		Pupdet(ProcUpdate);
-	    		console.log("업뎃트")
-	    	}
-    	var ProcDelete = ProcModiRow.deletedRows ;
-	    	if(ProcDelete.length > 0) {
-	    		Pdelete(ProcDelete);
-	    		console.log("딜리트")
-	    	}
+	    	
     	
-    	
-    	
-    	
+    	//자재 영역
     	var MatModiRow = MatGrid.getModifiedRows();
     	var MatInput = MatModiRow.createdRows ;
-    	var MatUpdate = MatModiRow.updatedRows ;
+    	console.log(MatModiRow);
+	    	if(MatInput.length > 0) {
+	    		Minpt(MatInput);
+	    	}
+	 
+	    	
     	var MatDelete = MatModiRow.deletedRows ;
+	    	if(MatDelete.length > 0) {
+	    		MDelt(MatDelete);
+	    	}
+	    	
+	    if(Check > 0){
+      		toastr["success"]("데이터 저장완료"); 
+	    }
     	
+     })
+     
+     //---------- BOM 삭제버튼 이벤트 ---------------
+     BomDataAllDelete.addEventListener("click" , () => {
+    	var proIdValue = document.getElementById("proId").value;
+  	   
+ 	  	if(proIdValue == '' || proIdValue == null)
+ 	   		{
+ 		   		toastr["warning"]("조회된 BOM정보가 없습니다")
+ 	   		}
+ 	   		else
+ 	   		{
+ 		 		if(confirm(proIdValue + '의 BOM을 삭제 하시겠습니까?'))
+ 		 		{
+	    		  		Pdelete(proIdValue);
+	    		  		Mdelete(proIdValue);
+	    		  		ProcGrid.clear();
+	    		  		MatGrid.clear();
+	    	   		}
+ 	   		}	    
+    	 
      })
     	
       
@@ -619,9 +658,7 @@ toastr.options = {
        })
        
        btnLeftDel.addEventListener("click", () => {
-          	
-
-    	   MatGrid.removeCheckedRows(true);
+          MatGrid.removeCheckedRows(true);
           
        })
        
@@ -656,17 +693,32 @@ toastr.options = {
        })
        
        btnRightDel.addEventListener('click' , (ev) => {
-    	   ProcGrid.removeCheckedRows(true);
+    	   var proIdValue = document.getElementById("proId").value;
+    	   
+    	  	if(proIdValue == '' || proIdValue == null)
+    	   		{
+    		   		toastr["info"]("조회된 BOM정보가 없습니다")
+    	   		}
+    	   		else
+    	   		{
+    		 		if(confirm('공정흐름을 초기화 하시겠습니까?'))
+    		 		{
+	    		  		Pdelete(proIdValue); 	//DB랑 먼저 연결해서 삭제를 해줘야 알림창이 정상적으로 뜬다
+	    		  		ProcGrid.clear();		//View 에서 삭제를 해줘야한다.
+	    	   		}
+    	   		}	    
        })
        	
+       
+       
+    	
        //공정 데이터 추가(인설트)
        function Pinpt(ProcInput) {
     	 var proIdValue = document.getElementById("proId").value ;
-    	 console.log(proIdValue);
     	 var num = 0 ;	
     	 var PI ;
     	 var ProcInpData = new Array();
-    	 
+    	 var Check = false ;
 	     	 try{
 	    		 ProcInput.forEach( (rst) => {
 	    			 if(rst.procCode == null || rst.procCode == '' || rst.procCode == undefined)
@@ -689,8 +741,7 @@ toastr.options = {
 	    	 }catch (err) {
 	 			alert('공정추가 오류 '+ err);
 	 		} 
-	    	 
-	    	 
+	    if(num>0){ 
 	    	 $.ajax({
 	    		 url : './ProcInsert',
 	    		 type : 'post',
@@ -698,23 +749,164 @@ toastr.options = {
 	    		 contentType : 'application/json;',
 	             async : false, 
 	             success: (datas) => {
-	            	 console.log(datas);
-	            	 toastr["success"]("저장완료"); 
+	            	 Check = true ;
+
 	             },
 	             error: (err) => {
 	                alert("공정데이터 추가 ajax 오류 " + err);
 	             }
 	          });
-    	 
+	    	}
+    	 return Check;
 		}
-     
-   	   //공정 업데이트
-       function Pupdet(ProcUpdate) {
-		 console.log(ProcUpdate)
+    
+	  //공정흐름 삭제 이벤트처리
+   	  function Pdelete(proIdValue) {
+			var param = {podtCode : proIdValue}
+			var PgridDt = ProcGrid.getData() ;
+			
+			if(PgridDt.length > 0) {
+				
+			
+				$.ajax({
+	 	    		 url : './ProcDelete',
+	 	    		 type : 'post',
+	 	    		 data : JSON.stringify(param),
+	 	    		 contentType : 'application/json;',
+	 	             async : false, 
+	 	             success: (datas) => {
+	 	            	 console.log(datas);
+	 	            	 toastr["success"]("삭제 완료"); 
+	 	             },
+	 	             error: (err) => {
+	 	                alert("공정흐름 삭제 오류 " + err);
+	 	             }
+	 	          });  
+			}else{
+				toastr["info"]("삭제할 데이터가 없습니다"); 
+			}
+	    	
 		}
-   	   
-   	   function Pdelete(ProcDelete) {
-   		console.log(ProcDelete)
+	  
+	  
+   	//자재 데이터 추가(인설트)
+    function Minpt(MatInput) {
+   	 var proIdValue = document.getElementById("proId").value ;
+   	 var num = 0 ;	
+   	 var MI ;
+   	 var MatInpData = new Array();
+	     	 try{
+	     		MatInput.forEach( (rst) => {
+	    			 if(rst.resCode == null || rst.resCode == '' || rst.resCode == undefined)
+	    			 {
+	    				toastr["error"]("자재코드 미입력");  
+						return false; 
+	    			 }
+	    			 else
+	    				 {
+	    				 MI = {
+	    						 podtCode 	: proIdValue,
+	    						 resCode  	: rst.resCode,
+	    						 resUsage 	: rst.resUsage,
+	    						 resEtc 	: rst.resEtc
+		    				 }
+	    				 MatInpData.push(MI);
+		    			   num++ ;
+	    				 }
+	    		 });
+	    		 
+	    	 }catch (err) {
+	 			alert('자재 데이터 오류 '+ err);
+	 		} 
+	    	 
+	    	 if(num > 0){ 
+		    	 $.ajax({
+		    		 url : './ResInsert',
+		    		 type : 'post',
+		    		 data : JSON.stringify(MatInpData),
+		    		 contentType : 'application/json;',
+		             async : false, 
+		             success: (datas) => {
+		            	 console.log(datas);
+		            	 toastr["success"]("자재 데이터 저장완료"); 
+		             },
+		             error: (err) => {
+		                alert("자재데이터 추가 ajax 오류 " + err);
+		             }
+		          });
+	    	 }
+		}
+    //---------- 자재 체크된 데이터 삭제 ---------------
+   	function MDelt(MatDelete) {
+      	 var num = 0 ;	
+      	 var MU ;
+      	 var MatDeltData = new Array();
+   	     	 try{
+   	     		MatDelete.forEach( (rst) => {
+   	    			 if(rst.resCode == null || rst.resCode == '' || rst.resCode == undefined)
+   	    			 {
+   	    				toastr["error"]("삭제할 코드가 없습니다");  
+   						return false; 
+   	    			 }
+   	    			 else
+   	    				 {
+   	    				MU = { resCode : rst.resCode }
+	   	    				 
+	   	    				MatDeltData.push(MU);
+	   		    			   num++ ;
+   	    				 }
+   	    		 });
+   	    		 
+   	    	 }catch (err) {
+   	 			alert('자재 삭제 오류 '+ err);
+   	 		} 
+   	    	 
+   	    	if(num > 0){ 
+   	    	 $.ajax({
+   	    		 url : './ResDelete',
+   	    		 type : 'post',
+   	    		 data : JSON.stringify(MatDeltData),
+   	    		 contentType : 'application/json;',
+   	             async : false, 
+   	             success: (datas) => {
+   	            	 console.log(datas);
+   	            	 toastr["success"]("자재 삭제 완료"); 
+   	             },
+   	             error: (err) => {
+   	                alert("자재 삭제 ajax 오류 " + err);
+   	             }
+   	          });
+   	    	}
+      	 	
+	}
+    
+    
+  	  //자재 BOM 전체 삭제
+ 	  function Mdelete(proIdValue) {
+			var param = {podtCode : proIdValue}
+			var MgridDt = MatGrid.getData() ;
+			
+			if(MgridDt.length > 0) {
+				
+			
+				$.ajax({
+	 	    		 url : './ResAllDelete',
+	 	    		 type : 'post',
+	 	    		 data : JSON.stringify(param),
+	 	    		 contentType : 'application/json;',
+	 	             async : false, 
+	 	             success: (datas) => {
+	 	            	 console.log(datas);
+	 	            	 toastr["success"]("삭제 완료"); 
+	 	             },
+	 	             error: (err) => {
+	 	                alert("자재BOM 삭제 오류 " + err);
+	 	             }
+	 	          });  
+			}else{
+				toastr["info"]("삭제할 데이터가 없습니다"); 
+			}
+	    	
 		}
       
       

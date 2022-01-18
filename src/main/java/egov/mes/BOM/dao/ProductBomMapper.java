@@ -16,4 +16,11 @@ public interface ProductBomMapper {
 	
 	
 	int ProcInsert (ProductBomVO BomVO); //공정흐름 데이터 추가
+	int ProcDelete (ProductBomVO BomVO); //공정흐름 전체삭제
+	
+	
+	int ResInsert (ProductBomVO BomVO); //자재데이터 추가
+	int ResDelete (ProductBomVO BomVO); //자제 데이터 삭제
+	int ResAllDelete (ProductBomVO BomVO); //자재BOM 전체 삭제
+	
 }
