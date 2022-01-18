@@ -11,7 +11,7 @@
 <div id="gridRsc"></div>
 <script type="text/javascript">
 
-	//그리드(자재 발주 페이지에서 사용)
+	//자재 발주 페이지에서 사용
 	var columnsRsc = [
 			{
 			  header: '자재코드',
