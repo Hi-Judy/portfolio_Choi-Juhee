@@ -48,11 +48,20 @@ public class FacilityController {
 		return jsonView ; 
 	}
 	
-	@RequestMapping("facilityBreakInfo/{fanNo}")
+	@RequestMapping("facilityBreakInfo/{facNo}")
 	public ModelAndView facilityBreakInfo(FacilityVO facility) {
 		List<FacilityVO> list = service.facilityBreakInfo(facility) ;
 		ModelAndView jsonView = new ModelAndView("jsonView") ;
 		jsonView.addObject("facilitybreakinfo" , list) ;
+		return jsonView ;
+	}
+	
+	@RequestMapping("facilityStatusUpdate")
+	public ModelAndView facilityStatusUpdate(FacilityVO facility) {
+		service.facilityStatusUpdate(facility) ;
+		String result = "" ;
+		ModelAndView jsonView = new ModelAndView("jsonView") ;
+		jsonView.addObject("facilitystatusupdate" , result) ;
 		return jsonView ;
 	}
 }

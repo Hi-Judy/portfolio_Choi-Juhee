@@ -14,9 +14,7 @@ public class FacilityVO {
 	String facCode ;
 	String facStatus ;
 	String facCause ;
-	@DateTimeFormat(pattern = "yyyy-MM-dd")
-	@JsonFormat(pattern = "yyyy-MM-dd", timezone = "Asia/Seoul")
-	Date facCheckdate ;
+	String facCheckdate ;
 	String checkDatestart ;
 	String checkDateend ;
 	String facOutput ;
@@ -24,6 +22,8 @@ public class FacilityVO {
 	String prosCode ;
 	
 	String facInfono ;
+	@DateTimeFormat(pattern = "yyyy-MM-dd")
+	@JsonFormat(pattern = "yyyy-MM-dd", timezone = "Asia/Seoul")
 	Date facCausedate ;
 	
 	String codeName ;

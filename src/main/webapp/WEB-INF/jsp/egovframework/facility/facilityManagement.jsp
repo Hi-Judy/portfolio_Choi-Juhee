@@ -55,7 +55,7 @@
 		{
 			header : '설비번호' ,
 			name : 'facNo' ,
-			hidden : true
+			align: 'center'
 		} ,
 		{
 			header : '설비코드' ,
@@ -90,7 +90,12 @@
 		{
 			header : '점검일자' ,
 			name : 'facCheckdate' ,
-			editor: 'datePicker' ,
+			editor: {
+				type : 'datePicker' ,
+				options : {
+					format : 'yyyy-MM-dd'
+				}
+			} ,
 			align: 'center'
 		} ,
 		{
@@ -162,6 +167,66 @@
 		$("#checkDateStart").val("") ;
 		$("#checkDateEnd").val("") ;
 		grid.clear() ;
+	})
+	
+	$("#btnInsert").on("click" , function() {
+		let modified = grid.getModifiedRows() ;
+		let updated = modified.updatedRows ;
+		
+		let ok = 1 ;
+		for (let i = 0 ; i < updated.length ; i++) {
+			
+			let no = updated[i].facNo ;
+			let status = updated[i].facStatus ;
+			let cause = updated[i].facCause ;
+			let checkdate = updated[i].facCheckdate ;
+			
+ 			$.ajax({
+				url : 'facilityStatusUpdate' ,
+				async : false ,
+				data : {
+					facNo : no ,
+					facStatus : status ,
+					facCause : cause ,
+					facCheckdate : checkdate
+				} ,
+				success : function(datas) {
+					ok = 2 ;
+					
+					let facCode = 'null' ;
+					let facStatus = 'null' ;
+					let checkDatestart = '1910-12-25' ;
+					let checkDateend = '1910-12-25' ;
+					
+					$.ajax({
+						url : 'facilityList' ,
+						dataType : 'json' ,
+						data : {
+							facCode : facCode ,
+							facStatus : facStatus ,
+							checkDatestart : checkDatestart ,
+							checkDateend : checkDateend
+						} ,
+						async : false ,
+						success : function(datas) {
+							data = datas.facilitylist ;
+							grid.resetData(data) ;
+							grid.resetOriginData() ;
+							
+						} ,
+						error : function(reject) {
+							console.log(reject) ;
+						}
+					})
+				} ,
+				error : function(reject) {
+					console.log(reject) ;
+				}
+			}) 
+		}  
+		if (ok == 2) {
+			alert('수정완료되었습니다') ;
+		}
 	})
 	//---------- ↑페이지 ----------
 	//---------- ↓설비찾기 ----------
@@ -239,20 +304,72 @@
 		$("#facName").val("") ;
 	})
 	//---------- ↑설비찾기 ----------
-	//---------- ↓상세정보 ----------
+	//---------- ↓상세정보 ----------	
+	let dialog2 = $("#selectFacility").dialog({
+		autoOpen : false ,
+		modal : true ,
+		width : 600 ,
+		height : 400
+	}) ;
+	
+	const columns3 = [
+		{
+			header: '번호' ,
+			name: 'facInfono' , 
+			hidden : true
+		} ,
+		{
+			header: '설비번호' ,
+			name: 'facNo' ,
+			align: 'center'
+		} ,
+		{
+			header: '비가동사유' ,
+			name: 'facCause' ,
+			align: 'center'
+		} ,
+		{
+			header: '고장발생일자' ,
+			name: 'facCausedate' ,
+			align: 'center'
+		}
+	] ;
+	
+	let data3 ;
+	
+	const grid3 = new Grid({
+		el : document.getElementById('selectInfo') ,
+		rowHeaders: [
+			{ type : 'rowNum' }
+		] ,
+		height : 300 ,
+		data : data3 ,
+		columns : columns3
+	})
+	
+	$("#btnClose2").on("click" , function() {
+		dialog2.dialog("close") ;
+	}) ;
+	
 	grid.on('click' , (ev) => {
 		
-		if ( ev.columnName === 'facStatus' || ev.columnName === 'facCause' || ev.columnName === 'facCheckdate' ) {
+		let value = grid.getValue(ev.rowKey,ev.columnName) ;
+		
+		if ( ev.columnName === 'facStatus' || ev.columnName === 'facCause' || ev.columnName === 'facCheckdate' || value == null) {
 			return ev.stop() ;
 		}
+		
+		dialog2.dialog("open") ;
+		grid3.refreshLayout() ;
 		
 		let facNo = data[ev.rowKey].facNo ;
 		
 		$.ajax({
-			url : 'facilitybreakinfo/' + facNo ,
+			url : 'facilityBreakInfo/' + facNo ,
 			dataType : 'json' ,
 			async : false ,
 			success : function(datas) {
+				console.log(data3) ;
 				data3 = datas.facilitybreakinfo ;
 				grid3.resetData(data3) ;
 				grid3.resetOriginData() ;
@@ -260,44 +377,6 @@
 			error : function(reject) {
 				console.log(reject) ;
 			}
-		}) ;
-		
-		let dialog2 = $("#selectFacility").dialog({
-			autoOpen : false ,
-			modal : true ,
-			width : 600 ,
-			height : 400
-		}) ;
-		
-		const columns3 = [
-			{
-				header: '설비코드' ,
-				name: 'facCode' , 
-				align: 'center'
-			} ,
-			{
-				header: '설비명' ,
-				name: 'codeName' ,
-				align: 'center'
-			}
-		] ;
-		
-		let data3 ;
-		
-		const grid3 = new Grid({
-			el : document.getElementById('facResult') ,
-			rowHeaders: [
-				{ type : 'rowNum' }
-			] ,
-			height : 300 ,
-			data : data3 ,
-			columns : columns3
-		})
-		
-		$("#btnClose1").on("click" , function() {
-			dialog2.dialog("close") ;
-			grid3.clear() ;
-			$("#facName").val("") ;
 		}) ;
 	})
 	//---------- ↑상세정보 ----------

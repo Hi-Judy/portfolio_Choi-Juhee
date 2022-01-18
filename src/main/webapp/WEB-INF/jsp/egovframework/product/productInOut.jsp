@@ -224,12 +224,11 @@
 			dataType : 'json' ,
 			async : false ,
 			success : function(datas) {
-				console.log(datas.selectoptions[0].qnt) ;
+				console.log(datas.selectoptions) ;
 				for (let i = 0 ; i < datas.selectoptions.length ; i++) {
-					if( datas.selectoptions[i].qnt < 0 ){
-						second.출하[1].text = '' ;
-						second.출하[1].value = '' ;
-					} 
+					second.미생산완료.push(datas.selectoptions.podtLot) ;
+					second.생산완료.push(datas.selectoptions.podtLot) ;
+					second.출하.push(datas.selectoptions.podtLot) ;
 				}
 			} ,
 			error : function(reject) {
@@ -241,11 +240,14 @@
 	
 	// 입력된 데이터 수정못하게 하기
 	grid.on('editingStart' , (ev) => {
-		let value = grid.getValue(ev.rowKey , 'qntInfono') ;
+		let value = grid.getValue(ev.rowKey , ev.columnName) ;
 		let lot = ev.columnName ;
 		
+		console.log(lot) ;
+		console.log(value) ;
+		
 		if (value != '' && value != null) {
-			if (lot != 'podtLot') {
+			if (lot != 'podtLot' || value != null) {
 				ev.stop() ;	
 			}
 		} 
