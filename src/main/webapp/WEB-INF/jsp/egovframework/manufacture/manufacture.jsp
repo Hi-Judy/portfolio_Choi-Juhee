@@ -17,6 +17,7 @@
 
 <body>
 	<h2>생산계획서 작성</h2><br>
+	
 	<div class = "planDate">
 		<p style="display:inline-block;">계획일자</p>
 		<input id = "txtFromDate" type="date" name="from" style="display:inline-block;">
@@ -62,6 +63,7 @@
 	<div style="float:right;">
 		<button type="button" id="btnSavePlan">저장</button>
 		<button type="button" id="btnDeletePlan">삭제</button>
+		<button type="button" id="btnInit">초기화</button>
 	</div>
 	
 	
@@ -243,10 +245,7 @@
 			{
 				header: '예상작업기간',
 				name: 'planPeriod',
-				editor: 'text',
-				validation : {
-					required : true
-				}
+				editor: 'text'
 			},
 			{
 				header: '예상작업시작일',
@@ -419,16 +418,20 @@
 		
 		//저장 버튼 이벤트
 		btnSavePlan.addEventListener("click", function(){
-			let txtPlanDate = document.querySelector('#txtFromDate').value;
-			let txtPlanName = document.querySelector('#txtPlanName').value;
+			let txtPlanDate = document.getElementById('txtFromDate');
+			let txtPlanName = document.getElementById('txtPlanName');
 			console.log(txtPlanDate);
+			console.log(txtPlanName);
 			//console.log(txtPlanDate.type);
 			
-			for(let i=0; i<gridMain.getRowCount();i++){
+			let a = gridMain.getCheckedRows();
+			
+			for(let i=0; i<gridMain.getRowCount(); i++){
 				console.log(i);
-				gridMain.setValue(i, 'manPlanDate', txtPlanDate);
-				gridMain.setValue(i, 'manPlanName', txtPlanName);
+				gridMain.setValue(a[i], 'manPlanDate', txtPlanDate);
+				gridMain.setValue(a[i], 'manPlanName', txtPlanName);
 			}
+			
 			console.log("!!SAVE!!")
 			gridMain.blur();
 			//gridMain에서 modifyData 요청 -> dataSourceMain의 modifyData 안의 url로 간다.
@@ -442,6 +445,20 @@
 		btnDeletePlan.addEventListener("click", function(){
 			gridMain.removeCheckedRows(true); //저절로 modify안에 deletedRows에 들어간다.
 		});
+		
+		
+		//초기화 버튼 이벤트
+		btnInit.addEventListener("click", function(){
+			let txtPlanDate = document.getElementById('txtFromDate');
+			let txtPlanTo = document.getElementById('txtToDate');
+			let txtPlanName = document.getElementById('txtPlanName');
+			
+			txtPlanDate.value = '';
+			txtPlanTo.value = '';
+			txtPlanName.value ='';
+			
+		})
+		
 	
 	</script>
 </body>

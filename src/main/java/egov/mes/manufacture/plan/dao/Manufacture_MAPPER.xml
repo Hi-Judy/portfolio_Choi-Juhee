@@ -6,7 +6,7 @@
 <!-- 생산계획서 디테일 조회(생산계획서 조회 페이지) -->
 <select id="selectManufactureDetail" resultType="egov.mes.manufacture.plan.dao.ManufacturePlanVO">
 	select a.man_plan_no, a.man_plan_date, a.man_plan_name, a.podt_code, prod_detail(a.podt_code),
-	          a.plan_period, a.man_perday, a.plan_sta rtdate, a.plan_etc,
+	          a.plan_period, a.man_perday, a.plan_startdate, a.plan_etc,
 	          b.ord_code, b.ord_duedate
 	from man_plan_view a join order_management b
 	on a.ord_code = b.ord_code
@@ -47,7 +47,7 @@
 
 
 <!-- 생산계획 디테일 데이터 추가 -->
-<insert id="insertPlanDetail" parameterType="egov.mes.manufacture.plan.dao.ManufacturePlanVO">
+<insert id="insertPlanDetail" statementType="CALLABLE">
 		insert into manufacture_plan_d ( PLAN_NO_DETAIL,
 										 PODT_CODE,
 										 MAN_PLAN_NO,
@@ -61,7 +61,7 @@
 				#{podtCode},
 				(select nvl(max(MAN_PLAN_NO),0) from manufacture_plan),
 				#{planStartDate},
-				#{planPeriod},
+				to_date(#{planComplete}, 'yyyy-MM-dd') - to_date(#{planStartDate},'yyyy-MM-dd') + 1 ,
 				#{manPerday},
 				#{planEtc},
 				#{ordQnt},
