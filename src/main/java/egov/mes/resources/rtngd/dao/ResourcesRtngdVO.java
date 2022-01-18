@@ -10,6 +10,5 @@ public class ResourcesRtngdVO {
 		String rtngdCnt;
 		String defCode;
 		
-		String code;
-		String codeName;
+		String defName;
 }
