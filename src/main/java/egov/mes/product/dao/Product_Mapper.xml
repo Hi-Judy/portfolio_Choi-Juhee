@@ -3,7 +3,8 @@
 <mapper namespace="egov.mes.product.dao.ProductMapper">
 	
 	<select id="podtList" resultType="egov.mes.product.dao.ProductVO">
-		select qnt_infono , podt_code , fn_get_code_name(podt_code) as codeName , man_date , podt_input , podt_output , podt_etc , podt_lot
+		select qnt_infono , podt_code , fn_get_code_name(podt_code) as codeName , man_date , podt_input , podt_output , podt_etc , podt_lot ,
+			   com_code
 		from product_qnt_info
 		where 1=1
 		
@@ -51,9 +52,9 @@
 	</delete>
 	
 	<select id="selectOptions" resultType="egov.mes.product.dao.ProductVO">
-		select podt_code , podt_lot, (sum(podt_input)-sum(podt_output)) as qnt
+		select podt_code , podt_lot, (sum(podt_input)-sum(podt_output)) as qnt , com_code
 		from product_qnt_info 
-		group by podt_code , podt_lot
+		group by podt_code , podt_lot , com_code
 	</select>
 	
 </mapper>

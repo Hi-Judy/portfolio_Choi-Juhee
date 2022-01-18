@@ -80,4 +80,13 @@ public class ProductController {
 		jsonView.addObject("selectoptions" , list) ;
 		return jsonView ;
 	}
+	
+	// ↓테스트
+	
+	@RequestMapping("ProductTest")
+	public String productTest() {
+		return "product/product_Test.tiles" ;
+	}
+	
+	// ↑테스트
 }

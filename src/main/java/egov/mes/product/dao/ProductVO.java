@@ -23,4 +23,6 @@ public class ProductVO {
 	String podtEtc ;
 	String podtLot ;
 	String qnt ;
+	
+	String comCode ;
 }
