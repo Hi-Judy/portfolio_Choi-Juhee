@@ -56,15 +56,8 @@
 	</div>
 	<br>
 	
-	<!-- 메인화면 그리드 -->
-	<div id = "gridMain"></div>
-	<br>
 	
-	<div style="float:right;">
-		<button type="button" id="btnSavePlan">저장</button>
-		<button type="button" id="btnDeletePlan">삭제</button>
-		<button type="button" id="btnInit">초기화</button>
-	</div>
+
 	
 	
 	<script> 
@@ -122,7 +115,7 @@
 						method:'GET', 
 						dataType: 'JSON',
 						success: function(datas){
-							//console.log(datas); 
+							console.log(datas); 
 							//확인 버튼 눌렀을 때 체크된 값에 해당하는 데이터를 gridMain에 뿌려준다.
 							gridMain.resetData(datas.data.contents);
 						}
@@ -304,7 +297,7 @@
 			//gridMain.appendRows(checkedPlan);
 			dialogPlan.dialog("close");
 			
-			let txtPlanDate = document.querySelector('#txtFromDate');
+			let txtPlanDate = document.querySelector('#txtFromDate').value;
 			console.log(txtPlanDate);
 			txtPlanDate.value = '';
 		};
@@ -420,23 +413,26 @@
 		btnSavePlan.addEventListener("click", function(){
 			let txtPlanDate = document.getElementById('txtFromDate');
 			let txtPlanName = document.getElementById('txtPlanName');
-			console.log(txtPlanDate);
-			console.log(txtPlanName);
+			console.log(txtPlanDate.value);
+			console.log(txtPlanName.value);
 			//console.log(txtPlanDate.type);
 			
 			let a = gridMain.getCheckedRows();
+			console.log(a);
 			
-			for(let i=0; i<gridMain.getRowCount(); i++){
+			for(i of a){
 				console.log(i);
-				gridMain.setValue(a[i], 'manPlanDate', txtPlanDate);
-				gridMain.setValue(a[i], 'manPlanName', txtPlanName);
+				gridMain.setValue(i.rowKey, 'manPlanDate', txtPlanDate.value);
+				gridMain.setValue(i.rowKey, 'manPlanName', txtPlanName.value);
+				console.log(gridMain.getValue(i.rowKey,'manPlanDate'));
+				console.log(gridMain.getValue(i.rowKey,'manPlanName'));
 			}
 			
 			console.log("!!SAVE!!")
 			gridMain.blur();
 			//gridMain에서 modifyData 요청 -> dataSourceMain의 modifyData 안의 url로 간다.
 			gridMain.request('modifyData'); 
-			
+		
 			txtPlanDate.value = '';
 		});
 		
