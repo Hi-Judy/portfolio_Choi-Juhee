@@ -3,21 +3,30 @@
 
 <mapper namespace="egov.mes.manufacture.command.dao.ManCommandMapper">
 
-<!-- 생산계획서 조회 (생산지시서 관리 페이지) -->
+<!-- 생산계획 디테일 조회 (생산지시서 관리 페이지) -->
 <select id="selectManPlan" resultType="egov.mes.manufacture.command.dao.ManCommandVO">
-	select a.podt_code, prod_detail(a.podt_code), a.ord_qnt, a.ord_duedate,
-          b.man_plan_no, b.ord_code, b.man_plan_name, b.man_plan_date
-	from ord_detail_view a join manufacture_plan b
+	select a.podt_code, prod_detail(a.podt_code) podtName, a.ord_qnt, a.ord_duedate,
+           b.man_plan_no, b.ord_code, b.man_plan_name, b.man_plan_date, b.plan_no_detail
+	from ord_detail_view a join man_plan_view b
 	on a.ord_code = b.ord_code
 	<where>
-		<if test = "writeStartDate != null"> 
-			and to_char(b.man_plan_date, 'rrrr-MM-dd') >= #{writeStartDate}
+		<if test = "planFromDate != null"> 
+			and to_char(b.man_plan_date, 'rrrr-MM-dd') >= #{planFromDate}
 		</if>
-		<if test= "writeEndDate != null">
-			and #{writeEndDate} >=  to_char(b.man_plan_date, 'rrrr-MM-dd')
+		<if test= "planToDate != null">
+			and #{planToDate} >=  to_char(b.man_plan_date, 'rrrr-MM-dd')
 		</if>
 	</where>
 	order by b.man_plan_no
+</select>
+
+<!-- 생산계획 디테일 상세 조회(생산지시서 관리 페이지) -->
+<select id="selectManPlanDetail" resultType="egov.mes.manufacture.command.dao.ManCommandVO">
+	select a.podt_code,  a.ord_duedate,
+	       b.plan_no_detail, b.podt_code, prod_detail(b.podt_code), b.ord_qnt
+	from ord_detail_view a join manufacture_plan_d b
+	on a.podt_code = b.podt_code
+	where b.plan_no_detail = #{planNoDetail}
 </select>
 
 </mapper>

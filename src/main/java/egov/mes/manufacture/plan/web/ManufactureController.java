@@ -54,7 +54,7 @@ public class ManufactureController {
 		model.addAttribute("result",true);
 		model.addAttribute("data", maps);
 
-//		System.out.println("생산계획 데테일 조회: " + manService.selectManPlanDetail(planVO));
+		System.out.println("생산계획 데테일 조회: " + manService.selectManPlanDetail(planVO));
 
 		return "jsonView";
 	}

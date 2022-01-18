@@ -15,10 +15,16 @@ public class ManCommandServiceImpl implements ManCommandService{
 	@Autowired
 	private ManCommandMapper mapper;
 	
-	//생산계획 조회(생산지시 관리 페이지)
+	//생산계획 디테일 조회(생산지시 관리 페이지)
 	@Override
 	public List<ManCommandVO> selectManPlan(ManCommandVO commandVO) {
 		return mapper.selectManPlan(commandVO);
+	}
+
+	//생산계획 디테일 상세 조회(생산지시서 관리 페이지)
+	@Override
+	public List<ManCommandVO> selectManPlanDetail(ManCommandVO commandVO) {
+		return mapper.selectManPlanDetail(commandVO);
 	}
 
 }

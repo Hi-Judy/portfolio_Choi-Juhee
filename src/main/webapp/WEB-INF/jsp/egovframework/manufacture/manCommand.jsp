@@ -47,9 +47,22 @@
 		<div id = "dialog-form-manPlan" title="생산계획 조회">
 			<div id="gridManPlan"></div>
 		</div>
+		<br>
 		
 		
 		
+		
+	</div>
+	
+	<!-- 메인화면 그리드 -->
+	<div id = "gridMain"></div>
+	<br>
+	
+	<div style="float:right;">
+		<button type="button" id="btnSelectCommand">조회</button>
+		<button type="button" id="btnSaveCommand">저장</button>
+		<button type="button" id="btnDeleteCommand">삭제</button>
+		<button type="button" id="btnInit">초기화</button>
 	</div>
 	
 	
@@ -72,26 +85,35 @@
 		});
 		
 		
-		//******************************모달 설정******************************
+		//******************************생산계획 모달******************************
 		//생산계획 모달 설정
 		let dialogManPlan = $("#dialog-form-manPlan").dialog({
 			autoOpen: false, 
 			modal: true,
 			height: 500,
-		    width: 900
-		    /* buttons: {
-				"확인" : //goCommand, //확인 버튼 눌렀을 때 체크된 값에 해당하는 데이터를 gridMain에 뿌려준다.
-						function(){
+		    width: 900,
+		    buttons: {
+				"확인" : function(){ //확인 버튼 눌렀을 때 체크된 값에 해당하는 데이터를 gridMain에 뿌려준다.
 							console.log("확인 테스트");
-						},		
+							$.ajax({
+								url: '${pageContext.request.contextPath}/selectManPlanDetail'+ checkedPlanDetail[0].planNoDetail,
+								method: 'GET',
+								dataType: 'JSON',
+								success: function(datas){
+									console.log(datas);
+									gridMain.resetData(datas.data.contents);
+								}
+							})
+						dialogManPlan.dialog("close");
+				},		
+						
 				"취소" : function(){
 					dialogPlan.dialog("close");
 				}
-			} */	
+			 } 
 		});
 		
 		
-		//******************************모달 컬럼******************************
 		//생산계획 모달 컬럼
 		const columnsManPlan = [
 			{
@@ -128,18 +150,18 @@
 		$('#btnSearchManPlan').click(function(){
 			console.log('생산계획조회 테스트');
 			
-			let writeFromDate = document.getElementById('writeFromDate').value;
-			let writeToDate = document.getElementById('writeToDate').value;
+			let planFromDate = document.querySelector('#planFromDate').value;
+			let planToDate = document.querySelector('#planToDate').value;
 			
-			console.log(writeFromDate);
-			console.log(writeToDate);
+			console.log(planFromDate);
+			console.log(planToDate);
 			
 			dialogManPlan.dialog("open");
 			$.ajax({
 				url: '${pageContext.request.contextPath}/selectManPlan',
 				method: 'POST',
-				data: {'writeStartDate' : writeFromDate, 'writeEndDate': writeToDate },
-				data: 'JSON',
+				data: {'planFromDate' : planFromDate, 'planToDate': planToDate },
+				dataType: 'JSON',
 				success: function(datas){
 					data = datas;
 					gridManPlan.resetData(data.result);
@@ -149,7 +171,6 @@
 					console.log('reject: '+ reject);
 				}
 			})
-			
 		})
 		
 		//생산계획 그리드 내용
@@ -161,16 +182,73 @@
 		})
 		
 		//생산계획 그리드에서 체크된 계획
-		let checkedManPlan;
+		let checkedPlanDetail;
 		
 		//생산계획 그리드에서 체크된 계획의 행을 가져온다.
 		gridManPlan.on('check', function(ev){
-			checkedManPlan = gridManPlan.getCheckedRows();
+			checkedPlanDetail = gridManPlan.getCheckedRows();
 		})
 		
-		function goCommand(){
-			
-		}
+		
+		//******************************메인 그리드******************************
+		//메인 그리드 컬럼
+		let columnsMain = [
+			{
+				header:'제품코드',
+				name: 'podtCode'
+			},
+			{
+				header: '제품명',
+				name: 'podtName'
+			},
+			{
+				header:'주문량',
+				name: 'ordQnt'
+			},
+			{
+				header: '납기일자',
+				name: 'ordDuedate'
+			},
+			{
+				header: '작업일',
+				name: 'manStartDate',
+				editor: 'datePicker'
+			},
+			{
+				header: '일 생산량',
+				name: 'manGoalPerday',
+				editor: 'text'
+			},
+			{
+				header: '사번',
+				name: 'empId',
+				editor: 'text'
+			},
+			{
+				header: '비고',
+				name: 'manEtc',
+				editor: 'text'
+			}
+		]
+		
+		//메인 그리드 데이터
+		const dataSourceMain = {
+			api: {
+				readData: { url: '.',
+						    method: 'GET' },
+				modifyData: { url: '${pageContext.request.contextPath}/main',
+							  method: 'POST' }
+			},
+			contentType : 'application/json;charset=UTF-8'
+		};
+		
+		//메인 그리드 내용
+		let gridMain = new Grid({
+			el: document.getElementById('gridMain'),
+			data: dataSourceMain,
+			columns: columnsMain,
+			rowHeaders: ['checkbox']
+		});
 		
 	</script>
 </body>
