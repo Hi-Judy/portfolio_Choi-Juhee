@@ -308,7 +308,7 @@ toastr.options = {
          ProcGrid.resetData(ProcData);
          ProcGrid.resetOriginData();
          
-         MatGrid.appendRow({})  
+ //        MatGrid.appendRow({})  
          dialog.dialog( "close" ) ;
          
       }
@@ -502,7 +502,7 @@ toastr.options = {
        
        
       //제품코드로 조회해서 가져온 코드는 변경 안되도록 해주기
-      ProcGrid.on('editing	Start' , (ev) => {
+      ProcGrid.on('editingStart' , (ev) => {
       	try{
       		if (ev.columnName == "procCode"){
       			var CRUD = ProcGrid.getValue(ev.rowKey ,'crud'); 
