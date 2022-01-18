@@ -15,6 +15,7 @@ public class ResourcesCheckVO {
 	String rscTstCnt;		//검사량
 	String rscPassCnt;		//합격량
 	String rscDefCnt;		//불량량
+	String defCode;
 	String tstFlag;			//검사유무(Y/N)
 	@DateTimeFormat(pattern = "yyyy-MM-dd")
 	@JsonFormat(pattern = "yyyy-MM-dd", timezone = "Asia/Seoul")

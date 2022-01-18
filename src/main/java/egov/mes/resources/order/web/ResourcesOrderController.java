@@ -46,6 +46,7 @@ public class ResourcesOrderController {
 		return "resources/searchRsc";
 	}
 	
+	//발주 -> 모달창(자재면,코드,단가 등등..조회)
 	@RequestMapping("recList2")
 	public String recList2(Model model, ResourcesOrderVO vo) {
 		model.addAttribute("recList2", service.searchRec(vo));

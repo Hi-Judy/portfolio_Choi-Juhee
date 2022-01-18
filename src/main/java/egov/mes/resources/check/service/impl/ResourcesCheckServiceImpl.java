@@ -20,6 +20,11 @@ public class ResourcesCheckServiceImpl implements ResourcesCheckService{
 	}
 
 	@Override
+	public List<ResourcesRtngdVO> searchRtngd(ResourcesRtngdVO vo) {
+		return mapper.searchRtngd(vo);
+	}
+	
+	@Override
 	public void modifyCheck(ModifyVO<ResourcesCheckVO> mvo) {
 		if(mvo.getUpdatedRows() != null) {
 			for(ResourcesCheckVO vo :mvo.getUpdatedRows()) {
@@ -29,10 +34,6 @@ public class ResourcesCheckServiceImpl implements ResourcesCheckService{
 		}
 	}
 
-	@Override
-	public List<ResourcesRtngdVO> searchRtngd(ResourcesRtngdVO vo) {
-		return mapper.searchRtngd(vo);
-	}
 
 	
 }

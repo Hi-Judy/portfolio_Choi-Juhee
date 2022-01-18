@@ -14,18 +14,12 @@
 	var columnsRtn = [
 			{
 			  header: '불량코드',
-			  name: 'code'
+			  name: 'defCode'
 			},
 			{
 			  header: '불량명',
-			  name: 'codeName'
-			 },
-			 {
-			   header: '수량',
-			   name: 'rscDefCnt',
-			   editor: 'text'
-			  },
-			 
+			  name: 'defName'
+			 }
 			];
 	
 	//ajax(api)로 값 받아오는 거 
@@ -46,9 +40,10 @@
 		});
 	
 	gridRtn.on("dblclick", (ev) => {
-		console.log(gridRtn.getValue(ev["rowKey"],ev["columnName"]));
-		var rtn = gridRtn.getValue(ev["rowKey"],ev["columnName"]);
-		clickRsc(rtn)
+		grid.setValue(defRowKey, "defCode", gridRtn.getValue(ev["rowKey"],'defCode'), false)
+		console.log(defRowKey);
+		console.log(gridRtn.getValue(ev["rowKey"],'defCode'));
+		dialogRtn.dialog("close");
 	})
 	
 </script>

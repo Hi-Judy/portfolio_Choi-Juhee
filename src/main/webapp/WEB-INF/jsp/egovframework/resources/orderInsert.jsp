@@ -35,15 +35,13 @@
 	<script type="text/javascript">
 	let rscRowKey;
 	
-	
 	//모달창(자재 조회)
 	let dialog3 = $( "#dialog-form-rsc" ).dialog({
 			autoOpen: false,
 			modal: true
 		});
 	
-	
-	//조회 클릭시 미입고 모달창 
+	//모달창(조회 클릭시 미입고)
 	let dialog4 = $( "#dialog-form-order" ).dialog({
 			autoOpen: false,
 			modal: true
@@ -91,8 +89,7 @@
 		},
 	   {
 		 header: '합계',
-		 name: 'rscTotal',
-		 
+		 name: 'rscTotal'
 		},
 		{
 		  header: '업체',
@@ -102,7 +99,6 @@
 		  header: '입고요청일',
 		  name: 'istReqDate',
 		  editor: 'datePicker'
-		  
 		}	
 	];
 	
@@ -134,10 +130,10 @@
 		}
 	});
 	
+	//그리드 클릭시 columnName = rscCode 
 	grid.on("click", function(ev){
 		console.log(grid.getValue(ev["rowKey"], "rscCode"));
-		if(ev["columnName"]=="rscCode" && 
-				grid.getValue(ev["rowKey"], ev["columnName"])!=null){
+		if(ev["columnName"]=="rscCode" && grid.getValue(ev["rowKey"], ev["columnName"])!=null){
 			rscRowKey=ev["rowKey"];
 		dialog3.dialog("open");
 		

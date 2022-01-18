@@ -13,7 +13,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import egov.mes.resources.check.dao.ResourcesCheckVO;
 import egov.mes.resources.check.service.ResourcesCheckService;
 import egov.mes.resources.order.dao.ModifyVO;
-import egov.mes.resources.order.dao.ResourcesOrderVO;
 import egov.mes.resources.rtngd.dao.ResourcesRtngdVO;
 
 @Controller

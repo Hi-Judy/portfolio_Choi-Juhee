@@ -1,12 +1,41 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="egov.mes.resources.store.dao.ResourceStoreMapper">
-
+	
+	<!-- 자재입고관리(검사유무가 'Y'인 품목) -->
 	<select id="findResourcesStore" resultType="egov.mes.resources.store.dao.ResourcesStoreVO">
-		SELECT O.RSC_CODE, FN_GET_CODE_NAME(O.RSC_CODE) AS RSC_NAME, C.RSC_PASS_CNT, FN_GET_RSC_PRC(O.RSC_CODE) AS RSC_PRC
+		SELECT O.RSC_CODE,
+			   C.RSC_PASS_CNT, 
+			   FN_GET_CODE_NAME(O.RSC_CODE) AS RSC_NAME,
+			   FN_GET_RSC_PRC(O.RSC_CODE) AS RSC_PRC,
+			   FN_GET_RSC_UNIT(O.RSC_CODE) AS RSC_UNIT
 		FROM RESOURCE_IST_CHECK C
 		LEFT JOIN RESOURCE_ORDER O
 		ON C.ORDR_NO = O.ORDR_NO
+		WHERE C.TST_FLAG = 'Y'
 	</select>
 	
+	<!-- 자재 LOT번호 부여 후 -> 완전 입고(자재입출고에서 조회 가능) -->
+	<insert id="insertResourcesStore">
+		INSERT 
+		INTO RESOURCE_STORE(
+					STORE_NO,
+					RSC_CODE,
+                    IST_FLAG,
+                    RSC_LOT,
+                    IST_CNT,
+                    OST_CNT,
+                    STORE_DATE,
+                    STORE_FLAG,
+                    STORE_ETC)
+		VALUES(to_char(SYSDATE,'"RI"YYMMDD""') || LPAD(RINUMBER.nextval,3,'0'),
+                #{rscCode},
+                'Y',
+                #{rscLot},
+                #{rscPassCnt},
+                0,
+                SYSDATE,
+                '입고',
+                #{storeEtc})
+	</insert>
 </mapper>

@@ -5,12 +5,23 @@
 <head>
 <meta charset="UTF-8">
 <title>Insert title here</title>
+<link rel="stylesheet" href="https://uicdn.toast.com/tui-grid/latest/tui-grid.css" />
+<link rel="stylesheet" href="https://uicdn.toast.com/tui.date-picker/latest/tui-date-picker.css" />
+<link rel="stylesheet" href="//code.jquery.com/ui/1.13.0/themes/base/jquery-ui.css">
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p" crossorigin="anonymous"></script>
+<script src="https://uicdn.toast.com/tui.date-picker/latest/tui-date-picker.js"></script>
+<script src="https://uicdn.toast.com/tui-grid/latest/tui-grid.js"></script>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
+<script src="https://code.jquery.com/jquery-3.6.0.js"></script>
+<script src="https://code.jquery.com/ui/1.13.0/jquery-ui.js"></script>
 </head>
 <body>
 	<h2>자재 입/출고 관리</h2>
 	<hr>
-	<button id="findResourcesStore">조회</button>
-	<button id="saveResourcesStore">저장</button>
+		<button id="findResourcesStore">조회</button>
+		<button id="saveResourcesStore">저장</button>
 	<hr>
 	<div id="grid"></div>
 	
@@ -34,7 +45,7 @@
 			  },
 			  {
 				header: '입고량',
-				name: 'rscIstCnt'
+				name: 'rscPassCnt'
 			  },
 			  {
 				header: '단가',
@@ -42,12 +53,18 @@
 			   },
 			   {
 				 header: '자재LOTNO',
-				 name: 'rscLot'
+				 name: 'rscLot',
+				 editor: 'text'
 				},
 				{
 				 header: '입고유무',
 				 name: 'rscTstCnt'
-				}
+				},
+				 {
+				  header: '비고',
+				  name: 'field',
+				  editor: 'text'
+				},
 			];
 			
 		let dataSource = {
@@ -68,8 +85,18 @@
 			  columns
 			});
 		
-	
-	
+		//저장버튼 클릭시 modify
+		saveResourcesStore.addEventListener("click", function(){
+			grid.request('modifyData'); 
+	}) 
+		
+		//저장시 데이터 다시 읽어서 수정한 품목은 사라지게
+		grid.on("response",function(ev){
+			let a =JSON.parse(ev.xhr.response)
+			 if(a.mod=='upd'){
+				grid.readData();
+			} 
+		})
 	
 </script>
 </body>

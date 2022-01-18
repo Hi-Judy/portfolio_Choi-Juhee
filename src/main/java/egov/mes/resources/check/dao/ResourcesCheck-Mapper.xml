@@ -11,6 +11,7 @@
 			   RSC_CNT,
 			   ORDE_DATE,
 			   IST_REQ_DATE,
+			   '' def_code,
 			   FN_GET_RSC_UNIT(RSC_CODE) AS RSC_UNIT
 		FROM RESOURCE_ORDER
 		WHERE RSC_ST = '발주'
@@ -19,7 +20,16 @@
 	
 	<!-- 자재입고 검사 후-> 입고검사관리테이블에 insert -->
 	<insert id="insertResourcesCheck">
-		INSERT INTO RESOURCE_IST_CHECK(RSC_TST_NO, ORDR_NO, RSC_IST_CNT, RSC_TST_CNT, RSC_PASS_CNT, RSC_DEF_CNT, TST_FLAG, RSC_EXPIRATION_DATE)
+		INSERT INTO 
+		RESOURCE_IST_CHECK(
+							RSC_TST_NO,
+							ORDR_NO,
+							RSC_IST_CNT,
+							RSC_TST_CNT,
+							RSC_PASS_CNT,
+							RSC_DEF_CNT,
+							TST_FLAG,
+							RSC_EXPIRATION_DATE)
 		VALUES(TO_CHAR(SYSDATE,'"RC"YYMMDD""') || LPAD(RCNUMBER.NEXTVAL,3,'0'),
              	#{ordrNo},
              	#{rscIstCnt},
@@ -38,7 +48,7 @@
 	</update>
 	
 	<select id="searchRtngd" resultType="egov.mes.resources.rtngd.dao.ResourcesRtngdVO">
-		SELECT CODE, CODE_NAME
+		SELECT CODE AS DEF_CODE, CODE_NAME AS DEF_NAME
 		FROM COMMON_CODE
 		WHERE CODE LIKE '%' || 'D_R' || '%'
 	</select>
