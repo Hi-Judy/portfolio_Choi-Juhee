@@ -21,6 +21,10 @@
 		<put-attribute name="tiles_content"
 			value="/WEB-INF/jsp/egovframework/{1}/{2}.jsp" />
 	</definition>
+	<definition name="com/*/*/*.tiles" extends="layouts-tiles">
+		<put-attribute name="tiles_content"
+			value="/WEB-INF/jsp/egovframework/com/{1}/{2}/{3}.jsp" />
+	</definition>
 
 	<definition name="layouts-none"
 		template="/WEB-INF/jsp/egovframework/tiles/none.jsp">
@@ -31,4 +35,5 @@
 		<put-attribute name="tiles_none"
 			value="/WEB-INF/jsp/egovframework/{1}/{2}.jsp" />
 	</definition>
+
 </tiles-definitions>
