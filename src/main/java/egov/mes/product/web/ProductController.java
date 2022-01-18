@@ -83,9 +83,18 @@ public class ProductController {
 	
 	// ↓테스트
 	
-	@RequestMapping("ProductTest")
+	@RequestMapping("ProductTestPage")
 	public String productTest() {
-		return "product/product_Test.tiles" ;
+		return "product/product_test.tiles" ;
+	}
+	
+	@RequestMapping("productTest")
+	public ModelAndView productTest(ProductVO product) {
+		service.productTest(product) ;
+		String result = "" ;
+		ModelAndView jsonView = new ModelAndView("jsonView") ;
+		jsonView.addObject("producttest" , result) ;
+		return jsonView ;
 	}
 	
 	// ↑테스트

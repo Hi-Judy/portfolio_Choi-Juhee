@@ -11,4 +11,8 @@ public interface ProductService {
 	void updateLotno(ProductVO product) ;
 	void deleteInOut(ProductVO product) ;
 	List<ProductVO> selectOptions(ProductVO product) ;
+	
+	// 테스트
+	void productTest(ProductVO product) ;
+	// 테스트
 }

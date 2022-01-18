@@ -52,9 +52,15 @@
 	</delete>
 	
 	<select id="selectOptions" resultType="egov.mes.product.dao.ProductVO">
-		select podt_code , podt_lot, (sum(podt_input)-sum(podt_output)) as qnt , com_code
+		select podt_code , podt_lot, (sum(podt_input)-sum(podt_output)) as qnt
 		from product_qnt_info 
-		group by podt_code , podt_lot , com_code
+		group by podt_code , podt_lot
 	</select>
+	
+	<!-- 테스트 -->
+	<insert id="productTest" statementType="CALLABLE">
+		{ call p_product_test(#{comCode}) }
+	</insert>
+	<!-- 테스트 -->
 	
 </mapper>
