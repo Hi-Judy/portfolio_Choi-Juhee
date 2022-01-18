@@ -26,7 +26,6 @@
 		<div align="right">
 <!-- 테스트 -->
 			<button type="button" id="test">테스트버튼</button>
-			<button type="button" id="test2">테스트버튼2</button>
 <!-- 테스트 -->
 			<button type="button" id="listBtn">조회</button>
 			<button type="button" id="btnAdd">추가</button>
@@ -96,7 +95,7 @@
 			editor: 'text' ,
 			align: 'center'
 		} ,
-// ----- 테스트 -----
+// ----- ↓테스트 -----
 		{
 			header: '비고	' ,
 			name : 'podtEtc' ,
@@ -109,8 +108,7 @@
 						{ text : '선택' , value: ''} ,
 						{ text : '생산완료' , value: '생산완료'} ,
 						{ text : '출하' , value: '출하'} ,
-						{ text : '미생산출하' , value: '미생산출하'} ,
-						{ text : '기타' , value: '기타'}
+						{ text : '미생산출하' , value: '미생산출하'}
 					]
 				}
 			} ,
@@ -127,6 +125,11 @@
 			]
 		} ,
 		{
+			header: '생산지시코드' ,
+			name : 'comCode' ,
+			align : 'center'
+		} ,
+		{
 			header: '완제품 Lot' ,
 			name : 'podtLot' ,
 			align: 'center' ,
@@ -138,7 +141,7 @@
 				}
 			}
 		}
-// ----- 테스트 -----
+// ----- ↑테스트 -----
 	] ;
 	
 	let data ;
@@ -192,51 +195,109 @@
 		columns : columns
 	})
 	
-	// ----- 테스트 -----
+	// ----- ↓테스트 -----
 	const second = {
 		'생산완료' : [
-			{ text : '선택' , value : ''} ,
-			{ text : '생산완료용Lot' , value : '1-1'}
+			{ text : '선택' , value : ''}
 		] ,
 		'출하' : [
-			{ text : '선택' , value : ''} ,
-			{ text : '출하용Lot' , value : '2-1'}
+			{ text : '선택' , value : ''}
 		] ,
 		'미생산출하' : [
-			{ text : '선택' , value : ''} ,
-			{ text : '출하용Lot' , value : '3-1'}
-		] ,
-		'기타' : [
-			{ text : '선택' , value : ''} ,
-			{ text : '생산완료Lot' , value : '4-1'} , 
-			{ text : '출하용Lot' , value : '4-2'} 
+			{ text : '선택' , value : ''}
 		]
 	} ;	
-	 
-	$("#test").on("click" , function() {
-		second.출하[1].text = 'C220117001_001' ;
-		second.출하[1].value = 'C220117001_001' ;
-	})	
 	
-	$("#test2").on("click" , function() {
+	$("#test").on("click" , function() {
 		$.ajax({
 			url : 'selectOptions' ,
 			dataType : 'json' ,
 			async : false ,
-			success : function(datas) {
-				console.log(datas.selectoptions) ;
+			success : function(datas) {			
+				// 사용할 배열들
+				let lots = [] ;
+				let lots2 = [] ;
+				let coms = [] ;
+				let createLot = 0 ;
 				for (let i = 0 ; i < datas.selectoptions.length ; i++) {
-					second.미생산완료.push(datas.selectoptions.podtLot) ;
-					second.생산완료.push(datas.selectoptions.podtLot) ;
-					second.출하.push(datas.selectoptions.podtLot) ;
+					
+					// 값을 하나씩 받아서
+					let lot = datas.selectoptions[i].podtLot ;
+					let com = datas.selectoptions[i].comCode ;
+					
+					// 각각 배열에 넣어줌
+					if (lot != null) {
+						lots.push(lot.substr(0,10)) ;
+						lots2.push(lot) ;
+					}
+					
+					// 각각 배열에 넣어줌
+					if (com != null) {
+						coms.push(com) ;
+					}
+					
+					// 같이 들어온 지시번호가 이미 입출고관리에 있는 지시번호면 1 , 없으면 0
+					for (let d = 0 ; d < lots.length ; d++) {
+						if (datas.selectoptions[i].comCode == lots[d]) {
+							createLot = 1 ;
+						}	
+					}
+				} ;
+				
+				// 배열에 중복 제거
+				let set1 = new Set(lots2) ;
+				let set2 = [...set1] ;
+				
+				// 중복제거한거 select options에 넣어줌
+				for (let c = 0 ; c < set2.length ; c++) {
+					let data = { text : set2[c] , value : set2[c] } ;
+					second.생산완료.push(data) ;
+					second.출하.push(data) ;
+					second.미생산출하.push(data) ;
 				}
+/*				
+				// 생산완료는 이 페이지에서 추가할일 없고, 앞장에서 데이터가 넘어올 때 Lot번호 주도록 하면되고
+				// 출하 , 미생산출하는 지금 만들어놓은거 그대로 하면됨 ( 대신 재고가 있는지 확인하고 재고 있는 Lot만 보여주게 )
+				
+				// 지금있는 지시번호중에 최대값 구하기
+				let maxCom = 'C000000000' ;
+				for (let a = 0 ; a < coms.length ; a++) {
+					let value = coms[a] ;
+					if (maxCom < value) {
+						maxCom = coms[a] ;
+					}
+				}
+				
+				// 최종 return
+				let nextLot = '' ;
+				
+				// Lot번호가 있으면 001 에 1씩 더해서 붙여주고 , 없으면 지시번호에 001 붙여주기
+				for (let b = 0 ; b < lots2.length ; b++) {
+					let listCom = lots2[b] ;
+					let maxNum = 0 ;
+					if (maxCom == listCom.substr(0,10)) {
+						if (parseInt(lots2[b].slice(-3)) < 10) {
+							maxNum = parseInt(lots2[b].slice(-3)) + 1 ;
+							nextLot = maxCom + "_00" + maxNum ;	
+						}							
+						else {
+							maxNum = parseInt(lots2[b].slice(-3)) + 1 ;
+							nextLot = maxCom + "_0" + maxNum ;
+						}
+					}
+				}
+				
+				// select 옵션에 다음 Lot 넣기
+				let data2 = { text : nextLot , value : nextLot }
+				second.생산완료.push(data2) ;
+*/				
 			} ,
 			error : function(reject) {
 				console.log(reject) ;
 			}
 		})
 	})
-	// ----- 테스트 -----
+	// ----- ↑테스트 -----
 	
 	// 입력된 데이터 수정못하게 하기
 	grid.on('editingStart' , (ev) => {
