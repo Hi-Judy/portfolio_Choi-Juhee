@@ -28,4 +28,6 @@ public class ResourcesStoreVO {
 	String rscPassCnt;		//자재 합격량
 	String rscPrc;			//자재 단가
 	String rscTstCnt;		//입고유무
+	String rscSt;
+	String ordrNO;
 }

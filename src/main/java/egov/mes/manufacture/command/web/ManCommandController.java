@@ -26,11 +26,20 @@ public class ManCommandController {
 		return "manufacture/manCommand.tiles";
 	}
 	
+	//제품 코드 입력했을 때 필요한 공정별 자재 조회
+	@PostMapping("/selectRes")
+	public String selectRes(ManCommandVO commandVO, Model model) {
+		model.addAttribute("result", service.selectRes(commandVO));
+		System.out.println("자재조회: " + service.selectRes(commandVO));
+		
+		return "jsonView";
+	}
+	
 	//생산계획 디테일 조회
 	@PostMapping("/selectManPlan")
 	public String selectManPlan(ManCommandVO commandVO, Model model) {
 		model.addAttribute("result", service.selectManPlan(commandVO));
-		System.out.println("생산계획 조회: " + service.selectManPlan(commandVO));
+		//System.out.println("생산계획 조회: " + service.selectManPlan(commandVO));
 		
 		return "jsonView";
 	}
@@ -40,6 +49,7 @@ public class ManCommandController {
 	public String selectManPlanDetail(@PathVariable String planNoDetail, 
 									  ManCommandVO commandVO, 
 									  Model model) {
+		
 		Map<String, List<ManCommandVO>> maps = new HashMap<>();
 		maps.put("contents", service.selectManPlanDetail(commandVO));
 		

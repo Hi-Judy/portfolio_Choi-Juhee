@@ -46,6 +46,14 @@ public class ResourceStoreController {
 		return "jsonView";
 	}
 	
+	//입,출고 조회
+	@RequestMapping("resourcesStoreIn")
+	public String resourcesStoreInOut() {
+		System.out.println("=================자재 입고 페이지================");
+		return "resources/resourcesStoreIn.tiles";
+	}
+	
+	
 	
 }
 	

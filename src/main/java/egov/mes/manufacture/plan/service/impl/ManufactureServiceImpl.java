@@ -48,12 +48,12 @@ public class ManufactureServiceImpl implements ManufactureService {
 	
 		System.out.println("*******************MODIFY_INSERT_test**************");
 		if(list.getUpdatedRows() != null) {
+			manMapper.insertPlan(list.getUpdatedRows().get(0));
 			for(ManufacturePlanVO planVO : list.getUpdatedRows()) {
 				System.out.println("12321S");
 				manMapper.insertPlanDetail(planVO);
 				System.out.println(planVO);
 			}
-			manMapper.insertPlan(list.getUpdatedRows().get(0));
 		}
 	
 		

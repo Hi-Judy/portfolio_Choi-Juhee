@@ -1,10 +1,10 @@
-<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
-<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+    pageEncoding="UTF-8"%>
 <!DOCTYPE html>
 <html>
 <head>
 <meta charset="UTF-8">
-<title>orderList</title>
+<title>Insert title here</title>
 <link rel="stylesheet" href="https://uicdn.toast.com/tui-grid/latest/tui-grid.css" />
 <link rel="stylesheet" href="https://uicdn.toast.com/tui.date-picker/latest/tui-date-picker.css" />
 <link rel="stylesheet" href="//code.jquery.com/ui/1.13.0/themes/base/jquery-ui.css">
@@ -18,11 +18,11 @@
 <script src="https://code.jquery.com/ui/1.13.0/jquery-ui.js"></script>
 </head>
 <body>
-	<h2>발주조회</h2>
+	<h2>자재입고조회</h2>
 	<hr>
-	발주일자  <input id="txtOrde1" type="date" data-role="datebox" data-options='{"mode": "calbox"}'>
+	입고일자  <input id="txtOrde1" type="date" data-role="datebox" data-options='{"mode": "calbox"}'>
 	~ 		<input id="txtOrde2" type="date" data-role="datebox" data-options='{"mode": "calbox"}'><br>
-	발주업체  <input id="txtSuc"><button id="btnFindSuc">돋보기</button><br>
+	입고업체  <input id="txtSuc"><button id="btnFindSuc">돋보기</button><br>
 	자재명   <input id="txtRsc"><button id="btnFindRsc">돋보기</button><br>
 	<div id="dialog-form-rsc" title="자재 검색"></div>
 	<div id="dialog-form-suc" title="업체 검색"></div>
@@ -35,7 +35,6 @@
 	<div id="grid"></div>
 	
 <script type="text/javascript">
-
 	//발주일자 초기값 
 	var d = new Date();
 	var nd = new Date(d.getFullYear(), d.getMonth(), d.getDate() - 7);
@@ -57,7 +56,7 @@
 		
 		dialog1.dialog("close");
 	};
-
+	
 	let dialog1 = $( "#dialog-form-rsc" ).dialog({
 			autoOpen: false,
 			modal: true
@@ -68,13 +67,13 @@
 		$("#dialog-form-rsc").load("recList2",
 				function(){console.log("로드됨")})
 		});
-
+	
 	//모달창(업체조회)
 	function clickSuc(suc){
 		$("#txtSuc").val(suc);
 		dialog2.dialog("close");
 	};
-
+	
 	let dialog2 = $("#dialog-form-suc").dialog({
 			autoOpen: false,
 			modal: true
@@ -85,21 +84,15 @@
 		$("#dialog-form-suc").load("sucList",
 				function(){console.log("로드됨")})
 		});
-
+	
 	//그리드 
 	var Grid = tui.Grid;
 	Grid.applyTheme('default');
 	
 	const columns = [
 		  		{
-			    header: '발주일',
-			    name: 'ordeDate',
-			    sortable: true,
-			    sortingType: 'desc'
-			  },
-			  {
-			    header: '발주번호',
-			    name: 'ordrNo',
+			    header: '입고일자',
+			    name: 'storeDate',
 			    sortable: true,
 			    sortingType: 'desc'
 			  },
@@ -120,24 +113,20 @@
 				name: 'rscUnit'
 			   },
 			  {
-				header: '발주량',
-				name: 'rscCnt'
-			   },
+				header: '단가',
+				name: 'pscPrc'
+				},
+			   {
+				 header: '업체',
+				 name: 'sucName'
+				},
 			   {
 				 header: '입고량',
-				 name: 'rscPassCnt'
+				 name: 'istCnt'
 				},
 				{
-				  header: '불량량',
-				  name: 'rscDefCnt'
-				},
-				{
-				  header: '업체',
-				  name: 'sucName'
-				},
-				{
-				  header: '입고요청일',
-				  name: 'istReqDate',
+				  header: '자재 LOT NO',
+				  name: 'rscLot',
 				  sortable: true,
 				  sortingType: 'desc'
 				}
@@ -160,7 +149,7 @@
 		  data: null,
 		  columns
 		});
-
+	
 	//조회버튼 클릭시 값 가지고 오는 거
 	$("#btnSelect").on("click", function(){
 			var rscCode = $("#txtRsc").val();
@@ -183,6 +172,5 @@
 					
 		})
 </script>
-
 </body>
 </html>

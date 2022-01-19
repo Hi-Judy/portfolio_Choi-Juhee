@@ -11,7 +11,7 @@
 			   RSC_CNT,
 			   ORDE_DATE,
 			   IST_REQ_DATE,
-			   '' def_code,
+			   '' DEF_CODE,
 			   FN_GET_RSC_UNIT(RSC_CODE) AS RSC_UNIT
 		FROM RESOURCE_ORDER
 		WHERE RSC_ST = '발주'
@@ -21,28 +21,25 @@
 	<!-- 자재입고 검사 후-> 입고검사관리테이블에 insert -->
 	<insert id="insertResourcesCheck">
 		INSERT INTO 
-		RESOURCE_IST_CHECK(
-							RSC_TST_NO,
+		RESOURCE_IST_CHECK(RSC_TST_NO,
 							ORDR_NO,
 							RSC_IST_CNT,
 							RSC_TST_CNT,
 							RSC_PASS_CNT,
 							RSC_DEF_CNT,
-							TST_FLAG,
-							RSC_EXPIRATION_DATE)
+							TST_FLAG)
 		VALUES(TO_CHAR(SYSDATE,'"RC"YYMMDD""') || LPAD(RCNUMBER.NEXTVAL,3,'0'),
              	#{ordrNo},
              	#{rscIstCnt},
              	#{rscTstCnt},
              	#{rscPassCnt},
              	NVL(#{rscDefCnt},0),
-             	'Y',
-             	#{rscExpirationDate})
+             	'Y')
 	</insert>
 	
-	<!-- 자재입고 검사 후 자재상태-> 자재발주 테이블로 update -->
+	<!-- 자재입고 검사 후 자재상태 '검사' -> 자재발주 테이블로 update -->
 	<update id="updateResourcesCheck">
-		UPDATE resource_order 
+		UPDATE RESOURCE_ORDER 
         SET RSC_ST = '검사'
       	WHERE ORDR_NO = #{ordrNo}
 	</update>

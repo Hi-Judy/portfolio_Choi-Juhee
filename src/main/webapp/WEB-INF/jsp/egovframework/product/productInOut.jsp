@@ -184,21 +184,21 @@
 					dataType : 'json' ,
 					async : false ,
 					success : function(datas) {
-						
+
 						// 조회 누를때마다 중복으로 안들어가도록 함
 						second.생산완료 = [] ;
 						second.출하 = [] ;
 						second.미생산출하 = [] ;
-						
+
 						let lots = [] ;
 						let lots2 = [] ;
 						
+
 						for (let a = 0 ; a < datas.selectoptions.length ; a++) {
 							lots.push(datas.selectoptions[a].podtLot) ;
 							let data = { podtLot : datas.selectoptions[a].podtLot , qnt : datas.selectoptions[a].qnt} ;
 							lots2.push(data) ;	
 						}
-
 
 						// 중복제거
 						let set1 = new Set(lots) ;
@@ -216,6 +216,10 @@
 								let options3 = { text : lots2[c].podtLot , value : lots2[c].podtLot } ;
 								second.출하.push(options3) ;
 								second.미생산출하.push(options3) ;	
+                
+							}else{
+								let options4 = { text : lots2[c].podtLot , value : lots2[c].podtLot, hidden } ;
+								second.미생산출하.push(options4) ;								
 							}
 						}
 						

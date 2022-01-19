@@ -4,11 +4,15 @@
 
 	<!-- 반품자재(자재입고검사 테이블에서 불량량이 'NULL'이 아닌 품목) -->
 	<select id="findResourcesRtngd">
-		SELECT C.ORDR_NO, C.RSC_TST_NO, C.RSC_DEF_CNT, O.RSC_CODE
+		SELECT C.ORDR_NO, 
+			   C.RSC_TST_NO, 
+			   C.RSC_DEF_CNT, 
+			   O.RSC_CODE
 		FROM RESOURCE_IST_CHECK C
 		LEFT JOIN RESOURCE_ORDER O
 		ON C.ORDR_NO = O.ORDR_NO
 		WHERE RSC_DEF_CNT IS NOT NULL
+		
 	</select>
 
 	

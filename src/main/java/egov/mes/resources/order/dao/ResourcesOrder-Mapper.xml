@@ -4,18 +4,28 @@
 
 	<!-- 발주 리스트 조회 -->
 	<select id="findResourcesOrder" resultType="egov.mes.resources.order.dao.ResourcesOrderVO">
-		SELECT O.ORDE_DATE, O.ORDR_NO, O.RSC_CODE, FN_GET_CODE_NAME(O.RSC_CODE) AS RSC_NAME, R.RSC_UNIT, O.RSC_CNT, O.IST_REQ_DATE, FN_GET_CODE_NAME(R.SUPLCOM_CODE) AS SUC_NAME, C.RSC_DEF_CNT, C.RSC_PASS_CNT, R.RSC_PRC  
+		SELECT O.ORDE_DATE,
+			   O.ORDR_NO,
+			   O.RSC_CODE,
+			   O.RSC_CNT,
+			   O.IST_REQ_DATE,
+			   FN_GET_CODE_NAME(O.RSC_CODE) AS RSC_NAME,
+			   R.RSC_PRC,
+			   R.RSC_UNIT,
+			   FN_GET_CODE_NAME(R.SUPLCOM_CODE) AS SUC_NAME,
+			   C.RSC_DEF_CNT,
+			   C.RSC_PASS_CNT
 		FROM RESOURCE_ORDER O
 		LEFT JOIN RESOURCES R 
 		ON O.RSC_CODE = R.RSC_CODE
 		LEFT JOIN RESOURCE_IST_CHECK C
 		ON O.ORDR_NO = C.ORDR_NO
 		<where>
-			<if test="rscName != null and rscName != '' ">
-				and FN_GET_CODE_NAME(O.RSC_CODE) = #{rscName} 
+			<if test="rscCode != null and rscCode != '' ">
+				and O.RSC_CODE = #{rscCode} 
 			</if>
-			<if test="sucName != null and sucName != '' ">
-				and FN_GET_CODE_NAME(R.SUPLCOM_CODE) = #{sucName} 
+			<if test="sucCode != null and sucCode != '' ">
+				and R.SUPLCOM_CODE = #{sucCode} 
 			</if>
 			<if test="ordeDate != null">
 				<![CDATA[
@@ -25,7 +35,7 @@
 			<if test="ordrNo !=null and ordrNo != '' ">
 				and O.ORDR_NO = #{ordrNo}
 			</if>
-			ORDER BY O.ORDR_NO
+				ORDER BY O.ORDR_NO
 		</where>
 	</select>
 	
@@ -44,24 +54,21 @@
 		ON C.CODE = R.RSC_CODE
 		WHERE CODE LIKE '%' || 'RSC' || '%'
 	</select>
-	
 	<select id="searchSuc" resultType="egov.mes.resources.order.dao.ResourcesOrderVO" parameterType="egov.mes.resources.order.dao.ResourcesOrderVO">
 		SELECT CODE,CODE_NAME
 		FROM COMMON_CODE
 		WHERE CODE LIKE '%' || 'm_' || '%'
 	</select>
 	
-	<!-- 자재 발주 페이지 insert-->
+	<!-- 자재 발주 페이지 insert, 자재상태 기본 값 = rsc_st '발주'-->
 	<insert id="insertResourcesOrder">
-		INSERT INTO RESOURCE_ORDER(
-									ORDR_NO,
+		INSERT INTO RESOURCE_ORDER(	ORDR_NO,
 									RSC_CODE,
 									RSC_CNT,
 									RSC_TOTAL,
 									ORDE_DATE,
 									IST_REQ_DATE)
-			                VALUES(
-			                		TO_CHAR(SYSDATE, '"PO"YYMMDD""')||LPAD(PONUMBER.nextval,3,'0'),
+			                VALUES(	TO_CHAR(SYSDATE, '"PO"YYMMDD""')||LPAD(PONUMBER.nextval,3,'0'),
 			                        #{rscCode}, 
 			                        #{rscCnt}, 
 			                        #{rscTotal},
@@ -78,7 +85,6 @@
 				ORDE_DATE = sysdate,
 				IST_REQ_DATE = #{ordeDate}
 		 WHERE ORDR_NO = #{ordrNo}
-			
 	</update>
 	
 	<!-- 자재 발주 페이지 delete-->
