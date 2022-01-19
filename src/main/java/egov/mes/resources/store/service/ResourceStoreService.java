@@ -7,5 +7,7 @@ import egov.mes.resources.store.dao.ResourcesStoreVO;
 
 public interface ResourceStoreService {
 	List<ResourcesStoreVO> findResourcesStore(ResourcesStoreVO vo);
+	List<ResourcesStoreVO> ResourcesStoreIn(ResourcesStoreVO vo);
+	List<ResourcesStoreVO> ResourcesStoreOut(ResourcesStoreVO vo);
 	void modifyStore(ModifyVO<ResourcesStoreVO> mvo);
 }

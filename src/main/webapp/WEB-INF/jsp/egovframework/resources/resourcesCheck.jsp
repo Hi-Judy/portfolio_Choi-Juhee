@@ -106,6 +106,8 @@
 		  columns
 		});
 	
+	grid.readData();
+	
 	//모달창(불량코드 조회)
 	let dialogRtn = $( "#dialog-form-def" ).dialog({
 		autoOpen: false,

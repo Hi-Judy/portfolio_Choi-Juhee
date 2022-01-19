@@ -43,8 +43,8 @@
 	
 	//리스트에서 선택한 값 가지고 오기...$(여기 어떻게 쓰지? )
 	gridSuc.on("dblclick", (ev) => {
-		console.log("+++++++++++++++++++++++++++++++++")
-		console.log(gridSuc.getValue(ev["rowKey"],ev["columnName"]));
+		console.log(gridSuc.getFocusedCell());
+		console.log(gridSuc.getData());
 		var suc = gridSuc.getValue(ev["rowKey"],ev["columnName"]);
 		clickSuc(suc)
 	});

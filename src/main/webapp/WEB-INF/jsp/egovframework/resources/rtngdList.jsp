@@ -1,10 +1,10 @@
-<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
-<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+    pageEncoding="UTF-8"%>
 <!DOCTYPE html>
 <html>
 <head>
 <meta charset="UTF-8">
-<title>orderList</title>
+<title>Insert title here</title>
 <link rel="stylesheet" href="https://uicdn.toast.com/tui-grid/latest/tui-grid.css" />
 <link rel="stylesheet" href="https://uicdn.toast.com/tui.date-picker/latest/tui-date-picker.css" />
 <link rel="stylesheet" href="//code.jquery.com/ui/1.13.0/themes/base/jquery-ui.css">
@@ -18,9 +18,9 @@
 <script src="https://code.jquery.com/ui/1.13.0/jquery-ui.js"></script>
 </head>
 <body>
-	<h2>발주조회</h2>
+	<h2>자재반품 조회</h2>
 	<hr>
-	발주일자  <input id="txtOrde1" type="date" data-role="datebox" data-options='{"mode": "calbox"}'>
+	반품일자  <input id="txtOrde1" type="date" data-role="datebox" data-options='{"mode": "calbox"}'>
 	~ 		<input id="txtOrde2" type="date" data-role="datebox" data-options='{"mode": "calbox"}'><br>
 	발주업체  <input id="txtSuc"><button id="btnFindSuc">돋보기</button><br>
 	자재명   <input id="txtRsc"><button id="btnFindRsc">돋보기</button><br>
@@ -33,6 +33,7 @@
 	<button>엑셀</button>
 	<hr>	
 	<div id="grid"></div>
+	<hr>
 	
 <script type="text/javascript">
 
@@ -50,11 +51,9 @@
 		$("#txtRsc").val('');
 	})
 	
-	
 	//모달창(자재조회)
 	function clickRsc(rsc){
 		$("#txtRsc").val(rsc);
-		
 		dialog1.dialog("close");
 	};
 
@@ -91,18 +90,18 @@
 	Grid.applyTheme('default');
 	
 	const columns = [
-		  		{
-			    header: '발주일',
-			    name: 'ordeDate',
-			    sortable: true,
-			    sortingType: 'desc'
-			  },
-			  {
-			    header: '발주번호',
-			    name: 'ordrNo',
-			    sortable: true,
-			    sortingType: 'desc'
-			  },
+  				{
+		    	header: '반품번호',
+		    	name: 'rtngdNo',
+		    	sortable: true,
+		    	sortingType: 'desc'
+		  		},
+  				{
+			     header: '자재입고검사번호',
+			     name: 'rscTstNo',
+			     sortable: true,
+			     sortingType: 'desc'
+			  	},
 			  {
 			    header: '자재코드',
 			    name: 'rscCode',
@@ -119,27 +118,25 @@
 				header: '단위',
 				name: 'rscUnit'
 			   },
-			  {
-				header: '발주량',
-				name: 'rscCnt'
-			   },
 			   {
-				 header: '입고량',
-				 name: 'rscPassCnt'
+				 header: '단가',
+				 name: 'rscPrc'
 				},
 				{
-				  header: '불량량',
-				  name: 'rscDefCnt'
+				 header: '합계',
+				 name: 'rscTotal'
+				},
+			  {
+				header: '반품량',
+				name: 'rtngdCnt'
+			   },
+				{
+				  header: '불량코드',
+				  name: 'defCode'
 				},
 				{
-				  header: '업체',
-				  name: 'sucName'
-				},
-				{
-				  header: '입고요청일',
-				  name: 'istReqDate',
-				  sortable: true,
-				  sortingType: 'desc'
+				  header: '불량명',
+				  name: 'defName'
 				}
 			];
 			
@@ -163,8 +160,8 @@
 
 	//조회버튼 클릭시 값 가지고 오는 거
 	$("#btnSelect").on("click", function(){
-			var rscCode = $("#txtRsc").val();
-			var sucCode = $("#txtSuc").val();
+			var rscName = $("#txtRsc").val();
+			var sucName = $("#txtSuc").val();
 			var ordeDate = $("#txtOrde1").val();
 			var ordeDate2 = $("#txtOrde2").val();
 			console.log(ordeDate);
@@ -173,7 +170,7 @@
 			
 			$.ajax({
 				url :'resourcesOrder',
-				data: {'rscCode' : rscCode, 'sucCode': sucCode, 'ordeDate':ordeDate, 'ordeDate2':ordeDate2 },
+				data: {'rscName' : rscName, 'sucName': sucName, 'ordeDate':ordeDate, 'ordeDate2':ordeDate2 },
 				contentType: 'application/json; charset=UTF-8'
 			}).done(function(da){
 				var datalist = JSON.parse(da);
@@ -182,7 +179,9 @@
 			})
 					
 		})
+	
+	
 </script>
-
+	
 </body>
 </html>
