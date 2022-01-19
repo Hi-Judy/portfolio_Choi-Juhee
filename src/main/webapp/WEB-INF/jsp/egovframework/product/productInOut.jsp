@@ -48,7 +48,7 @@
 		{
 			header: '번호' ,
 			name: 'qntInfono' ,
-			hidden : true
+			hidden: true
 		} ,
 		{
 			header: '제품코드' ,
@@ -105,10 +105,11 @@
 				type : 'select' ,
 				options: {
 					listItems: [
-						{ text : '선택' , value: ''} ,
-						{ text : '생산완료' , value: '생산완료'} ,
-						{ text : '출하' , value: '출하'} ,
-						{ text : '미생산출하' , value: '미생산출하'}
+						{ text : '선택' , value: '' } ,
+						{ text : '생산완료' , value: '생산완료' } ,
+						{ text : '출하완료' , value: '출하완료' } ,
+						{ text : '출하' , value: '출하' } ,
+						{ text : '미생산출하' , value: '미생산출하' }
 					]
 				}
 			} ,
@@ -184,79 +185,38 @@
 					async : false ,
 					success : function(datas) {
 						
-						console.log(datas) ;
-						
 						// 조회 누를때마다 중복으로 안들어가도록 함
 						second.생산완료 = [] ;
 						second.출하 = [] ;
 						second.미생산출하 = [] ;
 						
-//						let nextLot = '' ;
-//						let nextLots = [] ;
-//						let maxNum = 0 ;
 						let lots = [] ;
 						let lots2 = [] ;
 						
-// sum qnt가 0보다 큰것만 출하, 미생산출하 일 때 select option에 들어가도록 했는데 , 
-// 문제가 qnt가 0인거 (100개입고되고 100개출고된 Lot)는 select option에 안들어가다보니 ,
-// 이미 들어가있는 데이터의 Lot 번호가 보여지지 않음
 						for (let a = 0 ; a < datas.selectoptions.length ; a++) {
 							lots.push(datas.selectoptions[a].podtLot) ;
-							if (datas.selectoptions[a].qnt > 0) {
-								lots2.push(datas.selectoptions[a].podtLot) ;	
-							}
+							let data = { podtLot : datas.selectoptions[a].podtLot , qnt : datas.selectoptions[a].qnt} ;
+							lots2.push(data) ;	
 						}
-/*							
- 							if (datas.selectoptions[a].comCode != null && datas.selectoptions[a].podtLot != null) {
-								for (let b = 0 ; b < data.length ; b++) {
-									if (datas.selectoptions[a].comCode == data[b].comCode) {
-										if (parseInt(datas.selectoptions[a].podtLot.slice(-3)) < 9) {
-											maxNum = parseInt(datas.selectoptions[a].podtLot.slice(-3)) + 1 ;
-											nextLot = datas.selectoptions[a].comCode + "_00" + maxNum ;
-											nextLots.push(nextLot) ;
-										} else {
-											maxNum = parseInt(datas.selectoptions[a].podtLot.slice(-3)) + 1 ;
-											nextLot = datas.selectoptions[a].comCode + "_0" + maxNum ;
-											nextLots.push(nextLot) ;
-										}
-									} else {
-										
-									}
-								}
-							}	 					
-						}
-						// 최대값
-						let maxNextLot = 'C000000000_000' ;
-						for (let a = 0 ; a < nextLots.length ; a++) {
-							let temp = nextLots[a] ;
-							if (maxNextLot < temp) {
-								maxNextLot = temp ;
-							}
-						}
-						
-						let options1 = { text : maxNextLot , value : maxNextLot} ;
-						
-						second.생산완료.push(options1) ;
-						second.출하.push(options1) ;
-						second.미생산출하.push(options1) ;
-*/						
+
 
 						// 중복제거
 						let set1 = new Set(lots) ;
 						let set2 = [...set1] ;
-						let set3 = new Set(lots2) ;
-						let set4 = [...set3] ;
 						
 						// 중복제거한거 options로 넣음
 						for (let b = 0 ; b < set2.length ; b++) {
 							let options2 = { text : set2[b] , value : set2[b] } ;
 							second.생산완료.push(options2) ;
+							second.출하완료.push(options2) ;
 						}
-						
-						for (let c = 0 ; c < set4.length ; c++) {
-							let options3 = { text : set4[c] , value : set4[c] } ;
-							second.출하.push(options3) ;
-							second.미생산출하.push(options3) ;
+												
+						for (let c = 0 ; c < lots2.length ; c++) {
+							if (lots2[c].qnt > 0) {
+								let options3 = { text : lots2[c].podtLot , value : lots2[c].podtLot } ;
+								second.출하.push(options3) ;
+								second.미생산출하.push(options3) ;	
+							}
 						}
 						
 						grid.resetData(data) ;
@@ -292,6 +252,9 @@
 		'생산완료' : [
 			{ text : '선택' , value : ''}
 		] ,
+		'출하완료' : [
+			{ text : '선택' , value : ''}
+		] ,
 		'출하' : [
 			{ text : '선택' , value : ''}
 		] ,
@@ -306,9 +269,6 @@
 		let value = grid.getValue(ev.rowKey , ev.columnName) ;
 		let lot = ev.columnName ;
 		
-		console.log(lot) ;
-		console.log(value) ;
-		
 		if (value != '' && value != null) {
 			if (lot != 'podtLot' || value != null) {
 				ev.stop() ;	
@@ -317,7 +277,8 @@
 	})
 	
 	$("#btnAdd").on("click" , function() {
-		grid.appendRow({}) ;
+		let data = { podtEtc : '출하'} ;
+		grid.appendRow(data) ;
 	})
 	
 	$("#btnInsert").on("click" , function() {
@@ -350,6 +311,30 @@
 					} ,
 					success : function(datas) {
 						ok = 2 ;
+						
+						podtCode = 'null' ;
+						manDatestart = '1910-12-25' ;
+						manDateend = '1910-12-25' ;
+						
+						$.ajax({
+							url : 'productList' ,
+							dataType : 'json' ,
+							data : {
+								podtCode : podtCode ,
+								manDatestart : manDatestart ,
+								manDateend : manDateend
+							} ,
+							async : false ,
+							success : function(datas) {
+								data = datas.productlist ;
+								
+								grid.resetData(data) ;
+								grid.resetOriginData() ;
+							} ,
+							error : function(reject) {
+								console.log(reject) ;
+							}
+						})
 					} ,
 					error : function(reject) {
 						console.log(reject) ;
@@ -360,7 +345,12 @@
 				alert('수정완료되었습니다') ;
 			}
 		}
+		 
 		if (insertData != '') {
+			let change = insertData[0].podtEtc ;
+			if (change == '출하') {
+				insertData[0].podtEtc = '출하완료' ;
+			}
 			
 			let ok = 1 ;
 			for (let i = 0 ; i < insertData.length ; i++) {
@@ -409,6 +399,7 @@
 							async : false ,
 							success : function(datas) {
 								data = datas.productlist ;
+								
 								grid.resetData(data) ;
 								grid.resetOriginData() ;
 								
@@ -433,7 +424,7 @@
 	var rowNo = new Array() ;
 	
 	grid.on('check' , (ev) => {
-		rowNo[ev.rowKey] = data[ev.rowKey].qntInfono ;
+		rowNo[ev.rowKey] = grid.getValue([ev.rowKey],"qntInfono") ;
 	})
 	
 	grid.on('uncheck' , (ev) => {
