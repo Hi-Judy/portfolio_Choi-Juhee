@@ -96,6 +96,15 @@ public class ProductBomServiceImpl implements ProductBomService {
 		return 0;
 	}
 	
+	//자재BOM 업데이트
+	@Override
+	public void ResUpdate(List<ProductBomVO> bomVO) {
+		for(ProductBomVO BomVO : bomVO) {
+			bomMapper.ResUpdate(BomVO);
+		}
+			
+	}
+	
 	//자재데이터 삭제
 	@Override
 	public int ResDelete(List<ProductBomVO> bomVO) {
@@ -110,6 +119,8 @@ public class ProductBomServiceImpl implements ProductBomService {
 		bomMapper.ResAllDelete(BomVO);
 		return 0;
 	}
+
+	
 	
 	
 

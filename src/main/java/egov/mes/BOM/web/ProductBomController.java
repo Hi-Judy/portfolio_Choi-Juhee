@@ -116,7 +116,7 @@ public class ProductBomController {
 	}
 	
 	
-	//BOM(자재) 데이터 추가
+	//자재BOM 데이터 추가
 	@ResponseBody
 	@PostMapping(value = "ResInsert" ) //보내줄떄 배열로 보냈기떄문에 받을때로 List 배열로 받아야한다.
 	public String ResInsert (@RequestBody List<ProductBomVO> bomVO) {
@@ -126,7 +126,18 @@ public class ProductBomController {
 		return null ;
 	}
 	
-	//BOM(자재) 데이터 삭제
+	
+	//자재BOM 데이터 업데이트
+	@ResponseBody
+	@PostMapping(value = "ResUpdate" ) //보내줄떄 배열로 보냈기떄문에 받을때로 List 배열로 받아야한다.
+	public String ResUpdate (@RequestBody List<ProductBomVO> bomVO) {
+//			System.out.println("업데아트 준비");
+		service.ResUpdate(bomVO);
+				
+		return null ;
+	}
+	
+	//자재BOM 데이터 삭제
 	@ResponseBody
 	@PostMapping(value = "ResDelete" ) //보내줄떄 배열로 보냈기떄문에 받을때로 List 배열로 받아야한다.
 	public String ResDelete (@RequestBody List<ProductBomVO> bomVO) {
