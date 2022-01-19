@@ -27,4 +27,10 @@ public class ManCommandServiceImpl implements ManCommandService{
 		return mapper.selectManPlanDetail(commandVO);
 	}
 
+	//제품 코드 입력했을 때 필요한 공정별 자재 조회
+	@Override
+	public List<ManCommandVO> selectRes(ManCommandVO commandVO) {
+		return mapper.selectRes(commandVO);
+	}
+
 }

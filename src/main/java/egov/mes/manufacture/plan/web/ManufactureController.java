@@ -28,84 +28,83 @@ public class ManufactureController {
 	public String selectPlan() {
 		return "manufacture/manufacture.tiles";
 	}
-	
-	//생산계획 조회
+
+	// 생산계획 조회
 	@PostMapping("/manufacture/manPlan")
 	public String selectManPlan(ManufacturePlanVO planVO, Model model) {
 
-		//System.out.println(planVO);
+		// System.out.println(planVO);
 		model.addAttribute("result", manService.selectManPlan(planVO));
-		//System.out.println("생산계획 조회: " + manService.selectManPlan(planVO));
+		// System.out.println("생산계획 조회: " + manService.selectManPlan(planVO));
 
 		return "jsonView";
 	}
-	
-	
-	//생산계획 디테일 조회
+
+	// 생산계획 디테일 조회
 	@GetMapping("/manufacture/manPlanDetail/{manPlanNo}")
-	public String selectManPlanDetail(@PathVariable String manPlanNo, ManufacturePlanVO planVO, Model model) {
-		
+	public String selectManPlanDetail(@PathVariable String manPlanNo, 
+									  ManufacturePlanVO planVO, 
+									  Model model) {
+
 		Map<String, List<ManufacturePlanVO>> maps = new HashMap<>();
 		maps.put("contents", manService.selectManPlanDetail(planVO));
-
-		Map<String, Object> map = new HashMap<>();
+		 
+		Map<String, Object> map = new HashMap<>(); 
 		map.put("data", maps);
-		
-		model.addAttribute("result",true);
+		 
+		model.addAttribute("result",true); 
 		model.addAttribute("data", maps);
 
+		//model.addAttribute("result", manService.selectManPlanDetail(planVO));
 		System.out.println("생산계획 데테일 조회: " + manService.selectManPlanDetail(planVO));
 
 		return "jsonView";
 	}
-	
-	
-	//자재 조회 모달에서 매핑
+
+	// 자재 조회 모달에서 매핑
 	@PostMapping("/manufacture/resource")
 	public String selectRes(ManufacturePlanVO planVO, Model model) {
-		
-		//System.out.println("@@@@@@@@"+planVO.getPodtCode());
-		
+
+		// System.out.println("@@@@@@@@"+planVO.getPodtCode());
+
 		Map<String, List<ManufacturePlanVO>> maps = new HashMap<>();
 		maps.put("contents", manService.selectRes(planVO));
 
 		Map<String, Object> map = new HashMap<>();
 		map.put("data", maps);
-		
-		model.addAttribute("result",true);
+
+		model.addAttribute("result", true);
 		model.addAttribute("data", maps);
 		return "jsonView";
 	}
-	
-	
-	//미계획 조회 모달에서 매핑
+
+	// 미계획 조회 모달에서 매핑
 	@RequestMapping("/manufacture/plan")
-	public String selectPlan1(ManufacturePlanVO planVO, Model model )  {
-		
+	public String selectPlan1(ManufacturePlanVO planVO, Model model) {
+
 		Map<String, List<ManufacturePlanVO>> maps = new HashMap<>();
-		//쿼리 결과를 contents 안의 배열로 넣기. contents 이름으로 maps에 담기.
+		// 쿼리 결과를 contents 안의 배열로 넣기. contents 이름으로 maps에 담기.
 		maps.put("contents", manService.selectPlan(planVO));
 
 		Map<String, Object> map = new HashMap<>();
-		//contents를 담은 maps를 data 이름으로 map에 담기.
+		// contents를 담은 maps를 data 이름으로 map에 담기.
 		map.put("data", maps);
-		
-		model.addAttribute("result",true);
+
+		model.addAttribute("result", true);
 		model.addAttribute("data", maps);
 		return "jsonView";
 	}
-	
-	
-	//생산계획에서 한 건 추가
+
+	// 생산계획에서 한 건 추가
 	@PostMapping("/manufacture/main")
 	public String modifyDataInsert(@RequestBody ModifyVO<ManufacturePlanVO> list, Model model) {
-		System.out.println("!!!!생산계획추가^^!!!!!!!!!!!!!"+list);
-		System.out.println("!!!!생산계획 주문상태 수정^^!!!!!!!!!!!!!"+list);
+		System.out.println("!!!!생산계획추가^^!!!!!!!!!!!!!" + list);
+		System.out.println("!!!!생산계획 주문상태 수정^^!!!!!!!!!!!!!" + list);
 		manService.insertPlan(list);
-		
-		//System.out.println("!!!!생산계획삭제^^!!!!!!!!!!!!!"+list);
+
+		// System.out.println("!!!!생산계획삭제^^!!!!!!!!!!!!!"+list);
 		model.addAttribute("result", true);
-		
+
 		return "jsonView";
 	}
 

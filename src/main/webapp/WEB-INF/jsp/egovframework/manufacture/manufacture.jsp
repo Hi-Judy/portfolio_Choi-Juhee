@@ -58,7 +58,15 @@
 	
 	
 
+	<!-- 메인화면 그리드 -->
+	<div id = "gridMain"></div>
+	<br>
 	
+	<div style="float:right;">
+		<button type="button" id="btnSavePlan">저장</button>
+		<button type="button" id="btnDeletePlan">삭제</button>
+		<button type="button" id="btnInit">초기화</button>
+	</div>
 	
 	<script> 
 	
@@ -100,6 +108,7 @@
 		    width: 600
 		})
 			
+		//let data2;
 		//생산계획 조회 모달 설정해주기
 		let dialogManPlan = $("#dialog-form-manPlan").dialog({
 			autoOpen: false, 
@@ -109,13 +118,14 @@
 		    buttons: {
 				"확인" : function(){
 					//console.log('확인완료');
-					//console.log(checkedManPlan[0].manPlanNo);
+					console.log(checkedManPlan[0].manPlanNo);
 					$.ajax({
 						url: '${pageContext.request.contextPath}/manufacture/manPlanDetail/'+checkedManPlan[0].manPlanNo,
 						method:'GET', 
 						dataType: 'JSON',
 						success: function(datas){
-							console.log(datas); 
+							//data2 = datas
+							console.log(datas);
 							//확인 버튼 눌렀을 때 체크된 값에 해당하는 데이터를 gridMain에 뿌려준다.
 							gridMain.resetData(datas.data.contents);
 						}
@@ -124,7 +134,7 @@
 				},
 				"취소" : function(){
 					//console.log('취소');
-					dialogPlan.dialog("close");
+					dialogManPlan.dialog("close");
 				}
 			}		
 		})
@@ -404,8 +414,7 @@
 			el : document.getElementById('gridMain'),
 			data : dataSourceMain, //컨트롤러에서 리턴된 결과를 dataSource에 담아서 보여준다.
 			columns : columnsMain,
-			rowHeaders : ['checkbox'],
-			sortable: true
+			rowHeaders : ['checkbox']
 		});
 		
 		
