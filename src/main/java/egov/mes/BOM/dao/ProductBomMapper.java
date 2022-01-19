@@ -20,7 +20,9 @@ public interface ProductBomMapper {
 	
 	
 	int ResInsert (ProductBomVO BomVO); //자재데이터 추가
-	int ResDelete (ProductBomVO BomVO); //자제 데이터 삭제
+	int ResDelete (ProductBomVO BomVO); //자재 데이터 삭제
+	void ResUpdate (ProductBomVO BomVO); //자재 데이터 업데이트
+	
 	int ResAllDelete (ProductBomVO BomVO); //자재BOM 전체 삭제
 	
 }
