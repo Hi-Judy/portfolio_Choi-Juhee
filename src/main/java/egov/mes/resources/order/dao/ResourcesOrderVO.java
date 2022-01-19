@@ -26,6 +26,7 @@ public class ResourcesOrderVO {
 	@JsonFormat(pattern = "yyyy-MM-dd", timezone = "Asia/Seoul")
 	Date istReqDate;	
 
+	String sucCode;
 	String rscUnit;
 	String rscName;
 	String sucName;

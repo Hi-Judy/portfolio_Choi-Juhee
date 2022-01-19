@@ -66,7 +66,7 @@
 						<li class="submenu-item "><a href="resourcesCheck">자재입고검사 관리</a></li>
 						<li class="submenu-item "><a href="resourcesStore">자재 입고 관리</a></li>
 						<li class="submenu-item "><a href="#">자재 입/출고 조회</a></li>
-						<li class="submenu-item "><a href="#">자재 반품 조회</a></li>
+						<li class="submenu-item "><a href="resourcesRtngdList">자재 반품 조회</a></li>
 						<li class="submenu-item "><a href="#">자재 LOT재고 조정 관리</a></li>
 						<li class="submenu-item "><a href="#">자재 LOT재고 조정 조회</a></li>
 						<li class="submenu-item "><a href="#">자재 재고 조회</a></li>

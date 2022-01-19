@@ -2,9 +2,10 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="egov.mes.resources.store.dao.ResourceStoreMapper">
 	
-	<!-- 자재입고관리(검사유무가 'Y'인 품목) -->
+	<!-- 자재입고관리(검사유무가 'Y'인 품목 AND ) -->
 	<select id="findResourcesStore" resultType="egov.mes.resources.store.dao.ResourcesStoreVO">
-		SELECT O.RSC_CODE,
+		SELECT O.ORDR_NO,
+			   O.RSC_CODE,
 			   C.RSC_PASS_CNT, 
 			   FN_GET_CODE_NAME(O.RSC_CODE) AS RSC_NAME,
 			   FN_GET_RSC_PRC(O.RSC_CODE) AS RSC_PRC,
@@ -13,6 +14,7 @@
 		LEFT JOIN RESOURCE_ORDER O
 		ON C.ORDR_NO = O.ORDR_NO
 		WHERE C.TST_FLAG = 'Y'
+		AND O.RSC_ST = '입고'
 	</select>
 	
 	<!-- 자재 LOT번호 부여 후 -> 완전 입고(자재입출고에서 조회 가능) -->
@@ -38,4 +40,42 @@
                 '입고',
                 #{storeEtc})
 	</insert>
+	
+	<!-- 자재입고 LOT 번호 발행 후 자재상태 '입고' -> 자재발주 테이블로 update -->
+	<update id="updateResourcesStore">
+		UPDATE RESOURCE_ORDER 
+        SET RSC_ST = '입고'
+      	WHERE ORDR_NO = #{ordrNo}
+	</update>
+	
+	<!-- 자재 "입고" 조회 select -->
+	<select id="ResourcesStoreIn" resultType="egov.mes.resources.store.dao.ResourcesStoreVO">
+		SELECT STORE_NO,
+        	   RSC_CODE,
+        	   FN_GET_CODE_NAME(RSC_CODE) AS RSC_NAME,
+        	   FN_GET_RSC_UNIT(RSC_CODE) AS RSC_UNIT,
+        	   FN_GET_RSC_PRC(RSC_CODE) AS RSC_PRC,
+        	   IST_CNT,
+        	   RSC_LOT,
+        	   STORE_FLAG,
+        	   STORE_DATE
+		FROM RESOURCE_STORE
+		WHERE STORE_FLAG = '입고'
+	</select>
+	
+	<!-- 자재 "출고" 조회 select -->
+	<select id="ResourcesStoreOut" resultType="egov.mes.resources.store.dao.ResourcesStoreVO">
+		SELECT STORE_NO,
+        	   RSC_CODE,
+        	   FN_GET_CODE_NAME(RSC_CODE) AS RSC_NAME,
+        	   FN_GET_RSC_UNIT(RSC_CODE) AS RSC_UNIT,
+        	   FN_GET_RSC_PRC(RSC_CODE) AS RSC_PRC,
+        	   IST_CNT,
+        	   RSC_LOT,
+        	   STORE_FLAG,
+        	   STORE_DATE
+		FROM RESOURCE_STORE
+		WHERE STORE_FLAG = '입고'	
+	</select>
+	
 </mapper>

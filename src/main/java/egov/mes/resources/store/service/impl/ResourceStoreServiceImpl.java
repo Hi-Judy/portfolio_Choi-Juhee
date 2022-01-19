@@ -14,6 +14,16 @@ public class ResourceStoreServiceImpl implements ResourceStoreService{
 	@Autowired ResourceStoreMapper mapper;
 	
 	@Override
+	public List<ResourcesStoreVO> ResourcesStoreIn(ResourcesStoreVO vo) {
+		return mapper.ResourcesStoreIn(vo);
+	}
+
+	@Override
+	public List<ResourcesStoreVO> ResourcesStoreOut(ResourcesStoreVO vo) {
+		return mapper.ResourcesStoreOut(vo);
+	}
+	
+	@Override
 	public List<ResourcesStoreVO> findResourcesStore(ResourcesStoreVO vo) {
 		return mapper.findResourcesStore(vo);
 	}
@@ -23,9 +33,8 @@ public class ResourceStoreServiceImpl implements ResourceStoreService{
 		if(mvo.getUpdatedRows() != null) {
 			for(ResourcesStoreVO vo :mvo.getUpdatedRows()) {
 				mapper.insertResourcesStore(vo);
+				mapper.updateResourcesStore(vo);
 			}
 		}
-		
 	}
-
 }

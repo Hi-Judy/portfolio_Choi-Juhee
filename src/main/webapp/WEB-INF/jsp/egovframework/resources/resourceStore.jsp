@@ -18,7 +18,7 @@
 <script src="https://code.jquery.com/ui/1.13.0/jquery-ui.js"></script>
 </head>
 <body>
-	<h2>자재 입/출고 관리</h2>
+	<h2>자재입고관리</h2>
 	<hr>
 		<button id="findResourcesStore">조회</button>
 		<button id="saveResourcesStore">저장</button>
@@ -31,6 +31,10 @@
 	Grid.applyTheme('default');
 	
 	const columns = [
+			{
+		    header: '발주번호',
+		    name: 'ordrNO'
+		  	},
 		  		{
 			    header: '자재코드',
 			    name: 'rscCode'
