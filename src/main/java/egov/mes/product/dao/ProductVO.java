@@ -25,4 +25,5 @@ public class ProductVO {
 	String qnt ;
 	
 	String comCode ;
+	String comNoDetail ;
 }
