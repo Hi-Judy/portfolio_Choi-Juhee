@@ -37,7 +37,6 @@
 	
 	<div id="findProduct" title="제품코드검색">
 		<input id="podtName"><button id="btnPodtSearch">검색</button>
-		<button type="button" id="btnClose">닫기</button>
 		<div id="podtResult"></div>
 	</div>
 <script>
@@ -184,21 +183,21 @@
 					dataType : 'json' ,
 					async : false ,
 					success : function(datas) {
-
+						
 						// 조회 누를때마다 중복으로 안들어가도록 함
 						second.생산완료 = [] ;
 						second.출하 = [] ;
 						second.미생산출하 = [] ;
-
+						
 						let lots = [] ;
 						let lots2 = [] ;
 						
-
 						for (let a = 0 ; a < datas.selectoptions.length ; a++) {
 							lots.push(datas.selectoptions[a].podtLot) ;
 							let data = { podtLot : datas.selectoptions[a].podtLot , qnt : datas.selectoptions[a].qnt} ;
 							lots2.push(data) ;	
 						}
+
 
 						// 중복제거
 						let set1 = new Set(lots) ;
@@ -216,10 +215,6 @@
 								let options3 = { text : lots2[c].podtLot , value : lots2[c].podtLot } ;
 								second.출하.push(options3) ;
 								second.미생산출하.push(options3) ;	
-                
-							}else{
-								let options4 = { text : lots2[c].podtLot , value : lots2[c].podtLot, hidden } ;
-								second.미생산출하.push(options4) ;								
 							}
 						}
 						
@@ -495,7 +490,14 @@
 		autoOpen : false ,
 		modal : true ,
 		width : 600 ,
-		height : 400
+		height : 400 ,
+		buttons : {
+			"닫기" : function() {
+				dialog.dialog("close") ;
+				grid2.clear() ;
+				$("#podtName").val("") ;
+			}
+		}
 	})
 	
 	$("#btnSearch").on("click" , function() {
@@ -556,12 +558,6 @@
 		$("#txtPodtCode").val(cusCode) ;
 		grid2.clear() ;
 		dialog.dialog("close") ;
-		$("#podtName").val("") ;
-	})
-	
-	$("#btnClose").on("click" , function() {
-		dialog.dialog("close") ;
-		grid2.clear() ;
 		$("#podtName").val("") ;
 	})
 	//---------- ↑제품코드찾기 ----------

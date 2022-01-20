@@ -29,7 +29,6 @@
 	
 	<div id="findCustomer" title="업체검색"">
 		<input id="cusName"><button id="btnCusSearch">검색</button>
-		<button type="button" id="btnClose2">닫기</button>
 		<div id="cusResult"></div>
 	</div>
 <script>
@@ -130,7 +129,14 @@
 		autoOpen : false ,
 		modal : true ,
 		width : 600 ,
-		height : 400
+		height : 400 ,
+		buttons: {
+			"닫기" : function() {
+				dialog2.dialog("close") ;
+				grid3.clear() ;
+				$("#cusName").val("") ;
+			}
+		}
 	})
 	
 	$("#btnSearch2").on("click" , function() {
@@ -191,12 +197,6 @@
 		$("#txtCusCode").val(cusCode) ;
 		grid3.clear() ;
 		dialog2.dialog("close") ;
-		$("#cusName").val("") ;
-	})
-	
-	$("#btnClose2").on("click" , function() {
-		dialog2.dialog("close") ;
-		grid3.clear() ;
 		$("#cusName").val("") ;
 	})
 	//---------- ↑업체찾기 ----------

@@ -38,13 +38,11 @@
 	
 	<div id="findFacility" title="설비검색">
 		<input id="facName"><button id="btnfacSearch">검색</button>
-		<button type="button" id="btnClose1">닫기</button>
 		<div id="facResult"></div>
 	</div>
 	
 	<div id="selectFacility" title="비가동내역" align="center">
 		<div id="selectInfo"></div>
-		<button type="button" id="btnClose2">닫기</button>
 	</div>	
 <script>
 
@@ -234,7 +232,14 @@
 		autoOpen : false ,
 		modal : true ,
 		width : 600 ,
-		height : 400
+		height : 400 ,
+		buttons : {
+			"닫기" : function() {
+				dialog.dialog("close") ;
+				grid2.clear() ;
+				$("#facName").val("") ;
+			}
+		}
 	})
 	
 	$("#btnSearch").on("click" , function() {
@@ -297,19 +302,18 @@
 		dialog.dialog("close") ;
 		$("#facName").val("") ;
 	})
-	
-	$("#btnClose1").on("click" , function() {
-		dialog.dialog("close") ;
-		grid2.clear() ;
-		$("#facName").val("") ;
-	})
 	//---------- ↑설비찾기 ----------
 	//---------- ↓상세정보 ----------	
 	let dialog2 = $("#selectFacility").dialog({
 		autoOpen : false ,
 		modal : true ,
 		width : 600 ,
-		height : 400
+		height : 400 ,
+		buttons : {
+			"닫기" : function() {
+				dialog2.dialog("close") ;
+			}
+		}
 	}) ;
 	
 	const columns3 = [
@@ -346,10 +350,6 @@
 		data : data3 ,
 		columns : columns3
 	})
-	
-	$("#btnClose2").on("click" , function() {
-		dialog2.dialog("close") ;
-	}) ;
 	
 	grid.on('click' , (ev) => {
 		

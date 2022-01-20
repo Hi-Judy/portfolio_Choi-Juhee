@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="egov.mes.defective.dao.DefectiveMapper">
+	
+	<!-- 일자별 제품찾기 -->
+	<select id="findPodtCode" resultType="egov.mes.defective.dao.DefectiveVO">
+		select man_date , podt_code , fn_get_code_name(podt_code) as codeName 
+		from manufacture_process
+		where 1=1
+		
+		<if test="fromDate != null">
+			<![CDATA[
+				and to_char(man_date , 'yyyy-MM-dd') >= #{fromDate}
+			]]>
+		</if>
+		
+		<if test="toDate != null">
+			<![CDATA[
+				and to_char(man_date , 'yyyy-MM-dd') <= #{toDate}
+			]]>
+		</if>
+		order by man_date ASC
+	</select>
+	
+</mapper>
