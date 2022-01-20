@@ -48,13 +48,6 @@ public class ManCommandVO {
 		String facRuntime; //설비당 소요시간
 		String outputDay; //일 생산량
 		
-	
-	
-	//공정
-	String resCode; //자재코드
-	String resUsage; //자재소요량
-	String procCode; //공정코드
-	String ProcName; //공정명
-	
+
 	
 }
