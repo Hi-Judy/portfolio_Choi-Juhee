@@ -95,8 +95,9 @@
 
 <!-- 생산계획 디테일 조회 -->
 <select id="selectManPlanDetail" resultType="egov.mes.manufacture.plan.dao.ManufacturePlanVO">
-	select a.man_plan_no, a.podt_code, prod_detail(a.podt_code), a.plan_startdate, a.plan_period, a.man_perday, a.plan_etc, a.plan_complete, 
-          b.ord_code, b.ord_status, b.ord_duedate, b.ord_qnt
+	select a.man_plan_no, a.podt_code, prod_detail(a.podt_code) podtName, 
+		   a.plan_startdate, a.plan_period, a.man_perday, a.plan_etc, a.plan_complete, 
+           b.ord_code, b.ord_status, b.ord_duedate, b.ord_qnt
 	from man_plan_view a left join ord_detail_view b
 	on a.podt_code = b.podt_code
 	where a.man_plan_no = #{manPlanNo}

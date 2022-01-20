@@ -15,7 +15,7 @@ public class ManCommandServiceImpl implements ManCommandService{
 	@Autowired
 	private ManCommandMapper mapper;
 	
-	//생산계획 디테일 조회(생산지시 관리 페이지)
+	//지시가 없는 생산계획 디테일 조회(생산지시 관리 페이지)
 	@Override
 	public List<ManCommandVO> selectManPlan(ManCommandVO commandVO) {
 		return mapper.selectManPlan(commandVO);
@@ -26,5 +26,18 @@ public class ManCommandServiceImpl implements ManCommandService{
 	public List<ManCommandVO> selectManPlanDetail(ManCommandVO commandVO) {
 		return mapper.selectManPlanDetail(commandVO);
 	}
+	
+	//제품 코드 입력했을 때 필요한 공정별 자재 조회
+	@Override
+	public List<ManCommandVO> selectRes(ManCommandVO commandVO) {
+		return mapper.selectRes(commandVO);
+	}
+
+	//제품 만드는데 필요한 공정에 해당하는 설비 조회
+	@Override
+	public List<ManCommandVO> selectFac(ManCommandVO commandVO) {
+		return mapper.selectFac(commandVO);
+	}
+	
 
 }

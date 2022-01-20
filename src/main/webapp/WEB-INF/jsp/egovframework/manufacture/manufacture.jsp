@@ -58,7 +58,15 @@
 	
 	
 
+	<!-- 메인화면 그리드 -->
+	<div id = "gridMain"></div>
+	<br>
 	
+	<div style="float:right;">
+		<button type="button" id="btnSavePlan">저장</button>
+		<button type="button" id="btnDeletePlan">삭제</button>
+		<button type="button" id="btnInit">초기화</button>
+	</div>
 	
 	<script> 
 	
@@ -100,6 +108,7 @@
 		    width: 600
 		})
 			
+		//let data2;
 		//생산계획 조회 모달 설정해주기
 		let dialogManPlan = $("#dialog-form-manPlan").dialog({
 			autoOpen: false, 
@@ -108,14 +117,15 @@
 		    width: 900,
 		    buttons: {
 				"확인" : function(){
-					//console.log('확인완료');
-					//console.log(checkedManPlan[0].manPlanNo);
+					console.log('확인완료');
+					console.log(checkedManPlan[0].manPlanNo);
 					$.ajax({
 						url: '${pageContext.request.contextPath}/manufacture/manPlanDetail/'+checkedManPlan[0].manPlanNo,
 						method:'GET', 
 						dataType: 'JSON',
 						success: function(datas){
-							console.log(datas); 
+							//data2 = datas
+							console.log(datas);
 							//확인 버튼 눌렀을 때 체크된 값에 해당하는 데이터를 gridMain에 뿌려준다.
 							gridMain.resetData(datas.data.contents);
 						}
@@ -124,7 +134,7 @@
 				},
 				"취소" : function(){
 					//console.log('취소');
-					dialogPlan.dialog("close");
+					dialogManPlan.dialog("close");
 				}
 			}		
 		})
@@ -182,7 +192,6 @@
 				name: '재고량'
 			}
 		]
-
 		//생산계획조회 컬럼
 		const columnsManPlan = [
 			{
@@ -215,7 +224,8 @@
 			},
 			{
 				header:'주문상태',
-				name: 'ordStatus'
+				name: 'ordStatus',
+				hidden: true
 			},
 			{
 				header:'고객코드',
@@ -236,23 +246,28 @@
 				name: 'ordDuedate'
 			},
 			{
-				header: '예상작업기간',
+				header: '작업기간',
 				name: 'planPeriod',
 				editor: 'text'
 			},
 			{
-				header: '예상작업시작일',
+				header: '작업시작일',
 				name: 'planStartDate',
 				editor: 'datePicker'
 			},
 			{
-				header: '예상작업종료일',
+				header: '작업종료일',
 				name: 'planComplete',
 				editor: 'datePicker'
 			},
 			{
-				header: '생산량',
+				header: '일생산량(UPH*12)',
 				name: 'manPerday',
+				editor: 'text'
+			},
+			{
+				header: '실 작업량',
+				name: 'manQnt',
 				editor: 'text'
 			},
 			{
@@ -261,7 +276,6 @@
 				editor: 'text'
 			}
 		]
-
 		
 		//미계획 조회 그리드
 		const dataSourcePlan = {
@@ -306,7 +320,6 @@
 		
 		gridPlan.on('check', function(ev){
 				checkedPlan=gridPlan.getCheckedRows();
-
 				checkedOrd = gridPlan.getValue(ev.rowKey, 'ordCode'); //체크된 row의 주문코드
 				//console.log(gridPlan.getValue(ev.rowKey, 'podtCode')); //그리드에서 제품코드 가져오기
 		});
@@ -345,7 +358,7 @@
 		
 		//생산계획 조회 버튼 클릭
 		$('#btnSearchManPlan').click(function(){
-			//console.log('생산계획조회 테스트');
+			console.log('생산계획조회 테스트');
 			let dateFrom = document.getElementById('txtFromDate');
 			let dateTo = document.getElementById('txtToDate');
 			
@@ -360,8 +373,10 @@
 				dataType: 'JSON',
 				success: function(datas){
 					data = datas;
+					console.log(data);
 					gridManPlan.resetData(data.result);
 					gridManPlan.resetOriginData();
+					gridManPlan.refreshLayout();
 				},
 				error: function(reject){
 					console.log('reject: '+ reject);
@@ -404,8 +419,7 @@
 			el : document.getElementById('gridMain'),
 			data : dataSourceMain, //컨트롤러에서 리턴된 결과를 dataSource에 담아서 보여준다.
 			columns : columnsMain,
-			rowHeaders : ['checkbox'],
-			sortable: true
+			rowHeaders : ['checkbox']
 		});
 		
 		

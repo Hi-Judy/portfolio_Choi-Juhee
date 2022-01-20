@@ -33,9 +33,9 @@ public class ManufactureController {
 	@PostMapping("/manufacture/manPlan")
 	public String selectManPlan(ManufacturePlanVO planVO, Model model) {
 
-		//System.out.println(planVO);
+		System.out.println(planVO);
 		model.addAttribute("result", manService.selectManPlan(planVO));
-		//System.out.println("생산계획 조회: " + manService.selectManPlan(planVO));
+		System.out.println("생산계획 조회: " + manService.selectManPlan(planVO));
 
 		return "jsonView";
 	}

@@ -26,11 +26,30 @@ public class ManCommandController {
 		return "manufacture/manCommand.tiles";
 	}
 	
-	//생산계획 디테일 조회
+	//제품 만드는데 필요한 공정에 해당하는 설비 조회
+	@PostMapping("/selectFac")
+	public String selectFac(ManCommandVO commandVO, Model model) {
+		model.addAttribute("result", service.selectFac(commandVO));
+		System.out.println("설비조회: "+ service.selectFac(commandVO));
+		
+		return "jsonView";
+	}
+	
+	
+	//제품 코드 입력했을 때 필요한 공정별 자재 조회
+	@PostMapping("/selectRes")
+	public String selectRes(ManCommandVO commandVO, Model model) {
+		model.addAttribute("result", service.selectRes(commandVO));
+		//System.out.println("자재조회: " + service.selectRes(commandVO));
+		
+		return "jsonView";
+	}
+	
+	//지시가 없는 생산계획 디테일 조회
 	@PostMapping("/selectManPlan")
 	public String selectManPlan(ManCommandVO commandVO, Model model) {
 		model.addAttribute("result", service.selectManPlan(commandVO));
-		System.out.println("생산계획 조회: " + service.selectManPlan(commandVO));
+		//System.out.println("생산계획 조회: " + service.selectManPlan(commandVO));
 		
 		return "jsonView";
 	}
@@ -49,7 +68,7 @@ public class ManCommandController {
 		model.addAttribute("result", true);
 		model.addAttribute("data", maps);
 		
-		System.out.println("생산계획 디테일 상세조회: "+ service.selectManPlanDetail(commandVO));
+		//System.out.println("생산계획 디테일 상세조회: "+ service.selectManPlanDetail(commandVO));
 		return "jsonView";
 	}
 } 
