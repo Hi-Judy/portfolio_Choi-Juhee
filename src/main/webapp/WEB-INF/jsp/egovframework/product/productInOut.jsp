@@ -276,7 +276,7 @@
 	})
 	
 	$("#btnAdd").on("click" , function() {
-		let data = { podtEtc : '출하'} ;
+		let data = { podtEtc : '출하' , podtInput : '0'} ;
 		grid.appendRow(data) ;
 	})
 	

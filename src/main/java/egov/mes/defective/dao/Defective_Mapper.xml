@@ -22,4 +22,12 @@
 		order by man_date ASC
 	</select>
 	
+	<select id="selectPodtCode" resultType="egov.mes.defective.dao.DefectiveVO">
+		select def_code , fn_get_code_name(def_code) as codeName , 
+			( select podt_code from product where podt_code = #{podtCode} ) , 
+			fn_get_code_name(#{podtCode}) as codeName , proc_code , fn_get_code_name(proc_code) as codeName ,
+			man_date , def_qnt
+		from defective_product_info
+	</select>
+	
 </mapper>
