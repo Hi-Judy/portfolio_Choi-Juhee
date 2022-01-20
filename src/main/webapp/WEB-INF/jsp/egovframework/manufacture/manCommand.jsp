@@ -39,7 +39,7 @@
 		<p style="display:inline-block;"> ~ </p>
 		<input id = "planToDate" type="date" name="to" style="display:inline-block;">
 		
-		<button type="button" id="btnSearchManPlan">생산계획 조회</button><br>
+		<button type="button" id="btnSearchManPlan" style="display:inline-block;">생산계획 조회</button><br>
 		
 		<!-- 생산계획 조회 모달 -->
 		<div id = "dialog-form-manPlan" title="생산계획 조회">
@@ -49,20 +49,23 @@
 	<br>
 	
 	<!-- 자재조회 -->
-	<div class = "resource">
+	<div>
 		<p style="display:inline-block;"> 제품코드 </p>
 		<input id="txtPodt"> 
 		<button type="button" id="btnSelectRes">자재 조회</button>
-		
-		<!-- 자재조회 모달 -->
-		<div id = "dialog-form-resource" title="자재 조회">
-			<div id="gridResource"></div>
-		</div>
+		<button type="button" id="btnSelectFac">설비 조회</button>
 	</div>
-	<br>
 	
 	<!-- 메인화면 그리드 -->
-	<div id = "gridMain"></div>
+	<div id = "gridMain" ></div>
+	<br>
+	
+	<!-- 자재조회 모달 -->
+	<div id="gridResource" class="col-sm-6"></div>
+	<br>
+	
+	<!-- 설비조회 모달 -->
+	<div id="gridFacility" class="col-sm-9"></div>
 	<br>
 	
 	<div style="float:right;">
@@ -131,14 +134,6 @@
 			{
 				header: '제품명',
 				name: 'podtName'
-			},
-			{
-				header:'주문량',
-				name: 'ordQnt'
-			},
-			{
-				header: '납기일자',
-				name: 'ordDuedate'
 			},
 			{
 				header:'계획일자',
@@ -259,14 +254,14 @@
 		});
 		
 		
-		//******************************자재조회 모달******************************
+		//******************************자재조회 그리드******************************
 		//자재 모달 설정해주기
-		let dialogResource = $("#dialog-form-resource").dialog({
+	/* 	let dialogResource = $("#dialog-form-resource").dialog({
 			autoOpen: false, 
 			modal: true,
 			height: 500,
 		    width: 900
-		})
+		}) */
 		
 		//자재 조회 모달 컬럼
 		const columnsResource = [
@@ -292,21 +287,26 @@
 			},
 			{
 				header: '공정명',
-				name: 'ProcName'
+				name: 'procName'
+			},
+			{
+				header: '자재확보유무',
+				name: 'resObtain'
 			}
 		]
 		
 		let resData;
-		
+	
 		//자재조회 버튼 클릭 이벤트
 		$('#btnSelectRes').click(function(){
 			//console.log('자재조회 테스트');
 			
 			let podtCode = document.querySelector('#txtPodt').value;
 			
-			console.log(podtCode);
+			//console.log(podtCode);
 			
-			dialogResource.dialog("open");
+			//dialogResource.dialog("open");
+			gridResource.refreshLayout();
 			$.ajax({
 				url: '${pageContext.request.contextPath}/selectRes',
 				method: 'POST',
@@ -328,6 +328,72 @@
 			el: document.getElementById('gridResource'),
 			data: resData,
 			columns: columnsResource,
+			rowHeaders: ['rowNum']
+		})
+		
+		
+		//******************************설비 그리드******************************
+		const columnsFac = [
+			{
+				header:'작업번호',
+				name: 'facNo'
+			},
+			{
+				header:'설비코드',
+				name: 'facCode'
+			},
+			{
+				header:'설비명',
+				name: 'facName'
+			},
+			{
+				header:'공정코드',
+				name: 'procCode'
+			},
+			{
+				header:'공정명',
+				name: 'procCode'
+			},
+			{
+				header:'가동유무',
+				name: 'facStatus'
+			},
+			{
+				header:'설비 일 생산량',
+				name: 'outputDay'
+			}
+		]
+		
+		let facData;
+		
+		//설비조회 버튼 클릭 이벤트
+		$('#btnSelectFac').click(function(){
+			console.log('설비조회 테스트');
+			
+			let podtCode = document.querySelector('#txtPodt').value;
+			console.log(podtCode);
+			
+			$.ajax({
+				url: '${pageContext.request.contextPath}/selectFac',
+				method: 'POST',
+				data: {'podtCode' : podtCode },
+				dataType: 'JSON',
+				success: function(datas){
+					facData = datas;
+					gridFacility.resetData(facData.result);
+					gridFacility.resetOriginData();
+				},
+				error: function(reject){
+					console.log(reject);
+				}
+			})
+		})
+		
+		//설비조회 그리드 내용
+		let gridFacility = new Grid({
+			el: document.getElementById('gridFacility'),
+			data: facData,
+			columns: columnsFac,
 			rowHeaders: ['rowNum']
 		})
 		

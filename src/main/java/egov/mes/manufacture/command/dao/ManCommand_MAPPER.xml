@@ -3,6 +3,20 @@
 
 <mapper namespace="egov.mes.manufacture.command.dao.ManCommandMapper">
 
+
+<!-- 제품 만드는데 필요한 공정에 해당하는 설비 조회 -->
+<select id="selectFac" resultType="egov.mes.manufacture.command.dao.ManCommandVO">
+	select c.podt_code, c.proc_code, prod_detail(c.proc_code) procName,
+	       d.fac_no, d.fac_code, prod_detail(d.fac_code) facName, d.fac_status, d.fac_output/d.fac_runtime*24 outputDay
+	from process_flowInfo c left join (select a.fac_no, a.fac_code, prod_detail(a.fac_code), a.fac_status,
+	                                          b.proc_code, a.fac_output , a.fac_runtime
+	                                   from facility_status a join facility_process b
+	                                   on a.fac_no = b.fac_no ) d 
+	on c.proc_code = d.proc_code
+	where c.podt_code = #{podtCode}
+</select>
+
+
 <!-- 제품 코드 입력했을 때 필요한 공정별 자재 조회 -->
 <select id="selectRes" resultType="egov.mes.manufacture.command.dao.ManCommandVO">
 	select podt_code, prod_detail(podt_code) podtName, res_code, res_usage, proc_code, prod_detail(proc_code) ProcName
@@ -11,32 +25,24 @@
 	order by proc_code
 </select>
 
-<!-- 생산계획 디테일 상세 조회(생산지시서 관리 페이지) -->
-<select id="selectManPlanDetail" resultType="egov.mes.manufacture.command.dao.ManCommandVO">
-	select a.podt_code,  a.ord_duedate,
-	       b.plan_no_detail, b.podt_code, prod_detail(b.podt_code) podtName, b.ord_qnt
-	from ord_detail_view a join manufacture_plan_d b
-	on a.podt_code = b.podt_code
-	where b.plan_no_detail = #{planNoDetail}
-</select>
 
-<!-- 생산계획 디테일 조회 (생산지시서 관리 페이지) -->
+<!-- 지시가 없는 생산계획 디테일 조회 (생산지시서 관리 페이지) -->
 <select id="selectManPlan" resultType="egov.mes.manufacture.command.dao.ManCommandVO">
-	select  a.podt_code, prod_detail(a.podt_code) podtName,  a.plan_no_detail, a.man_plan_date, a.man_plan_name,
-            b.ord_code, b.ord_duedate, b.ord_qnt
-	from man_plan_view a join ord_detail_view b
-	on a.ord_code = b.ord_code
-	and a.podt_code = b.podt_code
-	<where>
+	select a.podt_code, prod_detail(a.podt_code) podtName, a.man_plan_name, a.man_plan_date, a.plan_no_detail
+	from man_plan_view a left outer join manufacture_command b
+	on a.man_plan_no = b.man_plan_no
+	where b.com_name is null
+
 		<if test = "planFromDate != null"> 
 			and to_char(a.man_plan_date, 'rrrr-MM-dd') >= #{planFromDate}
 		</if>
 		<if test= "planToDate != null">
 			and #{planToDate} >=  to_char(a.man_plan_date, 'rrrr-MM-dd')
 		</if>
-	</where>
-	order by a.plan_no_detail
-	
+
+	order by a.man_plan_no
+
+
 </select>
 
 
