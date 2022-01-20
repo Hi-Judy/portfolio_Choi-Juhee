@@ -44,9 +44,13 @@
 	
 	//리스트에서 선택한 값 가지고 오기...$(여기 어떻게 쓰지? )
 	gridRsc.on("dblclick", (ev) => {
-		console.log(gridRsc.getValue(ev["rowKey"],ev["columnName"]));
-		var rsc = gridRsc.getValue(ev["rowKey"],ev["columnName"]);
-		clickRsc(rsc)
+		console.log(gridRsc.getValue(ev["rowKey"],'rscCode'));
+		console.log(gridRsc.getValue(ev["rowKey"],'rscName'));
+		//var rsc = gridRsc.getValue(ev["rowKey"],ev["columnName"]);
+		
+		var rscCode = gridRsc.getValue(ev["rowKey"],'rscCode');
+		var rscName = gridRsc.getValue(ev["rowKey"],'rscName');
+		clickRsc(rscCode, rscName)
 	});
 
 

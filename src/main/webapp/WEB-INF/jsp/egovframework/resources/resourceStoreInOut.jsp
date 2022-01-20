@@ -18,12 +18,19 @@
 <script src="https://code.jquery.com/ui/1.13.0/jquery-ui.js"></script>
 </head>
 <body>
-	<h2>자재입고조회</h2>
+	<h2>자재입/출고조회</h2>
+<div id="tabs">
+  <ul>
+    <li><a href="#tabs-1">입고</a></li>
+    <li><a href="#tabs-2">출고</a></li>
+  </ul>
+  
+  <div id="tabs-1">
 	<hr>
 	입고일자  <input id="txtOrde1" type="date" data-role="datebox" data-options='{"mode": "calbox"}'>
 	~ 		<input id="txtOrde2" type="date" data-role="datebox" data-options='{"mode": "calbox"}'><br>
-	입고업체  <input id="txtSuc"><button id="btnFindSuc">돋보기</button><br>
-	자재명   <input id="txtRsc"><button id="btnFindRsc">돋보기</button><br>
+	업체코드  <input id="txtSuc1">  <button id="btnFindSuc">돋보기</button>  업체명 <input id="txtSuc2" readonly><br>
+	자재코드  <input id="txtRsc1">  <button id="btnFindRsc">돋보기</button>  자재명 <input id="txtRsc2" readonly><br>
 	<div id="dialog-form-rsc" title="자재 검색"></div>
 	<div id="dialog-form-suc" title="업체 검색"></div>
 	<br>
@@ -33,9 +40,36 @@
 	<button>엑셀</button>
 	<hr>	
 	<div id="grid"></div>
-	
+  </div>
+  
+  
+  <div id="tabs-2">
+	<hr>
+	출고일자  <input id="txtOrde1" type="date" data-role="datebox" data-options='{"mode": "calbox"}'>
+	~ 		<input id="txtOrde2" type="date" data-role="datebox" data-options='{"mode": "calbox"}'><br>
+	업체코드  <input id="txtSuc1">  <button id="btnFindSuc">돋보기</button>  업체명 <input id="txtSuc2" readonly><br>
+	자재코드  <input id="txtRsc1">  <button id="btnFindRsc">돋보기</button>  자재명 <input id="txtRsc2" readonly><br>
+	<div id="dialog-form-rsc" title="자재 검색"></div>
+	<div id="dialog-form-suc" title="업체 검색"></div>
+	<br>
+	<button id="btnSelect">조회</button>
+	<button id="btn_reset" type="reset">초기화</button>
+
+	<button>엑셀</button>
+	<hr>	
+	<div id="grid"></div>
+  </div>
+
+</div>
+
+ 
 <script type="text/javascript">
-	//발주일자 초기값 
+
+$(function() {
+    $( "#tabs" ).tabs();
+  });
+
+	//입고일자 초기값 
 	var d = new Date();
 	var nd = new Date(d.getFullYear(), d.getMonth(), d.getDate() - 7);
 	document.getElementById('txtOrde1').value = nd.toISOString().slice(0, 10);
@@ -45,18 +79,20 @@
 	$("#btn_reset").on("click", function(){
 		document.getElementById('txtOrde1').value = nd.toISOString().slice(0, 10);
 		document.getElementById('txtOrde2').value = d.toISOString().slice(0, 10);
-		$("#txtSuc").val('');
-		$("#txtRsc").val('');
+		$("#txtSuc1").val('');
+		$("#txtSuc2").val('');
+		$("#txtRsc1").val('');
+		$("#txtRsc2").val('');
 	})
 	
 	
 	//모달창(자재조회)
-	function clickRsc(rsc){
-		$("#txtRsc").val(rsc);
-		
+	function clickRsc(rscCode, rscName){
+		$("#txtRsc1").val(rscCode);
+		$("#txtRsc2").val(rscName);
 		dialog1.dialog("close");
 	};
-	
+
 	let dialog1 = $( "#dialog-form-rsc" ).dialog({
 			autoOpen: false,
 			modal: true
@@ -67,13 +103,16 @@
 		$("#dialog-form-rsc").load("recList2",
 				function(){console.log("로드됨")})
 		});
-	
+
 	//모달창(업체조회)
-	function clickSuc(suc){
-		$("#txtSuc").val(suc);
+	function clickSuc(sucCode, sucName){
+		console.log(sucCode);
+		console.log(sucName);
+		$("#txtSuc1").val(sucCode);
+		$("#txtSuc2").val(sucName);
 		dialog2.dialog("close");
 	};
-	
+
 	let dialog2 = $("#dialog-form-suc").dialog({
 			autoOpen: false,
 			modal: true
@@ -114,7 +153,7 @@
 			   },
 			  {
 				header: '단가',
-				name: 'pscPrc'
+				name: 'rscPrc'
 				},
 			   {
 				 header: '업체',
@@ -136,11 +175,10 @@
 	let dataSource = {
 		  api: {
 		    readData: { 
-		    	url: 'resourcesOrder', 
+		    	url: 'resourceStoreInOutList', 
 		    	method: 'GET'
 		    	}
 		  },
-		  //initialRequest: false,
 		  contentType: 'application/json'
 		};
 	
@@ -161,7 +199,7 @@
 			console.log(ordeDate2);
 			
 			$.ajax({
-				url :'resourcesOrder',
+				url :'resourceStoreInOutList',
 				data: {'rscCode' : rscCode, 'sucCode': sucCode, 'ordeDate':ordeDate, 'ordeDate2':ordeDate2 },
 				contentType: 'application/json; charset=UTF-8'
 			}).done(function(da){

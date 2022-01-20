@@ -14,7 +14,7 @@
 		LEFT JOIN RESOURCE_ORDER O
 		ON C.ORDR_NO = O.ORDR_NO
 		WHERE C.TST_FLAG = 'Y'
-		AND O.RSC_ST = '입고'
+		AND O.RSC_ST = '검사'
 	</select>
 	
 	<!-- 자재 LOT번호 부여 후 -> 완전 입고(자재입출고에서 조회 가능) -->

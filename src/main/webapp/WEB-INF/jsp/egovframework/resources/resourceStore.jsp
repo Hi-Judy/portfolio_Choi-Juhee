@@ -31,10 +31,10 @@
 	Grid.applyTheme('default');
 	
 	const columns = [
-			{
-		    header: '발주번호',
-		    name: 'ordrNO'
-		  	},
+				{
+			    header: '발주번호',
+			    name: 'ordrNo'
+			  	},
 		  		{
 			    header: '자재코드',
 			    name: 'rscCode'

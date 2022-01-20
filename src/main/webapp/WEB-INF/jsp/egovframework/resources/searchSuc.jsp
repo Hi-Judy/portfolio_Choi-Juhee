@@ -16,11 +16,11 @@
 	var columnsSuc = [
 			{
 			 header:'업체코드',
-			 name: 'code'
+			 name: 'sucCode'
 			},
 			{
 			 header: '업체명',
-			 name: 'codeName'
+			 name: 'sucName'
 			 }
 			];
 				
@@ -43,10 +43,10 @@
 	
 	//리스트에서 선택한 값 가지고 오기...$(여기 어떻게 쓰지? )
 	gridSuc.on("dblclick", (ev) => {
-		console.log(gridSuc.getFocusedCell());
-		console.log(gridSuc.getData());
-		var suc = gridSuc.getValue(ev["rowKey"],ev["columnName"]);
-		clickSuc(suc)
+		var sucCode = gridSuc.getValue(ev["rowKey"],'sucCode');
+		var sucName = gridSuc.getValue(ev["rowKey"],'sucName');
+		//var suc = gridSuc.getValue(ev["rowKey"],ev["columnName"]);
+		clickSuc(sucCode, sucName)
 	});
 
 </script>
