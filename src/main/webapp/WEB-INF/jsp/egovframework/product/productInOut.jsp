@@ -37,7 +37,6 @@
 	
 	<div id="findProduct" title="제품코드검색">
 		<input id="podtName"><button id="btnPodtSearch">검색</button>
-		<button type="button" id="btnClose">닫기</button>
 		<div id="podtResult"></div>
 	</div>
 <script>
@@ -491,7 +490,14 @@
 		autoOpen : false ,
 		modal : true ,
 		width : 600 ,
-		height : 400
+		height : 400 ,
+		buttons : {
+			"닫기" : function() {
+				dialog.dialog("close") ;
+				grid2.clear() ;
+				$("#podtName").val("") ;
+			}
+		}
 	})
 	
 	$("#btnSearch").on("click" , function() {
@@ -552,12 +558,6 @@
 		$("#txtPodtCode").val(cusCode) ;
 		grid2.clear() ;
 		dialog.dialog("close") ;
-		$("#podtName").val("") ;
-	})
-	
-	$("#btnClose").on("click" , function() {
-		dialog.dialog("close") ;
-		grid2.clear() ;
 		$("#podtName").val("") ;
 	})
 	//---------- ↑제품코드찾기 ----------

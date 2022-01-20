@@ -1,5 +1,7 @@
 package egov.mes.defective.service;
 
-public interface DefectiveService {
+import egov.mes.defective.dao.DefectiveVO;
 
+public interface DefectiveService {
+	
 }

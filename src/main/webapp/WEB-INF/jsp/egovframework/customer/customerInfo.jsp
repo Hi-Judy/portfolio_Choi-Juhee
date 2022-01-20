@@ -31,16 +31,11 @@
 	
 	<div id="findCustomer" title="업체검색"">
 		<input id="cusName"><button id="btnCusSearch">검색</button>
-		<button type="button" id="btnClose1">닫기</button>
 		<div id="cusResult"></div>
 	</div>
 	
 	<div id="tradeInfo-dialog-form" title="거래처정보수정 / 거래내역조회" style="text-align: center;">
 		<div id="cusInfo"></div>
-		<div style="height: 50px">
-			<button type="button" id="btnSave">저장</button>
-			<button type="button" id="btnClose2">닫기</button>
-		</div>
 		<div id="tradeResult" style="height: 200px;"></div>
 	</div>
 	
@@ -233,7 +228,14 @@
 		autoOpen : false ,
 		modal : true ,
 		width : 600 ,
-		height : 400
+		height : 400 ,
+		buttons: {
+			"닫기" : function() {
+				dialog.dialog("close") ;
+				grid2.clear() ;
+				$("#cusName").val("") ;
+			}
+		},
 	})
 	
 	$("#btnSearch").on("click" , function() {
@@ -296,12 +298,6 @@
 		dialog.dialog("close") ;
 		$("#cusName").val("") ;
 	})
-	
-	$("#btnClose1").on("click" , function() {
-		dialog.dialog("close") ;
-		grid2.clear() ;
-		$("#cusName").val("") ;
-	})	
 	//---------- ↑업체찾기 ----------
 	
 	//---------- ↓상세정보 ----------
@@ -309,7 +305,61 @@
 		autoOpen : false ,
 		modal : true ,
 		width : 600 ,
-		height : 400
+		height : 400 ,
+		buttons : {
+			"저장" : function() {
+				let datas = grid4.getModifiedRows() ;
+				let data = datas.updatedRows ;
+				let cusCode = data[0].cusCode ;
+				let codeName = data[0].codeName ;
+				let cusPhone = data[0].cusPhone ;
+				
+				$.ajax({
+					url : 'updateCustomer' ,
+					data : {
+						cusCode : cusCode ,
+						codeName : codeName ,
+						cusPhone : cusPhone
+					} ,
+					dataType : 'json' ,
+					contentType : 'application/json ; charset=utf-8;' , 
+					async : false ,
+					success : function(datas) {
+						alert('수정완료되었습니다.') ;
+						data4 = datas.update ;
+						grid4.resetData(data4) ;
+						grid4.resetOriginData() ;
+					} ,
+					error : function(reject) {
+						console.log(reject) ;
+					}
+				})
+			} ,
+			"닫기" : function() {
+				dialog2.dialog("close") ;
+				
+				let cusCode = $("#txtCusCode").val() ;
+				
+				if (cusCode == '') {
+					cusCode = 'null' ;
+				}
+				
+				$.ajax({
+					url : 'customerList/' + cusCode ,
+					dataType : 'json' ,
+					async : false ,
+					success : function(datas) {
+						data = datas.data ;
+						grid.resetData(data) ;
+						grid.resetOriginData() ;
+						
+					} ,
+					error : function(reject) {
+						console.log(reject) ;
+					}
+				})
+			}
+		}
 	})
 	
 	const columns3 = [
@@ -420,60 +470,6 @@
 		columns : columns4 ,
 		bodyHeight: 60,
 		minBodyHeight: 60
-	})
-	
-	$("#btnSave").on("click" , function() {
-		let datas = grid4.getModifiedRows() ;
-		let data = datas.updatedRows ;
-		let cusCode = data[0].cusCode ;
-		let codeName = data[0].codeName ;
-		let cusPhone = data[0].cusPhone ;
-		
-		$.ajax({
-			url : 'updateCustomer' ,
-			data : {
-				cusCode : cusCode ,
-				codeName : codeName ,
-				cusPhone : cusPhone
-			} ,
-			dataType : 'json' ,
-			contentType : 'application/json ; charset=utf-8;' , 
-			async : false ,
-			success : function(datas) {
-				alert('수정완료되었습니다.') ;
-				data4 = datas.update ;
-				grid4.resetData(data4) ;
-				grid4.resetOriginData() ;
-			} ,
-			error : function(reject) {
-				console.log(reject) ;
-			}
-		})
-	})
-	
-	$("#btnClose2").on("click" , function() {
-		dialog2.dialog("close") ;
-		
-		let cusCode = $("#txtCusCode").val() ;
-		
-		if (cusCode == '') {
-			cusCode = 'null' ;
-		}
-		
-		$.ajax({
-			url : 'customerList/' + cusCode ,
-			dataType : 'json' ,
-			async : false ,
-			success : function(datas) {
-				data = datas.data ;
-				grid.resetData(data) ;
-				grid.resetOriginData() ;
-				
-			} ,
-			error : function(reject) {
-				console.log(reject) ;
-			}
-		})
 	})
 	//---------- ↑상세정보 ----------
 </script>

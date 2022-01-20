@@ -41,13 +41,11 @@
 	
 	<div id="findCustomer" title="업체검색"">
 		<input id="cusName"><button id="btnCusSearch">검색</button>
-		<button type="button" id="btnClose1">닫기</button>
 		<div id="cusResult"></div>
 	</div>
 	
 	<div id="tradeDetail" title="주문상세정보" align="center">
 		<div id="selectInfo"></div>
-		<button type="button" id="btnClose2">닫기</button>
 	</div>
 <script>
 
@@ -58,7 +56,14 @@
 		autoOpen : false ,
 		modal : true ,
 		width : 600 ,
-		height : 400
+		height : 400 ,
+		buttons: {
+			"닫기" : function() {
+				dialog.dialog("close") ;
+				grid.clear() ;
+				$("#cusName").val("") ;
+			}
+		}
 	})
 	
 	$("#btnSearch").on("click" , function() {
@@ -119,12 +124,6 @@
 		$("#txtCusCode").val(cusCode) ;
 		grid.clear() ;
 		dialog.dialog("close") ;
-		$("#cusName").val("") ;
-	})
-	
-	$("#btnClose1").on("click" , function() {
-		dialog.dialog("close") ;
-		grid.clear() ;
 		$("#cusName").val("") ;
 	})
 	//---------- ↑업체찾기 ----------
@@ -423,12 +422,13 @@
 		autoOpen : false ,
 		modal : true ,
 		width : 800 ,
-		height : 400
-	})
-	
-	$("#btnClose2").on("click" , function() {
-		dialog2.dialog("close") ;
-		grid.clear() ;
+		height : 400 ,
+		buttons : {
+			"닫기" : function() {
+				dialog2.dialog("close") ;
+				grid.clear() ;
+			}
+		}
 	})
 	//---------- ↑상세조회 ----------
 </script>

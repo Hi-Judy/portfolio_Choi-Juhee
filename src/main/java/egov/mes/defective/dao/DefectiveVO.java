@@ -13,4 +13,7 @@ public class DefectiveVO {
 	String defQnt ;
 	String defEtc ;
 	String empId ;
+	
+	String fromDate ;
+	String toDate ;
 }
