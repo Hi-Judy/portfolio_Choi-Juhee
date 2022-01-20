@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="egov.mes.Proc.dao.ProcessControlMapper">
+
+<select id="AllFind" resultType="egov.mes.Proc.dao.ProcessControlVO">
+	select proc_code , proc_flag , proc_emp_id , FN_GET_CODE_NAME(proc_code) AS codeName
+	from process
+</select>
+
+
+
+
+
+</mapper>
