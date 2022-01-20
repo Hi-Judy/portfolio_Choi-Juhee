@@ -110,6 +110,30 @@ div.right {
 </body>
 
 <script>
+var ProcAllData
+
+//------공정전체조회 ajax --------
+$.ajax({
+   url : './AllFind',
+   dataType : 'json',
+   async : false,
+}).done( (rsts) => {
+	console.log(rsts);
+	ProcAllData = rsts.datas
+	
+})
+
+const Grid = new tui.Grid({
+	el : document.getElementById('Grid'),
+	data : ProcAllData ,
+	columns : [
+		{ header : '공정코드'		, name : 'procCode' 	, align : 'center'},
+		{ header : '공정명'		, name : 'codeName' 	, align : 'center'	, editor : 'text'},
+		{ header : '공정구분'		, name : 'procFlag' 	, align : 'center'},
+		{ header : '공정관리자ID'	, name : 'procEmpId' 	, align : 'center'	, editor : 'text'}
+	]
+})
+
 
 </script>
 </html>
