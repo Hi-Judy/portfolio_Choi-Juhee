@@ -18,6 +18,7 @@ public class ResourcesRtngdVO {
 		String rscPrc;		//단가
 		
 		String sucName;
+		String rtngdDate;
 		
 		
 }

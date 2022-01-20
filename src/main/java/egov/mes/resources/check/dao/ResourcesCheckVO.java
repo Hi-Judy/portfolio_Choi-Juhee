@@ -34,5 +34,9 @@ public class ResourcesCheckVO {
 	String rscName;		//자재명(자재 테이블)
 	String rscUnit;		//자재단위(자재 테이블)
 	String rscCnt;		//발주수량(자재 테이블)
+	
+	String rtngdNo;		//반품번호
+	String rtngdCnt;	//반품량
+	String rtngdDate; 	//반품일
 
 }

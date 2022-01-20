@@ -55,7 +55,8 @@
 		WHERE CODE LIKE '%' || 'RSC' || '%'
 	</select>
 	<select id="searchSuc" resultType="egov.mes.resources.order.dao.ResourcesOrderVO" parameterType="egov.mes.resources.order.dao.ResourcesOrderVO">
-		SELECT CODE,CODE_NAME
+		SELECT CODE AS SUC_CODE,
+			   CODE_NAME AS SUC_NAME
 		FROM COMMON_CODE
 		WHERE CODE LIKE '%' || 'm_' || '%'
 	</select>

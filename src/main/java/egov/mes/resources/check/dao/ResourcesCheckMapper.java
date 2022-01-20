@@ -9,4 +9,5 @@ public interface ResourcesCheckMapper {
 	List<ResourcesRtngdVO> searchRtngd(ResourcesRtngdVO vo);
 	int insertResourcesCheck(ResourcesCheckVO vo);
 	int updateResourcesCheck(ResourcesCheckVO vo);
+	int insertResourcesRtngd(ResourcesCheckVO vo);
 }

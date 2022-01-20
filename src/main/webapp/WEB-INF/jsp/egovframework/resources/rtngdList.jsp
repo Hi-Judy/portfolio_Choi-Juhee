@@ -22,8 +22,8 @@
 	<hr>
 	반품일자  <input id="txtOrde1" type="date" data-role="datebox" data-options='{"mode": "calbox"}'>
 	~ 		<input id="txtOrde2" type="date" data-role="datebox" data-options='{"mode": "calbox"}'><br>
-	발주업체  <input id="txtSuc"><button id="btnFindSuc">돋보기</button><br>
-	자재명   <input id="txtRsc"><button id="btnFindRsc">돋보기</button><br>
+	업체코드  <input id="txtSuc1">  <button id="btnFindSuc">돋보기</button>  업체명 <input id="txtSuc2" readonly><br>
+	자재코드  <input id="txtRsc1">  <button id="btnFindRsc">돋보기</button>  자재명 <input id="txtRsc2" readonly><br>
 	<div id="dialog-form-rsc" title="자재 검색"></div>
 	<div id="dialog-form-suc" title="업체 검색"></div>
 	<br>
@@ -47,13 +47,16 @@
 	$("#btn_reset").on("click", function(){
 		document.getElementById('txtOrde1').value = nd.toISOString().slice(0, 10);
 		document.getElementById('txtOrde2').value = d.toISOString().slice(0, 10);
-		$("#txtSuc").val('');
-		$("#txtRsc").val('');
+		$("#txtSuc1").val('');
+		$("#txtSuc2").val('');
+		$("#txtRsc1").val('');
+		$("#txtRsc2").val('');
 	})
 	
 	//모달창(자재조회)
-	function clickRsc(rsc){
-		$("#txtRsc").val(rsc);
+	function clickRsc(rscCode, rscName){
+		$("#txtRsc1").val(rscCode);
+		$("#txtRsc2").val(rscName);
 		dialog1.dialog("close");
 	};
 
@@ -69,8 +72,12 @@
 		});
 
 	//모달창(업체조회)
-	function clickSuc(suc){
-		$("#txtSuc").val(suc);
+	function clickSuc(sucCode, sucName){
+		
+		console.log(sucCode);
+		console.log(sucName);
+		$("#txtSuc1").val(sucCode);
+		$("#txtSuc2").val(sucName);
 		dialog2.dialog("close");
 	};
 
@@ -90,6 +97,12 @@
 	Grid.applyTheme('default');
 	
 	const columns = [
+				{
+		    	header: '반품일자',
+		    	name: 'rtngdDate',
+		    	sortable: true,
+		    	sortingType: 'desc'
+		  		},
   				{
 		    	header: '반품번호',
 		    	name: 'rtngdNo',
@@ -144,7 +157,7 @@
 	let dataSource = {
 		  api: {
 		    readData: { 
-		    	url: 'resourcesOrder', 
+		    	url: 'resourcesRtngd', 
 		    	method: 'GET'
 		    	}
 		  },
@@ -160,8 +173,8 @@
 
 	//조회버튼 클릭시 값 가지고 오는 거
 	$("#btnSelect").on("click", function(){
-			var rscName = $("#txtRsc").val();
-			var sucName = $("#txtSuc").val();
+			var rscCode = $("#txtRsc1").val();
+			var sucCode = $("#txtSuc1").val();
 			var ordeDate = $("#txtOrde1").val();
 			var ordeDate2 = $("#txtOrde2").val();
 			console.log(ordeDate);
@@ -169,8 +182,8 @@
 			console.log(ordeDate2);
 			
 			$.ajax({
-				url :'resourcesOrder',
-				data: {'rscName' : rscName, 'sucName': sucName, 'ordeDate':ordeDate, 'ordeDate2':ordeDate2 },
+				url :'resourcesRtngd',
+				data: {'rscCode' : rscCode, 'sucCode': sucCode, 'ordeDate':ordeDate, 'ordeDate2':ordeDate2 },
 				contentType: 'application/json; charset=UTF-8'
 			}).done(function(da){
 				var datalist = JSON.parse(da);

@@ -37,6 +37,24 @@
              	'Y')
 	</insert>
 	
+	<!-- 자재입고 검사 후 불량 품목 -> 자재반품 테이블로 insert -->
+	<insert id="insertResourcesRtngd">
+		INSERT INTO RESOURCE_RTNGD (RTNGD_NO,
+									RSC_TST_NO,
+									RSC_CODE,
+									RTNGD_CNT,
+									DEF_CODE,
+									RTNGD_DATE)
+					SELECT TO_CHAR(SYSDATE,'"RR"YYMMDD""') || LPAD(RCNUMBER.NEXTVAL,3,'0'),
+						   RSC_TST_NO,
+						   #{rscCode},
+						   RSC_DEF_CNT,
+						   #{defCode},
+						   SYSDATE	   
+					FROM RESOURCE_IST_CHECK
+					WHERE ORDR_NO = #{ordrNo}
+	</insert>
+	
 	<!-- 자재입고 검사 후 자재상태 '검사' -> 자재발주 테이블로 update -->
 	<update id="updateResourcesCheck">
 		UPDATE RESOURCE_ORDER 

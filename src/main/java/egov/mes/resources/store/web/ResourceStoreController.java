@@ -39,21 +39,31 @@ public class ResourceStoreController {
 	
 	//입고완료 insert
 	@PostMapping("resourcesStoreModify")
-	public String modifyCheck(Model model,@RequestBody ModifyVO<ResourcesStoreVO> mvo) {
+	public String modifyCheck(Model model, @RequestBody ModifyVO<ResourcesStoreVO> mvo) {
 		System.out.println(mvo);
 		System.out.println("=================입고완료 insert================");
 		service.modifyStore(mvo);
+		model.addAttribute("mod", "upd");
 		return "jsonView";
 	}
 	
-	//입,출고 조회
-	@RequestMapping("resourcesStoreIn")
-	public String resourcesStoreInOut() {
-		System.out.println("=================자재 입고 페이지================");
-		return "resources/resourcesStoreIn.tiles";
+	//입출고 조회 페이지
+	@RequestMapping("resourceStoreInOut")
+	public String resourceStoreInOut() {
+		System.out.println("=================입/출고 조회 페이지 이동================");
+		return "resources/resourceStoreInOut.tiles";
 	}
 	
-	
+	//입고검사 미완료 조회
+	@RequestMapping("resourceStoreInOutList")
+	public String resourceStoreInOutList(Model model, ResourcesStoreVO vo) {
+	  model.addAttribute("result",true);
+      Map<String,Object> map = new HashMap<String,Object>();
+      map.put("contents", service.ResourcesStoreIn(vo));
+      model.addAttribute("data", map);
+	  System.out.println("================입고 테이블 select================");
+      return "jsonView";
+	}
 	
 }
 	

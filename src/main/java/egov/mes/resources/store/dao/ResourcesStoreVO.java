@@ -29,5 +29,5 @@ public class ResourcesStoreVO {
 	String rscPrc;			//자재 단가
 	String rscTstCnt;		//입고유무
 	String rscSt;
-	String ordrNO;
+	String ordrNo;
 }
