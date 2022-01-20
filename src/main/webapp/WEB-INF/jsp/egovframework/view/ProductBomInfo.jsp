@@ -71,57 +71,16 @@ div.left {
    margin-left: 8px;
    float: left;
    box-sizing: border-box;
-   /* border-top: 1px solid black; */
-   /* border-bottom: 1px solid black; */
    padding: 5px;
 }
 
 div.right {
    float: right;
-   width: 53%;
+   width: 30%;
    padding: 5px;
    box-sizing: border-box;
-   /* background: #ece6cc; */
 }
 
-/*그리드 사용으로 사용 안하게됨*/
-tr:hover {
-   background-color: bisque;
-}
-
-.table {
-   width: 100%;
-   border-collapse: collapse;
-   border-top: 3px solid #168;
-}
-
-.table th {
-   color: #168;
-   background: #f0f6f9;
-   text-align: center;
-}
-
-.table th, .table td {
-   padding: 10px;
-   border: 1px solid #ddd;
-}
-
-.table th:first-child, .table td:first-child {
-   border-left: 0;
-}
-
-.table th:last-child, .table td:last-child {
-   border-right: 0;
-}
-
-.table tr td:first-child {
-   text-align: center;
-}
-
-.table caption {
-   caption-side: bottom;
-   display: none;
-}
 
 .btn {
    border-radius: 5px;
@@ -186,7 +145,7 @@ tr:hover {
 
          <!-- style="overflow:scroll; width:504px; height:500px; " -->
          <div id="MatGrid"
-            style="border-top: 3px solid #168; width: 504px; height: 500px;"></div>
+            style="border-top: 3px solid #168; width: 800px; height: 500px;"></div>
       </div>
 
       <div class="right">
@@ -289,7 +248,6 @@ toastr.options = {
             dataType : 'json',
             async : false
          }).done( (rsts) =>{
-            console.log(rsts);
             proData = rsts.ProDetail;
             document.getElementById("proId").setAttribute("value",proCode);         //제품코드
             document.getElementById("proName").setAttribute("value",proData[0].codeName);   //제품명
@@ -297,6 +255,7 @@ toastr.options = {
             document.getElementById("manFlag").setAttribute("value",proData[0].manFlag);   //제품구분
             document.getElementById("proUnit").setAttribute("value",proData[0].podtUnit);   //제품 관리단위
             rscData = rsts.rscDetail;   //BOM 자재
+     		console.log(rscData);
             pData = rsts.ProcDetail;   //공정흐름
          })      
          
@@ -308,7 +267,7 @@ toastr.options = {
          ProcGrid.resetData(ProcData);
          ProcGrid.resetOriginData();
          
-         MatGrid.appendRow({})  
+ //        MatGrid.appendRow({})  
          dialog.dialog( "close" ) ;
          
       }
@@ -323,13 +282,33 @@ toastr.options = {
          dataType : 'json',
          async : false,
       }).done( (rsts) => {
-         console.log("자재코드 조회결과")
          //grud 에 있는 listItems 형식대로 배열을 만들어서 헤드에 넣어줘야 한다.
          aaa = rsts.data
          aaa.forEach( (rsts) => {
             //그리드 형식에 맞춰서 Array 타입 에 데이트 추가
              dataA = { text : rsts.rscCode , value : rsts.rscCode }
              dataArray.push(dataA);
+            
+         })
+      })
+      
+       var bbb ;
+      var dataB ;
+      var ProcDataArray = new Array();
+       //------공정코드 조회--------
+      $.ajax({
+         url : './ProcFind',
+         dataType : 'json',
+         async : false,
+      }).done( (rsts) => {
+         //grud 에 있는 listItems 형식대로 배열을 만들어서 헤드에 넣어줘야 한다.
+         bbb = rsts.data
+         bbb.forEach( (rsts) => {
+            //그리드 형식에 맞춰서 Array 타입 에 데이트 추가
+             dataB = {
+                     text : rsts.code , value : rsts.code
+                  }
+             ProcDataArray.push(dataB);
             
          })
       })
@@ -350,12 +329,21 @@ toastr.options = {
                           listItems: dataArray
                         }
                       }
-               
+           	 },
+            { header : '자재명'   	, name : 'codeName'   	, align : 'center'},
+            { header : '자재소모량'   	, name : 'resUsage'   	, align : 'center' , editor : 'text' 	, validation : { required : true }  },
+            { header : '공정코드'     	, name : 'procCode'   	, align : 'center' , editor : 'text'	, validation : { required : true }, 
+                formatter: 'listItemText',
+                editor: {
+                     type: 'select',
+                     options: {
+                        //dataArray -> ajax 에서 값을받아서 Array 타입 과 그리드 형식을 갖춰서 만든 변수이다
+                       listItems: ProcDataArray
+                     }
+                   }
             },
-            { header : '자재명'   , name : 'codeName'   , align : 'center'},
-            { header : '자재소모량'   , name : 'resUsage'   , align : 'center' , editor : 'text' , validation : { required : true }  },
-            { header : '비고'      , name : 'resEtc'   , align : 'center' , editor : 'text' },
-            { header: 'DB'		, name: 'crud'		  , hidden : true }
+            { header : '비고'      	, name : 'resEtc'   	, align : 'center' , editor : 'text'	},
+            { header : 'DB'			, name: 'crud'		  	, hidden : true }
          ],
          rowHeaders: ['checkbox']
       });
@@ -456,28 +444,7 @@ toastr.options = {
  ///////// ↑↑↑ 자재코드 //////////////// ↓↓↓ 공정 관련코드 //////////////////      
        
        
-       var bbb ;
-      var dataB ;
-      var ProcDataArray = new Array();
-       //------공정코드 조회--------
-      $.ajax({
-         url : './ProcFind',
-         dataType : 'json',
-         async : false,
-      }).done( (rsts) => {
-         console.log(rsts)
-         //grud 에 있는 listItems 형식대로 배열을 만들어서 헤드에 넣어줘야 한다.
-         bbb = rsts.data
-         bbb.forEach( (rsts) => {
-            //그리드 형식에 맞춰서 Array 타입 에 데이트 추가
-             dataB = {
-                     text : rsts.code , value : rsts.code
-                  }
-             ProcDataArray.push(dataB);
-            
-         })
-         console.log(ProcDataArray)
-      })
+     
        
        //------공정흐름 그리드 헤드 --------
       const ProcGrid = new Grid({
@@ -502,7 +469,7 @@ toastr.options = {
        
        
       //제품코드로 조회해서 가져온 코드는 변경 안되도록 해주기
-      ProcGrid.on('editing	Start' , (ev) => {
+      ProcGrid.on('editingStart' , (ev) => {
       	try{
       		if (ev.columnName == "procCode"){
       			var CRUD = ProcGrid.getValue(ev.rowKey ,'crud'); 
@@ -595,34 +562,51 @@ toastr.options = {
     
      //----------BOM 저장버튼 ---------------
      BomSave.addEventListener("click" , () => {
-    	 var Check = 0 ;
+    	var Check = 0 ;
     	//공정흐름 영역
     	var ProcModiRow = ProcGrid.getModifiedRows();
+    	
     	var ProcInput = ProcModiRow.createdRows ;
 	    	if(ProcInput.length > 0) {
 	    		let attr = Pinpt(ProcInput);
 	    		if(attr){
 	    			Check++;
+	    			console.log("공정 데이터 추가완료")
 	    		}
 	    	}
 	    	
     	
     	//자재 영역
     	var MatModiRow = MatGrid.getModifiedRows();
+    	
     	var MatInput = MatModiRow.createdRows ;
-    	console.log(MatModiRow);
 	    	if(MatInput.length > 0) {
-	    		Minpt(MatInput);
+	    		let attr = Minpt(MatInput);
+	    		if(attr){
+	    			Check++;
+	    			console.log("자재 데이터 추가완료")
+	    		}
 	    	}
 	 
+	    var MatUpdate = MatModiRow.updatedRows;
+	    	if(MatUpdate.length>0){
+	    		let attr = MUpdate(MatUpdate);
+	    		if(attr){
+	    			Check++;
+	    			console.log("자재 업데이트")
+	    		}
+	    	}
+	    	
 	    	
     	var MatDelete = MatModiRow.deletedRows ;
 	    	if(MatDelete.length > 0) {
 	    		MDelt(MatDelete);
 	    	}
 	    	
+	    	
+	    	
 	    if(Check > 0){
-      		toastr["success"]("데이터 저장완료"); 
+      		toastr["success"]("데이터 저장완료",Check+" 건"); 
 	    }
     	
      })
@@ -776,7 +760,7 @@ toastr.options = {
 	 	             async : false, 
 	 	             success: (datas) => {
 	 	            	 console.log(datas);
-	 	            	 toastr["success"]("삭제 완료"); 
+	 	            	 toastr["success"]("공정흐름 데이터 삭제완료"); 
 	 	             },
 	 	             error: (err) => {
 	 	                alert("공정흐름 삭제 오류 " + err);
@@ -794,12 +778,13 @@ toastr.options = {
    	 var proIdValue = document.getElementById("proId").value ;
    	 var num = 0 ;	
    	 var MI ;
+   	 var Check = false ;
    	 var MatInpData = new Array();
 	     	 try{
 	     		MatInput.forEach( (rst) => {
-	    			 if(rst.resCode == null || rst.resCode == '' || rst.resCode == undefined)
+	    			 if(rst.resCode == null || rst.resCode == '' || rst.resCode == undefined || rst.procCode == null || rst.procCode == '')
 	    			 {
-	    				toastr["error"]("자재코드 미입력");  
+	    				toastr["error"]("필수입력코드 미입력");  
 						return false; 
 	    			 }
 	    			 else
@@ -808,6 +793,7 @@ toastr.options = {
 	    						 podtCode 	: proIdValue,
 	    						 resCode  	: rst.resCode,
 	    						 resUsage 	: rst.resUsage,
+	    						 procCode	: rst.procCode,
 	    						 resEtc 	: rst.resEtc
 		    				 }
 	    				 MatInpData.push(MI);
@@ -827,15 +813,69 @@ toastr.options = {
 		    		 contentType : 'application/json;',
 		             async : false, 
 		             success: (datas) => {
-		            	 console.log(datas);
-		            	 toastr["success"]("자재 데이터 저장완료"); 
+		            	 Check = true ;
 		             },
 		             error: (err) => {
 		                alert("자재데이터 추가 ajax 오류 " + err);
 		             }
 		          });
 	    	 }
+	    	 return Check ;
 		}
+   	
+   	
+    //---------- 자재 업데이트 ---------------
+   	function MUpdate(MatUpdate) {
+   		var proIdValue = document.getElementById("proId").value ;
+      	 var num = 0 ;	
+      	 var MU ;
+      	 var Check = false ;
+      	 var MatUpdtData = new Array();
+   	     	 try{
+   	     		MatUpdate.forEach( (rst) => {
+	   	     		 if(rst.resCode == null || rst.resCode == '' || rst.resCode == undefined || rst.procCode == null || rst.procCode == '')
+	    			 {
+	    				toastr["error"]("필수입력코드 미입력");  
+						return false; 
+	    			 }
+	    			 else
+	    				 {
+	    				 MU = {
+	    						 podtCode 	: proIdValue,
+	    						 resCode  	: rst.resCode,
+	    						 resUsage 	: rst.resUsage,
+	    						 procCode	: rst.procCode,
+	    						 resEtc 	: rst.resEtc
+		    				 }
+   	    				MatUpdtData.push(MU);
+   		    			   num++ ;
+   	    				 }
+   	    		 });
+   	    		 
+   	    	 }catch (err) {
+   	 			alert('자재 데이터 오류 '+ err);
+   	 		} 
+   	    	 
+   	    	 if(num > 0){ 
+   		    	 $.ajax({
+   		    		 url : './ResUpdate',
+   		    		 type : 'post',
+   		    		 data : JSON.stringify(MatUpdtData),
+   		    		 contentType : 'application/json;',
+   		             async : false, 
+   		             success: (datas) => {
+   		            	 Check = true ;
+   		             },
+   		             error: (err) => {
+   		                alert("자재 업데이트 ajax 오류 " + err);
+   		             }
+   		          });
+   	    	 }
+   	    	 return Check ;
+		
+	}
+   	
+   	
     //---------- 자재 체크된 데이터 삭제 ---------------
    	function MDelt(MatDelete) {
       	 var num = 0 ;	
@@ -897,7 +937,7 @@ toastr.options = {
 	 	             async : false, 
 	 	             success: (datas) => {
 	 	            	 console.log(datas);
-	 	            	 toastr["success"]("삭제 완료"); 
+	 	            	 toastr["success"]("자재 데이터 삭제 완료"); 
 	 	             },
 	 	             error: (err) => {
 	 	                alert("자재BOM 삭제 오류 " + err);

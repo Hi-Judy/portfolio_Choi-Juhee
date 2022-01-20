@@ -6,6 +6,7 @@ import lombok.Data;
 public class ManCommandVO {
 	
 	//생산계획
+
 		String podtCode; //제품코드
 		String podtName; //제품명
 		String ordQnt; //주문량
@@ -18,7 +19,7 @@ public class ManCommandVO {
 		String planToDate;   //계획일자
 		String planNoDetail; //계획 디테일 번호
 
-		
+
 		//생산지시
 		String comCode; //지시번호
 		String comDate; //지시일
@@ -47,6 +48,13 @@ public class ManCommandVO {
 		String facRuntime; //설비당 소요시간
 		String outputDay; //일 생산량
 		
+	
+	
+	//공정
+	String resCode; //자재코드
+	String resUsage; //자재소요량
+	String procCode; //공정코드
+	String ProcName; //공정명
 	
 	
 }

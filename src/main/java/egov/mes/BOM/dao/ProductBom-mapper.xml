@@ -30,7 +30,7 @@
 
 <!-- 제품BOM(자재) -->
 <select id="rscDetail" resultType="egov.mes.BOM.dao.ProductBomVO">
-	SELECT	res_code , res_usage , res_etc , FN_GET_CODE_NAME(res_code) AS codeName , 'R' AS CRUD
+	SELECT	res_code , res_usage , res_etc , proc_code , FN_GET_CODE_NAME(res_code) AS codeName , 'R' AS CRUD
 	FROM	Prdt_bom_res
 	WHERE	podt_code = #{podtCode}
 </select>
@@ -57,7 +57,7 @@
 </select>
 
 
-<!-- ////// 데이터 추가 영역 /////////////// -->
+<!-- ////// 데이터 추가 , 업데이트 영역 /////////////// -->
 
 <insert id="ProcInsert" parameterType="egov.mes.BOM.dao.ProductBomVO">
 	insert into process_flowInfo (
@@ -77,15 +77,27 @@
 									res_code,
 									podt_code,
 									res_usage,
+									proc_code,
 									res_etc
 									)
 							values(
 									#{resCode},
 									#{podtCode},
 									#{resUsage},
+									#{procCode},
 									#{resEtc}
 									)
 </insert>
+
+<update id="ResUpdate" parameterType="egov.mes.BOM.dao.ProductBomVO">
+	UPDATE Prdt_bom_res
+	SET
+	res_usage 	= #{resUsage},
+	proc_code	= #{procCode},
+	res_etc 	= #{resEtc}
+	WHERE res_code = #{resCode} AND podt_code = #{podtCode}
+
+</update>
 
 
 

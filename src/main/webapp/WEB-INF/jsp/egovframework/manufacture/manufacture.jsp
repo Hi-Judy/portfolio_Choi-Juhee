@@ -117,7 +117,9 @@
 		    width: 900,
 		    buttons: {
 				"확인" : function(){
+
 					console.log('확인완료');
+
 					console.log(checkedManPlan[0].manPlanNo);
 					$.ajax({
 						url: '${pageContext.request.contextPath}/manufacture/manPlanDetail/'+checkedManPlan[0].manPlanNo,

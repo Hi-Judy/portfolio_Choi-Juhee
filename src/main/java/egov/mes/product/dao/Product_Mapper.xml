@@ -35,12 +35,7 @@
 	</select>
 	
 	<insert id="insertInOut">
-		insert into product_qnt_info 
-		(qnt_infono , podt_code , man_date , podt_input , podt_output , podt_etc , podt_lot)
-		values (
-			(select (nvl(max(qnt_Infono),1)+1) from product_qnt_info) , #{podtCode} , #{manDate} , #{podtInput} , 
-			#{podtOutput} , #{podtEtc} , #{podtLot}
-		)
+		{ call p_insert_lotno(#{podtCode},#{manDate},#{podtInput},#{podtOutput},#{podtEtc},#{podtLot}) }
 	</insert>
 	
 	<update id="updateLotno" statementType="CALLABLE">
@@ -52,9 +47,15 @@
 	</delete>
 	
 	<select id="selectOptions" resultType="egov.mes.product.dao.ProductVO">
-		select podt_code , podt_lot, (sum(podt_input)-sum(podt_output)) as qnt , com_code
+		select podt_code , podt_lot, (sum(podt_input)-sum(podt_output)) as qnt
 		from product_qnt_info 
-		group by podt_code , podt_lot , com_code
+		group by podt_code , podt_lot
 	</select>
+	
+	<!-- 테스트 -->
+	<insert id="productTest" statementType="CALLABLE">
+		{ call p_product_test(#{comCode},#{comNoDetail},#{podtCode},#{podtInput},#{podtOutput}) }
+	</insert>
+	<!-- 테스트 -->
 	
 </mapper>

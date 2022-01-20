@@ -120,6 +120,7 @@
     from ord_detail_view a join common_code b
     on a.podt_code = b.code
     where a.ord_status = '미진행'
+    order by a.ord_code
 </select>
 
 

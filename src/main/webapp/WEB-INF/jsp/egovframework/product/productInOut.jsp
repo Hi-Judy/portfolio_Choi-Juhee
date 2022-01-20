@@ -25,7 +25,7 @@
 		<br>
 		<div align="right">
 <!-- 테스트 -->
-			<button type="button" id="test">테스트버튼</button>
+			<a href="ProductTestPage">테스트페이지</a></li>
 <!-- 테스트 -->
 			<button type="button" id="listBtn">조회</button>
 			<button type="button" id="btnAdd">추가</button>
@@ -48,7 +48,7 @@
 		{
 			header: '번호' ,
 			name: 'qntInfono' ,
-			hidden : true
+			hidden: true
 		} ,
 		{
 			header: '제품코드' ,
@@ -105,10 +105,11 @@
 				type : 'select' ,
 				options: {
 					listItems: [
-						{ text : '선택' , value: ''} ,
-						{ text : '생산완료' , value: '생산완료'} ,
-						{ text : '출하' , value: '출하'} ,
-						{ text : '미생산출하' , value: '미생산출하'}
+						{ text : '선택' , value: '' } ,
+						{ text : '생산완료' , value: '생산완료' } ,
+						{ text : '출하완료' , value: '출하완료' } ,
+						{ text : '출하' , value: '출하' } ,
+						{ text : '미생산출하' , value: '미생산출하' }
 					]
 				}
 			} ,
@@ -146,7 +147,7 @@
 	
 	let data ;
 	
-	$("#listBtn").click(function () {
+	$("#listBtn").click(function () {		
 		let podtCode = $("#txtPodtCode").val() ;
 		let manDatestart = $("#manDatestart").val() ;
 		let manDateend = $("#manDateend").val() ;
@@ -177,6 +178,61 @@
 				grid.resetData(data) ;
 				grid.resetOriginData() ;
 				
+// ----- ↓테스트 -----		
+				$.ajax({
+					url : 'selectOptions' ,
+					dataType : 'json' ,
+					async : false ,
+					success : function(datas) {
+
+						// 조회 누를때마다 중복으로 안들어가도록 함
+						second.생산완료 = [] ;
+						second.출하 = [] ;
+						second.미생산출하 = [] ;
+
+						let lots = [] ;
+						let lots2 = [] ;
+						
+
+						for (let a = 0 ; a < datas.selectoptions.length ; a++) {
+							lots.push(datas.selectoptions[a].podtLot) ;
+							let data = { podtLot : datas.selectoptions[a].podtLot , qnt : datas.selectoptions[a].qnt} ;
+							lots2.push(data) ;	
+						}
+
+						// 중복제거
+						let set1 = new Set(lots) ;
+						let set2 = [...set1] ;
+						
+						// 중복제거한거 options로 넣음
+						for (let b = 0 ; b < set2.length ; b++) {
+							let options2 = { text : set2[b] , value : set2[b] } ;
+							second.생산완료.push(options2) ;
+							second.출하완료.push(options2) ;
+						}
+												
+						for (let c = 0 ; c < lots2.length ; c++) {
+							if (lots2[c].qnt > 0) {
+								let options3 = { text : lots2[c].podtLot , value : lots2[c].podtLot } ;
+								second.출하.push(options3) ;
+								second.미생산출하.push(options3) ;	
+                
+							}else{
+								let options4 = { text : lots2[c].podtLot , value : lots2[c].podtLot, hidden } ;
+								second.미생산출하.push(options4) ;								
+							}
+						}
+						
+						grid.resetData(data) ;
+						grid.resetOriginData() ;
+						
+					} ,
+					error : function(reject) {
+						console.log(reject) ;
+					}
+				})
+// ----- ↑테스트 -----
+				
 			} ,
 			error : function(reject) {
 				console.log(reject) ;
@@ -200,6 +256,9 @@
 		'생산완료' : [
 			{ text : '선택' , value : ''}
 		] ,
+		'출하완료' : [
+			{ text : '선택' , value : ''}
+		] ,
 		'출하' : [
 			{ text : '선택' , value : ''}
 		] ,
@@ -207,105 +266,12 @@
 			{ text : '선택' , value : ''}
 		]
 	} ;	
-	
-	$("#test").on("click" , function() {
-		$.ajax({
-			url : 'selectOptions' ,
-			dataType : 'json' ,
-			async : false ,
-			success : function(datas) {			
-				// 사용할 배열들
-				let lots = [] ;
-				let lots2 = [] ;
-				let coms = [] ;
-				let createLot = 0 ;
-				for (let i = 0 ; i < datas.selectoptions.length ; i++) {
-					
-					// 값을 하나씩 받아서
-					let lot = datas.selectoptions[i].podtLot ;
-					let com = datas.selectoptions[i].comCode ;
-					
-					// 각각 배열에 넣어줌
-					if (lot != null) {
-						lots.push(lot.substr(0,10)) ;
-						lots2.push(lot) ;
-					}
-					
-					// 각각 배열에 넣어줌
-					if (com != null) {
-						coms.push(com) ;
-					}
-					
-					// 같이 들어온 지시번호가 이미 입출고관리에 있는 지시번호면 1 , 없으면 0
-					for (let d = 0 ; d < lots.length ; d++) {
-						if (datas.selectoptions[i].comCode == lots[d]) {
-							createLot = 1 ;
-						}	
-					}
-				} ;
-				
-				// 배열에 중복 제거
-				let set1 = new Set(lots2) ;
-				let set2 = [...set1] ;
-				
-				// 중복제거한거 select options에 넣어줌
-				for (let c = 0 ; c < set2.length ; c++) {
-					let data = { text : set2[c] , value : set2[c] } ;
-					second.생산완료.push(data) ;
-					second.출하.push(data) ;
-					second.미생산출하.push(data) ;
-				}
-/*				
-				// 생산완료는 이 페이지에서 추가할일 없고, 앞장에서 데이터가 넘어올 때 Lot번호 주도록 하면되고
-				// 출하 , 미생산출하는 지금 만들어놓은거 그대로 하면됨 ( 대신 재고가 있는지 확인하고 재고 있는 Lot만 보여주게 )
-				
-				// 지금있는 지시번호중에 최대값 구하기
-				let maxCom = 'C000000000' ;
-				for (let a = 0 ; a < coms.length ; a++) {
-					let value = coms[a] ;
-					if (maxCom < value) {
-						maxCom = coms[a] ;
-					}
-				}
-				
-				// 최종 return
-				let nextLot = '' ;
-				
-				// Lot번호가 있으면 001 에 1씩 더해서 붙여주고 , 없으면 지시번호에 001 붙여주기
-				for (let b = 0 ; b < lots2.length ; b++) {
-					let listCom = lots2[b] ;
-					let maxNum = 0 ;
-					if (maxCom == listCom.substr(0,10)) {
-						if (parseInt(lots2[b].slice(-3)) < 10) {
-							maxNum = parseInt(lots2[b].slice(-3)) + 1 ;
-							nextLot = maxCom + "_00" + maxNum ;	
-						}							
-						else {
-							maxNum = parseInt(lots2[b].slice(-3)) + 1 ;
-							nextLot = maxCom + "_0" + maxNum ;
-						}
-					}
-				}
-				
-				// select 옵션에 다음 Lot 넣기
-				let data2 = { text : nextLot , value : nextLot }
-				second.생산완료.push(data2) ;
-*/				
-			} ,
-			error : function(reject) {
-				console.log(reject) ;
-			}
-		})
-	})
 	// ----- ↑테스트 -----
 	
 	// 입력된 데이터 수정못하게 하기
 	grid.on('editingStart' , (ev) => {
 		let value = grid.getValue(ev.rowKey , ev.columnName) ;
 		let lot = ev.columnName ;
-		
-		console.log(lot) ;
-		console.log(value) ;
 		
 		if (value != '' && value != null) {
 			if (lot != 'podtLot' || value != null) {
@@ -315,7 +281,8 @@
 	})
 	
 	$("#btnAdd").on("click" , function() {
-		grid.appendRow({}) ;
+		let data = { podtEtc : '출하'} ;
+		grid.appendRow(data) ;
 	})
 	
 	$("#btnInsert").on("click" , function() {
@@ -348,6 +315,30 @@
 					} ,
 					success : function(datas) {
 						ok = 2 ;
+						
+						podtCode = 'null' ;
+						manDatestart = '1910-12-25' ;
+						manDateend = '1910-12-25' ;
+						
+						$.ajax({
+							url : 'productList' ,
+							dataType : 'json' ,
+							data : {
+								podtCode : podtCode ,
+								manDatestart : manDatestart ,
+								manDateend : manDateend
+							} ,
+							async : false ,
+							success : function(datas) {
+								data = datas.productlist ;
+								
+								grid.resetData(data) ;
+								grid.resetOriginData() ;
+							} ,
+							error : function(reject) {
+								console.log(reject) ;
+							}
+						})
 					} ,
 					error : function(reject) {
 						console.log(reject) ;
@@ -358,7 +349,12 @@
 				alert('수정완료되었습니다') ;
 			}
 		}
+		 
 		if (insertData != '') {
+			let change = insertData[0].podtEtc ;
+			if (change == '출하') {
+				insertData[0].podtEtc = '출하완료' ;
+			}
 			
 			let ok = 1 ;
 			for (let i = 0 ; i < insertData.length ; i++) {
@@ -407,6 +403,7 @@
 							async : false ,
 							success : function(datas) {
 								data = datas.productlist ;
+								
 								grid.resetData(data) ;
 								grid.resetOriginData() ;
 								
@@ -431,7 +428,7 @@
 	var rowNo = new Array() ;
 	
 	grid.on('check' , (ev) => {
-		rowNo[ev.rowKey] = data[ev.rowKey].qntInfono ;
+		rowNo[ev.rowKey] = grid.getValue([ev.rowKey],"qntInfono") ;
 	})
 	
 	grid.on('uncheck' , (ev) => {

@@ -14,7 +14,9 @@ public interface ManCommandService {
 	
 	//제품 코드 입력했을 때 필요한 공정별 자재 조회
 	List<ManCommandVO> selectRes(ManCommandVO commandVO);
+
 	
 	//제품 만드는데 필요한 공정에 해당하는 설비 조회
 	List<ManCommandVO> selectFac(ManCommandVO commandVO);
+
 }

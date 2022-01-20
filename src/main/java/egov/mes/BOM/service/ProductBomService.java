@@ -21,6 +21,8 @@ public interface ProductBomService {
 	
 	int ResInsert (List<ProductBomVO> bomVO); //자재데이터 추가
 	int ResDelete (List<ProductBomVO> bomVO); //자제 데이터 삭제
+	void ResUpdate (List<ProductBomVO> bomVO); //자재 데이터 업데이트
+	
 	int ResAllDelete (ProductBomVO BomVO); //자재BOM 전체 삭제
 
 }
