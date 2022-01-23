@@ -264,6 +264,7 @@
 					data = datas;
 					gridManPlan.resetData(data.result);
 					gridManPlan.resetOriginData();
+					gridManPlan.refreshLayout();
 				},
 				error: function(reject){
 					console.log('reject: '+ reject);

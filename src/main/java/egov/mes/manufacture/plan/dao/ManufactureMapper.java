@@ -25,7 +25,10 @@ public interface ManufactureMapper {
 	List<ManufacturePlanVO> selectRes(ManufacturePlanVO planVo);
 
 	//미계획조회
-	List<ManufacturePlanVO> selectPlan(ManufacturePlanVO planVo) ;
+	List<ManufacturePlanVO> selectPlan(ManufacturePlanVO planVo);
+	
+	//미계획 내역 메인화면에 넣어주기
+	List<ManufacturePlanVO> selectPlanToMain(ManufacturePlanVO planVo);
 	
 	//생산계획 추가 후 주문 테이블 주문 상태 변경
 	int updateOrdStatus(ManufacturePlanVO planVO);

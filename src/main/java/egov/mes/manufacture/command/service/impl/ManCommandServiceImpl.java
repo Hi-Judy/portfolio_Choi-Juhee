@@ -1,6 +1,7 @@
 package egov.mes.manufacture.command.service.impl;
 
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -38,12 +39,36 @@ public class ManCommandServiceImpl implements ManCommandService{
 	public List<ManCommandVO> selectFac(ManCommandVO commandVO) {
 		return mapper.selectFac(commandVO);
 	}
+
+	//자재코드에 해당하는 자재LOT 조회
+	@Override
+	public List<ManCommandVO> selectResLot(ManCommandVO commandVO) {
+		return mapper.selectResLot(commandVO);
+	}
+
+	//이전 생산지시 조회
+	@Override
+	public List<ManCommandVO> selectPreCommand(ManCommandVO commandVO) {
+		return mapper.selectPreCommand(commandVO);
+	}
+
+	@Override
+	public int hidden(Map<String, List<ManCommandVO>> commandVO) {
+		commandVO.get("command");
+		commandVO.get("commandDetail");
+		commandVO.get("res");
+		commandVO.get("plan");
+		
+		
+		return 0;
+	}
+
 	
 
-	//제품 코드 입력했을 때 필요한 공정별 자재 조회
-	@Override
-	public List<ManCommandVO> selectRes(ManCommandVO commandVO) {
-		return mapper.selectRes(commandVO);
-	}
+	
+
+	
+	
+	
 
 }

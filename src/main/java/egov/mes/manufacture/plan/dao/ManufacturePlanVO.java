@@ -28,7 +28,6 @@ public class ManufacturePlanVO {
 	String planComplete; //작업종료일
 	
 	String manPerday; //일 생산량
-	String manQnt; //실 작업량
 	String planEtc; //비고
 	
 	String startDate; //계획기간조회 
