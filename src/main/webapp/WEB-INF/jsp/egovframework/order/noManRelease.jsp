@@ -163,7 +163,7 @@
 		var codeName = $("#cusName").val() ;
 		
 		if (codeName == '') {
-			alert('업체명을 입력하세요') ;
+			alert('고객명을 입력하세요') ;
 			return ;
 		}
 		

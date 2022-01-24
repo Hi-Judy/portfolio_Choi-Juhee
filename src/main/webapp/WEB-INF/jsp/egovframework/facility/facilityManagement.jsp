@@ -435,7 +435,7 @@
 		var codeName = $("#facName").val() ;
 		
 		if (codeName == '') {
-			alert('업체명을 입력하세요') ;
+			alert('설비명을 입력하세요') ;
 			return ;
 		}
 		
