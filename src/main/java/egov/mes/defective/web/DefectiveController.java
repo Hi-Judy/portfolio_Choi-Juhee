@@ -4,11 +4,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import egov.mes.defective.dao.DefectiveVO;
-import egov.mes.defective.dao.ModifyVO;
 import egov.mes.defective.service.DefectiveService;
 
 @Controller
@@ -38,12 +36,12 @@ public class DefectiveController {
 		return "jsonView" ;
 	}
 	
-	// 선택한 제품코드에 대한 불량정보 불러오기
 	@PostMapping("/defective/main")
-	public String selectInsert(DefectiveVO defective , Model model) {
+	public String selectDefective(DefectiveVO defective , Model model) {
 		
-		model.addAttribute("result" , service.selectPodtCode(defective)) ;
+		model.addAttribute("result" , service.selectDefective(defective)) ;
 		
 		return "jsonView" ;
+		
 	}
 }

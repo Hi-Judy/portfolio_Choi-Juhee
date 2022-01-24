@@ -43,11 +43,17 @@ public class ProductServiceImpl implements ProductService{
 	public List<ProductVO> selectOptions(ProductVO product) {
 		return mapper.selectOptions(product) ;
 	}
-
+	
 	// 테스트
 	@Override
 	public void productTest(ProductVO product) {
 		mapper.productTest(product) ;
 	}
+	
+	@Override
+	public List<ProductVO> selectQR(ProductVO product) {
+		return mapper.selectQR(product) ;
+	}
 	// 테스트
+
 }

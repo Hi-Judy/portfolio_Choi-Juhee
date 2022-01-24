@@ -67,12 +67,20 @@
 				name: 'manDate'
 			},
 			{
+				header: '공정코드',
+				name : 'procCode'
+			} ,
+			{
+				header : '공정명',
+				name : 'procName'
+			} ,
+			{
 				header: '제품코드',
 				name: 'podtCode'
 			},
 			{
 				header: '제품명',
-				name: 'codeName'
+				name: 'podtName'
 			}
 		]
 
@@ -89,7 +97,7 @@
 			},
 			{
 				header:'불량명',
-				name: 'codeName'
+				name: 'defName'
 			},
 			{
 				header:'제품코드',
@@ -97,7 +105,7 @@
 			},
 			{
 				header:'제품명',
-				name: 'codeName'
+				name: 'podtName'
 			},
 			{
 				header:'공정코드',
@@ -105,7 +113,7 @@
 			},
 			{
 				header: '공정명',
-				name: 'codeName'
+				name: 'procName'
 			},
 			{
 				header:'작업일',
@@ -180,12 +188,16 @@
 		
 		//작업일자별 제품조회에서 클릭된 정보를 메인그리드로 가지고옴
 		gridProduct.on('click' , (ev) => {
-			let podtCode = gridProduct.getValue(ev.rowKey , "podtCode") ;	
+			gridMain.clear() ;
+			
+			let podtCode = gridProduct.getValue(ev.rowKey , "podtCode") ;
+			let manDate = gridProduct.getValue(ev.rowKey , "manDate") ;
+			let procCode = gridProduct.getValue(ev.rowKey , "procCode") ;
 			
 			$.ajax({
 				url : '${pageContext.request.contextPath}/defective/main' ,
 				method : 'post' ,
-				data : { 'podtCode' : podtCode } ,
+				data : { 'podtCode' : podtCode , "manDate" : manDate , "procCode" : procCode } ,
 				dataType : 'json' ,
 				success : function(datas) {
 					data = datas ;

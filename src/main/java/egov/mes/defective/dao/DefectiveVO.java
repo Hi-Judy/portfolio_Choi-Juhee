@@ -24,4 +24,8 @@ public class DefectiveVO {
 	
 	String fromDate ;
 	String toDate ;
+	
+	String procName ;
+	String podtName ;
+	String defName ;
 }

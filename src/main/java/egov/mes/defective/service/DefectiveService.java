@@ -6,5 +6,5 @@ import egov.mes.defective.dao.DefectiveVO;
 
 public interface DefectiveService {
 	List<DefectiveVO> findPodtCode(DefectiveVO defective) ;	
-	List<DefectiveVO> selectPodtCode(DefectiveVO defective) ;
+	List<DefectiveVO> selectDefective(DefectiveVO defective) ;
 }

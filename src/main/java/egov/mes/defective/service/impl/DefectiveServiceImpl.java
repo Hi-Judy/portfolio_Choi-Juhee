@@ -20,7 +20,7 @@ public class DefectiveServiceImpl implements DefectiveService {
 	}
 
 	@Override
-	public List<DefectiveVO> selectPodtCode(DefectiveVO defective) {
-		return mapper.selectPodtCode(defective) ;
+	public List<DefectiveVO> selectDefective(DefectiveVO defective) {
+		return mapper.selectDefective(defective) ;
 	}
 }
