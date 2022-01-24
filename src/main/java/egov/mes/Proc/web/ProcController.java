@@ -10,7 +10,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
-import egov.mes.BOM.dao.ProductBomVO;
 import egov.mes.Proc.dao.ProcessControlVO;
 import egov.mes.Proc.service.ProcessControlService;
 
@@ -47,10 +46,8 @@ public class ProcController {
 	@ResponseBody
 	@PostMapping(value = "Delete" ) 
 	public String ResDelete (@RequestBody List<ProcessControlVO> procVO) {
-		System.out.println("삭제준비");
 		service.ProcDelete(procVO);
 		service.CommonDelete(procVO);
-		System.out.println("삭제완료");	
 		return null ;
 	}
 	
@@ -58,11 +55,8 @@ public class ProcController {
 	@ResponseBody
 	@PostMapping(value = "AddData" ) 
 	public String AddData (@RequestBody List<ProcessControlVO> procVO) {
-		System.out.println("데이터입력준비");
 		service.ProcAddData(procVO);
-		System.out.println("데이터입력 1차 완료");
 		service.CommonAddData(procVO);
-		System.out.println("데이터입력모두완료");
 		return null ;
 	}
 	
@@ -74,5 +68,23 @@ public class ProcController {
 		service.CommonChangeData(procVO);
 		return null ;
 	}
+	
+	//설비 전체목록 조회
+	@RequestMapping("FacFind")
+	public ModelAndView FacFind() {
+//		System.out.println("공정전체조회 준비");
+		ModelAndView jsonView = new ModelAndView("jsonView");
+		jsonView.addObject("datas" , service.FacFind());
+		
+		return jsonView;
+	}
+	
+	//데이터 추가
+	@ResponseBody
+	@PostMapping(value = "FacProcInput" ) 
+	public void FacProcInput (@RequestBody List<ProcessControlVO> procVO) {
+		
+	}
+	
 
 }

@@ -33,8 +33,9 @@ public class ProcessControlServiceImpl implements ProcessControlService {
 	//process 테이블데이터 단건삭제
 	@Override
 	public int ProcDelete(List<ProcessControlVO> procVO) {
-		for(ProcessControlVO oneData : procVO)
+		for(ProcessControlVO oneData : procVO) {
 			mapper.ProcDelete(oneData);
+		}
 		return 0;
 	}
 
@@ -42,8 +43,9 @@ public class ProcessControlServiceImpl implements ProcessControlService {
 	//common_code 테이블 단건삭제
 	@Override
 	public int CommonDelete(List<ProcessControlVO> procVO) {
-		for(ProcessControlVO oneData : procVO)
+		for(ProcessControlVO oneData : procVO) {
 			mapper.CommonDelete(oneData);
+		}
 		return 0;
 	}
 	
@@ -59,15 +61,11 @@ public class ProcessControlServiceImpl implements ProcessControlService {
 	//common_code 테이블 데이터 추가
 	@Override
 	public int CommonAddData(List<ProcessControlVO> ProcVO) {
-		System.out.println("Impl 데이터준비");
-		
-		System.out.println(ProcVO);
 		for(ProcessControlVO procVO : ProcVO) {
 			System.out.println(procVO);
 			
 			mapper.CommonAddData(procVO);
 		}
-		System.out.println("Impl 성공");
 		
 		return 0;
 	}
@@ -85,6 +83,14 @@ public class ProcessControlServiceImpl implements ProcessControlService {
 		for(ProcessControlVO procVO : ProcVO)
 			mapper.CommonChangeData(procVO);
 		}
+
+	
+	//설비목록 전체조회
+	@Override
+	public List<ProcessControlVO> FacFind() {
+		
+		return mapper.FacFind();
+	}
 
 
 

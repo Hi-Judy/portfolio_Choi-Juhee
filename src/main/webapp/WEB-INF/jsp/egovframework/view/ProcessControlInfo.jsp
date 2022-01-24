@@ -69,12 +69,19 @@ div.right {
 
 .btn {
    border-radius: 5px;
-   background-color: white;
+   background-color: cornflowerblue;
    padding: 2px 15px;
 }
 
 .test {
 	background-color: darksalmon;
+}
+
+.FacYes{
+	background-color: rgb(96, 145, 96);
+}
+.FacNo{
+	background-color: rgb(204, 70, 70);
 }
 </style>
 
@@ -86,7 +93,7 @@ div.right {
       <div>
       		<span style="margin-top: 13px; float: left;"> &nbsp;&nbsp;공정관리</span>
             <span style="float: right; margin-top: 3.5px;">
-            <button id="AddData" type="button" class="btn btn btn-new"
+            <button id="AddData" type="button" class="btn"
                style="padding: 5px 30px;">추가</button> &nbsp;&nbsp;
             <button id="btnDelete" type="button" class="btn"
                style="padding: 5px 30px;">삭제</button> &nbsp;&nbsp;
@@ -112,6 +119,14 @@ div.right {
 		<span>10111~ 영업팀  10211~ 자재팀  10311~ 생상팀 <br>
 			  10411~ QC팀   10511~ 포장팀</span>
 		<div id="EmpGrid"></div>
+	</div>
+	
+	<div id="ModalDal" title="설비등록">
+		<div>선택된 공정코드: &nbsp;<input id="ProcSelected" readonly> </div>
+		 <button id="FacSave" type="button" class="btn" style="float: right; ">설비등록</button>
+		<br><br>
+           
+		<div id="FacGrid" style="border-top: 3px solid #168;"></div>
 	</div>
      
       
@@ -139,13 +154,26 @@ toastr.options = {
         "tapToDismiss": false
       }
 
-      //-------- 모달 설정 ----------
+      //-------- 관리자선택 모달 설정 ----------
       var dialog = $( "#dialog-form" ).dialog({
          autoOpen : false ,
          modal : true ,
          width:600, //너비
          height:400 //높이
       });
+      
+	  //-------- 설비등록 모달 설정 ----------
+	  var ModalDal = $( "#ModalDal" ).dialog({
+	     autoOpen : false ,
+	     modal : true ,
+	     width:1000, //너비
+	     height:700 ,//높이
+	     buttons : {"취소" : function() {
+	     		ModalDal.dialog( "close" ) ;
+			}
+	    }
+	  });      
+      
 
 
 var EmpDatas;
@@ -183,7 +211,7 @@ $.ajax({
 	console.log(rsts);
 	ProcAllData = rsts.datas
 	
-//	FacilityCheck(ProcAllData);
+	
 })
 
 
@@ -222,6 +250,8 @@ const Grid = new tui.Grid({
 	rowHeaders: ['checkbox'],
 	bodyHeight : 500  //그리드 높이 조절해서 스크트롤 생성
 })
+FacilityCheck(ProcAllData);
+
 
 	//추가버튼 누르면 그리드 행 추가해주면서 자동으로 코드입력 처리
 	AddData.addEventListener('click' , (ev) => {
@@ -245,6 +275,17 @@ const Grid = new tui.Grid({
 			dialog.dialog( "open" ) ;
 			EmpGrid.refreshLayout() ;
 		}
+		
+		//설비 미등록 된 얘만 모달 띄워주기
+		if(ev.columnName == 'FacCheck'){
+			let FacCheck = Grid.getValue(GridrowKey , 'FacCheck')
+			if(FacCheck == '미등록'){
+				document.getElementById("ProcSelected").setAttribute("value", Grid.getValue(GridrowKey , 'procCode'));
+				ModalDal.dialog("open");
+				FacGrid.refreshLayout() ;
+			}
+		}
+		
 	})
 	
 	//Grid 그리드 데이터 변경처리
@@ -276,7 +317,7 @@ const Grid = new tui.Grid({
     	}
 	});
 	
-	
+	//---------- 저장버튼 이벤트 -------------
 	btnSave.addEventListener('click' , (ev) => {
 		var GridModiRow = Grid.getModifiedRows() 	;
 		//데이터 추가
@@ -294,6 +335,8 @@ const Grid = new tui.Grid({
 
 	});
 	
+	
+	//---------- 공정건별삭제 처리 -------------
 	function Delt(DelectData) {
 		var num = 0 ;
 		var DT ;
@@ -333,7 +376,7 @@ const Grid = new tui.Grid({
 	   	          });
 			}
 	}
-	
+	//---------- 공정데이터추가 처리 -------------
 	function InpData(InputData) {
 		var num = 0 ;
 		var DI ;
@@ -380,7 +423,7 @@ const Grid = new tui.Grid({
 	   	          });
 			}
 	}
-	
+	//---------- 공정건별 업데이트 -------------
 	function ChangeData(UpdateData) {
 		var num = 0 ;
 		var DU ;
@@ -390,7 +433,7 @@ const Grid = new tui.Grid({
 				UpdateData.forEach( (rst) => {
 					if(rst.procCode == null || rst.procCode == '')
 					{
-						toastr["error"]("삭제할 코드가 없습니다");  
+						toastr["error"]("수정할 코드가 없습니다");  
    						return false; 
 					}
 					else
@@ -418,7 +461,7 @@ const Grid = new tui.Grid({
 	   	    		 contentType : 'application/json;',
 	   	             async : false, 
 	   	             success: (datas) => {
-	   	            	 toastr["success"]("데이터 추가 완료"); 
+	   	            	 toastr["success"]("데이터 수정 완료"); 
 	   	             },
 	   	             error: (err) => {
 	   	                alert("데이터수정 ajax에러 " + err);
@@ -427,12 +470,94 @@ const Grid = new tui.Grid({
 			}
 	}
 	
+	
+	
+///////////////////////// 설비관리 공간 시작 //////////////////////////////-----------------------------
+var FacAllData
+
+//------공정전체조회 ajax --------
+$.ajax({
+   url : './FacFind',
+   dataType : 'json',
+   async : false,
+}).done( (rsts) => {
+	FacAllData = rsts.datas
+	
+})
+
+// 설비 그리드 헤드
+const FacGrid = new tui.Grid({
+	   el : document.getElementById('FacGrid'),
+	   data : FacAllData ,
+	   columns : [
+	      { header : '설비번호'		, name : 'facNo'   		, align : 'center' },
+	      { header : '사용여부'		, name : 'facStatus'	, align : 'center' },
+	      { header : '기준생산량(개)'	, name : 'facOutput'   	, align : 'center' },
+	      { header : '기준시간'		, name : 'facRuntime'   , align : 'center' }
+	   ],
+	   rowHeaders: ['checkbox'],
+	   bodyHeight : 400 
+	});
+	
+	//------체크된 데이터 배열에 삽입 --------
+	var CheckDatas = new Array() ;
+	FacGrid.on('check' , (ev) => {
+		CheckDatas[ev.rowKey] = FacGrid.getValue([ev.rowKey] , "facNo")
+		
+	});
+	//------체크해제된 데이터 배열에 삭제 --------
+	FacGrid.on('uncheck' , (ev) => {
+		delete CheckDatas[ev.rowKey] 
+	})
+	
+	FacSave.addEventListener('click' , (ev) => {
+		var FacArray = new Array();
+		for(let i = 0 ; i<CheckDatas.length ; i++){
+			if(CheckDatas[i] == undefined){
+				delete CheckDatas[ev.rowKey] 
+			}else{
+				console.log(CheckDatas[i]);
+				var FacProcData = {
+						proc_code : document.getElementById("ProcSelected").value ,
+						facNo : CheckDatas[i]
+						}
+				FacArray.push(FacProcData);
+			}
+		}
+
+		$.ajax({
+	    		 url : './FacProcInput',
+	    		 type : 'post',
+	    		 data : JSON.stringify(FacArray),
+	    		 contentType : 'application/json;',
+	             async : false, 
+	             success: (datas) => {
+	            	 toastr["success"]("설비등록완료"); 
+	             },
+	             error: (err) => {
+	                alert("설비등록 ajax에러 " + err);
+	             }
+	          });
+		
+		
+	})
+	
+
+
+	//설비등록여부 칼럼에 textValue 넣어주고 색으로 구분지어주기
 	function FacilityCheck(datas) {
-/* 		let GridData = Grid.getData() ;
-		console.log(GridData); */
-		datas.forEach( (rst) => {
-			console.log(rst)
-		})
+		for (let i = 0 ; i<datas.length ; i++){
+			if(datas[i].facOutput != null && datas[i].facRuntime != null){
+				Grid.setValue(datas[i].rowKey , 'FacCheck' , '등록완료')
+				Grid.addCellClassName(datas[i].rowKey , 'FacCheck' , 'FacYes')
+			}else{
+				Grid.setValue(datas[i].rowKey , 'FacCheck' , '미등록')
+				Grid.addCellClassName(datas[i].rowKey , 'FacCheck' , 'FacNo')
+			}
+		} 
+		
+		console.log(datas[0]);
+		
 	}
 
 

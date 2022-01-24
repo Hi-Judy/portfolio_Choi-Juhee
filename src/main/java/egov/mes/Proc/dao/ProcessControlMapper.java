@@ -6,6 +6,7 @@ public interface ProcessControlMapper {
 	
 	List<ProcessControlVO> AllFind(); //공정 전체조회
 	List<ProcessControlVO> EmpFind(); //사원조회(반장만)
+	List<ProcessControlVO> FacFind(); //설비목록 전체조회
 	int ProcDelete (ProcessControlVO oneData);		 //process 테이블데이터 단건삭제
 	int CommonDelete (ProcessControlVO oneData);	 //common_code 테이블 단건삭제
 	

@@ -19,6 +19,12 @@
 	where position_code = 'W003'
 </select>
 
+<select id="FacFind" resultType="egov.mes.Proc.dao.ProcessControlVO">
+	select *
+	from facility_status 
+</select>
+
+
 <insert id="ProcAddData" parameterType="egov.mes.Proc.dao.ProcessControlVO">
 	insert into process (
 							proc_code,
