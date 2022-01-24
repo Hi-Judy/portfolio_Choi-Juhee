@@ -54,6 +54,7 @@
 		ON C.CODE = R.RSC_CODE
 		WHERE CODE LIKE '%' || 'RSC' || '%'
 	</select>
+	
 	<select id="searchSuc" resultType="egov.mes.resources.order.dao.ResourcesOrderVO" parameterType="egov.mes.resources.order.dao.ResourcesOrderVO">
 		SELECT CODE AS SUC_CODE,
 			   CODE_NAME AS SUC_NAME
@@ -83,7 +84,7 @@
 			SET RSC_CODE= #{rscCode},
 				RSC_CNT = #{rscCnt},
 				RSC_TOTAL =#{rscTotal},
-				ORDE_DATE = sysdate,
+				ORDE_DATE = SYSDATE,
 				IST_REQ_DATE = #{ordeDate}
 		 WHERE ORDR_NO = #{ordrNo}
 	</update>

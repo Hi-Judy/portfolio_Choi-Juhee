@@ -17,10 +17,15 @@ public class ResourcesStoreVO {
 	String istCnt;			//입고량
 	String ostCnt;			//출고량
 	@DateTimeFormat(pattern = "yyyy-MM-dd")
-	@JsonFormat(pattern = "yyyy-MM-dd")
+	@JsonFormat(pattern = "yyyy-MM-dd", timezone = "Asia/Seoul")
 	Date storeDate;			//입,출고 날짜
+	
+	@DateTimeFormat(pattern = "yyyy-MM-dd")
+	@JsonFormat(pattern = "yyyy-MM-dd", timezone = "Asia/Seoul")
+	Date storeDate2;			//입,출고 날짜
+	
 	String storeFlag;		//입/출고 구분 
-	String storeEtc;			//비고
+	String storeEtc;		//비고
 	
 	String rscName;			//자재명
 	String rscUnit;			//자재단위
@@ -28,6 +33,9 @@ public class ResourcesStoreVO {
 	String rscPassCnt;		//자재 합격량
 	String rscPrc;			//자재 단가
 	String rscTstCnt;		//입고유무
-	String rscSt;
-	String ordrNo;
+	String rscSt;			//자재상태
+	String ordrNo;			//발주번호
+	String sucCode;			//업체코드
+	String sucName;			//업체명
+	
 }
