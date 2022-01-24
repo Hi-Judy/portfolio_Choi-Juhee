@@ -22,6 +22,7 @@ public class ManCommandVO {
 	String planEtc; //계획 비고
 
 
+
 	//생산지시
 	String comCode; //지시번호
 	String comDate; //지시일
@@ -47,6 +48,8 @@ public class ManCommandVO {
 	String procName; //공정명
 	String resObtain; //자재 확보유무
 	
+
+
 	
 	//설비
 	String facNo; //작업번호

@@ -222,7 +222,7 @@ toastr.options = {
          columns : [
             { header : '제품코드'   , name : 'podtCode'   , align : 'center' },
             { header : '제품명'   , name : 'codeName'   , align : 'center' },
-            { headet : '제품분류'   , name : 'podtFlag'   , align : 'center' }
+            { header : '제품분류'   , name : 'podtFlag'   , align : 'center' }
          ]
       });
       

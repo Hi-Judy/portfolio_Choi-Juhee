@@ -48,8 +48,8 @@
 						<li class="submenu-item "><a href="manCommand">생산 지시 관리</a></li>
 						<li class="submenu-item "><a href="#">생산 지시 상세 조회</a></li>
 						<li class="submenu-item "><a href="#">생산 현황 조회</a></li>
-						<li class="submenu-item "><a href="DefectiveProduct">공장 실적 관리</a></li>
-						<li class="submenu-item "><a href="#">생산 실적 조회</a></li>
+						<li class="submenu-item "><a href="#">공장 실적 관리</a></li>
+						<li class="submenu-item "><a href="DefectiveProduct">생산 실적 조회</a></li>
 					</ul></li>
 				<li class="sidebar-item  has-sub"><a href="#"
 					class='sidebar-link'> <i class="bi bi-grid-1x2-fill"></i> <span>설비관리</span>
@@ -67,8 +67,8 @@
 						<li class="submenu-item "><a href="resourcesStore">자재 입고 관리</a></li>
 						<li class="submenu-item "><a href="resourceStoreInOut">자재 입/출고 조회</a></li>
 						<li class="submenu-item "><a href="resourcesRtngdList">자재 반품 조회</a></li>
-						<li class="submenu-item "><a href="#">자재 LOT재고 조정 관리</a></li>
-						<li class="submenu-item "><a href="#">자재 LOT재고 조정 조회</a></li>
+						<li class="submenu-item "><a href="resourcesInventory">자재 LOT재고 조정 관리</a></li>
+						<li class="submenu-item "><a href="resourcesInventoryList">자재 LOT재고 조정 조회</a></li>
 						<li class="submenu-item "><a href="#">자재 재고 조회</a></li>
 					</ul></li>
 			</ul>

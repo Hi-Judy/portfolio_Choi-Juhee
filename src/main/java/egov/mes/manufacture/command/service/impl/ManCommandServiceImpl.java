@@ -40,6 +40,7 @@ public class ManCommandServiceImpl implements ManCommandService{
 		return mapper.selectFac(commandVO);
 	}
 
+
 	//자재코드에 해당하는 자재LOT 조회
 	@Override
 	public List<ManCommandVO> selectResLot(ManCommandVO commandVO) {
@@ -95,12 +96,6 @@ public class ManCommandServiceImpl implements ManCommandService{
 		return 0;
 	}
 
-	
-
-	
-
-	
-	
 	
 
 }

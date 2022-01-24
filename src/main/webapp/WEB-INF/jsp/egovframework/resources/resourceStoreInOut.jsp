@@ -27,41 +27,39 @@
   
   <div id="tabs-1">
 	<hr>
-	입고일자  <input id="txtOrde1" type="date" data-role="datebox" data-options='{"mode": "calbox"}'>
-	~ 		<input id="txtOrde2" type="date" data-role="datebox" data-options='{"mode": "calbox"}'><br>
-	업체코드  <input id="txtSuc1">  <button id="btnFindSuc">돋보기</button>  업체명 <input id="txtSuc2" readonly><br>
-	자재코드  <input id="txtRsc1">  <button id="btnFindRsc">돋보기</button>  자재명 <input id="txtRsc2" readonly><br>
-	<div id="dialog-form-rsc" title="자재 검색"></div>
-	<div id="dialog-form-suc" title="업체 검색"></div>
+	입고일자  <input id="txtStoreIn1" type="date" data-role="datebox" data-options='{"mode": "calbox"}'>
+	~ 		<input id="txtStoreIn2" type="date" data-role="datebox" data-options='{"mode": "calbox"}'><br>
+	업체코드  <input id="txtStoreInSuc1">  <button id="btnStoreInSuc">돋보기</button>  업체명 <input id="txtStoreInSuc2" readonly><br>
+	자재코드  <input id="txtStoreInRsc1">  <button id="btnStoreInRsc">돋보기</button>  자재명 <input id="txtStoreInRsc2" readonly><br>
+	<div id="dialog-form-in-rsc" title="자재 검색"></div>
+	<div id="dialog-form-in-suc" title="업체 검색"></div>
 	<br>
-	<button id="btnSelect">조회</button>
-	<button id="btn_reset" type="reset">초기화</button>
+	<button id="btnStoreInSelect">조회</button>
+	<button id="btnStoreInreset" type="reset">초기화</button>
 
 	<button>엑셀</button>
 	<hr>	
-	<div id="grid"></div>
+	<div id="gridStoreIn"></div>
   </div>
   
   
   <div id="tabs-2">
 	<hr>
-	출고일자  <input id="txtOrde1" type="date" data-role="datebox" data-options='{"mode": "calbox"}'>
-	~ 		<input id="txtOrde2" type="date" data-role="datebox" data-options='{"mode": "calbox"}'><br>
-	업체코드  <input id="txtSuc1">  <button id="btnFindSuc">돋보기</button>  업체명 <input id="txtSuc2" readonly><br>
-	자재코드  <input id="txtRsc1">  <button id="btnFindRsc">돋보기</button>  자재명 <input id="txtRsc2" readonly><br>
-	<div id="dialog-form-rsc" title="자재 검색"></div>
-	<div id="dialog-form-suc" title="업체 검색"></div>
+	출고일자  <input id="txtStoreOut1" type="date" data-role="datebox" data-options='{"mode": "calbox"}'>
+	~ 		<input id="txtStoreOut2" type="date" data-role="datebox" data-options='{"mode": "calbox"}'><br>
+	업체코드  <input id="txtStoreOutSuc1">  <button id="btnStoreOutSuc">돋보기</button>  업체명 <input id="txtStoreOutSuc2" readonly><br>
+	자재코드  <input id="txtStoreOutRsc1">  <button id="btnStoreOutRsc">돋보기</button>  자재명 <input id="txtStoreOutRsc2" readonly><br>
+	<div id="dialog-form-Out-rsc" title="자재 검색"></div>
+	<div id="dialog-form-Out-suc" title="업체 검색"></div>
 	<br>
-	<button id="btnSelect">조회</button>
-	<button id="btn_reset" type="reset">초기화</button>
+	<button id="btnStoreOutSelect">조회</button>
+	<button id="btnStoreOutreset" type="reset">초기화</button>
 
 	<button>엑셀</button>
 	<hr>	
-	<div id="grid"></div>
-  </div>
-
+	<div id="gridStoreOut"></div>
+	</div>
 </div>
-
  
 <script type="text/javascript">
 
@@ -69,38 +67,41 @@ $(function() {
     $( "#tabs" ).tabs();
   });
 
+
+//////////////////////////////////////////////입고////////////////////////////////////////////////		
+
 	//입고일자 초기값 
 	var d = new Date();
 	var nd = new Date(d.getFullYear(), d.getMonth(), d.getDate() - 7);
-	document.getElementById('txtOrde1').value = nd.toISOString().slice(0, 10);
-	document.getElementById('txtOrde2').value = d.toISOString().slice(0, 10);
+	document.getElementById('txtStoreIn1').value = nd.toISOString().slice(0, 10);
+	document.getElementById('txtStoreIn2').value = d.toISOString().slice(0, 10);
 	
 	//초기화 버튼
-	$("#btn_reset").on("click", function(){
-		document.getElementById('txtOrde1').value = nd.toISOString().slice(0, 10);
-		document.getElementById('txtOrde2').value = d.toISOString().slice(0, 10);
-		$("#txtSuc1").val('');
-		$("#txtSuc2").val('');
-		$("#txtRsc1").val('');
-		$("#txtRsc2").val('');
+	$("#btnStoreInreset").on("click", function(){
+		document.getElementById('txtStoreIn1').value = nd.toISOString().slice(0, 10);
+		document.getElementById('txtStoreIn2').value = d.toISOString().slice(0, 10);
+		$("#txtStoreInSuc1").val('');
+		$("#txtStoreInSuc2").val('');
+		$("#txtStoreInRsc1").val('');
+		$("#txtStoreInRsc2").val('');
 	})
 	
 	
 	//모달창(자재조회)
 	function clickRsc(rscCode, rscName){
-		$("#txtRsc1").val(rscCode);
-		$("#txtRsc2").val(rscName);
-		dialog1.dialog("close");
+		$("#txtStoreInRsc1").val(rscCode);
+		$("#txtStoreInRsc2").val(rscName);
+		dialogInRsc.dialog("close");
 	};
 
-	let dialog1 = $( "#dialog-form-rsc" ).dialog({
+	let dialogInRsc = $("#dialog-form-in-rsc").dialog({
 			autoOpen: false,
 			modal: true
 		});
 	
-	$("#btnFindRsc").on("click", function(){
-			dialog1.dialog("open");
-		$("#dialog-form-rsc").load("recList2",
+	$("#btnStoreInRsc").on("click", function(){
+		dialogInRsc.dialog("open");
+		$("#dialog-form-in-rsc").load("recList2",
 				function(){console.log("로드됨")})
 		});
 
@@ -108,19 +109,19 @@ $(function() {
 	function clickSuc(sucCode, sucName){
 		console.log(sucCode);
 		console.log(sucName);
-		$("#txtSuc1").val(sucCode);
-		$("#txtSuc2").val(sucName);
-		dialog2.dialog("close");
+		$("#txtStoreInSuc1").val(sucCode);
+		$("#txtStoreInSuc2").val(sucName);
+		dialogInSuc.dialog("close");
 	};
 
-	let dialog2 = $("#dialog-form-suc").dialog({
+	let dialogInSuc = $("#dialog-form-in-rsc").dialog({
 			autoOpen: false,
 			modal: true
 		});
 	
-	$("#btnFindSuc").on("click", function(){
-			dialog2.dialog("open");
-		$("#dialog-form-suc").load("sucList",
+	$("#btnStoreInSuc").on("click", function(){
+		dialogInSuc.dialog("open");
+		$("#dialog-form-in-rsc").load("sucList",
 				function(){console.log("로드됨")})
 		});
 	
@@ -128,7 +129,7 @@ $(function() {
 	var Grid = tui.Grid;
 	Grid.applyTheme('default');
 	
-	const columns = [
+	const columnsStoreIn = [
 		  		{
 			    header: '입고일자',
 			    name: 'storeDate',
@@ -172,43 +173,182 @@ $(function() {
 			];
 			
 	//ajax(api)로 값 받아오는 거 
-	let dataSource = {
+	let dataSourceStoreIn = {
 		  api: {
 		    readData: { 
-		    	url: 'resourceStoreInOutList', 
+		    	url: 'resourceStoreInList', 
 		    	method: 'GET'
 		    	}
 		  },
 		  contentType: 'application/json'
 		};
 	
-	const grid = new Grid({
-		  el: document.getElementById('grid'),
+	const gridStoreIn = new Grid({
+		  el: document.getElementById('gridStoreIn'),
 		  data: null,
-		  columns
+		  columns: columnsStoreIn
 		});
 	
 	//조회버튼 클릭시 값 가지고 오는 거
-	$("#btnSelect").on("click", function(){
-			var rscCode = $("#txtRsc").val();
-			var sucCode = $("#txtSuc").val();
-			var ordeDate = $("#txtOrde1").val();
-			var ordeDate2 = $("#txtOrde2").val();
-			console.log(ordeDate);
-			console.log(typeof(ordeDate));
-			console.log(ordeDate2);
+	$("#btnStoreInSelect").on("click", function(){
+			var rscCode = $("#txtStoreInRsc1").val();
+			var sucCode = $("#txtStoreInSuc1").val();
+			var storeDate = $("#txtStoreIn1").val();
+			var storeDate2 = $("#txtStoreIn2").val();
+
 			
 			$.ajax({
-				url :'resourceStoreInOutList',
-				data: {'rscCode' : rscCode, 'sucCode': sucCode, 'ordeDate':ordeDate, 'ordeDate2':ordeDate2 },
+				url :'resourceStoreInList',
+				data: {'rscCode' : rscCode, 'sucCode': sucCode, 'storeDate':storeDate, 'storeDate2':storeDate2 },
 				contentType: 'application/json; charset=UTF-8'
 			}).done(function(da){
 				var datalist = JSON.parse(da);
-				console.log(datalist);
-				grid.resetData(datalist["data"]["contents"]);
+				gridStoreIn.resetData(datalist["data"]["contents"]);
 			})
 					
 		})
+		
+//////////////////////////////////////////////출고////////////////////////////////////////////////
+	
+	//출고일자 초기값 
+	var d = new Date();
+	var nd = new Date(d.getFullYear(), d.getMonth(), d.getDate() - 7);
+	document.getElementById('txtStoreOut1').value = nd.toISOString().slice(0, 10);
+	document.getElementById('txtStoreOut2').value = d.toISOString().slice(0, 10);
+	
+	//초기화 버튼
+	$("#btnStoreOutreset").on("click", function(){
+		document.getElementById('txtStoreOut1').value = nd.toISOString().slice(0, 10);
+		document.getElementById('txtStoreOut2').value = d.toISOString().slice(0, 10);
+		$("#txtStoreOutSuc1").val('');
+		$("#txtStoreOutSuc2").val('');
+		$("#txtStoreOutRsc1").val('');
+		$("#txtStoreOutRsc2").val('');
+	})
+	
+	
+	//모달창(자재조회)
+	function clickRsc(rscCode, rscName){
+		$("#txtStoreOutRsc1").val(rscCode);
+		$("#txtStoreOutRsc2").val(rscName);
+		dialogOutRsc.dialog("close");
+	};
+
+	let dialogOutRsc = $("#dialog-form-Out-rsc").dialog({
+			autoOpen: false,
+			modal: true
+		});
+	
+	$("#btnStoreOutRsc").on("click", function(){
+		dialogOutRsc.dialog("open");
+		$("#dialog-form-Out-rsc").load("recList2",
+				function(){console.log("로드됨")})
+		});
+
+	//모달창(업체조회)
+	function clickSuc(sucCode, sucName){
+		$("#txtStoreOutSuc1").val(sucCode);
+		$("#txtStoreOutSuc2").val(sucName);
+		dialogOutSuc.dialog("close");
+	};
+
+	let dialogOutSuc = $("#dialog-form-Out-rsc").dialog({
+			autoOpen: false,
+			modal: true
+		});
+	
+	$("#btnStoreOutSuc").on("click", function(){
+		dialogOutSuc.dialog("open");
+		$("#dialog-form-Out-rsc").load("sucList",
+				function(){console.log("로드됨")})
+		});
+	
+	//그리드 
+	var Grid = tui.Grid;
+	Grid.applyTheme('default');
+	
+	const columnsStoreOut = [
+		  		{
+			    header: '출고일자',
+			    name: 'storeDate',
+			    sortable: true,
+			    sortingType: 'desc'
+			  },
+			  {
+			    header: '자재코드',
+			    name: 'rscCode',
+			    sortable: true,
+			    sortingType: 'desc'
+			  },
+			  {
+				header: '자재명',
+				name: 'rscName',
+			    sortable: true,
+			    sortingType: 'desc'
+			  },
+			  {
+				header: '단위',
+				name: 'rscUnit'
+			   },
+			  {
+				header: '단가',
+				name: 'rscPrc'
+				},
+			   {
+				 header: '업체',
+				 name: 'sucName'
+				},
+			   {
+				 header: '출고량',
+				 name: 'ostCnt'
+				},
+				{
+				  header: '자재 LOT NO',
+				  name: 'rscLot',
+				  sortable: true,
+				  sortingType: 'desc'
+				}
+			];
+			
+	//ajax(api)로 값 받아오는 거 
+	let dataSourceStoreOut = {
+		  api: {
+		    readData: { 
+		    	url: 'resourceStoreOutList', 
+		    	method: 'GET'
+		    	}
+		  },
+		  contentType: 'application/json'
+		};
+	
+	const gridStoreOut = new Grid({
+		  el: document.getElementById('gridStoreOut'),
+		  data: null,
+		  columns: columnsStoreOut
+		});
+	
+	//조회버튼 클릭시 값 가지고 오는 거
+	$("#btnStoreOutSelect").on("click", function(){
+			var rscCode = $("#txtStoreOutRsc1").val();
+			var sucCode = $("#txtStoreOutSuc1").val();
+			var storeDate = $("#txtStoreOut1").val();
+			var storeDate2 = $("#txtStoreOut2").val();
+
+			
+			$.ajax({
+				url :'resourceStoreOutList',
+				data: {'rscCode' : rscCode, 'sucCode': sucCode, 'storeDate':storeDate, 'storeDate2':storeDate2 },
+				contentType: 'application/json; charset=UTF-8'
+			}).done(function(da){
+				var datalist = JSON.parse(da);
+				console.log(datalist["data"]["contents"])
+				gridStoreOut.resetData(datalist["data"]["contents"]);
+			})
+					
+		})
+		
+		
+		
 </script>
 </body>
 </html>
