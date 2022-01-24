@@ -72,6 +72,10 @@ div.right {
    background-color: white;
    padding: 2px 15px;
 }
+
+.test {
+	background-color: darksalmon;
+}
 </style>
 
 </head>
@@ -80,13 +84,14 @@ div.right {
 
    <div id="top">
       <div>
+      		<span style="margin-top: 13px; float: left;"> &nbsp;&nbsp;공정관리</span>
             <span style="float: right; margin-top: 3.5px;">
-            <button id="" type="button" class="btn btn btn-new"
-               style="padding: 5px 30px;">리셋</button> &nbsp;&nbsp;
-            <button id="BomSave" type="button" class="btn"
+            <button id="AddData" type="button" class="btn btn btn-new"
+               style="padding: 5px 30px;">추가</button> &nbsp;&nbsp;
+            <button id="btnDelete" type="button" class="btn"
+               style="padding: 5px 30px;">삭제</button> &nbsp;&nbsp;
+            <button id="btnSave" type="button" class="btn"
                style="padding: 5px 30px;">저장</button> &nbsp;&nbsp;
-            <button id="BomDataAllDelete" type="button" class="btn"
-               style="padding: 5px 30px;">BOM 삭제</button> &nbsp;&nbsp;
          </span>
 
       </div>
@@ -100,16 +105,73 @@ div.right {
          <span> 등록된 공정수 : 12509 </span>
          <br>
          <br>
-         <div id="Grid" style="border-top: 3px solid #168;"></div>
-
+         <div id="Grid" style="border-top: 3px solid #168; height: 600px;"></div>
       </div>
-
+	
+	<div id="dialog-form" title="작업반장 조회">
+		<span>10111~ 영업팀  10211~ 자재팀  10311~ 생상팀 <br>
+			  10411~ QC팀   10511~ 포장팀</span>
+		<div id="EmpGrid"></div>
+	</div>
      
       
    </div>
 </body>
 
 <script>
+//-------- toastr 옵션설정 ----------
+toastr.options = {
+        "closeButton": false,  //닫기버튼(X 표시)
+        "debug": false,       //디버그
+        "newestOnTop": false,
+        "progressBar": true,  //진행률 표시
+        "positionClass": "toast-top-center",
+        "preventDuplicates": false,    //중복 방지(같은거 여러개 안뜸)
+        "onclick": null,             //알림창 클릭시 alert 창 활성화 (다른것도 되는지는 연구해봐야함)
+        "showDuration": "3",
+        "hideDuration": "100",
+        "timeOut": "2000",   //사라지는데 걸리는 시간
+        "extendedTimeOut": "1000",  //마우스 올리고 연장된 시간
+        "showEasing": "swing",
+        "hideEasing": "linear",
+        "showMethod": "fadeIn",
+        "hideMethod": "fadeOut",
+        "tapToDismiss": false
+      }
+
+      //-------- 모달 설정 ----------
+      var dialog = $( "#dialog-form" ).dialog({
+         autoOpen : false ,
+         modal : true ,
+         width:600, //너비
+         height:400 //높이
+      });
+
+
+var EmpDatas;
+//------사원조회(반장만) ajax --------
+$.ajax({
+   url : './EmpFind',
+   dataType : 'json',
+   async : false,
+}).done( (rsts) => {
+	console.log(rsts);
+	EmpDatas = rsts.datas;
+	
+})
+//------사원조회(반장 직급만) 그리드 헤드 --------
+const EmpGrid = new tui.Grid({
+   el : document.getElementById('EmpGrid'),
+   data : EmpDatas ,
+   columns : [
+      { header : 'ID'	, name : 'empId'   	, align : 'center' },
+      { header : '이름'	, name : 'empName'	, align : 'center' },
+      { header : 'ETC'	, name : 'etc'   	, align : 'center' }
+   ]
+});
+
+
+
 var ProcAllData
 
 //------공정전체조회 ajax --------
@@ -121,18 +183,257 @@ $.ajax({
 	console.log(rsts);
 	ProcAllData = rsts.datas
 	
+//	FacilityCheck(ProcAllData);
 })
 
+
+//----------공정 그리드 헤드 ---------------
 const Grid = new tui.Grid({
 	el : document.getElementById('Grid'),
 	data : ProcAllData ,
 	columns : [
-		{ header : '공정코드'		, name : 'procCode' 	, align : 'center'},
-		{ header : '공정명'		, name : 'codeName' 	, align : 'center'	, editor : 'text'},
-		{ header : '공정구분'		, name : 'procFlag' 	, align : 'center'},
-		{ header : '공정관리자ID'	, name : 'procEmpId' 	, align : 'center'	, editor : 'text'}
-	]
+		{ header : '공정코드'		, name : 'procCode' 	, align : 'center'	, sortable : true },
+		{ header : '공정명'		, name : 'codeName' 	, align : 'center'	, editor : 'text' },
+		{ header : '공정구분'		, name : 'procFlag' 	, align : 'center'	,
+			formatter: 'listItemText',
+            editor: {
+                 type: 'select',
+                 options: {
+                    listItems: [
+                    	{ text : "재료혼합공정" , value : "재료혼합공정"},
+                    	{ text : "가공공정" 	, value : "가공공정"	},
+                    	{ text : "색소착색공정" , value : "색소착색공정"},
+                    	{ text : "렌즈중합공정" , value : "렌즈중합공정"},
+                    	{ text : "연마공정" 	, value : "연마공정"	},
+                    	{ text : "분리공정" 	, value : "분리공정"	},
+                    	{ text : "열처리공정" 	, value : "열처리공정"	},
+                    	{ text : "제품검사공정" , value : "제품검사공정"},
+                    	{ text : "제품멸균공정" , value : "제품멸균공정"},
+                    	{ text : "포장공정" 	, value : "포장공정"	}
+                    ]
+                 }
+               }
+        },
+        { header : '기준생산량(개)'		, name : 'facOutput' 	, align : 'center'	},
+        { header : '기준시간'			, name : 'facRuntime' 	, align : 'center'	},
+		{ header : '공정관리자ID'		, name : 'procEmpId' 	, align : 'center'	, editor : 'text' },
+        { header : '설비등록여부'		, name : 'FacCheck' 	, align : 'center'	, editor : 'text' }
+	],
+	rowHeaders: ['checkbox'],
+	bodyHeight : 500  //그리드 높이 조절해서 스크트롤 생성
 })
+
+	//추가버튼 누르면 그리드 행 추가해주면서 자동으로 코드입력 처리
+	AddData.addEventListener('click' , (ev) => {
+		let GridData = Grid.getData() ;
+		let ArrNum = GridData.length ; //그리드 배열의 갯수는 렝쓰값-1 의 숫자이다
+		ArrNum-- ;
+		let CodeData = GridData[ArrNum].procCode; //배열마지막 값의 코드를 담고
+		let CodeNum = CodeData.substring(4); //숫자만 뺴고 다 자른다
+		CodeNum++ //011 이면 ++ 되고나면 12 가 되어서 0을 붙일방법을 못찾아서 하드코딩으로 붙임 미래에 100개넘어가면 문제생김
+		
+		Grid.appendRow({})
+		Grid.setValue(GridData.length , "procCode" , "PROC0"+CodeNum);
+		
+	});
+	
+	var GridrowKey;
+	//관리자ID칼럼 라인 클릭시 모달생성
+	Grid.on('click' , (ev) => {
+		GridrowKey = ev.rowKey;
+		if(ev.columnName == 'procEmpId'){
+			dialog.dialog( "open" ) ;
+			EmpGrid.refreshLayout() ;
+		}
+	})
+	
+	//Grid 그리드 데이터 변경처리
+	EmpGrid.on('click' , (ev) => {
+		Grid.setValue(GridrowKey , 'procEmpId' , EmpDatas[ev.rowKey].empId);
+		 dialog.dialog( "close" ) ;
+	})
+	
+	//데이터가 변경된다면 실행
+	Grid.on('afterChange' , (ev) => {
+		var rowKey ;
+		ev.changes.forEach( (rst) => {
+			rowKey = rst.rowKey
+		})
+		Grid.addRowClassName(rowKey , 'test'); //클래스 추가
+	})
+	
+	
+	
+	//체크된 행 삭제처리
+	btnDelete.addEventListener('click' , (ev) => {
+		Grid.removeCheckedRows(true);
+		
+		var GridModiRow = Grid.getModifiedRows() 	;
+		//삭제처리
+		var DelectData	 = GridModiRow.deletedRows 	;
+    	if(DelectData.length > 0) {
+    		Delt(DelectData);
+    	}
+	});
+	
+	
+	btnSave.addEventListener('click' , (ev) => {
+		var GridModiRow = Grid.getModifiedRows() 	;
+		//데이터 추가
+		var InputData 	= GridModiRow.createdRows  	;
+		if(InputData.length > 0){
+			InpData(InputData)
+		}
+		
+		//업데이트
+		var UpdateData 	= GridModiRow.updatedRows 	;
+		if(UpdateData.length > 0){
+			ChangeData(UpdateData)
+		}
+    	
+
+	});
+	
+	function Delt(DelectData) {
+		var num = 0 ;
+		var DT ;
+		var DetDataArr = new Array();
+			try
+			{
+				DelectData.forEach( (rst) => {
+					if(rst.procCode == null || rst.procCode == '')
+					{
+						toastr["error"]("삭제할 코드가 없습니다");  
+   						return false; 
+					}
+					else
+						{
+						DT = {procCode : rst.procCode}
+						DetDataArr.push(DT);
+						num++
+						}
+				});
+			}catch(err){
+				alert('삭제오류발생 '+ err);
+			}
+			if(num > 0)
+			{
+				$.ajax({
+	   	    		 url : './Delete',
+	   	    		 type : 'post',
+	   	    		 data : JSON.stringify(DetDataArr),
+	   	    		 contentType : 'application/json;',
+	   	             async : false, 
+	   	             success: (datas) => {
+	   	            	 toastr["success"]("삭제 완료"); 
+	   	             },
+	   	             error: (err) => {
+	   	                alert("삭제 ajax 오류 " + err);
+	   	             }
+	   	          });
+			}
+	}
+	
+	function InpData(InputData) {
+		var num = 0 ;
+		var DI ;
+		var InpDataArr = new Array();
+			try
+			{
+				InputData.forEach( (rst) => {
+					if(rst.procCode == null || rst.procCode == '')
+					{
+						toastr["error"]("삭제할 코드가 없습니다");  
+   						return false; 
+					}
+					else
+						{
+						DI = {
+								procCode  : rst.procCode  ,
+								codeName  : rst.codeName  ,
+								procFlag  : rst.procFlag  ,
+								procEmpId : rst.procEmpId
+								
+							 }
+						InpDataArr.push(DI);
+						num++
+						}
+				});
+			}catch(err){
+				alert('데이터추가 예외 '+ err);
+			}
+			if(num > 0)
+			{
+				console.log("인설트 시작");
+				$.ajax({
+	   	    		 url : './AddData',
+	   	    		 type : 'post',
+	   	    		 data : JSON.stringify(InpDataArr),
+	   	    		 contentType : 'application/json;',
+	   	             async : false, 
+	   	             success: (datas) => {
+	   	            	 toastr["success"]("데이터 추가 완료"); 
+	   	             },
+	   	             error: (err) => {
+	   	                alert("데이터추가 ajax에러 " + err);
+	   	             }
+	   	          });
+			}
+	}
+	
+	function ChangeData(UpdateData) {
+		var num = 0 ;
+		var DU ;
+		var UpDataArr = new Array();
+			try
+			{
+				UpdateData.forEach( (rst) => {
+					if(rst.procCode == null || rst.procCode == '')
+					{
+						toastr["error"]("삭제할 코드가 없습니다");  
+   						return false; 
+					}
+					else
+						{
+						DU = {
+								procCode  : rst.procCode  ,
+								codeName  : rst.codeName  ,
+								procFlag  : rst.procFlag  ,
+								procEmpId : rst.procEmpId
+								
+							 }
+						UpDataArr.push(DU);
+						num++
+						}
+				});
+			}catch(err){
+				alert('데이터수정 예외 '+ err);
+			}
+			if(num > 0)
+			{
+				$.ajax({
+	   	    		 url : './ChangeData',
+	   	    		 type : 'post',
+	   	    		 data : JSON.stringify(UpDataArr),
+	   	    		 contentType : 'application/json;',
+	   	             async : false, 
+	   	             success: (datas) => {
+	   	            	 toastr["success"]("데이터 추가 완료"); 
+	   	             },
+	   	             error: (err) => {
+	   	                alert("데이터수정 ajax에러 " + err);
+	   	             }
+	   	          });
+			}
+	}
+	
+	function FacilityCheck(datas) {
+/* 		let GridData = Grid.getData() ;
+		console.log(GridData); */
+		datas.forEach( (rst) => {
+			console.log(rst)
+		})
+	}
 
 
 </script>
