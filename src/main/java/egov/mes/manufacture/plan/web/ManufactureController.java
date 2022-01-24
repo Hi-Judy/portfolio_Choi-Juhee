@@ -33,19 +33,19 @@ public class ManufactureController {
 	@PostMapping("/manufacture/manPlan")
 	public String selectManPlan(ManufacturePlanVO planVO, Model model) {
 
-		System.out.println(planVO);
+		//System.out.println(planVO);
 		model.addAttribute("result", manService.selectManPlan(planVO));
-		System.out.println("생산계획 조회: " + manService.selectManPlan(planVO));
+		//System.out.println("생산계획 조회: " + manService.selectManPlan(planVO));
 
 		return "jsonView";
 	}
 
-	// 생산계획 디테일 조회
+	// 생산계획 디테일 조회(생산계획조회)
 	@GetMapping("/manufacture/manPlanDetail/{manPlanNo}")
 	public String selectManPlanDetail(@PathVariable String manPlanNo, 
 									  ManufacturePlanVO planVO, 
 									  Model model) {
-
+		//System.out.println(planVO);
 		Map<String, List<ManufacturePlanVO>> maps = new HashMap<>();
 		maps.put("contents", manService.selectManPlanDetail(planVO));
 		 
@@ -56,11 +56,32 @@ public class ManufactureController {
 		model.addAttribute("data", maps);
 
 		//model.addAttribute("result", manService.selectManPlanDetail(planVO));
-		System.out.println("생산계획 데테일 조회: " + manService.selectManPlanDetail(planVO));
+		//System.out.println("생산계획 데테일 조회: " + manService.selectManPlanDetail(planVO));
 
 		return "jsonView";
 	}
 
+	// 생산계획 디테일 조회(미계획조회)
+	@PostMapping("/manufacture/manPlanDetailByPlan")
+	public String selectManPlanDetailByPlan(@RequestBody List<ManufacturePlanVO> planVO, 
+									  		Model model) {
+									  		
+		System.out.println(planVO);
+		Map<String, List<ManufacturePlanVO>> maps = new HashMap<>();
+		maps.put("contents", manService.selectPlanToMain(planVO));
+		 
+		Map<String, Object> map = new HashMap<>(); 
+		map.put("data", maps);
+		 
+		model.addAttribute("result",true); 
+		model.addAttribute("data", maps);
+
+		//model.addAttribute("result", manService.selectManPlanDetail(planVO));
+		System.out.println("미계획 조회: " + manService.selectPlanToMain(planVO));
+
+		return "jsonView";
+	}
+		
 	// 자재 조회 모달에서 매핑
 	@PostMapping("/manufacture/resource")
 	public String selectRes(ManufacturePlanVO planVO, Model model) {
@@ -69,6 +90,8 @@ public class ManufactureController {
 
 		Map<String, List<ManufacturePlanVO>> maps = new HashMap<>();
 		maps.put("contents", manService.selectRes(planVO));
+		System.out.println("planVO: "+ planVO);
+		System.out.println("자재조회"+maps);
 
 		Map<String, Object> map = new HashMap<>();
 		map.put("data", maps);
@@ -81,6 +104,7 @@ public class ManufactureController {
 	// 미계획 조회 모달에서 매핑
 	@RequestMapping("/manufacture/plan")
 	public String selectPlan1(ManufacturePlanVO planVO, Model model) {
+							 
 
 		Map<String, List<ManufacturePlanVO>> maps = new HashMap<>();
 		// 쿼리 결과를 contents 안의 배열로 넣기. contents 이름으로 maps에 담기.
