@@ -43,8 +43,6 @@
 	</div>
 	<br>
 	
-	
-	
 	<script>
 		var Grid = tui.Grid; //그리드 객체 생성
 		
@@ -55,11 +53,9 @@
 			height: 500,
 		    width: 900,
 			buttons: {
-				"확인" : function(){
-					dialogProduct.dialog("close");
-				}, 
-				"취소" : function(){
-					dialogProduct.dialog("close");
+				"닫기" : function(){
+					gridProduct.clear() ;
+					dialogProduct.dialog("close") ;
 				}
 			}		    
 		});
@@ -70,6 +66,14 @@
 				header: '작업일자',
 				name: 'manDate'
 			},
+			{
+				header: '공정코드',
+				name : 'procCode'
+			} ,
+			{
+				header : '공정명',
+				name : 'procName'
+			} ,
 			{
 				header: '제품코드',
 				name: 'podtCode'
@@ -93,7 +97,7 @@
 			},
 			{
 				header:'불량명',
-				name: 'codeName'
+				name: 'defName'
 			},
 			{
 				header:'제품코드',
@@ -101,7 +105,7 @@
 			},
 			{
 				header:'제품명',
-				name: 'codeName'
+				name: 'podtName'
 			},
 			{
 				header:'공정코드',
@@ -109,7 +113,7 @@
 			},
 			{
 				header: '공정명',
-				name: 'codeName'
+				name: 'procName'
 			},
 			{
 				header:'작업일',
@@ -130,16 +134,8 @@
 				contentType: 'application/json'
 		}; 
 		
-		//메인그리드
-		const dataSourceMain = {
-				api : {
-					readData : {url: '.', 
-							   method: 'GET'},
-					/* modifyData : { url: '${pageContext.request.contextPath}/manufacture/main', 
-								  method: 'POST' }, */
-				},
-				contentType : 'application/json;charset=UTF-8'
-		}; 
+		//메인그리드 데이터
+		let data ; 
 		
  		//제품코드찾기 그리드 내용. 
 		let gridProduct = new Grid({
@@ -151,21 +147,80 @@
 		//메인 그리드
 		var gridMain = new Grid({
 			el : document.getElementById('gridMain'),
-			data : dataSourceMain,
+			data : data,
 			columns : columnsMain,
 			rowHeaders : ['rowNum']
 		});
-		
+ 		
+ 		let data2 ;
+ 		
+ 		//작업일자별 제품조회
 		$("#btnFind").on("click" , function() {
 			dialogProduct.dialog("open") ;
 			
 			let from = $("#txtFromDate").val() ;
 			let to = $("#txtToDate").val() ;
 			
-			gridProduct.readData() ;
-			gridProduct.refreshLayout() ;
+			if (from == '') {
+				from = 'null' ;
+			}
+			if (to == '') {
+				to = 'null' ;
+			}
+			
+			$.ajax({
+				url : '${pageContext.request.contextPath}/defective/findProduct' ,
+				method : 'post' ,
+				data : { 'fromDate' : from , 'toDate' : to },
+				dataType : 'json' ,
+				success : function(datas) {
+					data2 = datas ;
+					
+					gridProduct.resetData(data2.result) ;
+					gridProduct.resetOriginData() ;
+					gridProduct.refreshLayout() ;
+				} ,
+				error : function(reject) {
+					console.log(reject) ;
+				}
+			})
 		})
 		
+		//작업일자별 제품조회에서 클릭된 정보를 메인그리드로 가지고옴
+		gridProduct.on('click' , (ev) => {
+			gridMain.clear() ;
+			
+			let podtCode = gridProduct.getValue(ev.rowKey , "podtCode") ;
+			let manDate = gridProduct.getValue(ev.rowKey , "manDate") ;
+			let procCode = gridProduct.getValue(ev.rowKey , "procCode") ;
+			
+			$.ajax({
+				url : '${pageContext.request.contextPath}/defective/main' ,
+				method : 'post' ,
+				data : { 'podtCode' : podtCode , "manDate" : manDate , "procCode" : procCode } ,
+				dataType : 'json' ,
+				success : function(datas) {
+					data = datas ;
+					
+					gridMain.resetData(data.result) ;
+					gridMain.resetOriginData() ;
+					gridMain.refreshLayout() ;
+				} ,
+				error : function(reject) {
+					console.log(reject) ;
+				}
+			})
+			
+			gridProduct.clear() ;
+			dialogProduct.dialog("close") ;
+		})
+		
+		//초기화 버튼
+		$("#btnClear").on("click" , function() {
+			$("#txtFromDate").val("") ;
+			$("#txtToDate").val("") ;
+			gridMain.clear() ;
+		})
 	</script>
 </body>
 </html>

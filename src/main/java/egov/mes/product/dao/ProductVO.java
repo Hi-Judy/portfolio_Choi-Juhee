@@ -25,5 +25,8 @@ public class ProductVO {
 	String qnt ;
 	
 	String comCode ;
-	String comNoDetail ;
+	String manPlanNo ;
+	String podtName ;
+	String ordCode ;
+	String manDate2 ;
 }

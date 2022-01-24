@@ -4,7 +4,7 @@
 	
 	<!-- 일자별 제품찾기 -->
 	<select id="findPodtCode" resultType="egov.mes.defective.dao.DefectiveVO">
-		select man_date , podt_code , fn_get_code_name(podt_code) as codeName 
+		select man_date , podt_code , proc_code , fn_get_code_name(proc_code) as procName , fn_get_code_name(podt_code) as podtName 
 		from manufacture_process
 		where 1=1
 		
@@ -20,6 +20,16 @@
 			]]>
 		</if>
 		order by man_date ASC
+	</select>
+	
+	<!-- 선택한거 메인그리드에 상세조회 -->
+	<select id="selectDefective" resultType="egov.mes.defective.dao.DefectiveVO">
+		select def_code , fn_get_code_name(def_code) as defName , podt_code , fn_get_code_name(podt_code) as podtName ,
+			proc_code , fn_get_code_name(proc_code) as procName , man_date , def_qnt
+		from defective_product_info
+		where podt_code = #{podtCode}
+		and man_date = #{manDate}
+		and proc_code = #{procCode}
 	</select>
 	
 </mapper>

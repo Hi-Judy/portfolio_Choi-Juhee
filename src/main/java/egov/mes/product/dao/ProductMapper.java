@@ -15,5 +15,6 @@ public interface ProductMapper {
 	
 	// 테스트
 	void productTest(ProductVO product) ;
+	List<ProductVO> selectQR(ProductVO product) ;
 	// 테스트
 }
