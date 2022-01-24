@@ -29,4 +29,6 @@ public class ProductVO {
 	String podtName ;
 	String ordCode ;
 	String manDate2 ;
+	
+	String code ;
 }

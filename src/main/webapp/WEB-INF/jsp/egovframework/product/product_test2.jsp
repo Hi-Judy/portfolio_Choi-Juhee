@@ -20,7 +20,7 @@
 	<br>
 	<div id="info"></div>
 	<div class="container">
-		<h2>LOT 정보조회</h2>  
+		<div id="title" align="center"><h2>LOT 정보조회</h2></div>  
 		<div class="table-responsive">
 		  <table class="table">
 		      <tr>
@@ -49,6 +49,9 @@
 		      </tr>
 		  </table>
 		</div>
+	</div>
+	<div id="buttonArea" align="center">
+		<button type="button" onclick="javascript:window.close()">닫기</button>
 	</div>
 	<script>
 	

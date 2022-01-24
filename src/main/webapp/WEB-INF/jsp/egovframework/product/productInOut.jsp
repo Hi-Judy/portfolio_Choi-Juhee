@@ -13,8 +13,8 @@
 <script src="https://uicdn.toast.com/tui-grid/latest/tui-grid.js"></script>
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
 <script src="https://code.jquery.com/ui/1.13.0/jquery-ui.js"></script>
+
 <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.17.1/xlsx.full.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/FileSaver.js/1.3.8/FileSaver.min.js"></script>
 </head>
 <body>
 	<div id="title" align="center"><h2>제품 입/출고 관리</h2></div>
@@ -54,6 +54,8 @@
 	var Grid = tui.Grid ;
 	
 	//---------- ↓페이지 ----------
+	let podtList = [] ;
+	
 	const columns = [
 		{
 			header: '번호' ,
@@ -66,18 +68,7 @@
 			editor: {
 				type: 'select' ,
 				options: {
-					listItems: [
-						{ text: '하드콘택트 브라운' , value: 'PODT001' } ,
-						{ text: '하드콘택트 그레이' , value: 'PODT002' } ,
-						{ text: '소프트콘택트 브라운' , value: 'PODT003' } ,
-						{ text: '소프트콘택트 그레이' , value: 'PODT004' } ,
-						{ text: '하드콘택트 무색' , value: 'PODT005' } ,
-						{ text: '소프트콘택트 무색' , value: 'PODT006' } ,
-						{ text: '소프트콘택트 도수 1.0' , value: 'PODT007' } ,
-						{ text: '하드콘택트 도수 1.0' , value: 'PODT008' } ,
-						{ text: '소프트콘택트 도수 0.5' , value: 'PODT009' } ,
-						{ text: '하드콘택트 도수 0.5' , value: 'PODT010' } 
-					]
+					listItems: podtList 
 				}
 			} ,
 			align: 'center'
@@ -105,7 +96,6 @@
 			editor: 'text' ,
 			align: 'center'
 		} ,
-// ----- ↓테스트 -----
 		{
 			header: '비고	' ,
 			name : 'podtEtc' ,
@@ -152,10 +142,25 @@
 				}
 			}
 		}
-// ----- ↑테스트 -----
 	] ;
 	
 	let data ;
+	
+	$.ajax({
+		url : 'selectPodtOptions' ,
+		dataType : 'json' ,
+		async : false ,
+		success : function(datas) {
+			for (let i = 0 ; i < datas.selectpodtoptions.length ; i++) {
+				let option = { text : datas.selectpodtoptions[i].codeName , value : datas.selectpodtoptions[i].code } ;
+				podtList.push(option) ;
+			}
+			
+		} , 
+		error : function(reject) {
+			console.log(reject) ;
+		}
+	})
 	
 	$("#listBtn").click(function () {		
 		let podtCode = $("#txtPodtCode").val() ;
@@ -187,8 +192,7 @@
 				data = datas.productlist ;
 				grid.resetData(data) ;
 				grid.resetOriginData() ;
-				
-// ----- ↓테스트 -----		
+						
 				$.ajax({
 					url : 'selectOptions' ,
 					dataType : 'json' ,
@@ -237,8 +241,6 @@
 						console.log(reject) ;
 					}
 				})
-// ----- ↑테스트 -----
-				
 			} ,
 			error : function(reject) {
 				console.log(reject) ;
@@ -253,11 +255,10 @@
 			{ type : 'checkbox' }
 		] ,
 		height : 300 ,
-		data : data ,
+		data : data , 
 		columns : columns
 	})
 	
-	// ----- ↓테스트 -----
 	const second = {
 		'생산완료' : [
 			{ text : '선택' , value : ''}
@@ -272,7 +273,6 @@
 			{ text : '선택' , value : ''}
 		]
 	} ;	
-	// ----- ↑테스트 -----
 	
 	// 입력된 데이터 수정못하게 하기
 	grid.on('editingStart' , (ev) => {
@@ -507,7 +507,6 @@
 		}
 		
 		let columnname = grid.getValue([ev.rowKey],"podtLot") ;
-		//let columnname = data[ev.rowKey].podtLot ;
 		if (columnname != null) {
 			// ★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★ 테스트한다고 우리집 IP 적어놨음. ★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★
 			// ★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★ 우리조 동적 IP로 바꾸고 나서 테스트 필요함. ★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★
@@ -541,6 +540,9 @@
 		includeHeader : true ,
 		includeHiddenColumns : true ,
 		onlySelected : false ,
+		columnNames : [
+			'qntInfono','podtCode','codeName','manDate','podtInput','podtOutput','podtEtc','comCode','podtLot'
+		] ,
 		fileName : 'excel'
 	} ;
 	

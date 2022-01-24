@@ -31,7 +31,9 @@
 		<br>
 		<div align="right">
 			<button type="button" id="listBtn">조회</button>
+			<button type="button" id="addBtn">추가</button>
 			<button type="button" id="btnInsert">저장</button>
+			<button type="button" id="deleteBtn">삭제</button>
 			<button type="button" id="clearBtn">초기화</button>
 		</div>
 	</div>
@@ -49,6 +51,8 @@
 	var Grid = tui.Grid ;
 	
 	//---------- ↓페이지 ----------
+	let facList = [] ;
+	
 	const columns = [
 		{
 			header : '설비번호' ,
@@ -58,6 +62,12 @@
 		{
 			header : '설비코드' ,
 			name : 'facCode' ,
+			editor : {
+				type: 'select' ,
+				options: {
+					listItems : facList
+				}
+			} ,
 			align: 'center'
 		} ,
 		{
@@ -99,11 +109,33 @@
 		{
 			header : 'UPH' ,
 			name : 'facOutput' , 
+			editor : 'text' ,
 			align: 'center'
+		} ,
+		{
+			header : '가동시간' ,
+			name : 'facRuntime' ,
+			editor : 'text' ,
+			align : 'center'
 		}
 	] ;
 	
 	let data ;
+	
+	$.ajax({
+		url : 'selectFacOptions' ,
+		dataType : 'json' ,
+		async : false ,
+		success : function(datas) {
+			for (let i = 0 ; i < datas.selectfacoptions.length ; i++) {
+				let option = { text : datas.selectfacoptions[i].code , value : datas.selectfacoptions[i].code } ;
+				facList.push(option) ;
+			}
+		} , 
+		error : function(reject) {
+			console.log(reject) ;
+		}
+	})
 	
 	$("#listBtn").click(function () {
 		let facCode = $("#txtfacCode").val() ;
@@ -152,7 +184,8 @@
 	const grid = new Grid({
 		el : document.getElementById('info') ,
 		rowHeaders: [
-			{ type : 'rowNum' }
+			{ type : 'rowNum' } ,
+			{ type : 'checkbox' }
 		] ,
 		height : 300 ,
 		data : data ,
@@ -167,65 +200,201 @@
 		grid.clear() ;
 	})
 	
+	grid.on('editingStart' , (ev) => {
+		let value = grid.getValue(ev.rowKey , ev.columnName) ;
+		
+		if ( ( ev.columnName == 'facCode' || ev.columnName == 'facOutput' || ev.columnName == 'facRuntime' ) && value != '' && value != null ){
+			return ev.stop() ;
+		}
+	})
+	
+	$("#addBtn").on("click" , function() {
+		let data = { facStatus : 'Y' }
+		grid.appendRow(data) ;
+	})
+	
 	$("#btnInsert").on("click" , function() {
 		let modified = grid.getModifiedRows() ;
 		let updated = modified.updatedRows ;
 		
-		let ok = 1 ;
-		for (let i = 0 ; i < updated.length ; i++) {
-			
-			let no = updated[i].facNo ;
-			let status = updated[i].facStatus ;
-			let cause = updated[i].facCause ;
-			let checkdate = updated[i].facCheckdate ;
-			
- 			$.ajax({
-				url : 'facilityStatusUpdate' ,
-				async : false ,
-				data : {
-					facNo : no ,
-					facStatus : status ,
-					facCause : cause ,
-					facCheckdate : checkdate
-				} ,
-				success : function(datas) {
-					ok = 2 ;
-					
-					let facCode = 'null' ;
-					let facStatus = 'null' ;
-					let checkDatestart = '1910-12-25' ;
-					let checkDateend = '1910-12-25' ;
-					
-					$.ajax({
-						url : 'facilityList' ,
-						dataType : 'json' ,
-						data : {
-							facCode : facCode ,
-							facStatus : facStatus ,
-							checkDatestart : checkDatestart ,
-							checkDateend : checkDateend
-						} ,
-						async : false ,
-						success : function(datas) {
-							data = datas.facilitylist ;
-							grid.resetData(data) ;
-							grid.resetOriginData() ;
-							
-						} ,
-						error : function(reject) {
-							console.log(reject) ;
-						}
-					})
-				} ,
-				error : function(reject) {
-					console.log(reject) ;
-				}
-			}) 
-		}  
-		if (ok == 2) {
-			alert('수정완료되었습니다') ;
+		let modified2 = grid.getModifiedRows() ;
+		let inserted = modified2.createdRows ;
+		
+		if ( updated != '' ){
+			let ok = 1 ;
+			for (let i = 0 ; i < updated.length ; i++) {
+				
+				let no = updated[i].facNo ;
+				let status = updated[i].facStatus ;
+				let cause = updated[i].facCause ;
+				let checkdate = updated[i].facCheckdate ;
+				
+	 			$.ajax({
+					url : 'facilityStatusUpdate' ,
+					async : false ,
+					data : {
+						facNo : no ,
+						facStatus : status ,
+						facCause : cause ,
+						facCheckdate : checkdate
+					} ,
+					success : function(datas) {
+						ok = 2 ;
+						
+						let facCode = 'null' ;
+						let facStatus = 'null' ;
+						let checkDatestart = '1910-12-25' ;
+						let checkDateend = '1910-12-25' ;
+						
+						$.ajax({
+							url : 'facilityList' ,
+							dataType : 'json' ,
+							data : {
+								facCode : facCode ,
+								facStatus : facStatus ,
+								checkDatestart : checkDatestart ,
+								checkDateend : checkDateend
+							} ,
+							async : false ,
+							success : function(datas) {
+								data = datas.facilitylist ;
+								grid.resetData(data) ;
+								grid.resetOriginData() ;
+								
+							} ,
+							error : function(reject) {
+								console.log(reject) ;
+							}
+						})
+					} ,
+					error : function(reject) {
+						console.log(reject) ;
+					}
+				}) 
+			}  
+			if (ok == 2) {
+				alert('수정완료되었습니다') ;
+			}
+		}
+		
+		if ( inserted != '' ) {
+			let ok = 1 ;
+			for (let i = 0 ; i < inserted.length ; i++) {
+				
+				let facStatus = inserted[i].facStatus ;				
+				let facCode = inserted[i].facCode ;
+				let facOutput = inserted[i].facOutput ;
+				let facRuntime = inserted[i].facRuntime ;
+				
+	 			$.ajax({
+					url : 'insertFacility' ,
+					async : false ,
+					data : {
+						facCode : facCode ,
+						facStatus : facStatus ,
+						facOutput : facOutput ,
+						facRuntime : facRuntime
+					} ,
+					success : function(datas) {
+						ok = 2 ;
+						
+						let facCode = 'null' ;
+						let facStatus = 'null' ;
+						let checkDatestart = '1910-12-25' ;
+						let checkDateend = '1910-12-25' ;
+						
+						$.ajax({
+							url : 'facilityList' ,
+							dataType : 'json' ,
+							data : {
+								facCode : facCode ,
+								facStatus : facStatus ,
+								checkDatestart : checkDatestart ,
+								checkDateend : checkDateend
+							} ,
+							async : false ,
+							success : function(datas) {
+								data = datas.facilitylist ;
+								grid.resetData(data) ;
+								grid.resetOriginData() ;
+								
+							} ,
+							error : function(reject) {
+								console.log(reject) ;
+							}
+						})
+					} ,
+					error : function(reject) {
+						console.log(reject) ;
+					}
+				}) 
+			}  
+			if (ok == 2) {
+				alert('등록완료되었습니다') ;
+			}
 		}
 	})
+	
+	var rowNo = new Array() ;
+	
+	grid.on('check' , (ev) => {
+		rowNo[ev.rowKey] = grid.getValue([ev.rowKey],"facNo") ;
+	})
+	
+	grid.on('uncheck' , (ev) => {
+		delete rowNo[ev.rowKey] ;
+	})
+	
+	$("#deleteBtn").on("click" , function() {
+		let ok = 1 ;
+		for (let i = 0 ; i < rowNo.length ; i++) {
+			if(rowNo[i] != null) {
+				let facNo = rowNo[i] ;
+				
+				$.ajax({
+					url : 'deleteFacility/' + facNo ,
+					async : false ,
+					success : function(datas) {
+						ok = 2 ;
+						
+						let facCode = 'null' ;
+						let facStatus = 'null' ;
+						let checkDatestart = '1910-12-25' ;
+						let checkDateend = '1910-12-25' ;
+						
+						$.ajax({
+							url : 'facilityList' ,
+							dataType : 'json' ,
+							data : {
+								facCode : facCode ,
+								facStatus : facStatus ,
+								checkDatestart : checkDatestart ,
+								checkDateend : checkDateend
+							} ,
+							async : false ,
+							success : function(datas) {
+								data = datas.facilitylist ;
+								grid.resetData(data) ;
+								grid.resetOriginData() ;
+								
+							} ,
+							error : function(reject) {
+								console.log(reject) ;
+							}
+						})
+					} ,
+					error : function(reject) {
+						console.log(reject) ;
+					}
+				})
+				delete rowNo[i] ;
+			}
+		}
+		if (ok == 2) {
+			alert('삭제완료되었습니다') ;
+		}
+	})
+	
 	//---------- ↑페이지 ----------
 	//---------- ↓설비찾기 ----------
 	let dialog = $("#findFacility").dialog({
@@ -355,7 +524,7 @@
 		
 		let value = grid.getValue(ev.rowKey,ev.columnName) ;
 		
-		if ( ev.columnName === 'facStatus' || ev.columnName === 'facCause' || ev.columnName === 'facCheckdate' || value == null) {
+		if ( ev.columnName === 'facCode' || ev.columnName === 'facStatus' || ev.columnName === 'facCause' || ev.columnName === 'facCheckdate' || ev.columnName === 'facOutput' || ev.columnName === 'facRuntime' || value == null) {
 			return ev.stop() ;
 		}
 		

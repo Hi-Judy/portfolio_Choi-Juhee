@@ -69,4 +69,8 @@
 	</select>
 	<!-- 테스트 -->
 	
+	<select id="selectPodtOptions" resultType="egov.mes.product.dao.ProductVO">
+		select code , code_name from common_code where group_code = 'podt'
+	</select>
+	
 </mapper>
