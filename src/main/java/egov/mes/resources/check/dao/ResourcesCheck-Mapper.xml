@@ -45,7 +45,7 @@
 									RTNGD_CNT,
 									DEF_CODE,
 									RTNGD_DATE)
-					SELECT TO_CHAR(SYSDATE,'"RR"YYMMDD""') || LPAD(RCNUMBER.NEXTVAL,3,'0'),
+					SELECT TO_CHAR(SYSDATE,'"RT"YYMMDD""') || LPAD(RTNUMBER.NEXTVAL,3,'0'),
 						   RSC_TST_NO,
 						   #{rscCode},
 						   RSC_DEF_CNT,

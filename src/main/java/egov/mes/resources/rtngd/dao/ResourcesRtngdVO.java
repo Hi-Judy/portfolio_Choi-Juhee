@@ -1,5 +1,9 @@
 package egov.mes.resources.rtngd.dao;
 
+import org.springframework.format.annotation.DateTimeFormat;
+
+import com.fasterxml.jackson.annotation.JsonFormat;
+
 import lombok.Data;
 
 @Data
@@ -18,7 +22,14 @@ public class ResourcesRtngdVO {
 		String rscPrc;		//단가
 		
 		String sucName;
+		String sucCode;
+		@DateTimeFormat(pattern = "yyyy-MM-dd")
+		@JsonFormat(pattern = "yyyy-MM-dd", timezone = "Asia/Seoul")
 		String rtngdDate;
+		@DateTimeFormat(pattern = "yyyy-MM-dd")
+		@JsonFormat(pattern = "yyyy-MM-dd", timezone = "Asia/Seoul")
+		String rtngdDate2;
+		
 		
 		
 }

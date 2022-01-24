@@ -141,6 +141,8 @@
 			function(){console.log("로드됨")})}
 		
 	});
+	
+	
 
 	btnAdd.addEventListener("click", function(){
 		grid.appendRow({});
@@ -154,10 +156,16 @@
 		grid.removeCheckedRows(true);
 	}) 
 	
+	
 	btnSaveOrder.addEventListener("click", function(){
-		grid.request('modifyData');
-		
+		console.log((grid.getValue(grid.getRowCount()-1, "rscCnt")));
+		if((grid.getValue(grid.getRowCount()-1, "rscCnt")) == ""){
+			alert("발주량을 입력해주세요")
+		}else if((grid.getValue(grid.getRowCount()-1, "rscCnt")) != null){
+		  grid.request('modifyData');
+		}
 	}) 
+	
 	grid.on("response",function(){
 		grid.clear();
 	})
