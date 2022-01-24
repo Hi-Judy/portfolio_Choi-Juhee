@@ -56,7 +56,9 @@
 
 	let dialog1 = $( "#dialog-form-rsc" ).dialog({
 			autoOpen: false,
-			modal: true
+			modal: true,
+			heigth : 500,
+			width : 900,
 		});
 	
 	$("#btnFindRsc").on("click", function(){
