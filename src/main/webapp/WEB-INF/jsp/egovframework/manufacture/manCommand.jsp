@@ -783,8 +783,8 @@
 			//console.log(gridInsertCommand.getValue(0, 'comDate'));
 			//console.log(gridInsertCommand.getValue(0, 'comName'));
 			
-			let a = {};
-			a.command = gridInsertCommand.getData();
+			let a = {}; //a 객체 만들기
+			a.command = gridInsertCommand.getData(); //a 객체에 command라는 키로 gridInsertCommand 데이터 넣기.
 			a.commandDetail = gridInsertCommandDetail.getData();
 			a.res = gridUpdateRes.getData();
 			a.plan = girdUpdatePlanStatus.getData();
@@ -792,13 +792,13 @@
 			console.log(a);
 			
 			$.ajax({
-				url: '${pageContext.request.contextPath}/hidden'
+				url: '${pageContext.request.contextPath}/hidden',
 				dataType: 'JSON',
 				method: 'POST',
-				data: JSON.stringify(a),
+				data: JSON.stringify(a), //a데이터를 넘겨준다.
 				contentType: 'application/json',
 				success: function(){
-					
+					alert("완료");
 				}
 			})
 			

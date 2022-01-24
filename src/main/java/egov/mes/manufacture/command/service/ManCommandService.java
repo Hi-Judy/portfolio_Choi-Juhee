@@ -7,7 +7,7 @@ import egov.mes.manufacture.command.dao.ManCommandVO;
 
 public interface ManCommandService {
 	
-	//계획디테일 테이블에 '생산지시중'으로 변경
+	//히든그리드
 	int hidden(Map<String, List<ManCommandVO>> commandVO);
 
 	//지시가 없는 생산계획 조회(생산지시 관리 페이지)

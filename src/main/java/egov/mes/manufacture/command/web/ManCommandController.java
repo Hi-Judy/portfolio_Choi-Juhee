@@ -30,9 +30,11 @@ public class ManCommandController {
 	//히든그리드 가져오기
 	@PostMapping("/hidden")
 	public String hidden(@RequestBody Map<String, List<ManCommandVO>> map) {
+		
+		System.out.println("hiddenTest");
 		service.hidden(map);
 		
-		return null;
+		return "jsonView";
 	}
 	
 	//이전 생산지시 조회

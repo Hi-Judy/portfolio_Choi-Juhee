@@ -3,6 +3,12 @@
 
 <mapper namespace="egov.mes.manufacture.command.dao.ManCommandMapper">
 
+<!-- 생산지시번호 시퀀스 -->
+<select id="selectSeq" resultType="string">
+	select 'C'||to_Char(Sysdate, 'yyMMdd') || (lpad('001'+1,3,'0')) as comCode from dual
+</select>
+
+
 <!-- 생산 지시서 저장 => 계획디테일 테이블에 '생산지시중'으로 변경 -->
 <update id="updatePlanStatus" parameterType="egov.mes.manufacture.command.dao.ManCommandMapper">
 	update manufacture_plan_d 
@@ -12,12 +18,17 @@
 
 
 <!-- 생산 지시서 저장 => 자재 테이블에 출고량, 생산지시디테일 번호 넣어주기 -->
-<update id="updateRes" parameterType="egov.mes.manufacture.command.dao.ManCommandMapper">
-	update resource_store  r
-	set r.ost_cnt = #{ostCnt},
-	    r.store_etc = (select com_no_detail from manufacture_command_d where com_no_detail = #{comNoDetail})
-	where r.rsc_lot = #{rscLot};
-</update>
+<insert id="insertRes" parameterType="egov.mes.manufacture.command.dao.ManCommandMapper">
+	insert into resource_store(store_no, 
+							   rsc_lot, 
+							   ost_cnt, 
+							   store_etc)
+    values( ( to_char(SYSDATE,'"RO"YYMMDD""') || LPAD(RONUMBER.nextval,3,'0') ),
+            #{rscLot},
+            #{ostCnt},
+            #{storeEtc} 
+     )
+</insert>
 
 
 <!-- 생산 지시 테이블 insert -->
@@ -26,7 +37,7 @@
 									 MAN_PLAN_NO, 
 									 COM_DATE, 
 									 COM_NAME) 
-	values ( (select SUBSTR(max(com_code),0,7) || LPAD(SUBSTR(max(com_code),8,10)+1, 3, 0) from manufacture_command)
+	values ( (select SUBSTR(max(com_code),0,7) || LPAD(SUBSTR(max(com_code),8,10)+1, 3, 0) from manufacture_command),
 			 #{manPlanNo},
 			 #{comDate},
 			 #{comName}	
@@ -52,6 +63,7 @@
 			 #{ordQnt},
 			 #{ordDuedate},
 			 #{manEtc}
+	)	
 </insert>
 
 

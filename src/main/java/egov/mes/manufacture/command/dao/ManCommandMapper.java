@@ -7,11 +7,14 @@ import egovframework.rte.psl.dataaccess.mapper.Mapper;
 @Mapper("manCommandMapper")
 public interface ManCommandMapper {
 	
+	//생산지시번호 시퀀스
+	String selectSeq();
+	
 	//계획디테일 테이블에 '생산지시중'으로 변경
 	int updatePlanStatus(ManCommandVO commandVO);
 	
 	//자재 테이블에 출고량, 생산지시디테일 번호 넣어주기
-	int updateRes(ManCommandVO commandVO);
+	int insertRes(ManCommandVO commandVO);
 	
 	//생산 지시 테이블 insert
 	int insertCommand(ManCommandVO commandVO);

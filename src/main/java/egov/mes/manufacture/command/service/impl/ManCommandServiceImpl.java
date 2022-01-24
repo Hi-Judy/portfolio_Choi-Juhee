@@ -52,12 +52,44 @@ public class ManCommandServiceImpl implements ManCommandService{
 		return mapper.selectPreCommand(commandVO);
 	}
 
+	//히든그리드 내용
 	@Override
-	public int hidden(Map<String, List<ManCommandVO>> commandVO) {
-		commandVO.get("command");
-		commandVO.get("commandDetail");
-		commandVO.get("res");
-		commandVO.get("plan");
+	public int hidden(Map<String, List<ManCommandVO>> commandVO ) {
+				
+		//생산지시 추가
+		System.out.println("1");
+		String seq = ( ( mapper.selectSeq() ) ); //시퀀스 쿼리를 변수에 담기
+		System.out.println("시퀀스: "+seq);
+		
+		ManCommandVO insertVO = new ManCommandVO();
+		insertVO = (commandVO.get("command")).get(0); //새로 만든 vo객체에 히든 그리드 command 의 첫번째 행을 담는다.
+		System.out.println( "생산지시추가:"+ insertVO );
+		System.out.println("2");
+		
+		insertVO.setComCode(seq); //히든 그리드 command 의 첫번째 행에 시퀀스를 설정해주고.
+		System.out.println("3");
+		
+		mapper.insertCommand( insertVO ); //시퀀스까지 담긴 히든그리드 command를 매개변수로 쿼리 실행
+		System.out.println("4");
+		
+		
+		//생산지시 디테일 추가
+		ManCommandVO insertDetailVO = new ManCommandVO();
+		insertDetailVO = (commandVO.get("commandDetail")).get(0);
+		System.out.println( "생산지시 디테일 추가:"+ insertDetailVO );
+		
+		insertDetailVO.setComCode(seq);
+		mapper.insertCommandDetail(insertDetailVO);
+		
+		
+		//
+		
+//		mapper.insertCommandDetail((commandVO.get("commandDetail").get(0)).setComCode((mapper.selectSeq()).getComCode()));
+//		mapper.insertRes((commandVO.get("res").get(0)).setComCode((mapper.selectSeq()).getComCode()));
+//		mapper.updatePlanStatus((commandVO.get("plan").get(0)).setComCode((mapper.selectSeq()).getComCode()));
+		
+		
+		
 		
 		
 		return 0;
