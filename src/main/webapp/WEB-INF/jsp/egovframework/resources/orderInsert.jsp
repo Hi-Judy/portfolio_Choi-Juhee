@@ -38,13 +38,17 @@
 	//모달창(자재 조회)
 	let dialog3 = $( "#dialog-form-rsc" ).dialog({
 			autoOpen: false,
-			modal: true
+			modal: true,
+			heigth : 500,
+			width : 900,
 		});
 	
 	//모달창(조회 클릭시 미입고)
 	let dialog4 = $( "#dialog-form-order" ).dialog({
 			autoOpen: false,
-			modal: true
+			modal: true,
+			heigth : 500,
+			width : 900,
 		});
 	
 	function clickOrder(ordrNo){

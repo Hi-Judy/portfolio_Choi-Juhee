@@ -9,10 +9,8 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.ResponseBody;
 
 import egov.mes.resources.order.dao.ModifyVO;
-import egov.mes.resources.order.dao.ResourcesOrderVO;
 import egov.mes.resources.store.dao.ResourcesStoreVO;
 import egov.mes.resources.store.service.ResourceStoreService;
 
@@ -121,6 +119,13 @@ public class ResourceStoreController {
       model.addAttribute("data", map);
 	  System.out.println("================자재 LOT 조회 select================");
       return "jsonView";
+	}
+	
+	//자재 LOT 재고 조회 페이지
+	@RequestMapping("resourcesInvenList")
+	public String resourcesInvenList() {
+		System.out.println("=================자재 LOT 재고 조회 페이지 이동================");
+		return "resources/resourcesInvenList.tiles";
 	}
 	
 }

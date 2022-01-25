@@ -96,7 +96,9 @@ $(function() {
 
 	let dialogInRsc = $("#dialog-form-in-rsc").dialog({
 			autoOpen: false,
-			modal: true
+			modal: true,
+			heigth : 500,
+			width : 900,
 		});
 	
 	$("#btnStoreInRsc").on("click", function(){
@@ -116,7 +118,9 @@ $(function() {
 
 	let dialogInSuc = $("#dialog-form-in-rsc").dialog({
 			autoOpen: false,
-			modal: true
+			modal: true,
+			heigth : 500,
+			width : 900,
 		});
 	
 	$("#btnStoreInSuc").on("click", function(){

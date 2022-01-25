@@ -34,7 +34,9 @@
 	//모달창(조회 클릭시 LOT별 입고)
 	let dialoginventory = $( "#dialog-form-inventory" ).dialog({
 			autoOpen: false,
-			modal: true
+			modal: true,
+			heigth : 500,
+			width : 900,
 		});
 	
 	$("#btnSelectInventory").on("click", function(){
