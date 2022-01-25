@@ -512,7 +512,7 @@
 			// ★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★ 우리조 동적 IP로 바꾸고 나서 테스트 필요함. ★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★
 			// 집 192.168.0.8
 			// 학원 192.168.0.60
-			let address = 'http://192.168.0.8/yedamfinal2/selectQR/' ; 
+			let address = 'http://52.86.104.126:8080/yedam_final2/selectQR/' ; 
 			let data = columnname.slice(0,10) ;
 			function qr() {
 				$("#result").val(data) ;	
