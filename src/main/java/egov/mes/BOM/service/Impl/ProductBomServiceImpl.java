@@ -34,6 +34,13 @@ public class ProductBomServiceImpl implements ProductBomService {
 		return bomMapper.rscName(bomVO);
 	}
 	
+	//자재코드로 자재단위 조회
+	@Override
+	public ProductBomVO RscUnit(ProductBomVO bomVO) {
+		// TODO Auto-generated method stub
+		return bomMapper.RscUnit(bomVO);
+	}
+	
 	
 	//제품단건조회
 	@Override
@@ -119,6 +126,8 @@ public class ProductBomServiceImpl implements ProductBomService {
 		bomMapper.ResAllDelete(BomVO);
 		return 0;
 	}
+
+	
 
 	
 	

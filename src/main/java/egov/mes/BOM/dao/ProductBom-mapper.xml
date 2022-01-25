@@ -12,11 +12,19 @@
 <select id="rscFind" resultType="egov.mes.BOM.dao.ProductBomVO">
 	select rsc_code
 	from resources
+	where rsc_flag = 'Y'
 </select>
 
 <!-- 자재코드로 자재명 호출 -->
 <select id="rscName" resultType="egov.mes.BOM.dao.ProductBomVO">
 	select FN_GET_CODE_NAME(rsc_code) AS codeName
+	from resources
+	where rsc_code = #{resCode}
+</select>
+
+<!-- 자재코드로 자재명 호출 -->
+<select id="RscUnit" resultType="egov.mes.BOM.dao.ProductBomVO">
+	select FN_GET_RSC_UNIT(rsc_code) AS rscUnit
 	from resources
 	where rsc_code = #{resCode}
 </select>
@@ -30,9 +38,10 @@
 
 <!-- 제품BOM(자재) -->
 <select id="rscDetail" resultType="egov.mes.BOM.dao.ProductBomVO">
-	SELECT	res_code , res_usage , res_etc , proc_code , FN_GET_CODE_NAME(res_code) AS codeName , 'R' AS CRUD
+	SELECT	res_code , res_usage , res_etc , proc_code , FN_GET_CODE_NAME(res_code) AS codeName , FN_GET_RSC_UNIT(res_code) AS rscUnit , 'R' AS CRUD
 	FROM	Prdt_bom_res
 	WHERE	podt_code = #{podtCode}
+	ORDER BY res_code
 </select>
 
 <!-- 공정흐름 조회 -->
@@ -40,6 +49,7 @@
 	SELECT	proc_code  , podt_code , proc_index , FN_GET_CODE_NAME(proc_code) AS codeName , 'R' AS CRUD
 	FROM 	process_flowInfo 
 	WHERE	podt_code = #{podtCode}
+	ORDER BY proc_code
 </select>
 
 <!-- 공정코드 테이블 조회-->
@@ -47,6 +57,7 @@
 	select code
 	from common_code
 	where group_code = 'proc'
+	ORDER BY code
 </select>
 
 <!-- 공정코드로 공정명 호출 -->

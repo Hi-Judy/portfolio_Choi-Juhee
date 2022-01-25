@@ -331,6 +331,7 @@ toastr.options = {
                       }
            	 },
             { header : '자재명'   	, name : 'codeName'   	, align : 'center'},
+            { header : '단위'   		, name : 'rscUnit'   	, align : 'center'},
             { header : '자재소모량'   	, name : 'resUsage'   	, align : 'center' , editor : 'text' 	, validation : { required : true }  },
             { header : '공정코드'     	, name : 'procCode'   	, align : 'center' , editor : 'text'	, validation : { required : true }, 
                 formatter: 'listItemText',
@@ -375,10 +376,15 @@ toastr.options = {
           resCode = ev.value ;
           jsonData = { resCode : resCode } //앞에가 키값 , 뒤에서 벨류값으로 보여진다.
           var Metadata = getCodeNm(jsonData)  //ajax 호출해서 리턴값을 돌려받는다.
-          
             if ( Metadata != '' || Metadata != null || Metadata != undefined ) {
                MatGrid.setValue(ev.rowKey , 'codeName' , Metadata);
-            }   
+            }
+          
+
+          var MaterialUnit = getUnitFn(jsonData) //자재단위 호출
+          if ( MaterialUnit != '' || MaterialUnit != null || MaterialUnit != undefined ) {
+              MatGrid.setValue(ev.rowKey , 'rscUnit' , MaterialUnit);
+           }
           }
           
           
@@ -440,6 +446,36 @@ toastr.options = {
           
           
        };
+       
+     //----------자재코드로 자재단위 호출 -------------
+       function getUnitFn(jsonData) {
+         
+       var Unitdata ; 
+       var MatUnit ;
+       $.ajax({
+          url: './proNameFind' ,
+          type: "post",
+          dataType: 'json',
+          data: JSON.stringify(jsonData),
+          contentType: "application/json",
+          async : false, //  동기식으로 처리하여 결과를 되돌린다.
+          success: function(datas) {
+        	  MatUnit = datas.rscUnit
+              if(MatUnit != null ){
+            	  Unitdata = MatUnit.rscUnit;
+              }else{
+                 toastr["warning"]("자재단위가 없는 코드입니다.")
+              }
+           },
+          error: function(err) {
+             alert("코드단위 호출 에러 " + err);
+          }
+       });
+       
+       return Unitdata;
+       
+       
+    };
        
  ///////// ↑↑↑ 자재코드 //////////////// ↓↓↓ 공정 관련코드 //////////////////      
        
