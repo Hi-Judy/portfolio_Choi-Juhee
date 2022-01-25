@@ -67,7 +67,7 @@ public class ProductBomController {
 		jsonView.addObject("ProDetail" , service.ProDetail(proCode));
 		jsonView.addObject("rscDetail" , service.rscDetail(proCode));
 		jsonView.addObject("ProcDetail" , service.ProcDetail(proCode));
-//		System.out.println(jsonView);
+		System.out.println(jsonView);
 		return jsonView;
 	}
 	

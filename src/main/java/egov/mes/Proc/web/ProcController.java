@@ -4,6 +4,7 @@ import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -75,7 +76,6 @@ public class ProcController {
 //		System.out.println("공정전체조회 준비");
 		ModelAndView jsonView = new ModelAndView("jsonView");
 		jsonView.addObject("datas" , service.FacFind());
-		
 		return jsonView;
 	}
 	
@@ -89,11 +89,12 @@ public class ProcController {
 	
 	//사용중인 설비목록 조회
 	@ResponseBody
-	@RequestMapping("SelectedFac")
-	public ModelAndView SelectedFac(@RequestBody ProcessControlVO procVO) {
+	@RequestMapping("SelectedFac/{procCode}")
+	public ModelAndView SelectedFac(@PathVariable String procCode) {
 		System.out.println("설비");
+		System.out.println(procCode);
 		ModelAndView jsonView = new ModelAndView("jsonView");
-		jsonView.addObject("datas" , service.SelectedFac(procVO));
+		jsonView.addObject("datas" , service.SelectedFac(procCode));
 		System.out.println(jsonView);
 		return jsonView;
 	}
