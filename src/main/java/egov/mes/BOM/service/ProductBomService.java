@@ -10,6 +10,7 @@ public interface ProductBomService {
 	List<ProductBomVO> rscFind();		//자재코드 조회
 	List<ProductBomVO> ProcFind();		//골정코드 조회
 	ProductBomVO rscName(ProductBomVO bomVO);			//자재코드로 자재명조회
+	ProductBomVO RscUnit (ProductBomVO bomVO);			//자재코드로 자재단위 조회	
 	ProductBomVO ProcName(ProductBomVO bomVO);			//공정코드로 공정명 조회
 	
 	List<ProductBomVO> ProDetail(String groupCode); 	//제품 단건조회

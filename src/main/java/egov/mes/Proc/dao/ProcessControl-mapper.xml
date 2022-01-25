@@ -20,8 +20,15 @@
 </select>
 
 <select id="FacFind" resultType="egov.mes.Proc.dao.ProcessControlVO">
-	select *
-	from facility_status 
+	select * 
+	from facility_status
+	where fac_no not in ( select fac_no from facility_process)
+</select>
+
+<select id="SelectedFac" resultType="egov.mes.Proc.dao.ProcessControlVO">
+	select fac_no 
+	from facility_process
+	where proc_code = #{procCode}
 </select>
 
 
@@ -54,6 +61,18 @@
 							#{procFlag},
 							'Y',
 							#{codeEtc}
+						)
+</insert>
+
+<!-- 설비사용공정 데이터 추가 -->
+<insert id="FacProcInput" parameterType="egov.mes.Proc.dao.ProcessControlVO">
+	insert into facility_process (
+							fac_no,
+							proc_code
+						)
+				values (
+							#{facNo},
+							#{procCode}
 						)
 </insert>
 

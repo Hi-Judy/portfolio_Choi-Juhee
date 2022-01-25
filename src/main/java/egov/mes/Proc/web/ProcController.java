@@ -83,7 +83,19 @@ public class ProcController {
 	@ResponseBody
 	@PostMapping(value = "FacProcInput" ) 
 	public void FacProcInput (@RequestBody List<ProcessControlVO> procVO) {
-		
+//		System.out.println(procVO);
+		service.FacProcInput(procVO);
+	}
+	
+	//사용중인 설비목록 조회
+	@ResponseBody
+	@RequestMapping("SelectedFac")
+	public ModelAndView SelectedFac(@RequestBody ProcessControlVO procVO) {
+		System.out.println("설비");
+		ModelAndView jsonView = new ModelAndView("jsonView");
+		jsonView.addObject("datas" , service.SelectedFac(procVO));
+		System.out.println(jsonView);
+		return jsonView;
 	}
 	
 

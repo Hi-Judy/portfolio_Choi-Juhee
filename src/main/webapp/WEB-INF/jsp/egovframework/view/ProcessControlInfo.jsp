@@ -15,6 +15,10 @@
    href="https://uicdn.toast.com/tui.date-picker/latest/tui-date-picker.css" />
 <script
    src="https://uicdn.toast.com/tui.date-picker/latest/tui-date-picker.js"></script>
+   
+<!-- 토스트 그래프 -->
+<link rel="stylesheet" href="https://uicdn.toast.com/chart/latest/toastui-chart.min.css" />
+<script src="https://uicdn.toast.com/chart/latest/toastui-chart.min.js"></script>
 
 <!-- 토스트그리드 cdn -->
 <script src="https://uicdn.toast.com/tui-grid/latest/tui-grid.js"></script>
@@ -66,6 +70,20 @@ div.right {
    box-sizing: border-box;
 }
 
+div.Gridleft {
+   float: left;
+   width: 40%;
+ /*  padding: 5px; */
+ /*  box-sizing: border-box; */
+}
+
+div.Gridright {
+   float: right;
+   width: 40%;
+ /*  padding: 5px; */
+ /*  box-sizing: border-box; */
+}
+
 
 .btn {
    border-radius: 5px;
@@ -78,7 +96,7 @@ div.right {
 }
 
 .FacYes{
-	background-color: rgb(96, 145, 96);
+	background-color: #59d959;
 }
 .FacNo{
 	background-color: rgb(204, 70, 70);
@@ -123,14 +141,33 @@ div.right {
 	
 	<div id="ModalDal" title="설비등록">
 		<div>선택된 공정코드: &nbsp;<input id="ProcSelected" readonly> </div>
-		 <button id="FacSave" type="button" class="btn" style="float: right; ">설비등록</button>
+		 <button id="FacSave" type="button" class="btn" style="float: right; ">설비저장</button>
 		<br><br>
            
 		<div id="FacGrid" style="border-top: 3px solid #168;"></div>
 	</div>
+	
+	<div id="ChangeModal" title="등록된 설비 변경">
+		<div> 선택된 공정코드: &nbsp;<input id="ProcSelected2" readonly>
+			  <button id="" type="button" class="btn" style="float: right; ">변경저장</button>
+		</div>
+		<br><br><br>
+		
+		<div class="Gridleft">
+			<span>가동중인 설비</span>
+			<div id="FacGrid3" style="border-top: 3px solid #168;"></div>
+		</div>
+		
+		<div class="Gridright" >
+	        <span>미할당 설비</span> 
+			<div id="FacGrid2"style="border-top: 3px solid #168;"></div>
+		</div>
+	</div>
      
       
    </div>
+   
+   <div id="chart"></div>
 </body>
 
 <script>
@@ -139,7 +176,7 @@ toastr.options = {
         "closeButton": false,  //닫기버튼(X 표시)
         "debug": false,       //디버그
         "newestOnTop": false,
-        "progressBar": true,  //진행률 표시
+        "progressBar": false,  //진행률 표시
         "positionClass": "toast-top-center",
         "preventDuplicates": false,    //중복 방지(같은거 여러개 안뜸)
         "onclick": null,             //알림창 클릭시 alert 창 활성화 (다른것도 되는지는 연구해봐야함)
@@ -172,7 +209,19 @@ toastr.options = {
 	     		ModalDal.dialog( "close" ) ;
 			}
 	    }
-	  });      
+	  });
+	  
+	//-------- 설비등록 모달 설정 ----------
+	  var ChangeModal = $( "#ChangeModal" ).dialog({
+	     autoOpen : false ,
+	     modal : true ,
+	     width:1200, //너비
+	     height:705 ,//높이
+	     buttons : {"취소" : function() {
+	     		ModalDal.dialog( "close" ) ;
+			}
+	    }
+	  });
       
 
 
@@ -283,6 +332,14 @@ FacilityCheck(ProcAllData);
 				document.getElementById("ProcSelected").setAttribute("value", Grid.getValue(GridrowKey , 'procCode'));
 				ModalDal.dialog("open");
 				FacGrid.refreshLayout() ;
+			}
+			
+			if(FacCheck == '등록완료'){
+				document.getElementById("ProcSelected2").setAttribute("value", Grid.getValue(GridrowKey , 'procCode'));
+				let ProcCodeDT = document.getElementById("ProcSelected2").value
+				SelectedFacFn(ProcCodeDT)
+				ChangeModal.dialog("open");
+				FacGrid2.refreshLayout() ;
 			}
 		}
 		
@@ -473,6 +530,24 @@ FacilityCheck(ProcAllData);
 	
 	
 ///////////////////////// 설비관리 공간 시작 //////////////////////////////-----------------------------
+	
+	//설비등록여부 칼럼에 textValue 넣어주고 색으로 구분지어주기
+	function FacilityCheck(datas) {
+		for (let i = 0 ; i<datas.length ; i++){
+			if(datas[i].facOutput != null && datas[i].facRuntime != null){
+				Grid.setValue(datas[i].rowKey , 'FacCheck' , '등록완료')
+				Grid.addCellClassName(datas[i].rowKey , 'FacCheck' , 'FacYes')
+			}else{
+				Grid.setValue(datas[i].rowKey , 'FacCheck' , '미등록')
+				Grid.addCellClassName(datas[i].rowKey , 'FacCheck' , 'FacNo')
+			}
+		} 
+		
+		console.log(datas[0]);
+		
+	}
+
+
 var FacAllData
 
 //------공정전체조회 ajax --------
@@ -491,7 +566,7 @@ const FacGrid = new tui.Grid({
 	   data : FacAllData ,
 	   columns : [
 	      { header : '설비번호'		, name : 'facNo'   		, align : 'center' },
-	      { header : '사용여부'		, name : 'facStatus'	, align : 'center' },
+//	      { header : '사용여부'		, name : 'facStatus'	, align : 'center' },
 	      { header : '기준생산량(개)'	, name : 'facOutput'   	, align : 'center' },
 	      { header : '기준시간'		, name : 'facRuntime'   , align : 'center' }
 	   ],
@@ -518,13 +593,13 @@ const FacGrid = new tui.Grid({
 			}else{
 				console.log(CheckDatas[i]);
 				var FacProcData = {
-						proc_code : document.getElementById("ProcSelected").value ,
+						procCode : document.getElementById("ProcSelected").value ,
 						facNo : CheckDatas[i]
 						}
 				FacArray.push(FacProcData);
 			}
 		}
-
+		console.log(FacArray);
 		$.ajax({
 	    		 url : './FacProcInput',
 	    		 type : 'post',
@@ -532,34 +607,86 @@ const FacGrid = new tui.Grid({
 	    		 contentType : 'application/json;',
 	             async : false, 
 	             success: (datas) => {
-	            	 toastr["success"]("설비등록완료"); 
+	            	 toastr["success"]("설비등록완료");
+	            	 setTimeout(() => {
+	            		 ModalDal.dialog( "close" ) ;
+	            		 location.reload();
+	            		 },1500 );		
 	             },
 	             error: (err) => {
 	                alert("설비등록 ajax에러 " + err);
 	             }
 	          });
+		})
 		
 		
-	})
+		// <설비변경용> 등록된 설비 그리드 헤드
+		const FacGrid2 = new tui.Grid({
+	   el : document.getElementById('FacGrid2'),
+	   data : FacAllData ,
+	   columns : [
+	      { header : '설비번호'		, name : 'facNo'   		, align : 'center' },
+//	      { header : '사용여부'		, name : 'facStatus'	, align : 'center' },
+	      { header : '기준생산량(개)'	, name : 'facOutput'   	, align : 'center' },
+	      { header : '기준시간'		, name : 'facRuntime'   , align : 'center' }
+	   ],
+	   rowHeaders: ['checkbox'],
+	   bodyHeight : 400 
+	});
 	
-
-
-	//설비등록여부 칼럼에 textValue 넣어주고 색으로 구분지어주기
-	function FacilityCheck(datas) {
-		for (let i = 0 ; i<datas.length ; i++){
-			if(datas[i].facOutput != null && datas[i].facRuntime != null){
-				Grid.setValue(datas[i].rowKey , 'FacCheck' , '등록완료')
-				Grid.addCellClassName(datas[i].rowKey , 'FacCheck' , 'FacYes')
-			}else{
-				Grid.setValue(datas[i].rowKey , 'FacCheck' , '미등록')
-				Grid.addCellClassName(datas[i].rowKey , 'FacCheck' , 'FacNo')
-			}
-		} 
+		const Chart = toastui.Chart;
 		
-		console.log(datas[0]);
-		
-	}
+		const el = document.getElementById('chart');
+		const data = {
+		  categories: ['Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'],
+		  series: [
+		    {
+		      name: 'Budget',
+		      data: [5000, 3000, 5000, 7000, 6000, 4000, 1000],
+		    },
+		    {
+		      name: 'Income',
+		      data: [8000, 4000, 7000, 2000, 6000, 3000, 5000],
+		    },
+		  ],
+		};
+		const options = {
+		  chart: { width: 700, height: 400 },
+		};
 
+		const chart = Chart.barChart({ el, data, options });
+		// const chart = new BarChart({ el, data, options }); // 두 번째 방법
+
+
+	var ChoiceFac;
+	function SelectedFacFn(ProcCodeDT) {
+		var ddat = { procCode : ProcCodeDT }
+		console.log(JSON.stringify(ddat))
+		 $.ajax({
+   		 url : './SelectedFac',
+   		 type : 'post',
+   		 data : JSON.stringify(ddat),
+   		 contentType : 'application/json;',
+            async : false, 
+            success: (datas) => {
+            	ChoiceFac = datas.datas ;// 테스트 해야함 @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+            }, 
+            error: (err) => {
+               alert("설비등록 ajax에러 " + err);
+            }
+         }); 
+		
+	}	
+				// <설비변경용> 등록된 설비 그리드 헤드
+	const FacGrid3 = new tui.Grid({
+	   el : document.getElementById('FacGrid3'),
+	   data : ChoiceFac ,
+	   columns : [
+	      { header : '설비번호'	, name : 'facNo'	, align : 'center' }
+	   ],
+	   rowHeaders: ['checkbox'],
+	   bodyHeight : 400 
+	});
 
 </script>
 </html>
