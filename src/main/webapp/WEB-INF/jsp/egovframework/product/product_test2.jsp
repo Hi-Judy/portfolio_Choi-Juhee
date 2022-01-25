@@ -17,85 +17,20 @@
 <script src="https://code.jquery.com/ui/1.13.0/jquery-ui.js"></script>
 </head>
 <body>
-	<br>
-	<div id="info"></div>
-	<div class="container">
-		<div id="title" align="center"><h2>LOT 정보조회</h2></div>  
-		<div class="table-responsive">
-		  <table class="table">
-		      <tr>
-				<th style="background-color: skyblue;">제품코드</th>
-				<td>${qr[0].podtCode}</td>
-		      </tr>
-		      <tr>
-				<th style="background-color: skyblue;">제품명</th>
-				<td>${qr[0].podtName}</td>
-		      </tr>
-		      <tr>
-		      	<th style="background-color: skyblue;">생산완료일</th>
-		      	<td>${qr[0].manDate2}</td>
-		      </tr>
-		      <tr>
-		      	<th style="background-color: skyblue;">생산지시코드</th>
-				<td>${qr[0].comCode}</td>
-		      </tr>
-		      <tr>
-				<th style="background-color: skyblue;">생산계획코드</th>
-				<td>${qr[0].manPlanNo}</td>
-		      </tr>
-		      <tr>
-		      	<th style="background-color: skyblue;">주문코드</th>
-				<td>${qr[0].ordCode}</td>
-		      </tr>
-		  </table>
-		</div>
-	</div>
-	<div id="buttonArea" align="center">
-		<button type="button" onclick="javascript:window.close()">닫기</button>
+	<div id="printTarget">
+		<img id="image" src="">
 	</div>
 	<script>
-	
-/*
-		var Grid = tui.Grid ;
+		function image() {
+			// 집 192.168.0.8
+			// 학원 192.168.0.60
+			// 우리조서버 52.86.104.126:8080
+			let code = '${code}' ;			
+			let url = "http://192.168.0.60/yedam_final2/viewQR/" + code ;
+			$("#image").attr("src","https://zxing.org/w/chart?cht=qr&chs=350x350&chld=L&choe=UTF-8&chl=" + url) ;	
+		}
 		
-		const columns = [
-			{
-				header : '제품코드' ,
-				name : 'podtCode'
-			} ,
-			{
-				header : '제품명' ,
-				name : 'codeName'
-			} ,
-			{
-				header : '생산완료일' ,
-				name : 'manDate'
-			} ,
-			{
-				header : '생산지시코드' ,
-				name : 'comCode'
-			} ,
-			{
-				header : '생산계획코드' ,
-				name : 'manPlanNo'
-			} ,
-			{
-				header : '주문코드' ,
-				name : 'ordCode'
-			}
-		]
-		
-		let data ;
-		
-		const grid = new Grid({
-			el : document.getElementById('info') ,
-			rowHeaders : [
-				{ type : 'rowNum' }
-			] ,
-			data : data ,
-			columns : columns
-		})
-*/		
+		image() ;
 	</script>
 </body>
 </html>
