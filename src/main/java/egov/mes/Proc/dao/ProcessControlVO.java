@@ -14,6 +14,8 @@ public class ProcessControlVO {
 	String empName;		//사원이름
 	String etc;			//비고
 	
+	String facNo;		//설비코드
+	String facStatus;	//설비사용여부
 	String facOutput;	//공정별 평균생산량
 	String facRuntime;	//공정별 시간 기준량
 	

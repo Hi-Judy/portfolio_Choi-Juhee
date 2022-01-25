@@ -97,7 +97,7 @@ public class ProductBomController {
 	
 	//공정흐름 데이터 추가
 	@ResponseBody
-	@PostMapping(value = "ProcInsert" ) //보내줄떄 배열로 보냈기떄문에 받을때로 List 배열로 받아야한다.
+	@PostMapping(value = "" ) //보내줄떄 배열로 보냈기떄문에 받을때로 List 배열로 받아야한다.
 	public String ProcInsert (@RequestBody List<ProductBomVO> bomVO) {
 //			System.out.println(bomVO);
 		service.ProcInsert(bomVO);
