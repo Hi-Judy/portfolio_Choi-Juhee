@@ -558,7 +558,7 @@
 			let comCode = columnname.slice(0,10) ;
 			
 			$("#result").val(comCode) ;
-			
+      
 			dialog2.dialog("open") ;
 			
 			$.ajax({

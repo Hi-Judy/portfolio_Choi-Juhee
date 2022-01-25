@@ -7,7 +7,8 @@ public interface ProductBomMapper {
 	List<ProductBomVO> ProFind();		//제품 조회
 	List<ProductBomVO> rscFind();		//자재코드 조회
 	List<ProductBomVO> ProcFind();		//공정코드 조회
-	ProductBomVO rscName(ProductBomVO bomVO);			//자재코드 로 제품명 조회
+	ProductBomVO rscName (ProductBomVO bomVO);			//자재코드 로 제품명 조회
+	ProductBomVO RscUnit (ProductBomVO bomVO);			//자재코드로 자재단위 조회		
 	ProductBomVO ProcName(ProductBomVO bomVO);			//공정코드로 공정명 조회
 	
 	List<ProductBomVO> ProDetail(String groupCode); 	//제품 단건조회

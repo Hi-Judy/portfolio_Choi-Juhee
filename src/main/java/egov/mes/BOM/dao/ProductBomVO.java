@@ -25,6 +25,7 @@ public class ProductBomVO {
 	
 	//제품BOM(자재)(Prdt_bom_res)
 	String resCode;		//자재코드
+	String rscUnit;		//자개단위
 	String resUsage;	//자재소모량
 	String resEtc;		//자재비고
 	

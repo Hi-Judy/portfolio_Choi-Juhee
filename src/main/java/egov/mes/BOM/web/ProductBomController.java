@@ -35,7 +35,7 @@ public class ProductBomController {
 		return jsonView;
 	}
 	
-	//자재코드로 자재명 호출
+	//자재코드로 자재명 , 자재단위 호출
 	@ResponseBody
 	@RequestMapping(value = "proNameFind")
 	public ModelAndView proNameFind(@RequestBody ProductBomVO bomVO ) {
@@ -43,7 +43,7 @@ public class ProductBomController {
 		
 		ModelAndView jsonView = new ModelAndView("jsonView");
 		jsonView.addObject("data" , service.rscName(bomVO));
-
+		jsonView.addObject("rscUnit" , service.RscUnit(bomVO));
 //		System.out.println(jsonView);
 
 		return jsonView ;
@@ -97,7 +97,7 @@ public class ProductBomController {
 	
 	//공정흐름 데이터 추가
 	@ResponseBody
-	@PostMapping(value = "" ) //보내줄떄 배열로 보냈기떄문에 받을때로 List 배열로 받아야한다.
+	@PostMapping(value = "ProcInsert" ) //보내줄떄 배열로 보냈기떄문에 받을때로 List 배열로 받아야한다.
 	public String ProcInsert (@RequestBody List<ProductBomVO> bomVO) {
 //			System.out.println(bomVO);
 		service.ProcInsert(bomVO);

@@ -91,6 +91,22 @@ public class ProcessControlServiceImpl implements ProcessControlService {
 		
 		return mapper.FacFind();
 	}
+	
+	
+	//설비사용공정 데이터 추가
+	@Override
+	public void FacProcInput(List<ProcessControlVO> ProcVO) {
+		for(ProcessControlVO procVO : ProcVO) {
+			mapper.FacProcInput(procVO);
+		}
+		
+	}
+	
+	//선택중인 설비 목록 조회
+	@Override
+	public List<ProcessControlVO> SelectedFac( ProcessControlVO procVO) {
+		return mapper.SelectedFac(procVO);
+	}
 
 
 
