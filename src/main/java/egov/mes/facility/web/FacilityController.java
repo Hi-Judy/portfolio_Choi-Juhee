@@ -64,4 +64,30 @@ public class FacilityController {
 		jsonView.addObject("facilitystatusupdate" , result) ;
 		return jsonView ;
 	}
+	
+	@RequestMapping("selectFacOptions")
+	public ModelAndView selectFacOptions(FacilityVO facility) {
+		List<FacilityVO> list = service.selectFacOptions(facility) ;
+		ModelAndView jsonView = new ModelAndView("jsonView") ;
+		jsonView.addObject("selectfacoptions" , list) ;
+		return jsonView ;
+	}
+	
+	@RequestMapping("insertFacility")
+	public ModelAndView insertFacility(FacilityVO facility) {
+		service.insertFacility(facility) ;
+		String result = "" ;
+		ModelAndView jsonView = new ModelAndView("jsonView") ;
+		jsonView.addObject("insertfacility" , result) ;
+		return jsonView ;
+	}
+	
+	@RequestMapping("deleteFacility/{facNo}")
+	public ModelAndView deleteFacility(FacilityVO facility) {
+		service.deleteFacility(facility) ;
+		String result = "" ;
+		ModelAndView jsonView = new ModelAndView("jsonView") ;
+		jsonView.addObject("deletefacility" , result) ;
+		return jsonView ;
+	}
 }

@@ -54,15 +54,78 @@ public class ResourceStoreController {
 		return "resources/resourceStoreInOut.tiles";
 	}
 	
-	//입고검사 미완료 조회
-	@RequestMapping("resourceStoreInOutList")
-	public String resourceStoreInOutList(Model model, ResourcesStoreVO vo) {
+	//자재입고 조회
+	@RequestMapping("resourceStoreInList")
+	public String resourceStoreInList(Model model, ResourcesStoreVO vo) {
 	  model.addAttribute("result",true);
       Map<String,Object> map = new HashMap<String,Object>();
       map.put("contents", service.ResourcesStoreIn(vo));
       model.addAttribute("data", map);
-	  System.out.println("================입고 테이블 select================");
+	  System.out.println("================입고 조회 select================");
       return "jsonView";
+	}
+	
+	//자재출고 조회
+	@RequestMapping("resourceStoreOutList")
+	public String resourceStoreOutList(Model model, ResourcesStoreVO vo) {
+	  model.addAttribute("result",true);
+      Map<String,Object> map = new HashMap<String,Object>();
+      map.put("contents", service.ResourcesStoreOut(vo));
+      System.out.println( service.ResourcesStoreOut(vo));
+      model.addAttribute("data", map);
+	  System.out.println("================출고 조회 select================");
+      return "jsonView";
+	}
+	
+	//자재 LOT 관리 페이지
+	@RequestMapping("resourcesInventory")
+	public String resourcesInventory() {
+		System.out.println("=================자재 LOT 관리 페이지 이동================");
+		return "resources/resourcesInventory.tiles";
+	}
+	
+	//자재재고조정관리->모달창(LOT별 입고 조회)
+	@RequestMapping("resourcesInventoryIn")
+	public String resourcesInventoryIn(Model model, ResourcesStoreVO vo) {
+		model.addAttribute("resourcesInventoryIn", service.searchResourcesStoreIn(vo));
+		System.out.println("=================자재재고조정관리->모달창(LOT별 입고 조회)================");
+		return "resources/searchInventoryIn";
+	}
+	
+	//모달창(LOT별 입고 조회)
+	@RequestMapping("resourcesInventoryInList")
+	public String resourcesInventoryInList(Model model, ResourcesStoreVO vo) {
+		model.addAttribute("result",true);
+		Map<String,Object> map = new HashMap<String,Object>();
+		map.put("contents", service.searchResourcesStoreIn(vo));
+		model.addAttribute("data", map);
+		System.out.println("=================모달창(자재조회)================");
+		return "jsonView";
+	}
+	
+	//자재 LOT 조회 페이지
+	@RequestMapping("resourcesInventoryList")
+	public String resourcesInventoryList() {
+		System.out.println("=================자재 LOT 조회 페이지 이동================");
+		return "resources/resourcesInventoryList.tiles";
+	}
+	
+	//자재입고 조회
+	@RequestMapping("resourcesInven")
+	public String resourcesInven(Model model, ResourcesStoreVO vo) {
+	  model.addAttribute("result",true);
+      Map<String,Object> map = new HashMap<String,Object>();
+      map.put("contents", service.findResourcesInventory(vo));
+      model.addAttribute("data", map);
+	  System.out.println("================자재 LOT 조회 select================");
+      return "jsonView";
+	}
+	
+	//자재 LOT 재고 조회 페이지
+	@RequestMapping("resourcesInvenList")
+	public String resourcesInvenList() {
+		System.out.println("=================자재 LOT 재고 조회 페이지 이동================");
+		return "resources/resourcesInvenList.tiles";
 	}
 	
 }

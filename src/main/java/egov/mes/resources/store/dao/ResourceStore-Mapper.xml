@@ -20,25 +20,24 @@
 	<!-- 자재 LOT번호 부여 후 -> 완전 입고(자재입출고에서 조회 가능) -->
 	<insert id="insertResourcesStore">
 		INSERT 
-		INTO RESOURCE_STORE(
-					STORE_NO,
-					RSC_CODE,
-                    IST_FLAG,
-                    RSC_LOT,
-                    IST_CNT,
-                    OST_CNT,
-                    STORE_DATE,
-                    STORE_FLAG,
-                    STORE_ETC)
-		VALUES(to_char(SYSDATE,'"RI"YYMMDD""') || LPAD(RINUMBER.nextval,3,'0'),
-                #{rscCode},
-                'Y',
-                #{rscLot},
-                #{rscPassCnt},
-                0,
-                SYSDATE,
-                '입고',
-                #{storeEtc})
+		INTO RESOURCE_STORE(STORE_NO,
+							RSC_CODE,
+                    		IST_FLAG,
+                    		RSC_LOT,
+                    		IST_CNT,
+                    		OST_CNT,
+                    		STORE_DATE,
+                    		STORE_FLAG,
+                    		STORE_ETC)
+					VALUES(F_CODE_MAKER('RI'),
+			                #{rscCode},
+			                'Y',
+			                #{rscLot},
+			                #{rscPassCnt},
+			                0,
+			                SYSDATE,
+			                '입고',
+			                #{storeEtc})
 	</insert>
 	
 	<!-- 자재입고 LOT 번호 발행 후 자재상태 '입고' -> 자재발주 테이블로 update -->
@@ -50,32 +49,145 @@
 	
 	<!-- 자재 "입고" 조회 select -->
 	<select id="ResourcesStoreIn" resultType="egov.mes.resources.store.dao.ResourcesStoreVO">
-		SELECT STORE_NO,
-        	   RSC_CODE,
-        	   FN_GET_CODE_NAME(RSC_CODE) AS RSC_NAME,
-        	   FN_GET_RSC_UNIT(RSC_CODE) AS RSC_UNIT,
-        	   FN_GET_RSC_PRC(RSC_CODE) AS RSC_PRC,
-        	   IST_CNT,
-        	   RSC_LOT,
-        	   STORE_FLAG,
-        	   STORE_DATE
-		FROM RESOURCE_STORE
-		WHERE STORE_FLAG = '입고'
+		SELECT  S.STORE_NO,
+				S.RSC_CODE,
+				FN_GET_CODE_NAME(S.RSC_CODE) AS RSC_NAME,
+				FN_GET_RSC_UNIT(S.RSC_CODE) AS RSC_UNIT,
+				FN_GET_RSC_PRC(S.RSC_CODE) AS RSC_PRC,
+		  		S.IST_CNT,
+		  		S.RSC_LOT,
+				S.STORE_FLAG,
+				S.STORE_DATE,
+				FN_GET_CODE_NAME(R.SUPLCOM_CODE) AS SUC_NAME
+				FROM RESOURCE_STORE S
+		LEFT JOIN RESOURCES R
+		ON S.RSC_CODE = R.RSC_CODE
+		WHERE STORE_FLAG = '입고' 
+			<if test="rscCode != null and rscCode != '' ">
+				AND O.RSC_CODE = #{rscCode} 
+			</if>
+			<if test="sucCode != null and sucCode != '' ">
+				AND R.SUPLCOM_CODE = #{sucCode} 
+			</if>
+			<if test="storeDate != null">
+				<![CDATA[
+    			AND to_char(S.STORE_DATE,'yyyyMMdd') >= to_char(#{storeDate},'yyyyMMdd') AND to_char(S.STORE_DATE,'yyyyMMdd') <= to_char(#{storeDate2}, 'yyyyMMdd')
+				]]>
+			</if>
+				ORDER BY S.STORE_DATE
 	</select>
 	
 	<!-- 자재 "출고" 조회 select -->
 	<select id="ResourcesStoreOut" resultType="egov.mes.resources.store.dao.ResourcesStoreVO">
-		SELECT STORE_NO,
-        	   RSC_CODE,
-        	   FN_GET_CODE_NAME(RSC_CODE) AS RSC_NAME,
-        	   FN_GET_RSC_UNIT(RSC_CODE) AS RSC_UNIT,
-        	   FN_GET_RSC_PRC(RSC_CODE) AS RSC_PRC,
-        	   IST_CNT,
-        	   RSC_LOT,
-        	   STORE_FLAG,
-        	   STORE_DATE
-		FROM RESOURCE_STORE
-		WHERE STORE_FLAG = '입고'	
+		SELECT  S.STORE_NO,
+				S.RSC_CODE,
+				FN_GET_CODE_NAME(S.RSC_CODE) AS RSC_NAME,
+				FN_GET_RSC_UNIT(S.RSC_CODE) AS RSC_UNIT,
+				FN_GET_RSC_PRC(S.RSC_CODE) AS RSC_PRC,
+		  		S.OST_CNT,
+		  		S.RSC_LOT,
+				S.STORE_FLAG,
+				S.STORE_DATE,
+				FN_GET_CODE_NAME(R.SUPLCOM_CODE) AS SUC_NAME
+				FROM RESOURCE_STORE S
+		LEFT JOIN RESOURCES R
+		ON S.RSC_CODE = R.RSC_CODE
+		WHERE STORE_FLAG = '출고' 			
+			<if test="rscCode != null and rscCode != '' ">
+				AND O.RSC_CODE = #{rscCode} 
+			</if>
+			<if test="sucCode != null and sucCode != '' ">
+				AND R.SUPLCOM_CODE = #{sucCode} 
+			</if>
+			<if test="storeDate != null">
+				<![CDATA[
+    			AND to_char(S.STORE_DATE,'yyyyMMdd') >= to_char(#{storeDate},'yyyyMMdd') AND to_char(S.STORE_DATE,'yyyyMMdd') <= to_char(#{storeDate2}, 'yyyyMMdd')
+				]]>
+			</if>
+				ORDER BY S.STORE_DATE
 	</select>
 	
+	<!-- 자재 입고 조회(모달창) -->
+	<select id="searchResourcesStoreIn" resultType="egov.mes.resources.store.dao.ResourcesStoreVO">
+		SELECT  RSC_CODE,
+        FN_GET_CODE_NAME(RSC_CODE) AS RSC_NAME,
+        RSC_LOT,
+        FN_GET_RSC_UNIT(RSC_CODE) AS RSC_UNIT,
+        IST_CNT
+		FROM RESOURCE_STORE
+	</select>
+	
+	<!-- 자재 출고 조회(모달창) -->
+	<select id="searchResourcesStoreOut" resultType="egov.mes.resources.store.dao.ResourcesStoreVO">
+		SELECT  RSC_CODE,
+        FN_GET_CODE_NAME(RSC_CODE) AS RSC_NAME,
+        RSC_LOT,
+        FN_GET_RSC_UNIT(RSC_CODE) AS RSC_UNIT,
+        OST_CNT
+		FROM RESOURCE_STORE
+	</select>
+	
+	<!-- 정산 입고 -->
+	<insert id="insertResourcesInventoryIn">
+		INSERT INTO RESOURCE_STORE( STORE_NO,
+		                            RSC_CODE,
+		                            IST_FLAG,
+		                            RSC_LOT,
+		                            IST_CNT,
+		                            OST_CNT,
+		                            STORE_DATE,
+		                            STORE_FLAG)
+		                    VALUES( F_CODE_MAKER('RI'),
+		                            #{rscCode},
+		                            'Y',
+		                            #{rscLot},
+		                            #{istCnt},
+		                            0,
+		                            SYSDATE,
+		                            #{storeFlag})
+	</insert>
+	
+	<!-- 정산 출고 -->
+	<insert id="insertResourcesInventoryOut">
+		INSERT INTO RESOURCE_STORE( STORE_NO,
+                            RSC_CODE,
+                            IST_FLAG,
+                            RSC_LOT,
+                            IST_CNT,
+                            OST_CNT,
+                            STORE_DATE,
+                            STORE_FLAG)
+                    VALUES( F_CODE_MAKER('RO'),
+                            #{rscCode},
+                            'Y',
+                            #{rscLot},
+                            0,
+                            #{ostCnt},
+                            SYSDATE,
+                            #{storeFlag})
+	</insert>
+	
+	<!-- 자재 LOT 조정 조회 -->
+	<select id="findResourcesInventory" resultType="egov.mes.resources.store.dao.ResourcesStoreVO">
+		SELECT  STORE_FLAG,
+        STORE_DATE,
+        RSC_CODE,
+        FN_GET_CODE_NAME(RSC_CODE) AS RSC_NAME,
+        FN_GET_RSC_UNIT(RSC_CODE) AS RSC_UNIT,
+        IST_CNT,
+        OST_CNT,
+        RSC_LOT,
+        STORE_ETC
+		FROM RESOURCE_STORE
+		WHERE STORE_FLAG LIKE '%' || '정산' || '%'
+		<if test="rscCode != null and rscCode != '' ">
+				AND RSC_CODE = #{rscCode} 
+			</if>
+			<if test="storeDate != null">
+				<![CDATA[
+    			AND to_char(STORE_DATE,'yyyyMMdd') >= to_char(#{storeDate},'yyyyMMdd') AND to_char(STORE_DATE,'yyyyMMdd') <= to_char(#{storeDate2}, 'yyyyMMdd')
+				]]>
+			</if>
+				ORDER BY STORE_DATE
+	</select>
 </mapper>

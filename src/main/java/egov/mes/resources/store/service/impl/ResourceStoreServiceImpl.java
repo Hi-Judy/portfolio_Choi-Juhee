@@ -27,6 +27,21 @@ public class ResourceStoreServiceImpl implements ResourceStoreService{
 	public List<ResourcesStoreVO> findResourcesStore(ResourcesStoreVO vo) {
 		return mapper.findResourcesStore(vo);
 	}
+	
+	@Override
+	public List<ResourcesStoreVO> searchResourcesStoreIn(ResourcesStoreVO vo) {
+		return mapper.searchResourcesStoreIn(vo);
+	}
+	
+	@Override
+	public List<ResourcesStoreVO> searchResourcesStoreOut(ResourcesStoreVO vo) {
+		return mapper.searchResourcesStoreOut(vo);
+	}
+	
+	@Override
+	public List<ResourcesStoreVO> findResourcesInventory(ResourcesStoreVO vo) {
+		return mapper.findResourcesInventory(vo);
+	}
 
 	@Override
 	public void modifyStore(ModifyVO<ResourcesStoreVO> mvo) {
@@ -36,5 +51,17 @@ public class ResourceStoreServiceImpl implements ResourceStoreService{
 				mapper.updateResourcesStore(vo);
 			}
 		}
+		if(mvo.getCreatedRows() != null) {
+			for(ResourcesStoreVO vo :mvo.getCreatedRows()) {
+				if(vo.getIstCnt() != "") {
+					mapper.insertResourcesInventoryIn(vo);
+				}else if(vo.getOstCnt() != "") {
+					mapper.insertResourcesInventoryOut(vo);
+				}
+			}
+		}
 	}
+
+
+
 }

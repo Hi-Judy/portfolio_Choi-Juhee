@@ -3,9 +3,87 @@
 <mapper namespace="egov.mes.Proc.dao.ProcessControlMapper">
 
 <select id="AllFind" resultType="egov.mes.Proc.dao.ProcessControlVO">
-	select proc_code , proc_flag , proc_emp_id , FN_GET_CODE_NAME(proc_code) AS codeName
-	from process
+	select p.proc_code AS proc_code , p.proc_flag AS proc_flag , p.proc_emp_id AS proc_emp_id , FN_GET_CODE_NAME(p.proc_code) AS codeName , avg(fs.fac_output) AS fac_output, avg(fs.fac_runtime) AS fac_runtime
+   from process p
+   left join facility_process fp
+   on p.proc_code = fp.proc_code
+   left join facility_status fs
+   on fp.fac_no = fs.fac_no
+   group by p.proc_code, p.proc_flag, p.proc_emp_id
+   order by proc_code 
 </select>
+
+<select id="EmpFind" resultType="egov.mes.Proc.dao.ProcessControlVO">
+	select * 
+	from Employee_info 
+	where position_code = 'W003'
+</select>
+
+<select id="FacFind" resultType="egov.mes.Proc.dao.ProcessControlVO">
+	select *
+	from facility_status 
+</select>
+
+
+<insert id="ProcAddData" parameterType="egov.mes.Proc.dao.ProcessControlVO">
+	insert into process (
+							proc_code,
+							proc_flag,
+							proc_emp_id	
+						)
+				values (
+							#{procCode},
+							#{procFlag},
+							#{procEmpId}
+						)
+</insert>
+
+<insert id="CommonAddData" parameterType="egov.mes.Proc.dao.ProcessControlVO">
+	insert into common_code (
+							code,
+							group_code,
+							code_name,
+							code_desct,
+							code_flag,
+							code_etc
+						)
+				values (
+							#{procCode},
+							'proc',
+							#{codeName},
+							#{procFlag},
+							'Y',
+							#{codeEtc}
+						)
+</insert>
+
+
+<delete id="ProcDelete" parameterType="egov.mes.Proc.dao.ProcessControlVO">
+	delete
+	from process
+	where proc_code = #{procCode}
+</delete>
+
+<delete id="CommonDelete" parameterType="egov.mes.Proc.dao.ProcessControlVO">
+	delete
+	from common_code
+	where code = #{procCode}
+</delete>
+
+<update id="ProcChangeData" parameterType="egov.mes.Proc.dao.ProcessControlVO">
+	update process
+	set
+	proc_flag = #{procFlag},
+	proc_emp_id	= #{procEmpId}
+	where proc_code = #{procCode}
+</update>
+
+<update id="CommonChangeData" parameterType="egov.mes.Proc.dao.ProcessControlVO">
+	update common_code
+	set
+	code_name = #{codeName}
+	where code = #{procCode}
+</update>
 
 
 

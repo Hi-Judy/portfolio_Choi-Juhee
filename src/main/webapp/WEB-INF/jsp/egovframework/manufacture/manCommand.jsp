@@ -522,6 +522,7 @@
 					gridResLOT.resetOriginData();
 					gridUpdateRes.resetData(resLotData.result);
 					console.log(resLotData.result);
+
 				},
 				error : function(reject) {
 					console.log('reject: ' + reject);
@@ -725,7 +726,9 @@
 			}, 
 			{
 				header : '비고(지시디테일번호)',
+
 				name : 'comNoDetail'
+
 			}
 		]
 		

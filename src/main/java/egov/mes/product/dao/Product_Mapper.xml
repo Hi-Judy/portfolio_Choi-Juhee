@@ -56,6 +56,21 @@
 	<insert id="productTest" statementType="CALLABLE">
 		{ call p_product_test(#{comCode},#{comNoDetail},#{podtCode},#{podtInput},#{podtOutput}) }
 	</insert>
+	
+	<select id="selectQR" resultType="egov.mes.product.dao.ProductVO">
+		select pqi.podt_code , fn_get_code_name(pqi.podt_code) as podtName , pqi.man_date as manDate2 , pqi.com_code ,
+	    	mc.man_plan_no , mp.ord_code
+		from product_qnt_info pqi    
+		join manufacture_command mc
+		on pqi.com_code = mc.com_code
+		join manufacture_plan mp
+		on mc.man_plan_no = mp.man_plan_no 
+		where pqi.com_code = #{comCode} 
+	</select>
 	<!-- 테스트 -->
+	
+	<select id="selectPodtOptions" resultType="egov.mes.product.dao.ProductVO">
+		select code , code_name from common_code where group_code = 'podt'
+	</select>
 	
 </mapper>

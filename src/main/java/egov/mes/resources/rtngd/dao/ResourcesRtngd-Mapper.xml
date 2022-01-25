@@ -4,17 +4,34 @@
 
 	<!-- 반품자재 select -->
 	<select id="findResourcesRtngd" resultType="egov.mes.resources.rtngd.dao.ResourcesRtngdVO">
-		SELECT RSC_CODE, 
-			   RTNGD_CNT,
-			   RSC_TST_NO,
-			   DEF_CODE,
-			   RTNGD_NO,
-			   RTNGD_DATE,
-			   FN_GET_RSC_UNIT(RSC_CODE) AS RSC_UNIT,
-			   FN_GET_RSC_PRC(RSC_CODE) AS RSC_PRC, 
-			   FN_GET_CODE_NAME(RSC_CODE) AS RSC_NAME,
-			   FN_GET_CODE_NAME(def_code) AS DEF_NAME
-		FROM RESOURCE_RTNGD
+		SELECT T.RSC_CODE, 
+		       T.RTNGD_CNT,
+		       T.RSC_TST_NO,
+		       T.DEF_CODE,
+			   T.RTNGD_NO,
+			   T.RTNGD_DATE,
+		       FN_GET_RSC_UNIT(T.RSC_CODE) AS RSC_UNIT,
+			   FN_GET_RSC_PRC(T.RSC_CODE) AS RSC_PRC, 
+		       FN_GET_CODE_NAME(T.RSC_CODE) AS RSC_NAME,
+			   FN_GET_CODE_NAME(T.def_code) AS DEF_NAME,
+		       R.SUPLCOM_CODE AS SUC_CODE
+		FROM RESOURCE_RTNGD T
+		LEFT JOIN RESOURCES R
+		ON T.RSC_CODE = R.RSC_CODE
+		<where>
+			<if test="rscCode != null and rscCode != '' ">
+				and T.RSC_CODE = #{rscCode} 
+			</if>
+			<if test="sucCode != null and sucCode != '' ">
+				and R.SUPLCOM_CODE = #{sucCode} 
+			</if>
+			<if test="rtngdDate != null">
+				<![CDATA[
+    			and to_char(T.RTNGD_DATE,'yyyyMMdd') >= to_char(#{rtngdDate},'yyyyMMdd') AND to_char(T.RTNGD_DATE,'yyyyMMdd') <= to_char(#{rtngdDate2}, 'yyyyMMdd')
+				]]>
+			</if>
+		</where>
+			ORDER BY T.RTNGD_NO
 	</select>
 
 	

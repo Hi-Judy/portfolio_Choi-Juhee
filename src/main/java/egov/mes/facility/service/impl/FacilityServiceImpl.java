@@ -33,5 +33,20 @@ public class FacilityServiceImpl implements FacilityService {
 	public void facilityStatusUpdate(FacilityVO facility) {
 		mapper.facilityStatusUpdate(facility) ;
 	}
+
+	@Override
+	public List<FacilityVO> selectFacOptions(FacilityVO facility) {
+		return mapper.selectFacOptions(facility) ;
+	}
+
+	@Override
+	public void insertFacility(FacilityVO facility) {
+		mapper.insertFacility(facility) ; 
+	}
+
+	@Override
+	public void deleteFacility(FacilityVO facility) {
+		mapper.deleteFacility(facility) ;
+	}
 	
 }

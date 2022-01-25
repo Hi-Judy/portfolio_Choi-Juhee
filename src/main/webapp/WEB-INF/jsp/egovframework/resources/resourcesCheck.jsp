@@ -111,7 +111,9 @@
 	//모달창(불량코드 조회)
 	let dialogRtn = $( "#dialog-form-def" ).dialog({
 		autoOpen: false,
-		modal: true
+		modal: true,
+		heigth : 500,
+		width : 900,
 	});
 	
 	//모달창(불량코드 조회)-> 불량코드 셀 선택시 코드 값 그리드에 넣어주기

@@ -13,7 +13,14 @@ import egov.mes.defective.service.DefectiveService;
 public class DefectiveServiceImpl implements DefectiveService {
 
 	@Autowired DefectiveMapper mapper ;
-	
-	
 
+	@Override
+	public List<DefectiveVO> findPodtCode(DefectiveVO defective) {
+		return mapper.findPodtCode(defective) ;
+	}
+
+	@Override
+	public List<DefectiveVO> selectDefective(DefectiveVO defective) {
+		return mapper.selectDefective(defective) ;
+	}
 }

@@ -18,14 +18,12 @@
 <script src="https://code.jquery.com/ui/1.13.0/jquery-ui.js"></script>
 </head>
 <body>
-	<h2>자재반품 조회</h2>
+	<h2>자재 LOT재고 조정 조회</h2>
 	<hr>
-	반품일자  <input id="txtOrde1" type="date" data-role="datebox" data-options='{"mode": "calbox"}'>
-	~ 		<input id="txtOrde2" type="date" data-role="datebox" data-options='{"mode": "calbox"}'><br>
-	업체코드  <input id="txtSuc1">  <button id="btnFindSuc">돋보기</button>  업체명 <input id="txtSuc2" readonly><br>
+	조정일자  <input id="txtInven1" type="date" data-role="datebox" data-options='{"mode": "calbox"}'>
+	~ 		<input id="txtInven2" type="date" data-role="datebox" data-options='{"mode": "calbox"}'><br>
 	자재코드  <input id="txtRsc1">  <button id="btnFindRsc">돋보기</button>  자재명 <input id="txtRsc2" readonly><br>
 	<div id="dialog-form-rsc" title="자재 검색"></div>
-	<div id="dialog-form-suc" title="업체 검색"></div>
 	<br>
 	<button id="btnSelect">조회</button>
 	<button id="btn_reset" type="reset">초기화</button>
@@ -33,22 +31,18 @@
 	<button>엑셀</button>
 	<hr>	
 	<div id="grid"></div>
-	<hr>
 	
 <script type="text/javascript">
-
-	//발주일자 초기값 
+	//조정일자 초기값 
 	var d = new Date();
 	var nd = new Date(d.getFullYear(), d.getMonth(), d.getDate() - 7);
-	document.getElementById('txtOrde1').value = nd.toISOString().slice(0, 10);
-	document.getElementById('txtOrde2').value = d.toISOString().slice(0, 10);
+	document.getElementById('txtInven1').value = nd.toISOString().slice(0, 10);
+	document.getElementById('txtInven2').value = d.toISOString().slice(0, 10);
 	
 	//초기화 버튼
 	$("#btn_reset").on("click", function(){
-		document.getElementById('txtOrde1').value = nd.toISOString().slice(0, 10);
-		document.getElementById('txtOrde2').value = d.toISOString().slice(0, 10);
-		$("#txtSuc1").val('');
-		$("#txtSuc2").val('');
+		document.getElementById('txtInven1').value = nd.toISOString().slice(0, 10);
+		document.getElementById('txtInven2').value = d.toISOString().slice(0, 10);
 		$("#txtRsc1").val('');
 		$("#txtRsc2").val('');
 	})
@@ -72,53 +66,24 @@
 		$("#dialog-form-rsc").load("recList2",
 				function(){console.log("로드됨")})
 		});
-
-	//모달창(업체조회)
-	function clickSuc(sucCode, sucName){
-		
-		console.log(sucCode);
-		console.log(sucName);
-		$("#txtSuc1").val(sucCode);
-		$("#txtSuc2").val(sucName);
-		dialog2.dialog("close");
-	};
-
-	let dialog2 = $("#dialog-form-suc").dialog({
-			autoOpen: false,
-			modal: true,
-			heigth : 500,
-			width : 900,
-		});
 	
-	$("#btnFindSuc").on("click", function(){
-			dialog2.dialog("open");
-		$("#dialog-form-suc").load("sucList",
-				function(){console.log("로드됨")})
-		});
-
 	//그리드 
 	var Grid = tui.Grid;
 	Grid.applyTheme('default');
 	
 	const columns = [
-				{
-		    	header: '반품일자',
-		    	name: 'rtngdDate',
-		    	sortable: true,
-		    	sortingType: 'desc'
-		  		},
-  				{
-		    	header: '반품번호',
-		    	name: 'rtngdNo',
-		    	sortable: true,
-		    	sortingType: 'desc'
-		  		},
-  				{
-			     header: '자재입고검사번호',
-			     name: 'rscTstNo',
-			     sortable: true,
-			     sortingType: 'desc'
-			  	},
+			  {
+			    header: '구분',
+			    name: 'storeFlag',
+			    sortable: true,
+			    sortingType: 'desc'
+			  },
+			  {
+				header: '조정일자',
+				name: 'storeDate',
+				sortable: true,
+				sortingType: 'desc'
+			  },
 			  {
 			    header: '자재코드',
 			    name: 'rscCode',
@@ -136,69 +101,62 @@
 				name: 'rscUnit'
 			   },
 			   {
-				 header: '단가',
-				 name: 'rscPrc'
+				 header: '입고량',
+				 name: 'istCnt'
 				},
 				{
-				 header: '합계',
-				 name: 'rscTotal'
-				},
-			  {
-				header: '반품량',
-				name: 'rtngdCnt'
-			   },
-				{
-				  header: '불량코드',
-				  name: 'defCode'
+				  header: '출고량',
+				  name: 'ostCnt'
 				},
 				{
-				  header: '불량명',
-				  name: 'defName'
-				}
+				  header: '자재LOT',
+				  name: 'rscLot',
+				  sortable: true,
+				  sortingType: 'desc'
+				},
+				{
+				  header: '비고',
+				  name: 'storeEtc'
+			   }
 			];
-			
+	
 	//ajax(api)로 값 받아오는 거 
 	let dataSource = {
 		  api: {
 		    readData: { 
-		    	url: 'resourcesRtngd', 
+		    	url: 'resourcesInven', 
 		    	method: 'GET'
 		    	}
 		  },
-		  //initialRequest: false,
 		  contentType: 'application/json'
 		};
 	
 	const grid = new Grid({
 		  el: document.getElementById('grid'),
 		  data: null,
-		  columns
+		  columns: columns
 		});
 
 	//조회버튼 클릭시 값 가지고 오는 거
 	$("#btnSelect").on("click", function(){
 			var rscCode = $("#txtRsc1").val();
-			var sucCode = $("#txtSuc1").val();
-			var ordeDate = $("#txtOrde1").val();
-			var ordeDate2 = $("#txtOrde2").val();
-			console.log(ordeDate);
-			console.log(typeof(ordeDate));
-			console.log(ordeDate2);
-			
+			var storeDate = $("#txtInven1").val();
+			var storeDate2 = $("#txtInven2").val();
+	
 			$.ajax({
-				url :'resourcesRtngd',
-				data: {'rscCode' : rscCode, 'sucCode': sucCode, 'ordeDate':ordeDate, 'ordeDate2':ordeDate2 },
+				url :'resourcesInven',
+				data: {'rscCode' : rscCode, 'storeDate':storeDate, 'storeDate2' : storeDate2 },
 				contentType: 'application/json; charset=UTF-8'
 			}).done(function(da){
 				var datalist = JSON.parse(da);
-				console.log(datalist);
 				grid.resetData(datalist["data"]["contents"]);
 			})
 					
 		})
 	
 	
-</script>
 	
+	
+</script>
 </body>
 </html>

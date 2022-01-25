@@ -28,13 +28,13 @@
 							RSC_PASS_CNT,
 							RSC_DEF_CNT,
 							TST_FLAG)
-		VALUES(TO_CHAR(SYSDATE,'"RC"YYMMDD""') || LPAD(RCNUMBER.NEXTVAL,3,'0'),
-             	#{ordrNo},
-             	#{rscIstCnt},
-             	#{rscTstCnt},
-             	#{rscPassCnt},
-             	NVL(#{rscDefCnt},0),
-             	'Y')
+					VALUES(F_CODE_MAKER('RC'),
+			             	#{ordrNo},
+			             	#{rscIstCnt},
+			             	#{rscTstCnt},
+			             	#{rscPassCnt},
+			             	NVL(#{rscDefCnt},0),
+			             	'Y')
 	</insert>
 	
 	<!-- 자재입고 검사 후 불량 품목 -> 자재반품 테이블로 insert -->
@@ -45,7 +45,7 @@
 									RTNGD_CNT,
 									DEF_CODE,
 									RTNGD_DATE)
-					SELECT TO_CHAR(SYSDATE,'"RR"YYMMDD""') || LPAD(RCNUMBER.NEXTVAL,3,'0'),
+					SELECT F_CODE_MAKER('RT'),
 						   RSC_TST_NO,
 						   #{rscCode},
 						   RSC_DEF_CNT,

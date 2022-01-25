@@ -8,6 +8,9 @@
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
 </head>
 <body>
+	<div id="title" align="center"><h1>공정마지막단계 대신 테스트페이지</h1></div>
+	<br>
+	<br>
 	<div>
 		<span>지시번호</span>
 		<input type="text" id="comCode">

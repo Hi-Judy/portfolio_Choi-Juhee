@@ -18,6 +18,7 @@ public class FacilityVO {
 	String checkDatestart ;
 	String checkDateend ;
 	String facOutput ;
+	String facRuntime ;
 	
 	String prosCode ;
 	
@@ -27,4 +28,6 @@ public class FacilityVO {
 	Date facCausedate ;
 	
 	String codeName ;
+	
+	String code ;
 }

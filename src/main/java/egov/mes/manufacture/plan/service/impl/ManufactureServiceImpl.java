@@ -28,7 +28,9 @@ public class ManufactureServiceImpl implements ManufactureService {
 	//생산계획 디테일 조회
 	@Override
 	public List<ManufacturePlanVO> selectManPlanDetail(ManufacturePlanVO planVo) {
+
 		System.out.println("생산계획 디테일 조회"+ planVo);
+
 		return manMapper.selectManPlanDetail(planVo);
 	}
 

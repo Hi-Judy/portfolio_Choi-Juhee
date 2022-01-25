@@ -4,6 +4,7 @@ import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.ModelAndView;
 
@@ -81,6 +82,14 @@ public class ProductController {
 		return jsonView ;
 	}
 	
+	@RequestMapping("selectPodtOptions")
+	public ModelAndView selectPodtOptions(ProductVO product) {
+		List<ProductVO> list = service.selectPodtOptions(product) ;
+		ModelAndView jsonView = new ModelAndView("jsonView") ;
+		jsonView.addObject("selectpodtoptions" , list) ;
+		return jsonView ;
+	}
+	
 	// ↓테스트
 	
 	@RequestMapping("ProductTestPage")
@@ -96,6 +105,18 @@ public class ProductController {
 		jsonView.addObject("producttest" , result) ;
 		return jsonView ;
 	}
+	
+	@RequestMapping("ProductTest2Page")
+	public String productTest2() {
+		return "product/product_test2" ;
+	}
+	
+	@RequestMapping("selectQR/{comCode}")
+	public String selectQR(ProductVO product , Model model) {
+		List<ProductVO> list = service.selectQR(product) ;
+		model.addAttribute("qr" , list) ;
+		return "product/product_test2" ;
+	}	
 	
 	// ↑테스트
 }

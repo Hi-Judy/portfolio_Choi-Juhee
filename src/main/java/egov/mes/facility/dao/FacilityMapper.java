@@ -10,4 +10,7 @@ public interface FacilityMapper {
 	List<FacilityVO> findFacility(FacilityVO facility) ;
 	List<FacilityVO> facilityBreakInfo(FacilityVO facility) ;
 	void facilityStatusUpdate(FacilityVO facility) ;
+	List<FacilityVO> selectFacOptions(FacilityVO facility) ;
+	void insertFacility(FacilityVO facility) ;
+	void deleteFacility(FacilityVO facility) ;
 }

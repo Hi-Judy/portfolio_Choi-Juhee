@@ -38,13 +38,17 @@
 	//모달창(자재 조회)
 	let dialog3 = $( "#dialog-form-rsc" ).dialog({
 			autoOpen: false,
-			modal: true
+			modal: true,
+			heigth : 500,
+			width : 900,
 		});
 	
 	//모달창(조회 클릭시 미입고)
 	let dialog4 = $( "#dialog-form-order" ).dialog({
 			autoOpen: false,
-			modal: true
+			modal: true,
+			heigth : 500,
+			width : 900,
 		});
 	
 	function clickOrder(ordrNo){
@@ -141,6 +145,8 @@
 			function(){console.log("로드됨")})}
 		
 	});
+	
+	
 
 	btnAdd.addEventListener("click", function(){
 		grid.appendRow({});
@@ -154,10 +160,16 @@
 		grid.removeCheckedRows(true);
 	}) 
 	
+	
 	btnSaveOrder.addEventListener("click", function(){
-		grid.request('modifyData');
-		
+		console.log((grid.getValue(grid.getRowCount()-1, "rscCnt")));
+		if((grid.getValue(grid.getRowCount()-1, "rscCnt")) == ""){
+			alert("발주량을 입력해주세요")
+		}else if((grid.getValue(grid.getRowCount()-1, "rscCnt")) != null){
+		  grid.request('modifyData');
+		}
 	}) 
+	
 	grid.on("response",function(){
 		grid.clear();
 	})
