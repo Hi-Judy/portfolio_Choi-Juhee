@@ -13,8 +13,6 @@
 <script src="https://uicdn.toast.com/tui-grid/latest/tui-grid.js"></script>
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
 <script src="https://code.jquery.com/ui/1.13.0/jquery-ui.js"></script>
-
-<script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.17.1/xlsx.full.min.js"></script>
 </head>
 <body>
 	<div id="title" align="center"><h2>제품 입/출고 관리</h2></div>
@@ -34,7 +32,6 @@
 			<button type="button" id="btnInsert">저장</button>
 			<button type="button" id="btnDelete">삭제</button>
 			<button type="button" id="clearBtn">초기화</button>
-			<button type="button" id="excel">엑셀로저장</button>
 		</div>
 	</div>
 	
@@ -45,9 +42,8 @@
 	
 	<div id="qr" title="QR코드조회" align='center'>
 		<input type="text" id="result" readonly>
-		<div id="printTarget">
-			<img id="image" src="" onclick="selectLot()">
-		</div>
+		<br>
+		<div id="qrTable"></div>
 	</div>
 	
 <script>
@@ -492,42 +488,104 @@
 	let dialog2 = $("#qr").dialog({
 		autoOpen : false ,
 		modal : true ,
-		width : 600 ,
+		width : 800 ,
 		height : 500 ,
 		buttons : {
+			"QR코드" : function() {
+				qr() ;
+			} ,
 			"닫기" : function() {
 				dialog2.dialog("close") ;
 			}
+			
 		}
 	})
 	
-	grid.on('click' , (ev) => {		
+	const columns3 = [
+		{
+			header: '제품코드' ,
+			name: 'podtCode' , 
+			align: 'center'
+		} ,
+		{
+			header: '제품명' ,
+			name: 'podtName' ,
+			align: 'center'
+		} ,
+		{
+			header: '생산완료일' ,
+			name: 'manDate2' ,
+			align: 'center'
+		} ,
+		{
+			header: '생산지시코드' ,
+			name: 'comCode' ,
+			align: 'center'
+		} ,
+		{
+			header: '생산계획코드' ,
+			name: 'manPlanNo' ,
+			align: 'center'
+		} ,
+		{
+			header: '주문코드' ,
+			name: 'ordCode' ,
+			align: 'center'
+		} ,
+	] ;
+	
+	let data3 ;
+	
+	const grid3 = new Grid({
+		el : document.getElementById('qrTable') ,
+		rowHeaders: [
+			{ type : 'rowNum' }
+		] ,
+		height : 300 ,
+		data : data3 ,
+		columns : columns3
+	})
+	
+	grid.on('click' , (ev) => {				
 		if(ev.columnName != 'podtLot') {
 			return ev.stop() ;
 		}
 		
 		let columnname = grid.getValue([ev.rowKey],"podtLot") ;
+		
 		if (columnname != null) {
-			// ★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★ 테스트한다고 우리집 IP 적어놨음. ★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★
-			// ★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★ 우리조 동적 IP로 바꾸고 나서 테스트 필요함. ★★★★★★★★★★★★★★★★★★★★★★★★★★★★★★
-			// 집 192.168.0.8
-			// 학원 192.168.0.60
-			let address = 'http://192.168.0.8/yedamfinal2/selectQR/' ; 
-			let data = columnname.slice(0,10) ;
-			function qr() {
-				$("#result").val(data) ;	
-				$("#image").attr("src","https://zxing.org/w/chart?cht=qr&chs=350x350&chld=L&choe=UTF-8&chl=" + address + data) ;
-			}
-			qr() ;
+			
+			let comCode = columnname.slice(0,10) ;
+			
+			$("#result").val(comCode) ;
+			
 			dialog2.dialog("open") ;
+			
+			$.ajax({
+				url : 'selectQR/' + comCode ,
+				dataType : 'json' ,
+				async : false ,
+				success : function(datas) {
+					data3 = datas.qr ;
+					grid3.resetData(data3) ;
+					grid3.resetOriginData() ;
+					grid3.refreshLayout() ;
+				} , 
+				error : function(reject) {
+					console.log(reject) ;
+				}
+			})
 		}
 	})
 	
-	function selectLot() {
+	function qr() {
 		let code = $("#result").val() ;
-		
-		let url = "http://192.168.0.8/yedamfinal2/selectQR/" + code ;
-		let option = "width = 500 , height = 500" ;
+	
+		// 집 192.168.0.8
+		// 학원 192.168.0.60
+		// 우리조서버 52.86.104.126:8080
+		let url = "http://192.168.0.60/yedam_final2/ProductTest2Page/" + code ;
+		let option = "width = 400 , height = 400" ;
 		window.open(url,"Lot조회",option) ;
 	}
 	
@@ -536,22 +594,7 @@
 		$("#manDatestart").val("") ;
 		$("#manDateend").val("") ;
 		grid.clear() ;
-	})
-	
-	const options = {
-		includeHeader : true ,
-		includeHiddenColumns : true ,
-		onlySelected : false ,
-		columnNames : [
-			'qntInfono','podtCode','codeName','manDate','podtInput','podtOutput','podtEtc','comCode','podtLot'
-		] ,
-		fileName : 'excel'
-	} ;
-	
-	$("#excel").on("click" , function() {
-		grid.export('xlsx' , options) ;
-	}) ;
-		
+	})		
 	//---------- ↑페이지 ----------
 	//---------- ↓제품코드찾기 ----------
 	let dialog = $("#findProduct").dialog({

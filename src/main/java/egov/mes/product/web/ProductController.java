@@ -5,6 +5,7 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.ModelAndView;
 
@@ -106,17 +107,26 @@ public class ProductController {
 		return jsonView ;
 	}
 	
-	@RequestMapping("ProductTest2Page")
-	public String productTest2() {
+	// ↑테스트
+	
+	@RequestMapping("viewQR/{comCode}")
+	public String productTest3(ProductVO product , Model model) {
+		List<ProductVO> list = service.selectQR(product) ;
+		model.addAttribute("qr" , list) ;
+		return "product/product_test3" ;
+	}
+	
+	@RequestMapping("ProductTest2Page/{comCode}")
+	public String productTest2(Model model , @PathVariable("comCode") String comCode) {
+		model.addAttribute("code" , comCode) ;
 		return "product/product_test2" ;
 	}
 	
 	@RequestMapping("selectQR/{comCode}")
-	public String selectQR(ProductVO product , Model model) {
+	public ModelAndView selectQR(ProductVO product) {
 		List<ProductVO> list = service.selectQR(product) ;
-		model.addAttribute("qr" , list) ;
-		return "product/product_test2" ;
+		ModelAndView jsonView = new ModelAndView("jsonView") ;
+		jsonView.addObject("qr" , list) ;
+		return jsonView ;
 	}	
-	
-	// ↑테스트
 }

@@ -131,7 +131,7 @@
 					readData: {url: '.', 
 							   method: 'GET'}
 				},
-				contentType: 'application/json'
+				contentType: "application/json"
 		}; 
 		
 		//메인그리드 데이터
@@ -172,7 +172,7 @@
 				url : '${pageContext.request.contextPath}/defective/findProduct' ,
 				method : 'post' ,
 				data : { 'fromDate' : from , 'toDate' : to },
-				dataType : 'json' ,
+				dataType : "json" ,
 				success : function(datas) {
 					data2 = datas ;
 					
@@ -198,7 +198,7 @@
 				url : '${pageContext.request.contextPath}/defective/main' ,
 				method : 'post' ,
 				data : { 'podtCode' : podtCode , "manDate" : manDate , "procCode" : procCode } ,
-				dataType : 'json' ,
+				dataType : "json" ,
 				success : function(datas) {
 					data = datas ;
 					
