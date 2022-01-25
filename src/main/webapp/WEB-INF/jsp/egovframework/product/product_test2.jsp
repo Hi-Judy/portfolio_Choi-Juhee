@@ -21,13 +21,23 @@
 		<img id="image" src="">
 	</div>
 	<script>
+	
+		function printCall() {
+			window.print() ;
+		}
+		
 		function image() {
 			// 집 192.168.0.8
 			// 학원 192.168.0.60
 			// 우리조서버 52.86.104.126:8080
 			let code = '${code}' ;			
-			let url = "http://192.168.0.60/yedam_final2/viewQR/" + code ;
+			//let url = "http://192.168.0.8/yedam_final2/viewQR/" + code ;
+			let url = "http://192.168.0.8/yedamfinal2/viewQR/" + code ;
 			$("#image").attr("src","https://zxing.org/w/chart?cht=qr&chs=350x350&chld=L&choe=UTF-8&chl=" + url) ;	
+		}
+		
+		window.onclick = function() {
+			printCall() ;
 		}
 		
 		image() ;
