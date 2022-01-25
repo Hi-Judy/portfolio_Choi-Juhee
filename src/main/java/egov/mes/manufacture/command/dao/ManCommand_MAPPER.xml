@@ -3,6 +3,13 @@
 
 <mapper namespace="egov.mes.manufacture.command.dao.ManCommandMapper">
 
+
+<!-- 자재에서 생산지시디테일 번호 넣기 -->
+<select id="selectResSeq" resultType="string">
+	select nvl(max(COM_NO_DETAIL),0) as comNoDetail from manufacture_command_d
+</select>
+
+
 <!-- 생산지시번호 시퀀스 -->
 <select id="selectSeq" resultType="string">
 	select 'C'||to_Char(Sysdate, 'yyMMdd') || (lpad('001'+1,3,'0')) as comCode from dual
@@ -26,7 +33,8 @@
     values( ( to_char(SYSDATE,'"RO"YYMMDD""') || LPAD(RONUMBER.nextval,3,'0') ),
             #{rscLot},
             #{ostCnt},
-            #{storeEtc} 
+            #{comNoDetail}
+
      )
 </insert>
 
@@ -55,13 +63,14 @@
 									   ORD_QNT,
 									   ORD_DUEDATE,
 									   MAN_ETC)
-	values ( (select nvl(max(COM_NO_DETAIL),0)+1) from manufacture_command_d),
-			 (select nvl(max(COM_CODE),0) from manufacture_command_d),
+
+	values ( (select nvl(max(COM_NO_DETAIL),0)+1 from manufacture_command_d),
+			 (select SUBSTR(max(com_code),0,7) || LPAD(SUBSTR(max(com_code),8,10), 3, 0) from manufacture_command),
 			 #{podtCode},
 			 #{manStartDate},
 			 #{manGoalPerday},
 			 #{ordQnt},
-			 #{ordDuedate},
+			 to_date(#{ordDuedate},'YYYY-MM-DD HH24:MI:SS'),
 			 #{manEtc}
 	)	
 </insert>
@@ -75,7 +84,8 @@
 	from man_command_view a left join manufacture_plan_d b
 	on a.podt_code = b.podt_code
 	where a.podt_code = #{podtCode}
-	and b.plan_etc = '생산지시중'
+	or b.plan_etc = '생산지시중'
+
 </select>
 
 
@@ -112,7 +122,9 @@
 
 <!-- 지시가 없는 생산계획 디테일 조회 (생산지시서 관리 페이지) -->
 <select id="selectManPlan" resultType="egov.mes.manufacture.command.dao.ManCommandVO">
-	select a.podt_code, prod_detail(a.podt_code) podtName, a.man_plan_name, a.man_plan_date, a.plan_no_detail, a.man_plan_no
+	select a.podt_code, prod_detail(a.podt_code) podtName, a.man_plan_name, 
+		   a.man_plan_date, a.plan_no_detail, a.man_plan_no, a.plan_etc
+
 	from man_plan_view a left outer join manufacture_command b
 	on a.man_plan_no = b.man_plan_no
 	where b.com_name is null

@@ -47,8 +47,6 @@ public class ManCommandVO {
 	String procCode; //공정코드
 	String procName; //공정명
 	String resObtain; //자재 확보유무
-	
-
 
 	
 	//설비
@@ -60,5 +58,6 @@ public class ManCommandVO {
 	String facRuntime; //설비당 소요시간
 	String outputDay; //일 생산량
 
+	
 	
 }
