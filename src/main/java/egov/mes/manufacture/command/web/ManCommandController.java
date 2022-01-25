@@ -10,6 +10,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import egov.mes.manufacture.command.dao.ManCommandVO;
@@ -26,11 +27,39 @@ public class ManCommandController {
 		return "manufacture/manCommand.tiles";
 	}
 	
+	//히든그리드 가져오기
+	@PostMapping("/hidden")
+	public String hidden(@RequestBody Map<String, List<ManCommandVO>> map) {
+		
+		//System.out.println("hiddenTest");
+		service.hidden(map);
+		
+		return "jsonView";
+	}
+	
+	//이전 생산지시 조회
+	@PostMapping("/selectPreCommand")
+	public String selectPreCommand(ManCommandVO commandVO, Model model) {
+		model.addAttribute("result", service.selectPreCommand(commandVO));
+		System.out.println("이전 생산 지시 조회: "+ service.selectPreCommand(commandVO));
+		
+		return "jsonView";
+	}
+	
+	//자재코드에 해당하는 자재LOT 조회
+	@PostMapping("/selectResLot")
+	public String selectResLot(ManCommandVO commandVO, Model model) {
+		model.addAttribute("result", service.selectResLot(commandVO));
+		//System.out.println("자재 로트 조회: "+ service.selectResLot(commandVO));
+		
+		return "jsonView";
+	}
+	
 	//제품 만드는데 필요한 공정에 해당하는 설비 조회
 	@PostMapping("/selectFac")
 	public String selectFac(ManCommandVO commandVO, Model model) {
 		model.addAttribute("result", service.selectFac(commandVO));
-		System.out.println("설비조회: "+ service.selectFac(commandVO));
+		//System.out.println("설비조회: "+ service.selectFac(commandVO));
 		
 		return "jsonView";
 	}

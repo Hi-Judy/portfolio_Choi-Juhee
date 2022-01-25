@@ -1,5 +1,6 @@
 package egov.mes.manufacture.plan.service.impl;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
@@ -27,6 +28,7 @@ public class ManufactureServiceImpl implements ManufactureService {
 	//생산계획 디테일 조회
 	@Override
 	public List<ManufacturePlanVO> selectManPlanDetail(ManufacturePlanVO planVo) {
+		System.out.println("생산계획 디테일 조회"+ planVo);
 		return manMapper.selectManPlanDetail(planVo);
 	}
 
@@ -65,16 +67,16 @@ public class ManufactureServiceImpl implements ManufactureService {
 				System.out.println(planVO);
 			}
 		}
-		
 	
 		
-		System.out.println("*******************MODIFY_UPDATE_test**************");
+		System.out.println("*******************MODIFY_ORD_UPDATE_test**************");
 		if(list.getUpdatedRows() != null) {
 			for(ManufacturePlanVO planVO : list.getUpdatedRows()) {
 				manMapper.updateOrdStatus(planVO);
 				System.out.println(planVO);
 			}
 		}
+		
 		
 		return 1;
 	}
@@ -92,6 +94,27 @@ public class ManufactureServiceImpl implements ManufactureService {
 	public List<ManufacturePlanVO> selectManufactureDetail(ManufacturePlanVO planVo) {
 		return manMapper.selectManufactureDetail(planVo);
 	}
+
+	//미계획 내역 메인화면에 넣어주기
+	@Override
+	public List<ManufacturePlanVO> selectPlanToMain(List<ManufacturePlanVO> planVo) {
+		
+		List<ManufacturePlanVO> b = new ArrayList<ManufacturePlanVO>();
+		
+		for (ManufacturePlanVO vo : planVo) {
+			List<ManufacturePlanVO> a = new ArrayList<ManufacturePlanVO>();
+			
+			a = manMapper.selectPlanToMain(vo); // a: [{},{}] => 반복
+			
+			for(ManufacturePlanVO vo2 : a) {
+				b.add(vo2); //a의 각 {} 오브젝트들을 b에 담아서 리턴. 
+			}
+		}
+		
+		return b;
+	}
+	
+	
 
 	
 }

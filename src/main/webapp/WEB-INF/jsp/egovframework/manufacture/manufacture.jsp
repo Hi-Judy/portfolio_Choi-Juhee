@@ -18,49 +18,53 @@
 <body>
 	<h2>생산계획서 작성</h2><br>
 	
+	<!-- 계획일자, 계획명 입력 -->
 	<div class = "planDate">
 		<p style="display:inline-block;">계획일자</p>
-		<input id = "txtFromDate" type="date" name="from" style="display:inline-block;">
 		
+		<input id = "txtFromDate" type="date" name="from" style="display:inline-block;">
 		<p style="display:inline-block;"> ~ </p>
 		<input id = "txtToDate" type="date" name="to" style="display:inline-block;">
 	</div>
 
-	<div>
+	<div class="planName">
 		<p style="display:inline-block;">생산계획명</p>
 		<input id = "txtPlanName" style="display:inline-block;">
-	</div>
-	<br>
-	
-	<div> 
-		<button type="button" id="btnSearchManPlan">생산계획 조회</button><br>
+		
+		<button type="button" id="btnSearchManPlan">생산계획 조회</button>
 		<button type="button" id="btnSearchPlan">미계획 조회</button><br>
-		
-		<input id="txtPodt"> 
-		<button type="button" id="btnSearchRes">자재 조회</button>
-		
+
 		<!-- 미계획 모달 -->
 		<div id = "dialog-form-plan" title="미계획 내역 조회" > 
 			<div id="gridPlan"></div>
 		</div>
-		
-		<!-- 자재조회 모달 -->
-		<div id = "dialog-form-resource" title="자재 조회">
-			<div id="gridResource"></div>
-		</div>
-		
-		<!-- 작성된 생산계획 조회 모달 -->
-		<div id="dialog-form-manPlan" title="생산계획 조회">
-			<div id="gridManPlan"></div>
-		</div>
 	</div>
 	<br>
 	
-	
+	<!-- 자재조회 -->
+	<div> 
+		<p style="display: inline-block;">제품코드</p>
+		<input id="txtPodt"> 
+		<button type="button" id="btnSearchRes">자재 조회</button>
+		
+		<!-- 자재조회 모달 -->
+		<!-- <div id = "dialog-form-resource" title="자재 조회"></div> -->
+		
+	</div>
+
+	<!-- 작성된 생산계획 조회 모달 -->
+	<div id="dialog-form-manPlan" title="생산계획 조회">
+		<div id="gridManPlan"></div>
+	</div>
+	<br>
 
 	<!-- 메인화면 그리드 -->
 	<div id = "gridMain"></div>
 	<br>
+	
+	<!-- 자재조회 그리드 -->
+	<div>자재조회</div>
+	<div id="gridResource"></div>
 	
 	<div style="float:right;">
 		<button type="button" id="btnSavePlan">저장</button>
@@ -100,13 +104,13 @@
 			}		    
 		});
 		
-		//자재 모달 설정해주기
+		/* //자재 모달 설정해주기
 		let dialogResource = $("#dialog-form-resource").dialog({
 			autoOpen: false, 
 			modal: true,
 			height: 400,
 		    width: 600
-		})
+		}) */
 			
 		//let data2;
 		//생산계획 조회 모달 설정해주기
@@ -183,7 +187,7 @@
 			},
 			{
 				header:'자재코드',
-				name: 'resCode'
+				name: 'rscCode'
 			},
 			{
 				header:'소요량',
@@ -268,11 +272,6 @@
 				editor: 'text'
 			},
 			{
-				header: '실 작업량',
-				name: 'manQnt',
-				editor: 'text'
-			},
-			{
 				header: '비고',
 				name: 'planEtc',
 				editor: 'text'
@@ -309,15 +308,32 @@
 		
 		//미계획 모달에서 체크 박스 선택 후 확인 버튼 눌렀을 때 가는 function
 		function goPlan(){
-			gridMain.resetData(checkedPlan); //gridMain에 기존에 들어있는 데이터를 checkedPlan 로 리셋.
-			//gridMain.appendRows(checkedPlan);
-			dialogPlan.dialog("close");
+			console.log('확인완료');
+			
+			let a = gridPlan.getCheckedRows();
+
+			//console.log(checkedPlan[0].podtCode);
+			$.ajax({
+				url: '${pageContext.request.contextPath}/manufacture/manPlanDetailByPlan',
+				method:'POST', 
+				dataType: 'JSON',
+				data: JSON.stringify(a),
+				contentType: 'application/json',
+				success: function(datas){
+					//data2 = datas
+					console.log(datas);
+					//확인 버튼 눌렀을 때 체크된 값에 해당하는 데이터를 gridMain에 뿌려준다.
+					gridMain.resetData(datas.data.contents);
+					
+					dialogPlan.dialog("close");
+				}
+			})
 			
 			let txtPlanDate = document.querySelector('#txtFromDate').value;
 			console.log(txtPlanDate);
 			txtPlanDate.value = '';
 		};
-		
+
 		let checkedPlan;
 		
 		gridPlan.on('check', function(ev){
@@ -325,7 +341,7 @@
 				checkedOrd = gridPlan.getValue(ev.rowKey, 'ordCode'); //체크된 row의 주문코드
 				//console.log(gridPlan.getValue(ev.rowKey, 'podtCode')); //그리드에서 제품코드 가져오기
 		});
-		
+
 		
 		//자재조회 그리드
 		const dataSourceResource = {
@@ -350,7 +366,7 @@
 		//자재 조회 버튼 눌렀을 때 모달창 띄우기
 		$("#btnSearchRes").on("click", function(){
 			let txtPodt = document.querySelector('#txtPodt').value;
-			dialogResource.dialog("open");
+			//dialogResource.dialog("open");
 			gridResource.readData(1, {'podtCode': txtPodt}, true )//검색한 다음에 첫번째 페이지 보여준다.// 파라미터 // 값 불러온 다음에 새로고침 유무
 			gridResource.refreshLayout();
 		})
