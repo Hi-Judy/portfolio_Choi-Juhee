@@ -82,6 +82,14 @@ public class ProductController {
 		return jsonView ;
 	}
 	
+	@RequestMapping("selectPodtOptions")
+	public ModelAndView selectPodtOptions(ProductVO product) {
+		List<ProductVO> list = service.selectPodtOptions(product) ;
+		ModelAndView jsonView = new ModelAndView("jsonView") ;
+		jsonView.addObject("selectpodtoptions" , list) ;
+		return jsonView ;
+	}
+	
 	// ↓테스트
 	
 	@RequestMapping("ProductTestPage")

@@ -56,4 +56,9 @@ public class ProductServiceImpl implements ProductService{
 	}
 	// 테스트
 
+	@Override
+	public List<ProductVO> selectPodtOptions(ProductVO product) {
+		return mapper.selectPodtOptions(product) ;
+	}
+
 }

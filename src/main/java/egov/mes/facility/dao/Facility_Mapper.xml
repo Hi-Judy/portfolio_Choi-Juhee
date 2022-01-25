@@ -3,7 +3,7 @@
 <mapper namespace="egov.mes.facility.dao.FacilityMapper">
 
 	<select id="facilityList" resultType="egov.mes.facility.dao.FacilityVO">
-		select fac_no , fn_get_code_name(fac_code) as codeName , fac_code , fac_status , fac_cause , fac_checkdate , fac_output
+		select fac_no , fn_get_code_name(fac_code) as codeName , fac_code , fac_status , fac_cause , fac_checkdate , fac_output , fac_runtime
 		from facility_status
 		where 1=1
 		
@@ -26,7 +26,7 @@
 				and to_char(fac_checkdate , 'yyyy-MM-dd') <= #{checkDateend}
 			]]>
 		</if>
-		order by fac_code ASC		
+		order by fac_no ASC		
 	</select>
 
 	<select id="findFacility" resultType="egov.mes.facility.dao.FacilityVO">
@@ -48,5 +48,17 @@
 	<update id="facilityStatusUpdate" statementType="CALLABLE">
 		{ call p_update_fac_break( #{facNo},#{facStatus},#{facCause},#{facCheckdate} ) }
 	</update>
+	
+	<select id="selectFacOptions" resultType="egov.mes.facility.dao.FacilityVO">
+		select code from common_code where group_code = 'fac'
+	</select>
+	
+	<insert id="insertFacility" statementType="CALLABLE">
+		{ call p_insert_fac(#{facCode},#{facStatus},#{facOutput},#{facRuntime}) }  
+	</insert>
+	
+	<delete id="deleteFacility" statementType="CALLABLE">
+		{ call p_delete_fac(#{facNo}) }
+	</delete>
 
 </mapper>
