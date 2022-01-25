@@ -717,27 +717,24 @@ const FacGrid = new tui.Grid({
 			CArray.push(rst)
 		})
 		
-		for(let a = 0 ; a<CArray.length ; a++){
+		for(let a = 0 ; a<CArray.length ; a++)
+		{
 			FacGrid3.appendRow()
 			After = FacGrid3.getData();
 			
-			for(let b = 0 ; b<After.length ; b++){
-				if(After[b].facNo != null){
+			for(let b = 0 ; b<After.length ; b++)
+			{
+				if(After[b].facNo != null)
+				{
 					continue;
 				}else{
 						console.log(CArray[a])
 						FacGrid3.setValue(b , "facNo" , CArray[a]);
 					 }
-		}
+			}
 		
 		}
-		/* 
-		console.log(
-			FacGrid2.findRows({
-			facNo: 1102
-		})
-		);
-		 */
+		
 	});
 	
 	
