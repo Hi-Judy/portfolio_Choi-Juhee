@@ -39,20 +39,22 @@
 	
 	<!-- 자재입고 검사 후 불량 품목 -> 자재반품 테이블로 insert -->
 	<insert id="insertResourcesRtngd">
+	<selectKey resultType="egov.mes.resources.check.dao.ResourcesCheckVO" keyProperty="rscTstNo,rtngdCnt" keyColumn="rscTstNo,rtngdCnt" order="BEFORE">
+		SELECT RSC_TST_NO,RSC_DEF_CNT FROM RESOURCE_IST_CHECK WHERE ORDR_NO = #{ordrNo}
+	</selectKey>
 		INSERT INTO RESOURCE_RTNGD (RTNGD_NO,
 									RSC_TST_NO,
 									RSC_CODE,
 									RTNGD_CNT,
 									DEF_CODE,
 									RTNGD_DATE)
-					SELECT F_CODE_MAKER('RT'),
-						   RSC_TST_NO,
+					values(F_CODE_MAKER('RT'),
+						   #{rscTstNo},
 						   #{rscCode},
-						   RSC_DEF_CNT,
+						   #{rscDefCnt},
 						   #{defCode},
-						   SYSDATE	   
-					FROM RESOURCE_IST_CHECK
-					WHERE ORDR_NO = #{ordrNo}
+						   SYSDATE
+						   )
 	</insert>
 	
 	<!-- 자재입고 검사 후 자재상태 '검사' -> 자재발주 테이블로 update -->
