@@ -91,7 +91,6 @@ public class EgovAuthorManageController {
 		paginationInfo.setCurrentPageNo(authorManageVO.getPageIndex());
 		paginationInfo.setRecordCountPerPage(authorManageVO.getPageUnit());
 		paginationInfo.setPageSize(authorManageVO.getPageSize());
-		
 		authorManageVO.setFirstIndex(paginationInfo.getFirstRecordIndex());
 		authorManageVO.setLastIndex(paginationInfo.getLastRecordIndex());
 		authorManageVO.setRecordCountPerPage(paginationInfo.getRecordCountPerPage());
