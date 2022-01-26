@@ -501,7 +501,9 @@ toastr.options = {
             },
             { header : '공정명'   , name : 'codeName'   , align : 'center' },
             { header: 'DB'		, name: 'crud'		  , hidden : true }
-         ]
+         ],
+         rowHeaders: ['rowNum'],
+         draggable: true
       });
        
        
@@ -708,9 +710,17 @@ toastr.options = {
            Pdata.forEach( (datas) => {
               RowKey = datas.rowKey
            })
-
+		   for(let a = 1 ; a<=Pdata.length ; a++){
+			   console.log(a); //여기까지 그리드행 숫자만큼 나옴
+		   }
            ProcGrid.setValue(RowKey , 'procIndex' , indexData);
-
+           
+           	
+          	let bbb = ProcData[0]._attributes;
+          	console.log(bbb.rowNum);
+    		
+          	console.log(Pdata)
+          
        })
        
        btnRightDel.addEventListener('click' , (ev) => {
