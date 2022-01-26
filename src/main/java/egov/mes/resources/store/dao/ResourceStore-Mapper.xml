@@ -15,6 +15,7 @@
 		ON C.ORDR_NO = O.ORDR_NO
 		WHERE C.TST_FLAG = 'Y'
 		AND O.RSC_ST = '검사'
+		ORDER BY O.ORDR_NO
 	</select>
 	
 	<!-- 자재 LOT번호 부여 후 -> 완전 입고(자재입출고에서 조회 가능) -->
@@ -180,7 +181,7 @@
         STORE_ETC
 		FROM RESOURCE_STORE
 		WHERE STORE_FLAG LIKE '%' || '정산' || '%'
-		<if test="rscCode != null and rscCode != '' ">
+			<if test="rscCode != null and rscCode != '' ">
 				AND RSC_CODE = #{rscCode} 
 			</if>
 			<if test="storeDate != null">
@@ -189,5 +190,21 @@
 				]]>
 			</if>
 				ORDER BY STORE_DATE
+	</select>
+	
+	<!-- 자재재고 조회 -->
+	<select id="resourceStoreInventory" resultType="egov.mes.resources.store.dao.ResourcesStoreVO">
+		SELECT  RSC_CODE, 
+		        RSC_LOT,
+		        FN_GET_RSC_UNIT(RSC_CODE) AS RSC_UNIT,
+		        FN_GET_CODE_NAME(RSC_CODE) AS RSC_NAME,
+		        RSC_CNT,
+		        IST_CNT,
+		        OST_CNT
+		FROM 	R_QNT 
+			<if test="rscCode != null and rscCode != '' ">
+				AND RSC_CODE = #{rscCode} 
+			</if>
+		ORDER BY RSC_CODE	
 	</select>
 </mapper>

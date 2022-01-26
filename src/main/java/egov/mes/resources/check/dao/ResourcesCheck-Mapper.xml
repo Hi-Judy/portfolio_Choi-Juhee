@@ -53,8 +53,7 @@
 						   #{rscCode},
 						   #{rscDefCnt},
 						   #{defCode},
-						   SYSDATE
-						   )
+						   SYSDATE)
 	</insert>
 	
 	<!-- 자재입고 검사 후 자재상태 '검사' -> 자재발주 테이블로 update -->
