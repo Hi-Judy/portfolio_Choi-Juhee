@@ -15,6 +15,8 @@
 <script src="https://code.jquery.com/ui/1.13.0/jquery-ui.js"></script>
 </head>
 <body>
+	<div id="help" align="right"><button type="button" id="helpBtn">도움말</button></div>
+	<br>
 	<div id="title" align="center"><h2>설비 관리</h2></div>
 	<br>
 	<div id="info">
@@ -46,6 +48,10 @@
 	<div id="selectFacility" title="비가동내역" align="center">
 		<div id="selectInfo"></div>
 	</div>	
+	
+	<div id="helpDialog" title="도움말" style="text-align: center;">
+		
+	</div>
 <script>
 
 	var Grid = tui.Grid ;
@@ -548,6 +554,22 @@
 			}
 		}) ;
 	})
+	
+	let dialog3 = $("#helpDialog").dialog({
+		autoOpen : false ,
+		modal : true ,
+		width : 600 ,
+		height : 400 ,
+		buttons: {
+			"닫기" : function() {
+				dialog3.dialog("close") ;
+			}
+		},
+	})
+	
+	$("#helpBtn").on("mouseover" , function() {
+		dialog3.dialog("open") ;
+	}) ;
 	//---------- ↑상세정보 ----------
 </script>
 </body>

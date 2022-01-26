@@ -41,7 +41,14 @@ public class DefectiveController {
 		
 		model.addAttribute("result" , service.selectDefective(defective)) ;
 		
-		return "jsonView" ;
+		return "jsonView" ;	
+	}
+	
+	@PostMapping("/defective/selectProcess")
+	public String selectProcess(DefectiveVO defective , Model model) {
 		
+		model.addAttribute("result" , service.selectProcess(defective)) ;
+		
+		return "jsonView" ;
 	}
 }

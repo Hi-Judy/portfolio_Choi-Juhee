@@ -5,9 +5,10 @@
 
 <!-- 생산계획서 디테일 조회(생산계획서 조회 페이지) -->
 <select id="selectManufactureDetail" resultType="egov.mes.manufacture.plan.dao.ManufacturePlanVO">
-	select a.man_plan_no, a.man_plan_date, a.man_plan_name, a.podt_code, prod_detail(a.podt_code) podtName,
-	          a.plan_period, a.man_perday, a.plan_startdate, a.plan_etc,
-	          b.ord_code, b.ord_duedate
+	select a.man_plan_no, a.man_plan_date, a.man_plan_name, 
+		   a.podt_code, prod_detail(a.podt_code) podtName,
+	       a.plan_period, a.man_perday, a.plan_startdate, a.plan_etc,
+	       b.ord_code, b.ord_duedate
 	from man_plan_view a join order_management b
 	on a.ord_code = b.ord_code
 	where a.man_plan_no = #{manPlanNo}
@@ -16,7 +17,8 @@
 
 <!-- 생산계획서 조회(생산계획서 조회 페이지) -->
 <select id="selectManufacturePlan" resultType="egov.mes.manufacture.plan.dao.ManufacturePlanVO">
-	select  a.podt_code, prod_detail(a.podt_code) podtName, b.ord_code, b.man_plan_no, b.man_plan_name, b.man_plan_date
+	select  a.podt_code, prod_detail(a.podt_code) podtName, 
+			b.ord_code, b.man_plan_no, b.man_plan_name, b.man_plan_date
 	from trade_info a join manufacture_plan b
 	on a.ord_code = b.ord_code
 	where a.podt_code = #{podtCode}
@@ -38,7 +40,7 @@
 								   CUS_CODE,
 								   MAN_PLAN_NAME,
 								   MAN_PLAN_DATE )
-	values( (select SUBSTR(max(man_plan_no),0,7) || LPAD(SUBSTR(max(man_plan_no),8,10)+1, 3, 0) from manufacture_plan),
+	values( f_code_maker('P'),
 			#{ordCode},
 			(select cus_code from order_management where ord_code = #{ordCode}),
 			#{manPlanName},
@@ -115,6 +117,7 @@
 
 <!-- 자재 조회 -->
 <select id="selectRes" resultType="egov.mes.manufacture.plan.dao.ManufacturePlanVO">
+
 select a.podt_code, prod_detail(a.podt_code) podtName, a.res_usage, 
 	   b.rsc_code, sum(b.rsc_cnt) as rscCnt
 from prdt_bom_res a join r_qnt b
@@ -122,12 +125,14 @@ on a.res_code = b.rsc_code
 where a.podt_code = #{podtCode}
 group by a.podt_code, a.res_usage,  b.rsc_code
 order by b.rsc_code
+
 </select>
 
 
 <!-- 미계획 내역 조회 -->
 <select id="selectPlan" resultType="egov.mes.manufacture.plan.dao.ManufacturePlanVO">
-	select a.ord_code, a.ord_duedate, a.ord_status, a.cus_code, a.ord_qnt, a.podt_code, b.code_name podtName
+	select a.ord_code, a.ord_duedate, a.ord_status, a.cus_code, 
+		   a.ord_qnt, a.podt_code, b.code_name podtName
     from ord_detail_view a join common_code b
     on a.podt_code = b.code
     where a.ord_status = '미진행'

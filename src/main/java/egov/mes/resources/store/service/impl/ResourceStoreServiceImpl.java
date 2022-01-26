@@ -42,6 +42,11 @@ public class ResourceStoreServiceImpl implements ResourceStoreService{
 	public List<ResourcesStoreVO> findResourcesInventory(ResourcesStoreVO vo) {
 		return mapper.findResourcesInventory(vo);
 	}
+	
+	@Override
+	public List<ResourcesStoreVO> resourceStoreInventory(ResourcesStoreVO vo) {
+		return mapper.resourceStoreInventory(vo);
+	}
 
 	@Override
 	public void modifyStore(ModifyVO<ResourcesStoreVO> mvo) {
@@ -61,6 +66,8 @@ public class ResourceStoreServiceImpl implements ResourceStoreService{
 			}
 		}
 	}
+
+
 
 
 

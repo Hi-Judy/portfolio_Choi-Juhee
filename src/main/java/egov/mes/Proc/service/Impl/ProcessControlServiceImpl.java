@@ -108,6 +108,15 @@ public class ProcessControlServiceImpl implements ProcessControlService {
 		return mapper.SelectedFac(ProcCode);
 	}
 
+	//가동중인설비 선택적 삭젠
+	@Override
+	public void FacDataDelt(List<ProcessControlVO> procVO) {
+		for(ProcessControlVO oneData : procVO) {
+			mapper.FacDataDelt(oneData);
+		}
+		
+	}
+
 
 
 

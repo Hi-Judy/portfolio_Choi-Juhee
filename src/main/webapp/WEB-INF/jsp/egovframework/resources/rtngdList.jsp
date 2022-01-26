@@ -29,7 +29,6 @@
 	<br>
 	<button id="btnSelect">조회</button>
 	<button id="btn_reset" type="reset">초기화</button>
-
 	<button>엑셀</button>
 	<hr>	
 	<div id="grid"></div>

@@ -25,21 +25,20 @@
 		<input id = "txtFromDate" type="date" name="from" style="display:inline-block;">
 		<p style="display:inline-block;"> ~ </p>
 		<input id = "txtToDate" type="date" name="to" style="display:inline-block;">
-	</div>
 
-	<div class="planName">
-		<p style="display:inline-block;">생산계획명</p>
-		<input id = "txtPlanName" style="display:inline-block;">
-		
 		<button type="button" id="btnSearchManPlan">생산계획 조회</button>
 		<button type="button" id="btnSearchPlan">미계획 조회</button><br>
+	</div>
 
-		<!-- 미계획 모달 -->
+	
+	<!-- 미계획 모달 -->
+	<div>
 		<div id = "dialog-form-plan" title="미계획 내역 조회" > 
 			<div id="gridPlan"></div>
 		</div>
 	</div>
 	<br>
+
 	
 	<!-- 자재조회 -->
 	<div> 
@@ -49,8 +48,8 @@
 		
 		<!-- 자재조회 모달 -->
 		<!-- <div id = "dialog-form-resource" title="자재 조회"></div> -->
-		
 	</div>
+
 
 	<!-- 작성된 생산계획 조회 모달 -->
 	<div id="dialog-form-manPlan" title="생산계획 조회">

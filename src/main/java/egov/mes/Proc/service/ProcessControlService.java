@@ -13,7 +13,8 @@ public interface ProcessControlService {
 	
 	int ProcDelete 		(List<ProcessControlVO> procVO);		//process 테이블데이터 단건삭제
 	int CommonDelete 	(List<ProcessControlVO> procVO);		//common_code 테이블 단건삭제
-
+	void FacDataDelt 	(List<ProcessControlVO> procVO);	 //facility_process 선택적 삭제
+	
 	int ProcAddData 	(List<ProcessControlVO> ProcVO);	//process 테이블 데이터 추가
 	int CommonAddData 	(List<ProcessControlVO> ProcVO);	//common_code 테이블 데이터 추가
 	

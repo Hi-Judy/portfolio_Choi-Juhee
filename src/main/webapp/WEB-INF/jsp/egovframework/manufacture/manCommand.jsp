@@ -772,6 +772,7 @@
 			gridMain.resetData([{}]);
 			gridResource.resetData([{}]);
 			gridFacility.resetData([{}]);
+			gridPreCommand.resetData([{}]);
 		})
 		
 		

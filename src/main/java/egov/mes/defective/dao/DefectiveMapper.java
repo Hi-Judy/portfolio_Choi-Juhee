@@ -8,4 +8,5 @@ import egovframework.rte.psl.dataaccess.mapper.Mapper;
 public interface DefectiveMapper {
 	List<DefectiveVO> findPodtCode(DefectiveVO defective) ;
 	List<DefectiveVO> selectDefective(DefectiveVO defective) ;
+	List<DefectiveVO> selectProcess(DefectiveVO defective) ;
 }

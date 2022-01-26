@@ -15,6 +15,8 @@
 <script src="https://code.jquery.com/ui/1.13.0/jquery-ui.js"></script>
 </head>
 <body>
+	<div id="help" align="right"><button type="button" id="helpBtn">도움말</button></div>
+	<br>
 	<h2>불량조회</h2><br>
 	
 	<div class = "manDate">
@@ -37,12 +39,17 @@
 		<button type="button" id="btnClear">초기화</button>		
 	</div>
 	<br>
-	
 	<!-- 메인화면 그리드 -->
-	<div id = "gridMain">
-	</div>
+	<div id = "gridMain"></div>
 	
-	<script>	
+	<!-- 공정목록 -->
+	<div id = "process" class="col-sm-5"></div>
+	
+	<div id="helpDialog" title="도움말" style="text-align: center;">
+		
+	</div>
+
+<script>	
 		var Grid = tui.Grid; //그리드 객체 생성
 		
 		//제품코드찾기 모달 설정해주기
@@ -124,6 +131,18 @@
 			}
 		]
 		
+		//공정 컬럼
+		const columnsProcess = [
+			{
+				header: '공정코드',
+				name: 'procCode'
+			},
+			{
+				header: '공정명',
+				name : 'procName'
+			} 
+		]
+		
  		//제품코드찾기 조회 그리드
 		const dataSourceProduct = {
 				api: {
@@ -135,6 +154,9 @@
 		
 		//메인그리드 데이터
 		let data ; 
+		
+		//공정그리드 데이터
+		let data3 ; 
 		
  		//제품코드찾기 그리드 내용. 
 		let gridProduct = new Grid({
@@ -148,6 +170,14 @@
 			el : document.getElementById('gridMain'),
 			data : data,
 			columns : columnsMain,
+			rowHeaders : ['rowNum']
+		});
+ 		
+		//공정 그리드
+		var gridProcess = new Grid({
+			el : document.getElementById('process'),
+			data : data3,
+			columns : columnsProcess,
 			rowHeaders : ['rowNum']
 		});
  		
@@ -191,12 +221,11 @@
 			
 			let podtCode = gridProduct.getValue(ev.rowKey , "podtCode") ;
 			let manDate = gridProduct.getValue(ev.rowKey , "manDate") ;
-			let procCode = gridProduct.getValue(ev.rowKey , "procCode") ;
 			
 			$.ajax({
 				url : '${pageContext.request.contextPath}/defective/main' ,
 				method : 'post' ,
-				data : { 'podtCode' : podtCode , "manDate" : manDate , "procCode" : procCode } ,
+				data : { 'podtCode' : podtCode , "manDate" : manDate } ,
 				dataType : "json" ,
 				success : function(datas) {
 					data = datas ;
@@ -210,8 +239,25 @@
 				}
 			})
 			
+			$.ajax({
+				url : '${pageContext.request.contextPath}/defective/selectProcess' ,
+				method : 'post' ,
+				data : { 'podtCode' : podtCode } ,
+				dataType : "json" ,
+				success : function(datas) {
+					data3 = datas ;
+					
+					gridProcess.resetData(data3.result) ;
+					gridProcess.resetOriginData() ;
+					gridProcess.refreshLayout() ;
+				} ,
+				error : function(reject) {
+					console.log(reject) ;
+				}
+			})
+			
 			gridProduct.clear() ;
-			dialogProduct.dialog("close") ;
+			dialogProduct.dialog("close") ;			
 		})
 		
 		//초기화 버튼
@@ -220,6 +266,22 @@
 			$("#txtToDate").val("") ;
 			gridMain.clear() ;
 		})
+		
+		let dialog3 = $("#helpDialog").dialog({
+			autoOpen : false ,
+			modal : true ,
+			width : 600 ,
+			height : 400 ,
+			buttons: {
+				"닫기" : function() {
+					dialog3.dialog("close") ;
+				}
+			},
+		})
+		
+		$("#helpBtn").on("mouseover" , function() {
+			dialog3.dialog("open") ;
+		}) ;
 	</script>
 </body>
 </html>

@@ -22,6 +22,9 @@
 		<property name="basePackage" value="egovframework.**.**.dao" />
 	</bean>
 	<bean class="org.mybatis.spring.mapper.MapperScannerConfigurer">
+		<property name="basePackage" value="egovframework.**.**.**.dao" />
+	</bean>
+	<bean class="org.mybatis.spring.mapper.MapperScannerConfigurer">
 		<property name="basePackage" value="egov.mes.**.dao" />
 	</bean>
 	<bean class="org.mybatis.spring.mapper.MapperScannerConfigurer">

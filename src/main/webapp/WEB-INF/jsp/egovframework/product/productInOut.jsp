@@ -15,6 +15,8 @@
 <script src="https://code.jquery.com/ui/1.13.0/jquery-ui.js"></script>
 </head>
 <body>
+	<div id="help" align="right"><button type="button" id="helpBtn">도움말</button></div>
+	<br>
 	<div id="title" align="center"><h2>제품 입/출고 관리</h2></div>
 	<br>
 	<div id="info">
@@ -44,6 +46,10 @@
 		<input type="text" id="result" readonly>
 		<br>
 		<div id="qrTable"></div>
+	</div>
+	
+	<div id="helpDialog" title="도움말" style="text-align: center;">
+		
 	</div>
 	
 <script>
@@ -585,11 +591,11 @@
 		// 학원 192.168.0.60
 		// 우리조서버 52.86.104.126:8080
 		// 집
-		let url = "http://192.168.0.8/yedamfinal2/viewQR/" + code ;
+		//let url = "http://192.168.0.8/yedamfinal2/viewQR/" + code ;
 		// 학원
 		//let url = "http://192.168.0.60/yedam_final2/viewQR/" + code ;
 		// 서버
-		//let url = "http://52.86.104.126:8080/ProductTest2Page/" + code ;
+		let url = "http://52.86.104.126:8080/ProductTest2Page/" + code ;
 		let option = "width = 355 , height = 355" ;
 		window.open(url,"Lot조회",option) ;
 	}
@@ -676,6 +682,22 @@
 		dialog.dialog("close") ;
 		$("#podtName").val("") ;
 	})
+	
+	let dialog3 = $("#helpDialog").dialog({
+		autoOpen : false ,
+		modal : true ,
+		width : 600 ,
+		height : 400 ,
+		buttons: {
+			"닫기" : function() {
+				dialog3.dialog("close") ;
+			}
+		},
+	})
+	
+	$("#helpBtn").on("mouseover" , function() {
+		dialog3.dialog("open") ;
+	}) ;
 	//---------- ↑제품코드찾기 ----------
 </script>
 </body>

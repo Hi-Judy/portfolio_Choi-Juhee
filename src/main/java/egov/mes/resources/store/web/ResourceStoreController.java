@@ -128,5 +128,17 @@ public class ResourceStoreController {
 		return "resources/resourcesInvenList.tiles";
 	}
 	
+	//자재 LOT 재고 조회 페이지
+	@RequestMapping("resourceStoreInventory")
+	public String resourceStoreInventory(Model model, ResourcesStoreVO vo) {
+	  model.addAttribute("result",true);
+      Map<String,Object> map = new HashMap<String,Object>();
+      map.put("contents", service.resourceStoreInventory(vo));
+      model.addAttribute("data", map);
+	  System.out.println("================자재 LOT 재고 조회================");
+      return "jsonView";
+	}
+	
+	
 }
 	

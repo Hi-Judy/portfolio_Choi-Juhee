@@ -89,6 +89,13 @@
 	where code = #{procCode}
 </delete>
 
+<!-- 가동중인 설비 선택적 삭제 -->
+<delete id="FacDataDelt" parameterType="egov.mes.Proc.dao.ProcessControlVO">
+	delete
+	from facility_process
+	where fac_no = #{facNo}
+</delete>
+
 <update id="ProcChangeData" parameterType="egov.mes.Proc.dao.ProcessControlVO">
 	update process
 	set

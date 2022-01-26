@@ -22,7 +22,6 @@ public class ManCommandVO {
 	String planEtc; //계획 비고
 
 
-
 	//생산지시
 	String comCode; //지시번호
 	String comDate; //지시일

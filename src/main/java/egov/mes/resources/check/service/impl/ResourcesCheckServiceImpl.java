@@ -30,7 +30,9 @@ public class ResourcesCheckServiceImpl implements ResourcesCheckService{
 			for(ResourcesCheckVO vo :mvo.getUpdatedRows()) {
 				mapper.insertResourcesCheck(vo);
 				mapper.updateResourcesCheck(vo);
-				mapper.insertResourcesRtngd(vo);
+				if(!vo.getRscDefCnt().equals("0")) {
+					mapper.insertResourcesRtngd(vo);	
+				}
 			}
 		}
 	}
