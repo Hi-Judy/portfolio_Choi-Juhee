@@ -203,7 +203,7 @@
 		        OST_CNT
 		FROM 	R_QNT 
 			<if test="rscCode != null and rscCode != '' ">
-				AND RSC_CODE = #{rscCode} 
+				WHERE RSC_CODE = #{rscCode} 
 			</if>
 		ORDER BY RSC_CODE	
 	</select>
