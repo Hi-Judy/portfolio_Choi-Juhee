@@ -15,6 +15,8 @@
 <script src="https://code.jquery.com/ui/1.13.0/jquery-ui.js"></script>
 </head>
 <body>
+	<div id="help" align="right"><button type="button" id="helpBtn">도움말</button></div>
+	<br>
 	<h2>불량조회</h2><br>
 	
 	<div class = "manDate">
@@ -42,7 +44,12 @@
 	
 	<!-- 공정목록 -->
 	<div id = "process" class="col-sm-5"></div>
-	<script>	
+	
+	<div id="helpDialog" title="도움말" style="text-align: center;">
+		
+	</div>
+
+<script>	
 		var Grid = tui.Grid; //그리드 객체 생성
 		
 		//제품코드찾기 모달 설정해주기
@@ -259,6 +266,22 @@
 			$("#txtToDate").val("") ;
 			gridMain.clear() ;
 		})
+		
+		let dialog3 = $("#helpDialog").dialog({
+			autoOpen : false ,
+			modal : true ,
+			width : 600 ,
+			height : 400 ,
+			buttons: {
+				"닫기" : function() {
+					dialog3.dialog("close") ;
+				}
+			},
+		})
+		
+		$("#helpBtn").on("mouseover" , function() {
+			dialog3.dialog("open") ;
+		}) ;
 	</script>
 </body>
 </html>

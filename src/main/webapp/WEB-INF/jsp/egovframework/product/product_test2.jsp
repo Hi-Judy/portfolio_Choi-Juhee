@@ -36,7 +36,7 @@
 			// 학원
 			//let url = "http://192.168.0.60/yedam_final2/viewQR/" + code ;
 			// 서버
-			let url = "http://52.86.104.126:8080/ProductTest2Page/" + code ;
+			let url = "http://52.86.104.126:8080/viewQR/" + code ;
 			$("#image").attr("src","https://zxing.org/w/chart?cht=qr&chs=350x350&chld=L&choe=UTF-8&chl=" + url) ;	
 		}
 		
