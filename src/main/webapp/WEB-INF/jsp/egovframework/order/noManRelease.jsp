@@ -15,6 +15,8 @@
 <script src="https://code.jquery.com/ui/1.13.0/jquery-ui.js"></script>
 </head>
 <body>
+	<div id="help" align="right"><button type="button" id="helpBtn">도움말</button></div>
+	<br>
 	<div id="title" align="center"><h2>미생산 출하 조회</h2></div>
 	<br>
 	<div id="info">
@@ -30,6 +32,10 @@
 	<div id="findCustomer" title="업체검색"">
 		<input id="cusName"><button id="btnCusSearch">검색</button>
 		<div id="cusResult"></div>
+	</div>
+	
+	<div id="helpDialog" title="도움말" style="text-align: center;">
+		
 	</div>
 <script>
 	var Grid = tui.Grid ;
@@ -199,6 +205,22 @@
 		dialog2.dialog("close") ;
 		$("#cusName").val("") ;
 	})
+	
+	let dialog3 = $("#helpDialog").dialog({
+		autoOpen : false ,
+		modal : true ,
+		width : 600 ,
+		height : 400 ,
+		buttons: {
+			"닫기" : function() {
+				dialog3.dialog("close") ;
+			}
+		},
+	})
+	
+	$("#helpBtn").on("mouseover" , function() {
+		dialog3.dialog("open") ;
+	}) ;
 	//---------- ↑업체찾기 ----------
 </script>
 </body>

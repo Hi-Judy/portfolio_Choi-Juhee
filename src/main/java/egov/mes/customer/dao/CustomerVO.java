@@ -7,6 +7,7 @@ public class CustomerVO {
 	String cusCode ;
 	String codeName ;
 	String cusPhone ;
+	String cusType ;
 	
 	String ordCode ;
 	String podtCode ;

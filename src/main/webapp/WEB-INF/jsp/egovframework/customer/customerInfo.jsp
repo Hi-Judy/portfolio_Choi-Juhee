@@ -15,11 +15,14 @@
 <script src="https://code.jquery.com/ui/1.13.0/jquery-ui.js"></script>
 </head>
 <body>
+	<div id="help" align="right"><button type="button" id="helpBtn">도움말</button></div>
+	<br>
 	<div id="title" align="center"><h2>고객 관리</h2></div>
 	<br>
 	<div id="info">
 		<span>업체코드 : </span><input id="txtCusCode"><button type="button" id="btnSearch">업체코드검색</button>
 		<br>
+		<span>업체명 :  </span><input id="txtCusName">
 		<div align="right">
 			<button type="button" id="listBtn">조회</button>
 			<button type="button" id="btnAdd">추가</button>
@@ -35,8 +38,16 @@
 	</div>
 	
 	<div id="tradeInfo-dialog-form" title="거래처정보수정 / 거래내역조회" style="text-align: center;">
+		거래처정보수정
+		<br>
 		<div id="cusInfo"></div>
+		<br>
+		거래내역조회
 		<div id="tradeResult" style="height: 200px;"></div>
+	</div>
+	
+	<div id="helpDialog" title="도움말" style="text-align: center;">
+		
 	</div>
 	
 <script>
@@ -57,6 +68,13 @@
 				}
 			} ,
 			align: 'center'
+		} ,
+		{
+			header : '고객구분' ,
+			name : 'cusType' ,
+			editor : 'text' ,
+			align: 'center'
+			
 		} ,
 		{
 			header: '업체명' ,
@@ -109,6 +127,18 @@
 	
 	$("#btnAdd").on("click" , function() {
 		grid.appendRow({}) ;
+	})
+	
+	grid.on('editingFinish' , (ev) => {
+		let code = ev.value ;
+		
+		if(ev.columnName == 'cusCode') {
+			if(code == '제품 구매 고객') {
+				grid.setValue(ev.rowKey , 'cusType' , '구매처') ;
+			} else {
+				grid.setValue(ev.rowKey , 'cusType' , '판매처') ;
+			}
+		}
 	})
 	
 	$("#btnInsert").on("click" , function() {
@@ -228,7 +258,7 @@
 		autoOpen : false ,
 		modal : true ,
 		width : 600 ,
-		height : 400 ,
+		height : 600 ,
 		buttons: {
 			"닫기" : function() {
 				dialog.dialog("close") ;
@@ -293,7 +323,9 @@
 	
 	grid2.on('click',(ev) => {
 		let cusCode = data2[ev.rowKey].cusCode ;
+		let cusName = data2[ev.rowKey].codeName ;
 		$("#txtCusCode").val(cusCode) ;
+		$("#txtCusName").val(cusName) ;
 		grid2.clear() ;
 		dialog.dialog("close") ;
 		$("#cusName").val("") ;
@@ -305,7 +337,7 @@
 		autoOpen : false ,
 		modal : true ,
 		width : 600 ,
-		height : 400 ,
+		height : 600 ,
 		buttons : {
 			"저장" : function() {
 				let datas = grid4.getModifiedRows() ;
@@ -471,6 +503,22 @@
 		bodyHeight: 60,
 		minBodyHeight: 60
 	})
+	
+	let dialog3 = $("#helpDialog").dialog({
+		autoOpen : false ,
+		modal : true ,
+		width : 600 ,
+		height : 400 ,
+		buttons: {
+			"닫기" : function() {
+				dialog3.dialog("close") ;
+			}
+		},
+	})
+	
+	$("#helpBtn").on("mouseover" , function() {
+		dialog3.dialog("open") ;
+	}) ;
 	//---------- ↑상세정보 ----------
 </script>
 </body>
