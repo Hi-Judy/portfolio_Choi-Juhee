@@ -677,7 +677,7 @@ toastr.options = {
           
           
        })
-       
+       //----------체크된 그리드행삭제 ---------------
        btnLeftDel.addEventListener("click", () => {
           MatGrid.removeCheckedRows(true);
           
