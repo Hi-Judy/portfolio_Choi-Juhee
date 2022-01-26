@@ -7,11 +7,11 @@ import egovframework.rte.psl.dataaccess.mapper.Mapper;
 @Mapper("manCommandMapper")
 public interface ManCommandMapper {
 	
+	//생산지시서 조회(지시서 조회 페이지)
+	List<ManCommandVO> selectCommand(ManCommandVO commandVO);
 
 	//자재에서 생산지시디테일 시퀀스
 	String selectResSeq();
-	
-
 
 	//생산지시번호 시퀀스
 	String selectSeq();
