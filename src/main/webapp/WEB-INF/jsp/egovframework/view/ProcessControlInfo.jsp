@@ -149,13 +149,13 @@ div.Gridright {
 	
 	<div id="ChangeModal" title="등록된 설비 변경">
 		<div> 선택된 공정코드: &nbsp;<input id="ProcSelected2" readonly>
-			  <button id="" type="button" class="btn" style="float: right; ">변경저장</button>
+			  <button id="DataSeve" type="button" class="btn" style="float: right; ">변경저장</button>
 		</div>
 		<br><br>
 		
 		<div class="Gridleft">
 			<div> <span> 가동중인 설비 </span>
-	        	<button id="" type="button" class="btn" style="float: right; margin-bottom: 5px;">삭제</button>
+	        	<button id="FacDataDelete" type="button" class="btn" style="float: right; margin-bottom: 5px;">삭제</button>
 	        </div> 
 			<div id="FacGrid3" ></div> <!-- style="border-top: 3px solid #168;" -->
 		</div>
@@ -172,7 +172,6 @@ div.Gridright {
       
    </div>
    
-   <div id="chart"></div>
 </body>
 
 <script>
@@ -237,7 +236,6 @@ $.ajax({
    dataType : 'json',
    async : false,
 }).done( (rsts) => {
-	console.log(rsts);
 	EmpDatas = rsts.datas;
 	
 })
@@ -262,7 +260,6 @@ $.ajax({
    dataType : 'json',
    async : false,
 }).done( (rsts) => {
-	console.log(rsts);
 	ProcAllData = rsts.datas
 	
 	
@@ -565,7 +562,6 @@ FacilityCheck(ProcAllData);
 			}
 		} 
 		
-		console.log(datas[0]);
 		
 	}
 
@@ -613,7 +609,6 @@ const FacGrid = new tui.Grid({
 			if(CheckDatas[i] == undefined){
 				delete CheckDatas[ev.rowKey] 
 			}else{
-				console.log(CheckDatas[i]);
 				var FacProcData = {
 						procCode : document.getElementById("ProcSelected").value ,
 						facNo : CheckDatas[i]
@@ -621,7 +616,6 @@ const FacGrid = new tui.Grid({
 				FacArray.push(FacProcData);
 			}
 		}
-		console.log(FacArray);
 		$.ajax({
 	    		 url : './FacProcInput',
 	    		 type : 'post',
@@ -656,30 +650,6 @@ const FacGrid = new tui.Grid({
 	   bodyHeight : 400 
 	});
 	
-		const Chart = toastui.Chart;
-		
-		const el = document.getElementById('chart');
-		const data = {
-		  categories: ['Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'],
-		  series: [
-		    {
-		      name: 'Budget',
-		      data: [5000, 3000, 5000, 7000, 6000, 4000, 1000],
-		    },
-		    {
-		      name: 'Income',
-		      data: [8000, 4000, 7000, 2000, 6000, 3000, 5000],
-		    },
-		  ],
-		};
-		const options = {
-		  chart: { width: 700, height: 400 },
-		};
-
-		const chart = Chart.barChart({ el, data, options });
-		// const chart = new BarChart({ el, data, options }); // 두 번째 방법
-
-
 	
 	function SelectedFacFn(ProcCodeDT) {
 		var ChoiceFac;
@@ -711,32 +681,172 @@ const FacGrid = new tui.Grid({
 	//등록완료 모달에서 데이터추가버튼
 	dataflowBtn.addEventListener('click' , (aaa) => {
 		
+		//데이터 플로우 (그리드2 -> 그리드3 으로 데이터 이동)
 		var After ;
 		var CArray = [];
+		var i = 0;
+		var Ok = 'N' ;
 		FacArray.forEach( (rst) => {
 			CArray.push(rst)
 		})
 		
-		for(let a = 0 ; a<CArray.length ; a++)
-		{
+		for(let a = 0 ; a<CArray.length ; a++)//그리드2에 체크한 갯수 만큼 밖에 for 을 돌린다
+		{	
+			var Before = FacGrid3.getData();
+			Before.forEach( (Check) => { //이미들어있는 값인지 체크해서 있는값이면 i++
+				if(Check.facNo == CArray[a]){
+					i++ ;
+				}
+			});
+			
+			if(i == 0){ //i == 0 일떄만 그리드행 추가 되면서 실행이 된다.
 			FacGrid3.appendRow()
 			After = FacGrid3.getData();
-			
-			for(let b = 0 ; b<After.length ; b++)
-			{
-				if(After[b].facNo != null)
-				{
-					continue;
-				}else{
-						console.log(CArray[a])
-						FacGrid3.setValue(b , "facNo" , CArray[a]);
-					 }
+			}else{
+				Ok = 'Y';
+				i = 0 ;
+			//	continue; //i 가 0 이상일떄 for문 멈춤
 			}
-		
-		}
-		
+			if(Ok == 'N')
+			{
+				for(let b = 0 ; b<After.length ; b++)//그리드3 데이터숫자 만큼 row텍스트 들을 체크
+				{
+					if(After[b].facNo != null)//텍스트에 빈값이 아닐경우 건너뛰고, 빈값일떄만 setValue 를 추가한다.
+					{
+						continue;
+					}
+					else
+					{
+						FacGrid3.setValue(b , "facNo" , CArray[a]);
+					}
+				}
+			}
+			Ok = 'N';
+		}	
 	});
 	
+	
+	//---------- 가동중인설비 그리드 체크된행 데이터 삭제 ---------------
+	FacDataDelete.addEventListener('click' , (ev) => {
+		FacGrid3.removeCheckedRows(true);
+	});
+	
+	
+	//---------- 저장버튼 눌렀을떄 데이트추가 -> 삭제 순으로 처리 ---------------
+	DataSeve.addEventListener('click' , (ev) =>{
+		var Check ;
+		var FacGrid3ModiRow = 	FacGrid3.getModifiedRows()  ;
+		var FacInput 		= 	FacGrid3ModiRow.createdRows ;
+		if(FacInput.length > 0){
+			Check =FacInputFn(FacInput);
+		}
+		var FacDelete		= 	FacGrid3ModiRow.deletedRows ;
+		if(FacDelete.length > 0){
+			Check = FacDeleteFn(FacDelete);
+		}
+		
+		if(Check){
+			toastr["success"]("저장완료");
+			setTimeout(() => {
+				ChangeModal.dialog( "close" ) ;
+       			location.reload();
+       		},1500 );	
+		}else{
+			toastr["warning"]("저장할 정보가 없습니다"); 
+		}
+	});
+	
+	//데이터 추가ajax 처리
+	function FacInputFn(FacInput) {
+	 var procValue = document.getElementById("ProcSelected2").value ;
+   	 var num = 0 ;	
+   	 var IN ;
+   	 var FacInpData = new Array();
+   	 var Check = false ;
+	     	 try{
+	     		FacInput.forEach( (rst) => {
+	    			  if(rst.facNo == null || rst.facNo == '' || rst.facNo == undefined)
+	    			 {
+	    				toastr["error"]("설비번호가 비어있습니다.");  
+						return false; 
+	    			 }
+	    			 else
+	    				 {
+	    				 IN = {
+		    					procCode  	: procValue,
+		    					facNo		: rst.facNo
+		    				 }
+	    				   FacInpData.push(IN);
+		    			   num++ ;
+	    				 } 
+	    		 });
+	    		 
+	    	 }catch (err) {
+	 			alert('설비추가 오류 '+ err);
+	 		} 
+	     if(num>0){ 
+	    	 $.ajax({
+	    		 url : './FacProcInput',
+	    		 type : 'post',
+	    		 data : JSON.stringify(FacInpData),
+	    		 contentType : 'application/json;',
+	             async : false, 
+	             success: (datas) => {
+	            	 Check = true ;
+	             },
+	             error: (err) => {
+	                alert("가동설비추가 ajax 오류 " + err);
+	             }
+	          });
+	    	}
+   	 return Check; 
+	}
+	
+	//가동중인설비 데이터 삭제ajax 처리
+	function FacDeleteFn(FacDelete) {
+		 var procValue = document.getElementById("ProcSelected2").value ;
+	   	 var num = 0 ;	
+	   	 var OUT ;
+	   	 var FacDeltData = new Array();
+	   	 var Check = false ;
+		     	 try{
+		     		FacDelete.forEach( (rst) => {
+		    			  if(rst.facNo == null || rst.facNo == '' || rst.facNo == undefined)
+		    			 {
+		    				toastr["error"]("설비번호가 비어있습니다.");  
+							return false; 
+		    			 }
+		    			 else
+		    				 {
+		    				 OUT = {
+			    					procCode  	: procValue,
+			    					facNo		: rst.facNo
+			    				 }
+		    				 	FacDeltData.push(OUT);
+			    			   	num++ ;
+		    				 } 
+		    		 });
+		    		 
+		    	 }catch (err) {
+		 			alert('설비삭제 오류 '+ err);
+		 		} 
+		     if(num>0){ 
+		    	 $.ajax({
+		    		 url : './FacDataDelt',
+		    		 type : 'post',
+		    		 data : JSON.stringify(FacDeltData),
+		    		 contentType : 'application/json;',
+		             async : false, 
+		             success: (datas) => {
+		            	 Check = true ;
+		             },
+		             error: (err) => {
+		                alert("가동설비 삭제 ajax 오류 " + err);
+		             }
+		          });
+		    	}
+	   	 return Check; 
+	}
 	
 
 </script>

@@ -91,12 +91,17 @@ public class ProcController {
 	@ResponseBody
 	@RequestMapping("SelectedFac/{procCode}")
 	public ModelAndView SelectedFac(@PathVariable String procCode) {
-		System.out.println("설비");
-		System.out.println(procCode);
 		ModelAndView jsonView = new ModelAndView("jsonView");
 		jsonView.addObject("datas" , service.SelectedFac(procCode));
-		System.out.println(jsonView);
 		return jsonView;
+	}
+	
+	//공정 데이터 삭제
+	@ResponseBody
+	@PostMapping(value = "FacDataDelt" ) 
+	public String FacDataDelt (@RequestBody List<ProcessControlVO> procVO) {
+		service.FacDataDelt(procVO);
+		return null ;
 	}
 	
 
