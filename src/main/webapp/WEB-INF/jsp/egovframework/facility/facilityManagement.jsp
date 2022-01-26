@@ -8,8 +8,10 @@
 <link rel="stylesheet" href="https://uicdn.toast.com/tui-grid/latest/tui-grid.css" />
 <link rel="stylesheet" href="https://uicdn.toast.com/tui.date-picker/latest/tui-date-picker.css" />
 <link rel="stylesheet" href="//code.jquery.com/ui/1.13.0/themes/base/jquery-ui.css">
+<link rel="stylesheet" href="https://uicdn.toast.com/tui.pagination/latest/tui-pagination.css" />
 
 <script src="https://uicdn.toast.com/tui.date-picker/latest/tui-date-picker.js"></script>
+<script type="text/javascript" src="https://uicdn.toast.com/tui.pagination/v3.4.0/tui-pagination.js"></script>
 <script src="https://uicdn.toast.com/tui-grid/latest/tui-grid.js"></script>
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
 <script src="https://code.jquery.com/ui/1.13.0/jquery-ui.js"></script>
@@ -82,7 +84,7 @@
 			align: 'center'
 		} ,
 		{
-			header : '상태' ,
+			header : '가동상태' ,
 			name : 'facStatus' ,
 			editor : {
 				type : 'select' ,
@@ -195,7 +197,11 @@
 		] ,
 		height : 300 ,
 		data : data ,
-		columns : columns
+		columns : columns ,
+ 		pageOptions: {
+		    useClient: true,
+		    perPage: 5
+		} 
 	})
 	
 	$("#clearBtn").on("click" , function() {
@@ -467,7 +473,11 @@
 		] ,
 		height : 300 ,
 		data : data2 ,
-		columns : columns2
+		columns : columns2 ,
+ 		pageOptions: {
+		    useClient: true,
+		    perPage: 5
+		} 
 	})
 	
 	grid2.on('click',(ev) => {
@@ -503,6 +513,11 @@
 			align: 'center'
 		} ,
 		{
+			header: '설비명' ,
+			name: 'codeName' ,
+			align: 'center'
+		} ,
+		{
 			header: '비가동사유' ,
 			name: 'facCause' ,
 			align: 'center'
@@ -523,7 +538,11 @@
 		] ,
 		height : 300 ,
 		data : data3 ,
-		columns : columns3
+		columns : columns3 ,
+ 		pageOptions: {
+		    useClient: true,
+		    perPage: 5
+		} 
 	})
 	
 	grid.on('click' , (ev) => {

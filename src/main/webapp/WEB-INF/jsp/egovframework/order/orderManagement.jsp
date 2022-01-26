@@ -8,8 +8,10 @@
 <link rel="stylesheet" href="https://uicdn.toast.com/tui-grid/latest/tui-grid.css" />
 <link rel="stylesheet" href="https://uicdn.toast.com/tui.date-picker/latest/tui-date-picker.css" />
 <link rel="stylesheet" href="//code.jquery.com/ui/1.13.0/themes/base/jquery-ui.css">
+<link rel="stylesheet" href="https://uicdn.toast.com/tui.pagination/latest/tui-pagination.css" />
 
 <script src="https://uicdn.toast.com/tui.date-picker/latest/tui-date-picker.js"></script>
+<script type="text/javascript" src="https://uicdn.toast.com/tui.pagination/v3.4.0/tui-pagination.js"></script>
 <script src="https://uicdn.toast.com/tui-grid/latest/tui-grid.js"></script>
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
 <script src="https://code.jquery.com/ui/1.13.0/jquery-ui.js"></script>
@@ -25,10 +27,10 @@
 			<option value="" selected>선택</option>
 			<option value="미진행">미진행</option>
 			<option value="진행중">진행중</option>
-			<option value="취소">취소</option>
 			<option value="완료">완료</option>
 			<option value="미생산완료">미생산완료</option>
 		</select>
+		<span>업체명 :  </span><input id="txtCusName" readonly>
 		<span>업체코드 : </span><input id="txtCusCode"><button type="button" id="btnSearch">업체코드검색</button>
 		<br><br>
 		<span>접수일자 : </span><input id="ordDateStart" type="date"><span> ~ </span><input id="ordDateEnd" type="date">
@@ -45,7 +47,8 @@
 		<input id="cusName"><button id="btnCusSearch">검색</button>
 		<div id="cusResult"></div>
 	</div>
-	
+	<br>
+	<div align="center"><h5>거래상세정보</h5></div>
 	<div id="tradeDetail" title="주문상세정보" align="center">
 		<div id="selectInfo"></div>
 	</div>
@@ -62,7 +65,7 @@
 		autoOpen : false ,
 		modal : true ,
 		width : 600 ,
-		height : 400 ,
+		height : 600 ,
 		buttons: {
 			"닫기" : function() {
 				dialog.dialog("close") ;
@@ -122,12 +125,18 @@
 		] ,
 		height : 300 ,
 		data : data ,
-		columns : columns
+		columns : columns ,
+ 		pageOptions: {
+		    useClient: true,
+		    perPage: 5
+		} 
 	})
 	
 	grid.on('click',(ev) => {
 		let cusCode = data[ev.rowKey].cusCode ;
+		let cusName = data[ev.rowKey].codeName ;
 		$("#txtCusCode").val(cusCode) ;
+		$("#txtCusName").val(cusName) ;
 		grid.clear() ;
 		dialog.dialog("close") ;
 		$("#cusName").val("") ;
@@ -232,7 +241,11 @@
 			{ type : 'checkbox'}
 		] ,
 		data : data2 ,
-		columns : columns2
+		columns : columns2 ,
+ 		pageOptions: {
+		    useClient: true,
+		    perPage: 5
+		} 
 	}) ;
 	
 	$("#clearBtn").on("click" , function() {
@@ -242,7 +255,7 @@
 		$("#ordDateEnd").val("") ;
 		$("#dueDateStart").val("") ;
 		$("#dueDateEnd").val("") ;
-		grid2.clear() ;
+		$("#txtCusName").val("") ;
 	})
 	
 	grid2.on('check' , (ev) => {
@@ -270,11 +283,19 @@
 				let ordStatus = rowStatus[i] ;
 				if(ordStatus == '완료' || ordStatus == '미생산출하' || ordStatus == ''){
 					no = 2 ;
-				}
+				} else if (ordStatus == '진행중') {
+					no = 3 ;
+				} 
 			} 
 		}
 		if (no == 2) {
 			alert('이미 완료된 주문입니다') ;
+			rowCodes = [] ;
+			rowStatus = [] ;
+			return ;
+		}
+		if (no == 3) {
+			alert('이미 진행중인 주문입니다') ;
 			rowCodes = [] ;
 			rowStatus = [] ;
 			return ;
@@ -401,7 +422,7 @@
 			}
 		})
 		
-		dialog2.dialog("open") ;
+		//dialog2.dialog("open") ;
 		grid3.refreshLayout() ;
 	})
 	
@@ -421,10 +442,14 @@
 					}
 				}
 			}
-		}
+		} ,
+ 		pageOptions: {
+		    useClient: true,
+		    perPage: 5
+		} 
 	}) ;
 	
-	let dialog2 = $("#tradeDetail").dialog({
+/* 	let dialog2 = $("#tradeDetail").dialog({
 		autoOpen : false ,
 		modal : true ,
 		width : 800 ,
@@ -435,7 +460,7 @@
 				grid.clear() ;
 			}
 		}
-	})
+	}) */
 	
 	let dialog3 = $("#helpDialog").dialog({
 		autoOpen : false ,
