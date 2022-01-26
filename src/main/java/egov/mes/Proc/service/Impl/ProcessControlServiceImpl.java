@@ -104,8 +104,8 @@ public class ProcessControlServiceImpl implements ProcessControlService {
 	
 	//선택중인 설비 목록 조회
 	@Override
-	public List<ProcessControlVO> SelectedFac( ProcessControlVO procVO) {
-		return mapper.SelectedFac(procVO);
+	public List<ProcessControlVO> SelectedFac( String ProcCode) {
+		return mapper.SelectedFac(ProcCode);
 	}
 
 

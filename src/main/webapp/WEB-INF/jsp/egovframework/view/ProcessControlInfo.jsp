@@ -72,14 +72,14 @@ div.right {
 
 div.Gridleft {
    float: left;
-   width: 40%;
+   width: 45%;
  /*  padding: 5px; */
  /*  box-sizing: border-box; */
 }
 
 div.Gridright {
    float: right;
-   width: 40%;
+   width: 45%;
  /*  padding: 5px; */
  /*  box-sizing: border-box; */
 }
@@ -151,16 +151,21 @@ div.Gridright {
 		<div> 선택된 공정코드: &nbsp;<input id="ProcSelected2" readonly>
 			  <button id="" type="button" class="btn" style="float: right; ">변경저장</button>
 		</div>
-		<br><br><br>
+		<br><br>
 		
 		<div class="Gridleft">
-			<span>가동중인 설비</span>
-			<div id="FacGrid3" style="border-top: 3px solid #168;"></div>
+			<div> <span> 가동중인 설비 </span>
+	        	<button id="" type="button" class="btn" style="float: right; margin-bottom: 5px;">삭제</button>
+	        </div> 
+			<div id="FacGrid3" ></div> <!-- style="border-top: 3px solid #168;" -->
 		</div>
 		
 		<div class="Gridright" >
-	        <span>미할당 설비</span> 
-			<div id="FacGrid2"style="border-top: 3px solid #168;"></div>
+			
+	        <div> <span> 비가동(가동준비) 설비 </span>
+	        	<button id="dataflowBtn" type="button" class="btn" style="float: right; margin-bottom: 5px;">추가</button>
+	        </div> 
+			<div id="FacGrid2"></div> <!-- style="border-top: 3px solid #168;" -->
 		</div>
 	</div>
      
@@ -215,7 +220,7 @@ toastr.options = {
 	  var ChangeModal = $( "#ChangeModal" ).dialog({
 	     autoOpen : false ,
 	     modal : true ,
-	     width:1200, //너비
+	     width:900, //너비
 	     height:705 ,//높이
 	     buttons : {"취소" : function() {
 	     		ModalDal.dialog( "close" ) ;
@@ -317,6 +322,7 @@ FacilityCheck(ProcAllData);
 	});
 	
 	var GridrowKey;
+	var ChoiceFac
 	//관리자ID칼럼 라인 클릭시 모달생성
 	Grid.on('click' , (ev) => {
 		GridrowKey = ev.rowKey;
@@ -333,17 +339,33 @@ FacilityCheck(ProcAllData);
 				ModalDal.dialog("open");
 				FacGrid.refreshLayout() ;
 			}
-			
+			//등록완료 데이터 클릭시 모달생성 및 데이터 생성
 			if(FacCheck == '등록완료'){
 				document.getElementById("ProcSelected2").setAttribute("value", Grid.getValue(GridrowKey , 'procCode'));
 				let ProcCodeDT = document.getElementById("ProcSelected2").value
-				SelectedFacFn(ProcCodeDT)
+				ChoiceFac = SelectedFacFn(ProcCodeDT)
+				FacGrid3.resetData(ChoiceFac);
+				FacGrid3.resetOriginData();
+				
 				ChangeModal.dialog("open");
 				FacGrid2.refreshLayout() ;
+				FacGrid3.refreshLayout() ;
+				
+				
 			}
 		}
 		
 	})
+	// <설비변경용> 등록된 설비 그리드 헤드 위로 올려야만 작동이 되서 위로올림
+	const FacGrid3 = new tui.Grid({
+	   el : document.getElementById('FacGrid3'),
+	   data : ChoiceFac ,
+	   columns : [
+	      { header : '설비번호'	, name : 'facNo'	, align : 'center' }
+	   ],
+	   rowHeaders: ['checkbox'],
+	   bodyHeight : 400 
+	});
 	
 	//Grid 그리드 데이터 변경처리
 	EmpGrid.on('click' , (ev) => {
@@ -658,35 +680,64 @@ const FacGrid = new tui.Grid({
 		// const chart = new BarChart({ el, data, options }); // 두 번째 방법
 
 
-	var ChoiceFac;
+	
 	function SelectedFacFn(ProcCodeDT) {
-		var ddat = { procCode : ProcCodeDT }
-		console.log(JSON.stringify(ddat))
-		 $.ajax({
-   		 url : './SelectedFac',
-   		 type : 'post',
-   		 data : JSON.stringify(ddat),
-   		 contentType : 'application/json;',
-            async : false, 
-            success: (datas) => {
-            	ChoiceFac = datas.datas ;// 테스트 해야함 @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
-            }, 
-            error: (err) => {
-               alert("설비등록 ajax에러 " + err);
-            }
-         }); 
+		var ChoiceFac;
+         $.ajax({
+             url : './SelectedFac/'+ProcCodeDT,
+             dataType : 'json',
+             async : false
+          }).done( (rsts) =>{
+        	  ChoiceFac = rsts.datas;
+			  FacGrid3.refreshLayout() ;
+          });
+		return ChoiceFac;
+	}
 		
-	}	
-				// <설비변경용> 등록된 설비 그리드 헤드
-	const FacGrid3 = new tui.Grid({
-	   el : document.getElementById('FacGrid3'),
-	   data : ChoiceFac ,
-	   columns : [
-	      { header : '설비번호'	, name : 'facNo'	, align : 'center' }
-	   ],
-	   rowHeaders: ['checkbox'],
-	   bodyHeight : 400 
+		
+	//그리드2 에서 체크된 얘만 값 담기	
+	var FacArray = new Array() ;
+	FacGrid2.on('check' , (ev) => {
+		FacArray[ev.rowKey] = FacGrid2.getValue([ev.rowKey] , "facNo")
 	});
+	
+	
+	//------체크해제된 데이터 배열에 삭제 --------
+	FacGrid2.on('uncheck' , (ev) => {
+		delete FacArray[ev.rowKey] 
+	})
+	
+	
+	//등록완료 모달에서 데이터추가버튼
+	dataflowBtn.addEventListener('click' , (aaa) => {
+		
+		var After ;
+		var CArray = [];
+		FacArray.forEach( (rst) => {
+			CArray.push(rst)
+		})
+		
+		for(let a = 0 ; a<CArray.length ; a++)
+		{
+			FacGrid3.appendRow()
+			After = FacGrid3.getData();
+			
+			for(let b = 0 ; b<After.length ; b++)
+			{
+				if(After[b].facNo != null)
+				{
+					continue;
+				}else{
+						console.log(CArray[a])
+						FacGrid3.setValue(b , "facNo" , CArray[a]);
+					 }
+			}
+		
+		}
+		
+	});
+	
+	
 
 </script>
 </html>

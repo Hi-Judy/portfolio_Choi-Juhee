@@ -248,6 +248,7 @@ toastr.options = {
             dataType : 'json',
             async : false
          }).done( (rsts) =>{
+        	 console.log(rsts)
             proData = rsts.ProDetail;
             document.getElementById("proId").setAttribute("value",proCode);         //제품코드
             document.getElementById("proName").setAttribute("value",proData[0].codeName);   //제품명
