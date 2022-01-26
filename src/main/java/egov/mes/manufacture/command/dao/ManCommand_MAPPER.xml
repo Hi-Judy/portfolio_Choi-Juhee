@@ -3,16 +3,37 @@
 
 <mapper namespace="egov.mes.manufacture.command.dao.ManCommandMapper">
 
+<!-- 제품코드별로 생산지시서 조회(지시서 조회 페이지) -->
+<select id="selectCommand" resultType="egov.mes.manufacture.command.dao.ManCommandVO">
+	select COM_CODE, MAN_STARTDATE, COM_NAME, PODT_CODE,
+	       prod_detail(podt_code) podtName, MAN_GOALPERDAY, 
+	       ORD_QNT, MAN_ETC
+	from man_command_view
+	where 1=1
+	
+	<if test = ' podtCode != null and podtCode != "" '>
+		and podt_code = #{podtCode}
+	</if>
+	
+	<if test = ' manStartDate != null and manStartDate != "" '>
+		and man_startdate = #{manStartDate}
+	</if>
+	
+	order by com_code
+</select>
+
 
 <!-- 자재에서 생산지시디테일 번호 넣기 -->
 <select id="selectResSeq" resultType="string">
-	select nvl(max(COM_NO_DETAIL),0) as comNoDetail from manufacture_command_d
+	select nvl(max(COM_CODE),0) as comCode 
+	from manufacture_command_d
 </select>
 
 
 <!-- 생산지시번호 시퀀스 -->
 <select id="selectSeq" resultType="string">
-	select 'C'||to_Char(Sysdate, 'yyMMdd') || (lpad('001'+1,3,'0')) as comCode from dual
+	select 'C'||to_Char(Sysdate, 'yyMMdd') || (lpad('001'+1,3,'0')) as comCode 
+	from dual
 </select>
 
 
@@ -26,15 +47,24 @@
 
 <!-- 생산 지시서 저장 => 자재 테이블에 출고량, 생산지시디테일 번호 넣어주기 -->
 <insert id="insertRes" parameterType="egov.mes.manufacture.command.dao.ManCommandMapper">
-	insert into resource_store(store_no, 
-							   rsc_lot, 
-							   ost_cnt, 
-							   store_etc)
+	insert into resource_store(STORE_NO, --자재 입출고 번호
+							   RSC_CODE, --자재코드
+							   IST_FLAG, --입고유무
+							   RSC_LOT, --자재LOT
+							   IST_CNT, --입고량
+							   OST_CNT, --출고량
+							   STORE_DATE, --입출고 날짜
+							   STORE_FLAG, --입출고 구분
+							   STORE_ETC) --비고(생산지시번호)
     values( ( to_char(SYSDATE,'"RO"YYMMDD""') || LPAD(RONUMBER.nextval,3,'0') ),
+            #{resCode},
+            'N',
             #{rscLot},
+            0,
             #{ostCnt},
-            #{comNoDetail}
-
+            sysdate,
+            '출고',
+            #{comCode}
      )
 </insert>
 
@@ -45,10 +75,10 @@
 									 MAN_PLAN_NO, 
 									 COM_DATE, 
 									 COM_NAME) 
-	values ( (select SUBSTR(max(com_code),0,7) || LPAD(SUBSTR(max(com_code),8,10)+1, 3, 0) from manufacture_command),
+	values ( f_code_maker('C'),
 			 #{manPlanNo},
 			 #{comDate},
-			 #{comName}	
+			 #{comName}
 	)
 </insert>
 
@@ -78,9 +108,9 @@
 
 <!-- 이전 생산지시 조회 -->
 <select id="selectPreCommand" resultType="egov.mes.manufacture.command.dao.ManCommandVO">
-	select a.podt_code, prod_detail(a.podt_code) podtName, a.ord_qnt, a.ord_duedate, 
-	          a.man_goalperday, a.man_startdate, a.man_etc,
-	          b.plan_period, b.man_perday, b.plan_etc       
+	select a.podt_code, prod_detail(a.podt_code) podtName, a.ord_qnt, 
+		   a.ord_duedate, a.man_goalperday, a.man_startdate, a.man_etc,
+	       b.plan_period, b.man_perday, b.plan_etc       
 	from man_command_view a left join manufacture_plan_d b
 	on a.podt_code = b.podt_code
 	where a.podt_code = #{podtCode}
@@ -100,7 +130,8 @@
 <!-- 제품 만드는데 필요한 공정에 해당하는 설비 조회 -->
 <select id="selectFac" resultType="egov.mes.manufacture.command.dao.ManCommandVO">
 	select c.podt_code, c.proc_code, prod_detail(c.proc_code) as procName,
-	       d.fac_no, d.fac_code, prod_detail(d.fac_code) facName, d.fac_status, d.fac_output/d.fac_runtime*24 outputDay
+	       d.fac_no, d.fac_code, prod_detail(d.fac_code) facName, d.fac_status, 
+	       d.fac_output/d.fac_runtime*24 outputDay
 	from process_flowInfo c left join (select a.fac_no, a.fac_code, prod_detail(a.fac_code), a.fac_status,
 	                                          b.proc_code, a.fac_output , a.fac_runtime
 	                                   from facility_status a join facility_process b
@@ -113,7 +144,7 @@
 <!-- 제품 코드 입력했을 때 필요한 공정별 자재 조회 -->
 <select id="selectRes" resultType="egov.mes.manufacture.command.dao.ManCommandVO">
 	select podt_code, prod_detail(podt_code) podtName, res_code, res_usage, 
-	proc_code, prod_detail(proc_code) ProcName
+		   proc_code, prod_detail(proc_code) ProcName
 	from prdt_bom_res
 	where podt_code= #{podtCode}
 	order by proc_code
@@ -124,7 +155,6 @@
 <select id="selectManPlan" resultType="egov.mes.manufacture.command.dao.ManCommandVO">
 	select a.podt_code, prod_detail(a.podt_code) podtName, a.man_plan_name, 
 		   a.man_plan_date, a.plan_no_detail, a.man_plan_no, a.plan_etc
-
 	from man_plan_view a left outer join manufacture_command b
 	on a.man_plan_no = b.man_plan_no
 	where b.com_name is null
@@ -134,6 +164,7 @@
 		<if test = "planFromDate != null"> 
 			and to_char(a.man_plan_date, 'rrrr-MM-dd') >= #{planFromDate}
 		</if>
+		
 		<if test= "planToDate != null">
 			and #{planToDate} >=  to_char(a.man_plan_date, 'rrrr-MM-dd')
 		</if>
@@ -145,7 +176,8 @@
 <!-- 생산계획 디테일 상세 조회(생산지시서 관리 페이지) -->
 <select id="selectManPlanDetail" resultType="egov.mes.manufacture.command.dao.ManCommandVO">
 	select a.podt_code,  a.ord_duedate,
-	       b.plan_no_detail, b.podt_code, prod_detail(b.podt_code) podtName, b.ord_qnt, b.plan_period, b.man_plan_no,
+	       b.plan_no_detail, b.podt_code, prod_detail(b.podt_code) podtName, 
+	       b.ord_qnt, b.plan_period, b.man_plan_no,
 	       (select man_perday from manufacture_plan_d where podt_code = a.podt_code) as manPerday
 	from ord_detail_view a join manufacture_plan_d b
 	on a.podt_code = b.podt_code

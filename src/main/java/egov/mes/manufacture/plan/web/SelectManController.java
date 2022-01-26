@@ -20,7 +20,7 @@ public class SelectManController {
 	@Autowired
 	ManufactureService service;
 	
-	// egov 메인에서 manufacture.jsp로 연결
+	// egov 메인에서 manufactureSelect.jsp로 연결
 	@RequestMapping("/manufactureSelect")
 	public String selectPlan() {
 		return "manufacture/manufactureSelect.tiles";
