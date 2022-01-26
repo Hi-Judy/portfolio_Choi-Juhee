@@ -20,6 +20,18 @@
 	<definition name="*/*.tiles" extends="layouts-tiles">
 		<put-attribute name="tiles_content"
 			value="/WEB-INF/jsp/egovframework/{1}/{2}.jsp" />
+	</definition>	
+	<definition name="*/*/*/*/*" extends="layouts-tiles">
+		<put-attribute name="tiles_content"
+			value="/WEB-INF/jsp/{1}/{2}/{3}/{4}/{5}.jsp" />
+	</definition>
+		<definition name="*/*/*/*" extends="layouts-tiles">
+		<put-attribute name="tiles_content"
+			value="/WEB-INF/jsp/{1}/{2}/{3}/{4}.jsp" />
+	</definition>
+		<definition name="*/*/*" extends="layouts-tiles">
+		<put-attribute name="tiles_content"
+			value="/WEB-INF/jsp/{1}/{2}/{3}.jsp" />
 	</definition>
 	<definition name="com/*/*/*.tiles" extends="layouts-tiles">
 		<put-attribute name="tiles_content"
