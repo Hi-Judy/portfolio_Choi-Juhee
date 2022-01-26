@@ -12,5 +12,6 @@ public interface ResourceStoreService {
 	List<ResourcesStoreVO> searchResourcesStoreIn(ResourcesStoreVO vo);
 	List<ResourcesStoreVO> searchResourcesStoreOut(ResourcesStoreVO vo);
 	List<ResourcesStoreVO> findResourcesInventory(ResourcesStoreVO vo);
+	List<ResourcesStoreVO> resourceStoreInventory(ResourcesStoreVO vo);
 	void modifyStore(ModifyVO<ResourcesStoreVO> mvo);
 }

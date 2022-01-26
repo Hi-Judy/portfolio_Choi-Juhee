@@ -60,10 +60,6 @@
 				 name: 'rscLot',
 				 editor: 'text'
 				},
-				{
-				 header: '입고유무',
-				 name: 'rscTstCnt'
-				},
 				 {
 				  header: '비고',
 				  name: 'field',

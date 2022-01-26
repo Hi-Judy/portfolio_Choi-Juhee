@@ -37,5 +37,6 @@ public class ResourcesStoreVO {
 	String ordrNo;			//발주번호
 	String sucCode;			//업체코드
 	String sucName;			//업체명
+	String rscCnt;			///재고량
 	
 }
