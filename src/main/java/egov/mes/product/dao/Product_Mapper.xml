@@ -58,7 +58,7 @@
 	</insert>
 	
 	<select id="selectQR" resultType="egov.mes.product.dao.ProductVO">
-		select pqi.podt_code , fn_get_code_name(pqi.podt_code) as podtName , pqi.man_date as manDate2 , pqi.com_code ,
+		select pqi.podt_code , fn_get_code_name(pqi.podt_code) as podtName , to_char(pqi.man_date,'yyyy-MM-dd') as manDate2 , pqi.com_code ,
 	    	mc.man_plan_no , mp.ord_code
 		from product_qnt_info pqi    
 		join manufacture_command mc

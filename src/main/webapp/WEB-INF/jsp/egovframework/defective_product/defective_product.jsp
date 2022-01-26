@@ -41,9 +41,8 @@
 	<!-- 메인화면 그리드 -->
 	<div id = "gridMain">
 	</div>
-	<br>
 	
-	<script>
+	<script>	
 		var Grid = tui.Grid; //그리드 객체 생성
 		
 		//제품코드찾기 모달 설정해주기

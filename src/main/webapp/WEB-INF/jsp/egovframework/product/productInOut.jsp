@@ -584,8 +584,13 @@
 		// 집 192.168.0.8
 		// 학원 192.168.0.60
 		// 우리조서버 52.86.104.126:8080
-		let url = "http://192.168.0.60/yedam_final2/ProductTest2Page/" + code ;
-		let option = "width = 400 , height = 400" ;
+		// 집
+		let url = "http://192.168.0.8/yedamfinal2/viewQR/" + code ;
+		// 학원
+		//let url = "http://192.168.0.60/yedam_final2/viewQR/" + code ;
+		// 서버
+		//let url = "http://52.86.104.126:8080/ProductTest2Page/" + code ;
+		let option = "width = 355 , height = 355" ;
 		window.open(url,"Lot조회",option) ;
 	}
 	

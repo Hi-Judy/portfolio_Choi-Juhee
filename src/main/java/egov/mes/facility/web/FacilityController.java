@@ -90,4 +90,13 @@ public class FacilityController {
 		jsonView.addObject("deletefacility" , result) ;
 		return jsonView ;
 	}
+	
+	// ↓테스트
+	
+	@RequestMapping("chartPage")
+	public String chartPage() {
+		return "defective_product/chart" ;
+	}
+	
+	// ↑테스트
 }
