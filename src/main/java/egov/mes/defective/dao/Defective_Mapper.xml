@@ -29,7 +29,10 @@
 		from defective_product_info
 		where podt_code = #{podtCode}
 		and man_date = #{manDate}
-		and proc_code = #{procCode}
+	</select>
+	
+	<select id="selectProcess" resultType="egov.mes.defective.dao.DefectiveVO">
+		select proc_code , fn_get_code_name(proc_code) as procName from process_flowinfo where podt_code = #{podtCode} order by proc_code ASC
 	</select>
 	
 </mapper>
