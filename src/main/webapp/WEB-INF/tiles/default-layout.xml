@@ -25,9 +25,9 @@
 		<put-attribute name="tiles_content"
 			value="/WEB-INF/jsp/{1}/{2}/{3}/{4}/{5}.jsp" />
 	</definition>	
-	<definition name="*/*/*/*/*/*" extends="layouts-tiles">
+	<definition name="egovframework/*/*/*/*/*" extends="layouts-tiles">
 		<put-attribute name="tiles_content"
-			value="/WEB-INF/jsp/{1}/{2}/{3}/{4}/{5}/{6}.jsp" />
+			value="/WEB-INF/jsp/egovframework/{1}/{2}/{3}/{4}/{5}.jsp" />
 	</definition>
 		<definition name="*/*/*/*" extends="layouts-tiles">
 		<put-attribute name="tiles_content"
@@ -37,11 +37,6 @@
 		<put-attribute name="tiles_content"
 			value="/WEB-INF/jsp/{1}/{2}/{3}.jsp" />
 	</definition>
-	<definition name="com/*/*/*.tiles" extends="layouts-tiles">
-		<put-attribute name="tiles_content"
-			value="/WEB-INF/jsp/egovframework/com/{1}/{2}/{3}.jsp" />
-	</definition>
-
 	<definition name="layouts-none"
 		template="/WEB-INF/jsp/egovframework/tiles/none.jsp">
 		<put-attribute name="tiles_none" />
