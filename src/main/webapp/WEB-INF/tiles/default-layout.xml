@@ -24,6 +24,10 @@
 	<definition name="*/*/*/*/*" extends="layouts-tiles">
 		<put-attribute name="tiles_content"
 			value="/WEB-INF/jsp/{1}/{2}/{3}/{4}/{5}.jsp" />
+	</definition>	
+	<definition name="*/*/*/*/*/*" extends="layouts-tiles">
+		<put-attribute name="tiles_content"
+			value="/WEB-INF/jsp/{1}/{2}/{3}/{4}/{5}/{6}.jsp" />
 	</definition>
 		<definition name="*/*/*/*" extends="layouts-tiles">
 		<put-attribute name="tiles_content"
