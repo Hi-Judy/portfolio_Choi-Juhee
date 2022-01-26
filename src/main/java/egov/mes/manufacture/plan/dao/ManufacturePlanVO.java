@@ -15,7 +15,7 @@ public class ManufacturePlanVO {
 	String podtName; //제품명
 	String resCode; //자재코드
 	String resUsage; //자재소요량
-	String 재고량;
+	String rscCnt; //재고량
 	String rscCode;
 	
 	String manPlanNo; //계획번호

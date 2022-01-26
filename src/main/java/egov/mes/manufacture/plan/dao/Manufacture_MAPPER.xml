@@ -115,12 +115,13 @@
 
 <!-- 자재 조회 -->
 <select id="selectRes" resultType="egov.mes.manufacture.plan.dao.ManufacturePlanVO">
-	select a.podt_code, prod_detail(a.podt_code) podtName, a.res_usage, b.rsc_code, sum(b.재고량) as 재고량
-	from prdt_bom_res a join r_qnt b
-	on a.res_code = b.rsc_code
-	where a.podt_code = #{podtCode}
-	group by a.podt_code, a.res_usage,  b.rsc_code
-	order by b.rsc_code
+select a.podt_code, prod_detail(a.podt_code) podtName, a.res_usage, 
+	   b.rsc_code, sum(b.rsc_cnt) as rscCnt
+from prdt_bom_res a join r_qnt b
+on a.res_code = b.rsc_code
+where a.podt_code = #{podtCode}
+group by a.podt_code, a.res_usage,  b.rsc_code
+order by b.rsc_code
 </select>
 
 

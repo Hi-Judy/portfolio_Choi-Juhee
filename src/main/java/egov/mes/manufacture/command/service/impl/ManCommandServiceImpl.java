@@ -17,10 +17,11 @@ public class ManCommandServiceImpl implements ManCommandService{
 	@Autowired
 	private ManCommandMapper mapper;
 	
+	
 	//지시가 없는 생산계획 디테일 조회(생산지시 관리 페이지)
 	@Override
 	public List<ManCommandVO> selectManPlan(ManCommandVO commandVO) {
-		return mapper.selectManPlan(commandVO);
+		return mapper.selectCommand(commandVO);
 	}
 
 	//생산계획 디테일 상세 조회(생산지시서 관리 페이지)
@@ -41,8 +42,6 @@ public class ManCommandServiceImpl implements ManCommandService{
 		return mapper.selectFac(commandVO);
 	}
 
-
-
 	//자재코드에 해당하는 자재LOT 조회
 	@Override
 	public List<ManCommandVO> selectResLot(ManCommandVO commandVO) {
@@ -56,6 +55,7 @@ public class ManCommandServiceImpl implements ManCommandService{
 		return mapper.selectPreCommand(commandVO);
 	}
 
+	
 	//히든그리드 내용
 	@Override
 	public int hidden(Map<String, List<ManCommandVO>> commandVO ) {
@@ -105,7 +105,7 @@ public class ManCommandServiceImpl implements ManCommandService{
 		
 		if(voList.size() != 0) { //VO에 담긴 자재코드에 값이 있으면
 			for(ManCommandVO vo : voList) {//VO에 담긴 자재코드 갯수 만큼 for문. 안에서 쿼리돌기
-				vo.setComNoDetail(resSeq);
+				vo.setComCode(resSeq);
 				System.out.println("자재테이블 추가: " + voList);
 
 				mapper.insertRes(vo);
@@ -113,13 +113,16 @@ public class ManCommandServiceImpl implements ManCommandService{
 		
 		}
 		
-		
 		return 0;
 	}
-
 	
 	
-
+	//생산지시서 조회(지시서 조회 페이지)
+	@Override
+	public List<ManCommandVO> selectCommand(ManCommandVO commandVO) {
+		return mapper.selectCommand(commandVO);
+	}
+	
 	
 
 }

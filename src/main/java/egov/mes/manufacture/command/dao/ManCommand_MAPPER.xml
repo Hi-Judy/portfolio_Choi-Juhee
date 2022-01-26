@@ -4,6 +4,26 @@
 <mapper namespace="egov.mes.manufacture.command.dao.ManCommandMapper">
 
 
+<!-- 제품코드별로 생산지시서 조회(지시서 조회 페이지) -->
+<select id="selectCommand" resultType="egov.mes.manufacture.command.dao.ManCommandVO">
+	select COM_CODE, MAN_STARTDATE, COM_NAME, PODT_CODE,
+	       prod_detail(podt_code) podtName, MAN_GOALPERDAY, 
+	       ORD_QNT, MAN_ETC
+	from man_command_view
+	where 1=1
+	
+	<if test = ' podtCode != null and podtCode != "" '>
+		and podt_code = #{podtCode}
+	</if>
+	
+	<if test = ' manStartDate != null and manStartDate != "" '>
+		and man_startdate = #{manStartDate}
+	</if>
+	
+	order by com_code
+</select>
+
+
 <!-- 자재에서 생산지시디테일 번호 넣기 -->
 <select id="selectResSeq" resultType="string">
 	select nvl(max(COM_NO_DETAIL),0) as comNoDetail from manufacture_command_d
