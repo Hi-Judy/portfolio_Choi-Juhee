@@ -487,8 +487,7 @@ toastr.options = {
       const ProcGrid = new Grid({
          el : document.getElementById('ProcGrid'),
          data : ProcData ,
-         columns : [ 
-            { header : '공정순서'   , name : 'procIndex'   , align : 'center', sortable : true },
+         columns : [
             { header : '공정코드'   , name : 'procCode'   , align : 'center' , validation : { required : true } ,
                	   formatter: 'listItemText',
                 editor: {
@@ -523,6 +522,14 @@ toastr.options = {
               alert('코드수정 방지 에러 ' + err);
           }
       });
+      
+      
+      /*----------@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+      			  @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@ ------------- */
+      ProcGrid.on('drop' , (ev) => { //그리드 데이터 드로우 끝난 이후 이벤트 시작
+      	console.log(ProcGrid.getData());
+      	console.log(ProcGrid.getModifiedRows());
+      });
        
        
        
@@ -539,6 +546,9 @@ toastr.options = {
             	 ProcGrid.setValue(ev.rowKey , 'codeName' , PrNmData);
              } 
            }
+        
+           
+           
            
            
          //----------공정코드 중복체크 -------------
@@ -602,16 +612,60 @@ toastr.options = {
      //----------BOM 저장버튼 ---------------
      BomSave.addEventListener("click" , () => {
     	var Check = 0 ;
+    	var Pdata = ProcGrid.getData();
     	//공정흐름 영역
     	var ProcModiRow = ProcGrid.getModifiedRows();
     	
     	var ProcInput = ProcModiRow.createdRows ;
 	    	if(ProcInput.length > 0) {
-	    		let attr = Pinpt(ProcInput);
-	    		if(attr){
-	    			Check++;
-	    			console.log("공정 데이터 추가완료")
-	    		}
+	    		 var proIdValue = document.getElementById("proId").value ;
+	        	 var num = 0 ;	
+	        	 var PI ;
+	        	 var ProcInpData = new Array();
+	        	 var Check = false ;
+	        	 //그리드 rowNum 값 찾아서 그걸 index 값에 넣어주는 for영역
+	    		 for(let a = 0 ; a<ProcInput.length ; a++){
+	    			let ProcRowNum = ProcInput[a]._attributes;
+	    	     	 try{
+	    	    		 if(ProcInput[a].procCode == null || ProcInput[a].procCode == '' || ProcInput[a].procCode == undefined)
+	    	    			{
+	    	    				toastr["error"]("공정코드 미입력");  
+	    						return false; 
+	    	    			}
+	    	    			 else
+	    	    				 {
+	    	    				 PI = {
+	    		    					procCode  : ProcInput[a].procCode,
+	    		    					podtCode  : proIdValue,
+	    		    					procIndex : ProcRowNum.rowNum
+	    		    				 }
+	    		    			   ProcInpData.push(PI);
+	    		    			   num++ ;
+	    	    				 }
+	    	    		 
+	    	    	 }catch (err) {
+	    	 			alert('공정추가 오류 '+ err);
+	    	 		}
+	    	    	
+	    		 }
+	    		 
+	    		 
+	    	      	if(num>0){ 
+	    	    	   $.ajax({
+	    	    		 url : './ProcInsert',
+	    	    		 type : 'post',
+	    	    		 data : JSON.stringify(ProcInpData),
+	    	    		 contentType : 'application/json;',
+	    	             async : false, 
+	    	             success: (datas) => {
+	    	            	 Check = true ;
+
+	    	             },
+	    	             error: (err) => {
+	    	                alert("공정데이터 추가 ajax 오류 " + err);
+	    	             }
+	    	          });  
+	    	    	} 
 	    	}
 	    	
     	
@@ -645,7 +699,7 @@ toastr.options = {
 	    	
 	    	
 	    if(Check > 0){
-      		toastr["success"]("데이터 저장완료",Check+" 건"); 
+      		toastr["success"]("데이터 저장완료"); 
 	    }
     	
      })
@@ -710,17 +764,10 @@ toastr.options = {
            Pdata.forEach( (datas) => {
               RowKey = datas.rowKey
            })
-		   for(let a = 1 ; a<=Pdata.length ; a++){
-			   console.log(a); //여기까지 그리드행 숫자만큼 나옴
-		   }
+		   
            ProcGrid.setValue(RowKey , 'procIndex' , indexData);
-           
-           	
-          	let bbb = ProcData[0]._attributes;
-          	console.log(bbb.rowNum);
-    		
-          	console.log(Pdata)
           
+           
        })
        
        btnRightDel.addEventListener('click' , (ev) => {
@@ -743,53 +790,6 @@ toastr.options = {
        
        
     	
-       //공정 데이터 추가(인설트)
-       function Pinpt(ProcInput) {
-    	 var proIdValue = document.getElementById("proId").value ;
-    	 var num = 0 ;	
-    	 var PI ;
-    	 var ProcInpData = new Array();
-    	 var Check = false ;
-	     	 try{
-	    		 ProcInput.forEach( (rst) => {
-	    			 if(rst.procCode == null || rst.procCode == '' || rst.procCode == undefined)
-	    			 {
-	    				toastr["error"]("공정코드 미입력");  
-						return false; 
-	    			 }
-	    			 else
-	    				 {
-	    				 PI = {
-		    					procCode  : rst.procCode,
-		    					podtCode  : proIdValue,
-		    					procIndex : rst.procIndex
-		    				 }
-		    			   ProcInpData.push(PI);
-		    			   num++ ;
-	    				 }
-	    		 });
-	    		 
-	    	 }catch (err) {
-	 			alert('공정추가 오류 '+ err);
-	 		} 
-	    if(num>0){ 
-	    	 $.ajax({
-	    		 url : './ProcInsert',
-	    		 type : 'post',
-	    		 data : JSON.stringify(ProcInpData),
-	    		 contentType : 'application/json;',
-	             async : false, 
-	             success: (datas) => {
-	            	 Check = true ;
-
-	             },
-	             error: (err) => {
-	                alert("공정데이터 추가 ajax 오류 " + err);
-	             }
-	          });
-	    	}
-    	 return Check;
-		}
     
 	  //공정흐름 삭제 이벤트처리
    	  function Pdelete(proIdValue) {
