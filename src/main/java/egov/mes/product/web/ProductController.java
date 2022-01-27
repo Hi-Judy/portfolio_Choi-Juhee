@@ -129,4 +129,12 @@ public class ProductController {
 		jsonView.addObject("qr" , list) ;
 		return jsonView ;
 	}	
+	
+	@RequestMapping("selectMatLot/{comCode}")
+	public ModelAndView selectMatLot(ProductVO product) {
+		List<ProductVO> list = service.selectMatLot(product) ;
+		ModelAndView jsonView = new ModelAndView("jsonView") ;
+		jsonView.addObject("selectmatlot" , list) ;
+		return jsonView ;
+	}
 }

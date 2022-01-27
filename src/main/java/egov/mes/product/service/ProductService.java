@@ -12,6 +12,7 @@ public interface ProductService {
 	void deleteInOut(ProductVO product) ;
 	List<ProductVO> selectOptions(ProductVO product) ;
 	List<ProductVO> selectPodtOptions(ProductVO product) ;
+	List<ProductVO> selectMatLot(ProductVO product) ;
 	
 	// 테스트
 	void productTest(ProductVO product) ;
