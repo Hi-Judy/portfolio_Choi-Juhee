@@ -1,6 +1,21 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
+<script>
+window.onload=function(){
+	$.ajax({
+		url : '${pageContext.request.contextPath}/reqsidebar',
+		method : 'GET',
+		dataType : 'JSON',
+		success : function(datas) {
+			console.log(datas);
+		},
+		error : function(reject) {
+			console.log('reject: ' + reject);
+		}
+	})
+}
+</script>
 <div id="sidebar" class="active">
 	<div class="sidebar-wrapper active"
 		style="padding-right: 0px; resize: horizontal;">
