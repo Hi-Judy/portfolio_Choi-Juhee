@@ -17,8 +17,9 @@ public interface ProductBomService {
 	List<ProductBomVO> rscDetail(String groupCode); 	//BOM(자재) 상세조회
 	List<ProductBomVO> ProcDetail(String groupCode);	//공정흐름 조회
 	
-	int ProcInsert (List<ProductBomVO> bomVO); //공정흐름 데이터 추가
-	int ProcDelete (ProductBomVO BomVO); //공정흐름 전체삭제
+	int ProcInsert  (List<ProductBomVO> bomVO);	//공정흐름 데이터 추가
+	int ProcDelete  (ProductBomVO BomVO); 		//공정흐름 전체삭제
+	void ProcUpdate (List<ProductBomVO> bomVO); //공정흐름 데이터수정
 	
 	int ResInsert (List<ProductBomVO> bomVO); //자재데이터 추가
 	int ResDelete (List<ProductBomVO> bomVO); //자제 데이터 삭제

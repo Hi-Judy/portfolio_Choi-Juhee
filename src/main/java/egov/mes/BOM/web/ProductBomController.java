@@ -158,5 +158,16 @@ public class ProductBomController {
 	}
 	
 	
+	//공정흐름 데이터수정
+	@ResponseBody
+	@PostMapping(value = "ProcUpdate" )
+	public String ProcUpdate (@RequestBody List<ProductBomVO> bomVO) {
+		System.out.println("업데이트 준비");
+		System.out.println(bomVO);
+		service.ProcUpdate(bomVO);
+				
+		return null ;
+	}	
+	
 
 }

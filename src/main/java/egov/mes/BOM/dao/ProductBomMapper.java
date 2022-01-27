@@ -16,8 +16,9 @@ public interface ProductBomMapper {
 	List<ProductBomVO> ProcDetail(String groupCode);	//공정흐름 조회
 	
 	
-	int ProcInsert (ProductBomVO BomVO); //공정흐름 데이터 추가
-	int ProcDelete (ProductBomVO BomVO); //공정흐름 전체삭제
+	int ProcInsert (ProductBomVO BomVO);  //공정흐름 데이터 추가
+	int ProcDelete (ProductBomVO BomVO);  //공정흐름 전체삭제
+	void ProcUpdate (ProductBomVO BomVO); //공정흐름 데이터수정
 	
 	
 	int ResInsert (ProductBomVO BomVO); //자재데이터 추가
