@@ -41,7 +41,12 @@
 	
 	<!-- 자재 발주 페이지 모달창에서 미입고 발주 리스트 select -> 수정, 삭제 -->
 	<select id="searchResourcesOrder" resultType="egov.mes.resources.order.dao.ResourcesOrderVO" parameterType="egov.mes.resources.order.dao.ResourcesOrderVO">
-		SELECT ORDR_NO, RSC_CODE, RSC_CNT, RSC_TOTAL, ORDE_DATE, IST_REQ_DATE
+		SELECT 	ORDR_NO,
+				RSC_CODE,
+				RSC_CNT,
+				RSC_TOTAL,
+				ORDE_DATE,
+				IST_REQ_DATE
 		FROM RESOURCE_ORDER
 		WHERE RSC_ST = '발주'	
 	</select>
@@ -52,11 +57,16 @@
 				C.CODE_NAME AS RSC_NAME,
 				FN_GET_RSC_PRC(C.CODE) AS RSC_PRC,
 				FN_GET_RSC_UNIT(C.CODE) AS RSC_UNIT,
-				FN_GET_CODE_NAME(R.SUPLCOM_CODE) AS SUC_NAME
+				FN_GET_CODE_NAME(R.SUPLCOM_CODE) AS SUC_NAME,
+		        SUM(Q.RSC_CNT) AS RSC_CNT
 		FROM COMMON_CODE C
 		LEFT JOIN RESOURCES R
 		ON C.CODE = R.RSC_CODE
+		LEFT JOIN R_QNT Q
+		ON R.RSC_CODE = Q.RSC_CODE
 		WHERE CODE LIKE '%' || 'RSC' || '%'
+		GROUP BY C.CODE,C.CODE_NAME,FN_GET_RSC_PRC(C.CODE),FN_GET_RSC_UNIT(C.CODE),FN_GET_CODE_NAME(R.SUPLCOM_CODE)
+		ORDER BY C.CODE
 	</select>
 	
 	<select id="searchSuc" resultType="egov.mes.resources.order.dao.ResourcesOrderVO" parameterType="egov.mes.resources.order.dao.ResourcesOrderVO">

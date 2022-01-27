@@ -18,7 +18,14 @@
 <script src="https://code.jquery.com/ui/1.13.0/jquery-ui.js"></script>
 </head>
 <body>
-	<h2>안전재고조회</h2>
+	<h2>재고조회</h2>
+<div id="tabs">
+  <ul>
+    <li><a href="#tabs-1">안전 재고</a></li>
+    <li><a href="#tabs-2">LOT별 재고</a></li>
+  </ul>
+  
+  <div id="tabs-1">	
 	<hr>
 	자재코드  <input id="txtRsc1">  <button id="btnFindRsc">돋보기</button>  자재명 <input id="txtRsc2" readonly><br>
 	<hr>
@@ -28,10 +35,34 @@
 	<button id="btn_reset" type="reset">초기화</button>
 	<button>엑셀</button>
 	<hr>	
-	<div id="grid"></div>
+	<div id="gridRsc1"></div>
 	<hr>
+	</div>
 	
+	
+	<div id="tabs-2">
+	<hr>
+	자재코드  <input id="txtRscLot1">  <button id="btnFindRscLot">돋보기</button>  자재명 <input id="txtRscLot2" readonly><br>
+	<hr>
+	<div id="dialog-form-rsc-Lot" title="자재 검색"></div>
+	<br>
+	<button id="btnSelectLot">조회</button>
+	<button id="btn_reset_Lot" type="reset">초기화</button>
+	<button>엑셀</button>
+	<hr>
+	<div id="gridRscLot"></div>
+	</div>
+</div>	
+
 <script type="text/javascript">
+
+$( function() {
+    $( "#tabs" ).tabs();
+  } );
+  
+  
+//////////////////////////////////////////////안전재고조회////////////////////////////////////////////////	
+
 	//초기화 버튼
 	$("#btn_reset").on("click", function(){
 		$("#txtRsc1").val('');
@@ -42,10 +73,10 @@
 	function clickRsc(rscCode, rscName){
 		$("#txtRsc1").val(rscCode);
 		$("#txtRsc2").val(rscName);
-		dialog1.dialog("close");
+		dialog.dialog("close");
 	};
 	
-	let dialog1 = $( "#dialog-form-rsc" ).dialog({
+	let dialog = $( "#dialog-form-rsc" ).dialog({
 		autoOpen: false,
 		modal: true,
 		heigth : 500,
@@ -53,7 +84,108 @@
 	});
 	
 	$("#btnFindRsc").on("click", function(){
-		dialog1.dialog("open");
+		dialog.dialog("open");
+	$("#dialog-form-rsc").load("recList2",
+			function(){console.log("로드됨")})
+	});
+	
+	//그리드 
+	var Grid = tui.Grid;
+	Grid.applyTheme('default');
+	
+	const columns = [
+			  {
+			    header: '자재코드',
+			    name: 'rscCode',
+			    sortable: true,
+			    sortingType: 'desc'
+			  },
+			  {
+				header: '자재명',
+				name: 'rscName',
+			    sortable: true,
+			    sortingType: 'desc'
+			  },
+			  {
+				header: '단위',
+				name: 'rscUnit'
+			   },
+			  {
+				header: '입고량',
+				name: 'istCnt'
+			   },
+				{
+				  header: '출고량',
+				  name: 'ostCnt'
+				},
+				{
+				  header: '재고',
+				  name: 'rscCnt'
+				},
+				{
+				  header: '안전재고',
+				  name: ''
+				}
+			];
+	
+	//ajax(api)로 값 받아오는 거 
+	let dataSource = {
+		  api: {
+		    readData: { 
+		    	url: 'resourceStoreInventory', 
+		    	method: 'GET'
+		    	}
+		  },
+
+		  contentType: 'application/json'
+		};
+	
+	const grid = new Grid({
+		  el: document.getElementById('gridRsc1'),
+		  data: null,
+		  columns
+		});
+	
+	//조회버튼 클릭시 값 가지고 오는 거
+	$("#btnSelect").on("click", function(){
+			var rscCode = $("#txtRsc1").val();
+			
+			$.ajax({
+				url :'resourceStoreInventory',
+				data: {'rscCode' : rscCode },
+				contentType: 'application/json; charset=UTF-8'
+			}).done(function(da){
+				var datalist = JSON.parse(da);
+				console.log(datalist);
+				grid.resetData(datalist["data"]["contents"]);
+			})
+					
+		})
+		
+//////////////////////////////////////////////자재 LOT별 재고////////////////////////////////////////////////		
+	
+	//초기화 버튼
+	$("#btn_reset").on("click", function(){
+		$("#txtRsc1").val('');
+		$("#txtRsc2").val('');
+	})
+	
+	//모달창(자재조회)
+	function clickRsc(rscCode, rscName){
+		$("#txtRsc1").val(rscCode);
+		$("#txtRsc2").val(rscName);
+		dialog.dialog("close");
+	};
+	
+	let dialog = $( "#dialog-form-rsc" ).dialog({
+		autoOpen: false,
+		modal: true,
+		heigth : 500,
+		width : 900,
+	});
+	
+	$("#btnFindRsc").on("click", function(){
+		dialog.dialog("open");
 	$("#dialog-form-rsc").load("recList2",
 			function(){console.log("로드됨")})
 	});
@@ -111,12 +243,12 @@
 		    	method: 'GET'
 		    	}
 		  },
-		  //initialRequest: false,
+
 		  contentType: 'application/json'
 		};
 	
 	const grid = new Grid({
-		  el: document.getElementById('grid'),
+		  el: document.getElementById('gridRsc1'),
 		  data: null,
 		  columns
 		});
@@ -136,6 +268,7 @@
 			})
 					
 		})
+
 </script>
 </body>
 </html>

@@ -29,7 +29,7 @@
 	<br>
 	<button id="btnSelect">조회</button>
 	<button id="btn_reset" type="reset">초기화</button>
-	<button>엑셀</button>
+	<button id="btnXlsx">엑셀</button>
 	<hr>	
 	<div id="grid"></div>
 	
@@ -146,7 +146,8 @@
 				  name: 'istReqDate',
 				  sortable: true,
 				  sortingType: 'desc'
-				}
+				},
+				
 			];
 			
 	//ajax(api)로 값 받아오는 거 
@@ -166,6 +167,11 @@
 		  data: null,
 		  columns
 		});
+	
+	//엑셀버튼 클릭시 파일로 저장
+	$("#btnXlsx").on("click", function () {
+		
+	})
 
 	//조회버튼 클릭시 값 가지고 오는 거
 	$("#btnSelect").on("click", function(){
