@@ -50,7 +50,7 @@
 	</update>
 	
 	<select id="selectFacOptions" resultType="egov.mes.facility.dao.FacilityVO">
-		select code from common_code where group_code = 'fac'
+		select code_name from common_code where group_code = 'fac'
 	</select>
 	
 	<insert id="insertFacility" statementType="CALLABLE">

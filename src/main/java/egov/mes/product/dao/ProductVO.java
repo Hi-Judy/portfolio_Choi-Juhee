@@ -31,4 +31,9 @@ public class ProductVO {
 	String manDate2 ;
 	
 	String code ;
+	String comNoDetail ;
+	
+	String matNo ; 
+	String matLotno ;
+	String rscLot ;
 }

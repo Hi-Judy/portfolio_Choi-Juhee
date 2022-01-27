@@ -6,15 +6,25 @@
 <meta charset="UTF-8">
 <title>Insert title here</title>
 <link rel="stylesheet" href="https://uicdn.toast.com/tui-grid/latest/tui-grid.css" />
-<link rel="stylesheet" href="https://uicdn.toast.com/tui.date-picker/latest/tui-date-picker.css" />
-<link rel="stylesheet" href="//code.jquery.com/ui/1.13.0/themes/base/jquery-ui.css">
-<link rel="stylesheet" href="https://uicdn.toast.com/tui.pagination/latest/tui-pagination.css" />
 
+<link rel="stylesheet" href="https://uicdn.toast.com/tui.date-picker/latest/tui-date-picker.css" />
 <script src="https://uicdn.toast.com/tui.date-picker/latest/tui-date-picker.js"></script>
+   
+<link rel="stylesheet" href="https://uicdn.toast.com/tui.pagination/latest/tui-pagination.css" />
 <script type="text/javascript" src="https://uicdn.toast.com/tui.pagination/v3.4.0/tui-pagination.js"></script>
+
 <script src="https://uicdn.toast.com/tui-grid/latest/tui-grid.js"></script>
-<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+<script src="https://code.jquery.com/jquery-3.6.0.js"></script>
+
+<link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.css" />
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
+
+<link rel="stylesheet" href="https://uicdn.toast.com/grid/latest/tui-grid.css" />
+
 <script src="https://code.jquery.com/ui/1.13.0/jquery-ui.js"></script>
+<link rel="stylesheet" href="//code.jquery.com/ui/1.13.0/themes/base/jquery-ui.css">
+
+<script src="https://uicdn.toast.com/grid/latest/tui-grid.js"></script>
 </head>
 <body>
 	<div id="help" align="right"><button type="button" id="helpBtn">도움말</button></div>
@@ -45,10 +55,11 @@
 		<div id="podtResult"></div>
 	</div>
 	
-	<div id="qr" title="QR코드조회" align='center'>
+	<div id="qr" title="LOT정보조회" align='center'>
 		<input type="text" id="result" readonly>
 		<br>
 		<div id="qrTable"></div>
+		<div id="matLot"></div>
 	</div>
 	
 	<div id="helpDialog" title="도움말" style="text-align: center;">
@@ -264,8 +275,50 @@
 		columns : columns ,
  		pageOptions: {
 		    useClient: true,
-		    perPage: 5
+		    perPage: 10
 		} 
+	})
+	
+	grid.on('editingFinish' , (ev) => {
+		
+		let output = grid.getValue(ev.rowKey , 'podtOutput') ;
+		let Lot = grid.getValue(ev.rowKey , 'podtLot') ;
+		
+		if(ev.columnName == 'podtLot') {			
+			$.ajax({
+				url : 'selectOptions' ,
+				dataType : 'json' ,
+				async : false ,
+				success : function(datas) {
+					
+					let test = [] ;
+					
+					for (let a = 0 ; a < datas.selectoptions.length ; a++) {
+						let data = { podtLot : datas.selectoptions[a].podtLot , qnt : datas.selectoptions[a].qnt} ;
+						test.push(data) ;	
+					}
+
+					// 중복제거
+					let set1 = new Set(test) ;
+					let set2 = [...set1] ;
+					
+					for (let c = 0 ; c < set2.length ; c++) {
+						
+						if (set2[c].podtLot == Lot) {
+							if (Number(set2[c].qnt) < Number(output)) {
+								alert('해당 LOT의 재고가 부족합니다') ;
+								grid.setValue(ev.rowKey , 'podtOutput' , '') ;
+								grid.setValue(ev.rowKey , 'podtLot' , null) ;
+								return ;
+							}
+						}
+					}				
+				} ,
+				error : function(reject) {
+					console.log(reject) ;
+				}
+			})
+		}
 	})
 	
 	const second = {
@@ -298,25 +351,74 @@
 	$("#btnAdd").on("click" , function() {
 		let data = { podtEtc : '출하' , podtInput : '0'} ;
 		grid.appendRow(data) ;
+		
+		$.ajax({
+			url : 'selectOptions' ,
+			dataType : 'json' ,
+			async : false ,
+			success : function(datas) {
+				
+				// 조회 누를때마다 중복으로 안들어가도록 함
+				second.생산완료 = [] ;
+				second.출하 = [] ;
+				second.미생산출하 = [] ;
+				
+				let lots = [] ;
+				let lots2 = [] ;
+				
+				for (let a = 0 ; a < datas.selectoptions.length ; a++) {
+					lots.push(datas.selectoptions[a].podtLot) ;
+					let data = { podtLot : datas.selectoptions[a].podtLot , qnt : datas.selectoptions[a].qnt} ;
+					lots2.push(data) ;	
+				}
+
+
+				// 중복제거
+				let set1 = new Set(lots) ;
+				let set2 = [...set1] ;
+				
+				// 중복제거한거 options로 넣음
+				for (let b = 0 ; b < set2.length ; b++) {
+					let options2 = { text : set2[b] , value : set2[b] } ;
+					second.생산완료.push(options2) ;
+					second.출하완료.push(options2) ;
+				}
+										
+				for (let c = 0 ; c < lots2.length ; c++) {
+					if (lots2[c].qnt > 0) {
+						let options3 = { text : lots2[c].podtLot , value : lots2[c].podtLot } ;
+						second.출하.push(options3) ;
+						second.미생산출하.push(options3) ;	
+					}
+				}
+				
+				grid.resetData(data) ;
+				grid.resetOriginData() ;
+				
+			} ,
+			error : function(reject) {
+				console.log(reject) ;
+			}
+		})
 	})
 	
-	$("#btnInsert").on("click" , function() {
+	$("#btnInsert").on("click" , function() {		
 		let insertDatas = grid.getModifiedRows() ;
 		let insertData = insertDatas.createdRows ;
 		
-		let datas = grid.getModifiedRows() ;
-		let data = datas.updatedRows ;
+		let updateDatas = grid.getModifiedRows() ;
+		let updateData = updateDatas.updatedRows ;
 		
-		 if (data != '') {
+		 if (updateData != '') {
 			
 	  		let ok = 1 ;
-			for (let i = 0 ; i < data.length ; i++) {
+			for (let i = 0 ; i < updateData.length ; i++) {
 				
-				let no = data[i].qntInfono ;
-				let lot = data[i].podtLot ;
-				let podtCode = data[i].podtCode ;
-				let input = data[i].podtInput ;
-				let output = data[i].podtOutput ;
+				let no = updateData[i].qntInfono ;
+				let lot = updateData[i].podtLot ;
+				let podtCode = updateData[i].podtCode ;
+				let input = updateData[i].podtInput ;
+				let output = updateData[i].podtOutput ;
 				
 	 			$.ajax({
 					url : 'updateLotno' ,
@@ -480,6 +582,55 @@
 								grid.resetData(data) ;
 								grid.resetOriginData() ;
 								
+								$.ajax({
+									url : 'selectOptions' ,
+									dataType : 'json' ,
+									async : false ,
+									success : function(datas) {
+										
+										// 조회 누를때마다 중복으로 안들어가도록 함
+										second.생산완료 = [] ;
+										second.출하 = [] ;
+										second.미생산출하 = [] ;
+										
+										let lots = [] ;
+										let lots2 = [] ;
+										
+										for (let a = 0 ; a < datas.selectoptions.length ; a++) {
+											lots.push(datas.selectoptions[a].podtLot) ;
+											let data = { podtLot : datas.selectoptions[a].podtLot , qnt : datas.selectoptions[a].qnt} ;
+											lots2.push(data) ;	
+										}
+
+
+										// 중복제거
+										let set1 = new Set(lots) ;
+										let set2 = [...set1] ;
+										
+										// 중복제거한거 options로 넣음
+										for (let b = 0 ; b < set2.length ; b++) {
+											let options2 = { text : set2[b] , value : set2[b] } ;
+											second.생산완료.push(options2) ;
+											second.출하완료.push(options2) ;
+										}
+																
+										for (let c = 0 ; c < lots2.length ; c++) {
+											if (lots2[c].qnt > 0) {
+												let options3 = { text : lots2[c].podtLot , value : lots2[c].podtLot } ;
+												second.출하.push(options3) ;
+												second.미생산출하.push(options3) ;	
+											}
+										}
+										
+										grid.resetData(data) ;
+										grid.resetOriginData() ;
+										
+									} ,
+									error : function(reject) {
+										console.log(reject) ;
+									}
+								})
+								
 							} ,
 							error : function(reject) {
 								console.log(reject) ;
@@ -502,7 +653,7 @@
 		autoOpen : false ,
 		modal : true ,
 		width : 800 ,
-		height : 500 ,
+		height : 800 ,
 		buttons : {
 			"QR코드" : function() {
 				qr() ;
@@ -559,11 +710,40 @@
 		columns : columns3 ,
  		pageOptions: {
 		    useClient: true,
-		    perPage: 5
+		    perPage: 10
 		} 
 	})
 	
-	grid.on('click' , (ev) => {				
+	const columns4 = [
+		{
+			header: '자재명' ,
+			name: 'codeName' ,
+			align: 'center'
+		} ,
+		{
+			header: '자재Lot번호' ,
+			name: 'matLotno' , 
+			align: 'center'
+		}		
+	] ;
+	
+	let data4 ;
+	
+	const grid4 = new Grid({
+		el : document.getElementById('matLot') ,
+		rowHeaders: [
+			{ type : 'rowNum' }
+		] ,
+		height : 300 ,
+		data : data4 ,
+		columns : columns4 ,
+ 		pageOptions: {
+		    useClient: true,
+		    perPage: 10
+		}
+	})
+	
+	grid.on('click' , (ev) => {		
 		if(ev.columnName != 'podtLot') {
 			return ev.stop() ;
 		}
@@ -590,6 +770,21 @@
 				} , 
 				error : function(reject) {
 					console.log(reject) ;
+				}
+			})
+			
+			$.ajax({
+				url : 'selectMatLot/' + comCode ,
+				dataType : 'json' ,
+				async : false ,
+				success : function(datas) {
+					data4 = datas.selectmatlot ;					
+					grid4.resetData(data4) ;
+					grid4.resetOriginData() ;
+					grid4.refreshLayout() ;
+				} ,
+				error : function(reject) {
+					console.log(reject) ; 
 				}
 			})
 		}
@@ -714,7 +909,7 @@
 		columns : columns2 ,
  		pageOptions: {
 		    useClient: true,
-		    perPage: 5
+		    perPage: 10
 		}
 	})
 	

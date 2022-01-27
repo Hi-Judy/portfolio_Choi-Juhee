@@ -6,15 +6,25 @@
 <meta charset="UTF-8">
 <title>Insert title here</title>
 <link rel="stylesheet" href="https://uicdn.toast.com/tui-grid/latest/tui-grid.css" />
-<link rel="stylesheet" href="https://uicdn.toast.com/tui.date-picker/latest/tui-date-picker.css" />
-<link rel="stylesheet" href="//code.jquery.com/ui/1.13.0/themes/base/jquery-ui.css">
-<link rel="stylesheet" href="https://uicdn.toast.com/tui.pagination/latest/tui-pagination.css" />
 
+<link rel="stylesheet" href="https://uicdn.toast.com/tui.date-picker/latest/tui-date-picker.css" />
 <script src="https://uicdn.toast.com/tui.date-picker/latest/tui-date-picker.js"></script>
+   
+<link rel="stylesheet" href="https://uicdn.toast.com/tui.pagination/latest/tui-pagination.css" />
 <script type="text/javascript" src="https://uicdn.toast.com/tui.pagination/v3.4.0/tui-pagination.js"></script>
+
 <script src="https://uicdn.toast.com/tui-grid/latest/tui-grid.js"></script>
-<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+<script src="https://code.jquery.com/jquery-3.6.0.js"></script>
+
+<link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.css" />
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
+
+<link rel="stylesheet" href="https://uicdn.toast.com/grid/latest/tui-grid.css" />
+
 <script src="https://code.jquery.com/ui/1.13.0/jquery-ui.js"></script>
+<link rel="stylesheet" href="//code.jquery.com/ui/1.13.0/themes/base/jquery-ui.css">
+
+<script src="https://uicdn.toast.com/grid/latest/tui-grid.js"></script>
 </head>
 <body>
 	<div id="help" align="right"><button type="button" id="helpBtn">도움말</button></div>
@@ -65,22 +75,24 @@
 		{
 			header : '설비번호' ,
 			name : 'facNo' ,
-			align: 'center'
+			align: 'center' ,
+			width : 70
 		} ,
 		{
 			header : '설비코드' ,
 			name : 'facCode' ,
+			align: 'center' ,
+			width : 70
+		} ,
+		{
+			header : '설비명' ,
+			name : 'codeName' ,
 			editor : {
 				type: 'select' ,
 				options: {
 					listItems : facList
 				}
 			} ,
-			align: 'center'
-		} ,
-		{
-			header : '설비명' ,
-			name : 'codeName' ,
 			align: 'center'
 		} ,
 		{
@@ -95,13 +107,15 @@
 					]
 				}
 			} ,
-			align: 'center'
+			align: 'center' ,
+			width : 70
 		} ,
 		{
 			header : '비가동사유' ,
 			name : 'facCause' ,
 			editor : 'text' ,
-			align: 'center'
+			align: 'center' ,
+			width : 90
 		} ,
 		{
 			header : '점검일자' ,
@@ -112,19 +126,22 @@
 					format : 'yyyy-MM-dd'
 				}
 			} ,
-			align: 'center'
+			align: 'center' ,
+			width : 90
 		} ,
 		{
 			header : 'UPH' ,
 			name : 'facOutput' , 
 			editor : 'text' ,
-			align: 'center'
+			align: 'center' ,
+			width : 50
 		} ,
 		{
 			header : '가동시간' ,
 			name : 'facRuntime' ,
 			editor : 'text' ,
-			align : 'center'
+			align : 'center' ,
+			width : 70
 		}
 	] ;
 	
@@ -136,7 +153,7 @@
 		async : false ,
 		success : function(datas) {
 			for (let i = 0 ; i < datas.selectfacoptions.length ; i++) {
-				let option = { text : datas.selectfacoptions[i].code , value : datas.selectfacoptions[i].code } ;
+				let option = { text : datas.selectfacoptions[i].codeName , value : datas.selectfacoptions[i].codeName } ;
 				facList.push(option) ;
 			}
 		} , 
@@ -200,7 +217,7 @@
 		columns : columns ,
  		pageOptions: {
 		    useClient: true,
-		    perPage: 5
+		    perPage: 10
 		} 
 	})
 	
@@ -215,8 +232,36 @@
 	grid.on('editingStart' , (ev) => {
 		let value = grid.getValue(ev.rowKey , ev.columnName) ;
 		
-		if ( ( ev.columnName == 'facCode' || ev.columnName == 'facOutput' || ev.columnName == 'facRuntime' ) && value != '' && value != null ){
+		if ( ( ev.columnName == 'codeName' || ev.columnName == 'facOutput' || ev.columnName == 'facRuntime' ) && value != '' && value != null ){
 			return ev.stop() ;
+		}		
+	})
+	
+	grid.on('editingFinish' , (ev) => {		
+		let code = ev.value ;
+		
+		if(ev.columnName == 'codeName') {
+			if(code == '교반기') {
+				grid.setValue(ev.rowKey , 'facCode' , 'F001') ;
+			} else if(code == '정삭기') {
+				grid.setValue(ev.rowKey , 'facCode' , 'F002') ;
+			} else if(code == '패드기') {
+				grid.setValue(ev.rowKey , 'facCode' , 'F003') ;
+			} else if(code == '재료성형기') {
+				grid.setValue(ev.rowKey , 'facCode' , 'F004') ;
+			} else if(code == '안마기') {
+				grid.setValue(ev.rowKey , 'facCode' , 'F005') ;
+			} else if(code == '렌즈분리기') {
+				grid.setValue(ev.rowKey , 'facCode' , 'F006') ;
+			} else if(code == '열탕기') {
+				grid.setValue(ev.rowKey , 'facCode' , 'F007') ;
+			} else if(code == '렌즈메타') {
+				grid.setValue(ev.rowKey , 'facCode' , 'F008') ;
+			} else if(code == '멸균기') {
+				grid.setValue(ev.rowKey , 'facCode' , 'F009') ;
+			} else if(code == '포장기') {
+				grid.setValue(ev.rowKey , 'facCode' , 'F010') ;
+			}
 		}
 	})
 	
@@ -476,7 +521,7 @@
 		columns : columns2 ,
  		pageOptions: {
 		    useClient: true,
-		    perPage: 5
+		    perPage: 10
 		} 
 	})
 	
@@ -541,7 +586,7 @@
 		columns : columns3 ,
  		pageOptions: {
 		    useClient: true,
-		    perPage: 5
+		    perPage: 10
 		} 
 	})
 	
@@ -549,7 +594,7 @@
 		
 		let value = grid.getValue(ev.rowKey,ev.columnName) ;
 		
-		if ( ev.columnName === 'facCode' || ev.columnName === 'facStatus' || ev.columnName === 'facCause' || ev.columnName === 'facCheckdate' || ev.columnName === 'facOutput' || ev.columnName === 'facRuntime' || value == null) {
+		if ( ev.columnName === 'codeName' || ev.columnName === 'facStatus' || ev.columnName === 'facCause' || ev.columnName === 'facCheckdate' || ev.columnName === 'facOutput' || ev.columnName === 'facRuntime' || value == null) {
 			return ev.stop() ;
 		}
 		
