@@ -287,7 +287,7 @@ toastr.options = {
          aaa = rsts.data
          aaa.forEach( (rsts) => {
             //그리드 형식에 맞춰서 Array 타입 에 데이트 추가
-             dataA = { text : rsts.rscCode , value : rsts.rscCode }
+             dataA = { text : rsts.rscCode, value : rsts.rscCode }
              dataArray.push(dataA);
             
          })
@@ -622,7 +622,6 @@ toastr.options = {
 	        	 var num = 0 ;	
 	        	 var PI ;
 	        	 var ProcInpData = new Array();
-	        	 var Check = false ;
 	        	 //그리드 rowNum 값 찾아서 그걸 index 값에 넣어주는 for영역
 	    		 for(let a = 0 ; a<ProcInput.length ; a++){
 	    			let ProcRowNum = ProcInput[a]._attributes;
@@ -647,9 +646,7 @@ toastr.options = {
 	    	 			alert('공정추가 오류 '+ err);
 	    	 		}
 	    	    	
-	    		 }
-	    		 
-	    		 
+	    		 }   		 
 	    	      	if(num>0){ 
 	    	    	   $.ajax({
 	    	    		 url : './ProcInsert',
@@ -658,7 +655,7 @@ toastr.options = {
 	    	    		 contentType : 'application/json;',
 	    	             async : false, 
 	    	             success: (datas) => {
-	    	            	 Check = true ;
+	    	            	 Check++ ;
 
 	    	             },
 	    	             error: (err) => {
@@ -668,9 +665,52 @@ toastr.options = {
 	    	    	} 
 	    	}
 	    	
+		   
+		//------------- 공정흐름 업데이트 ---------------------
+	    var ProcUpdt = ProcModiRow.updatedRows;
+		if(ProcUpdt.length > 0){
+			var proIdValue = document.getElementById("proId").value ;
+       	 	var num = 0 ;	
+       	 	var PU ;
+       		var ProcUpData = new Array();
+			var ProcUpdtData = ProcGrid.getData();
+     		for(let u = 0 ; u < ProcUpdtData.length ; u++){
+     			let ProcRowNum = ProcUpdtData[u]._attributes ;
+	     			try{
+	   	    		 	
+	     				PU = {
+	   		    				procCode  : ProcUpdtData[u].procCode,
+	   		    				podtCode  : proIdValue,
+	   		    				procIndex : ProcRowNum.rowNum
+	   		    			 }
+	   	    			ProcUpData.push(PU);
+	   		    			 num++ ;
+	   	    	 }catch (err) {
+	   	 			alert('공정흐름 업데이트 오류 '+ err);
+	   	 		}
+     		}
+     		 if(num>0){ 
+ 	    	   $.ajax({
+ 	    		 url : './ProcUpdate',
+ 	    		 type : 'post',
+ 	    		 data : JSON.stringify(ProcUpData),
+ 	    		 contentType : 'application/json;',
+ 	             async : false, 
+ 	             success: (datas) => {
+ 	            	Check++ ;
+ 	             },
+ 	             error: (err) => {
+ 	                alert("공정데이터 추가 ajax 오류 " + err);
+ 	             }
+ 	          });  
+ 	    	} 
+     		
+     		
+		}
     	
-    	//자재 영역
-    	var MatModiRow = MatGrid.getModifiedRows();
+		
+    	//------------------ 자재 영역 ----------------------
+     	var MatModiRow = MatGrid.getModifiedRows();
     	
     	var MatInput = MatModiRow.createdRows ;
 	    	if(MatInput.length > 0) {

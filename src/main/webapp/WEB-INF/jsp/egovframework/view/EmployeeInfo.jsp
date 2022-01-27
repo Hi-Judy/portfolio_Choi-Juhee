@@ -70,25 +70,15 @@ div.right {
    box-sizing: border-box;
 }
 
-div.Gridleft {
-   float: left;
-   width: 45%;
- /*  padding: 5px; */
- /*  box-sizing: border-box; */
-}
-
-div.Gridright {
-   float: right;
-   width: 45%;
- /*  padding: 5px; */
- /*  box-sizing: border-box; */
-}
-
 
 .btn {
    border-radius: 5px;
    background-color: cornflowerblue;
    padding: 2px 15px;
+}
+
+.Test{
+	background-color: darksalmon;
 }
 
 </style>
@@ -103,8 +93,8 @@ div.Gridright {
             <span style="float: right; margin-top: 3.5px;">
             <button id="AddData" type="button" class="btn"
                style="padding: 5px 30px;">추가</button> &nbsp;&nbsp;
-            <button id="btnDelete" type="button" class="btn"
-               style="padding: 5px 30px;">삭제</button> &nbsp;&nbsp;
+<!--             <button id="btnDelete" type="button" class="btn"
+               style="padding: 5px 30px;">삭제</button> &nbsp;&nbsp; -->
             <button id="btnSave" type="button" class="btn"
                style="padding: 5px 30px;">저장</button> &nbsp;&nbsp;
          </span>
@@ -117,10 +107,10 @@ div.Gridright {
    <div id="AA">
 
       <div class="right">
-         <span> 등록된사원수 : 3579 </span>
+         <span> 등록된사원수 : 329 </span>
          <br>
          <br>
-         <div id="Grid" style="border-top: 3px solid #168; height: 600px;"></div>
+         <div id="EmpGrid" style="border-top: 3px solid #168; height: 600px;"></div>
       </div>
 	
 	
@@ -150,17 +140,44 @@ toastr.options = {
         "hideMethod": "fadeOut",
         "tapToDismiss": false
       }
+
+var	EmpAllDatas;
+//------제품조회 ajax --------
+$.ajax({
+   url : './EmpAllFind',
+   dataType : 'json',
+   async : false,
+}).done( (rsts) => {
+	console.log(rsts);
+	EmpAllDatas = rsts.data
+})
       
-//------사원조회(반장 직급만) 그리드 헤드 --------
+      
+//------사원조회 그리드 헤드 --------
 const EmpGrid = new tui.Grid({
    el : document.getElementById('EmpGrid'),
-   data : EmpDatas ,
+   data : EmpAllDatas ,
    columns : [
-      { header : 'ID'	, name : 'empId'   	, align : 'center' },
-      { header : '이름'	, name : 'empName'	, align : 'center' },
-      { header : 'ETC'	, name : 'etc'   	, align : 'center' }
-   ]
+      { header : '사원번호 / ID'	, name : 'empId'   		, align : 'center' , filter: 'text' },
+      { header : '이름'			, name : 'empName'		, align : 'center' , filter: 'text' },
+      { header : '부서코드'		, name : 'deptName'   	, align : 'center' , editor : 'text'  },
+      { header : '직책코드'		, name : 'positionName' , align : 'center' , editor : 'text'  },
+      { header : '비고'			, name : 'etc'   		, align : 'center' , editor : 'text'  }  
+   ],
+   columnOptions: {
+	   frozenCount : 2,
+	   forzenBorderWidth: 4
+   },
+   bodyHeight: 500
 });
+
+EmpGrid.on('afterChange' , (ev) => {
+	var rowKey ;
+	ev.changes.forEach( (rst) => {
+		rowKey = rst.rowKey
+	})
+	EmpGrid.addRowClassName(rowKey , "Test")
+})
 
 </script>
 </html>

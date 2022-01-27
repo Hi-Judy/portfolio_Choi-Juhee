@@ -72,14 +72,14 @@ div.right {
 
 div.Gridleft {
    float: left;
-   width: 45%;
+   width: 40%;
  /*  padding: 5px; */
  /*  box-sizing: border-box; */
 }
 
 div.Gridright {
    float: right;
-   width: 45%;
+   width: 55%;
  /*  padding: 5px; */
  /*  box-sizing: border-box; */
 }
@@ -200,10 +200,10 @@ toastr.options = {
          autoOpen : false ,
          modal : true ,
          width:600, //너비
-         height:400 //높이
+         height:500 //높이
       });
       
-	  //-------- 설비등록 모달 설정 ----------
+	  //-------- 미등록 설비등록 모달 설정 ----------
 	  var ModalDal = $( "#ModalDal" ).dialog({
 	     autoOpen : false ,
 	     modal : true ,
@@ -215,14 +215,14 @@ toastr.options = {
 	    }
 	  });
 	  
-	//-------- 설비등록 모달 설정 ----------
+	//-------- 등록완료 설비등록 모달 설정 ----------
 	  var ChangeModal = $( "#ChangeModal" ).dialog({
 	     autoOpen : false ,
 	     modal : true ,
-	     width:900, //너비
+	     width:1000, //너비
 	     height:705 ,//높이
 	     buttons : {"취소" : function() {
-	     		ModalDal.dialog( "close" ) ;
+	    	 ChangeModal.dialog( "close" ) ;
 			}
 	    }
 	  });
@@ -247,7 +247,8 @@ const EmpGrid = new tui.Grid({
       { header : 'ID'	, name : 'empId'   	, align : 'center' },
       { header : '이름'	, name : 'empName'	, align : 'center' },
       { header : 'ETC'	, name : 'etc'   	, align : 'center' }
-   ]
+   ],
+   bodyHeight: 300
 });
 
 
@@ -358,7 +359,8 @@ FacilityCheck(ProcAllData);
 	   el : document.getElementById('FacGrid3'),
 	   data : ChoiceFac ,
 	   columns : [
-	      { header : '설비번호'	, name : 'facNo'	, align : 'center' }
+	      { header : '설비번호'	, name : 'facNo'	, align : 'center' },
+	      { header : '설비명'		, name : 'facName'	, align : 'center' }
 	   ],
 	   rowHeaders: ['checkbox'],
 	   bodyHeight : 400 
@@ -379,16 +381,39 @@ FacilityCheck(ProcAllData);
 		Grid.addRowClassName(rowKey , 'test'); //클래스 추가
 	})
 	
+		//------체크된 데이터 배열에 삽입 --------
+	var DeleCheck = new Array() ;
+	Grid.on('check' , (ev) => {
+		DeleCheck[ev.rowKey] = Grid.getValue([ev.rowKey] , "FacCheck")
+		
+	});
+	//------체크해제된 데이터 배열에 삭제 --------
+	Grid.on('uncheck' , (ev) => {
+		delete DeleCheck[ev.rowKey] 
+	})
+	
 	
 	
 	//체크된 행 삭제처리
 	btnDelete.addEventListener('click' , (ev) => {
-		Grid.removeCheckedRows(true);
+		var LetsCheck = 'YES';
+		DeleCheck.forEach( (rst) => {
+			if(rst == '등록완료'){
+				LetsCheck = 'NO'
+			}
+		})
+		if(LetsCheck == 'NO'){
+			toastr["error"]("설비등록이 된 공정이 있습니다");  
+		}else{
+			Grid.removeCheckedRows(true);
+		}
+	
 		
 		var GridModiRow = Grid.getModifiedRows() 	;
 		//삭제처리
 		var DelectData	 = GridModiRow.deletedRows 	;
     	if(DelectData.length > 0) {
+    		
     		Delt(DelectData);
     	}
 	});
@@ -584,7 +609,7 @@ const FacGrid = new tui.Grid({
 	   data : FacAllData ,
 	   columns : [
 	      { header : '설비번호'		, name : 'facNo'   		, align : 'center' },
-//	      { header : '사용여부'		, name : 'facStatus'	, align : 'center' },
+	      { header : '설비명'			, name : 'facName'		, align : 'center' },
 	      { header : '기준생산량(개)'	, name : 'facOutput'   	, align : 'center' },
 	      { header : '기준시간'		, name : 'facRuntime'   , align : 'center' }
 	   ],
@@ -642,7 +667,7 @@ const FacGrid = new tui.Grid({
 	   data : FacAllData ,
 	   columns : [
 	      { header : '설비번호'		, name : 'facNo'   		, align : 'center' },
-//	      { header : '사용여부'		, name : 'facStatus'	, align : 'center' },
+	      { header : '설비명'			, name : 'facName'		, align : 'center' },
 	      { header : '기준생산량(개)'	, name : 'facOutput'   	, align : 'center' },
 	      { header : '기준시간'		, name : 'facRuntime'   , align : 'center' }
 	   ],
@@ -667,14 +692,17 @@ const FacGrid = new tui.Grid({
 		
 	//그리드2 에서 체크된 얘만 값 담기	
 	var FacArray = new Array() ;
+	var FacNameArr = new Array();
 	FacGrid2.on('check' , (ev) => {
 		FacArray[ev.rowKey] = FacGrid2.getValue([ev.rowKey] , "facNo")
+		FacNameArr[ev.rowKey] = FacGrid2.getValue([ev.rowKey] , "facName")
 	});
 	
 	
 	//------체크해제된 데이터 배열에 삭제 --------
 	FacGrid2.on('uncheck' , (ev) => {
 		delete FacArray[ev.rowKey] 
+		delete FacNameArr[ev.rowKey]
 	})
 	
 	
@@ -684,12 +712,15 @@ const FacGrid = new tui.Grid({
 		//데이터 플로우 (그리드2 -> 그리드3 으로 데이터 이동)
 		var After ;
 		var CArray = [];
+		var NArray = [];
 		var i = 0;
 		var Ok = 'N' ;
-		FacArray.forEach( (rst) => {
+		FacArray.forEach( (rst) => {	
 			CArray.push(rst)
 		})
-		
+		FacNameArr.forEach( (rst) => {	
+			NArray.push(rst)
+		})
 		for(let a = 0 ; a<CArray.length ; a++)//그리드2에 체크한 갯수 만큼 밖에 for 을 돌린다
 		{	
 			var Before = FacGrid3.getData();
@@ -698,14 +729,12 @@ const FacGrid = new tui.Grid({
 					i++ ;
 				}
 			});
-			
 			if(i == 0){ //i == 0 일떄만 그리드행 추가 되면서 실행이 된다.
 			FacGrid3.appendRow()
 			After = FacGrid3.getData();
 			}else{
 				Ok = 'Y';
 				i = 0 ;
-			//	continue; //i 가 0 이상일떄 for문 멈춤
 			}
 			if(Ok == 'N')
 			{
@@ -717,7 +746,8 @@ const FacGrid = new tui.Grid({
 					}
 					else
 					{
-						FacGrid3.setValue(b , "facNo" , CArray[a]);
+						FacGrid3.setValue(b , "facNo" 	, CArray[a]);
+						FacGrid3.setValue(b , "facName" , NArray[a]);
 					}
 				}
 			}
@@ -732,7 +762,7 @@ const FacGrid = new tui.Grid({
 	});
 	
 	
-	//---------- 저장버튼 눌렀을떄 데이트추가 -> 삭제 순으로 처리 ---------------
+	//---------- 저장버튼 눌렀을떄 데이터추가 -> 삭제 순으로 처리 ---------------
 	DataSeve.addEventListener('click' , (ev) =>{
 		var Check ;
 		var FacGrid3ModiRow = 	FacGrid3.getModifiedRows()  ;
