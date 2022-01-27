@@ -8,8 +8,10 @@
 <link rel="stylesheet" href="https://uicdn.toast.com/tui-grid/latest/tui-grid.css" />
 <link rel="stylesheet" href="https://uicdn.toast.com/tui.date-picker/latest/tui-date-picker.css" />
 <link rel="stylesheet" href="//code.jquery.com/ui/1.13.0/themes/base/jquery-ui.css">
+<link rel="stylesheet" href="https://uicdn.toast.com/tui.pagination/latest/tui-pagination.css" />
 
 <script src="https://uicdn.toast.com/tui.date-picker/latest/tui-date-picker.js"></script>
+<script type="text/javascript" src="https://uicdn.toast.com/tui.pagination/v3.4.0/tui-pagination.js"></script>
 <script src="https://uicdn.toast.com/tui-grid/latest/tui-grid.js"></script>
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
 <script src="https://code.jquery.com/ui/1.13.0/jquery-ui.js"></script>
@@ -21,6 +23,8 @@
 	<br>
 	<div id="info">
 		<span>납기일자 : </span><input id="dueDateStart" type="date"><span> ~ </span><input id="dueDateEnd" type="date">
+		<br><br>
+		<span>업체명 :  </span><input id="txtCusName" readonly>
 		<span>고객코드 : </span><input id="txtCusCode"><button type="button" id="btnSearch2">고객코드검색</button>
 		<br>
 		<div align="right">
@@ -120,14 +124,18 @@
 			{ type : 'rowNum' }
 		] ,
 		data : data ,
-		columns : columns
+		columns : columns ,
+ 		pageOptions: {
+		    useClient: true,
+		    perPage: 5
+		} 
 	}) ;
 	
 	$("#clearBtn").on("click" , function() {
 		$("#txtCusCode").val("") ;
 		$("#dueDateStart").val("") ;
 		$("#dueDateEnd").val("") ;
-		grid.clear() ;
+		$("#txtCusName").val("") ;
 	})
 	//---------- ↑페이지 ----------
 	//---------- ↓업체찾기 ----------
@@ -195,12 +203,18 @@
 		] ,
 		height : 300 ,
 		data : data3 ,
-		columns : columns3
+		columns : columns3 ,
+ 		pageOptions: {
+		    useClient: true,
+		    perPage: 5
+		} 
 	})
 	
 	grid3.on('click',(ev) => {
 		let cusCode = data3[ev.rowKey].cusCode ;
+		let cusName = data3[ev.rowKey].codeName ;
 		$("#txtCusCode").val(cusCode) ;
+		$("#txtCusName").val(cusName) ;
 		grid3.clear() ;
 		dialog2.dialog("close") ;
 		$("#cusName").val("") ;

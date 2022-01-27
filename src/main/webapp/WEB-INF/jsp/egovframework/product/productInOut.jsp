@@ -8,8 +8,10 @@
 <link rel="stylesheet" href="https://uicdn.toast.com/tui-grid/latest/tui-grid.css" />
 <link rel="stylesheet" href="https://uicdn.toast.com/tui.date-picker/latest/tui-date-picker.css" />
 <link rel="stylesheet" href="//code.jquery.com/ui/1.13.0/themes/base/jquery-ui.css">
+<link rel="stylesheet" href="https://uicdn.toast.com/tui.pagination/latest/tui-pagination.css" />
 
 <script src="https://uicdn.toast.com/tui.date-picker/latest/tui-date-picker.js"></script>
+<script type="text/javascript" src="https://uicdn.toast.com/tui.pagination/v3.4.0/tui-pagination.js"></script>
 <script src="https://uicdn.toast.com/tui-grid/latest/tui-grid.js"></script>
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
 <script src="https://code.jquery.com/ui/1.13.0/jquery-ui.js"></script>
@@ -20,6 +22,7 @@
 	<div id="title" align="center"><h2>제품 입/출고 관리</h2></div>
 	<br>
 	<div id="info">
+		<span>제품명 :  </span><input id="txtPodtName" readonly>
 		<span>제품코드 : </span><input id="txtPodtCode"><button type="button" id="btnSearch">제품코드검색</button>
 		<br>
 		<br>
@@ -258,7 +261,11 @@
 		] ,
 		height : 300 ,
 		data : data , 
-		columns : columns
+		columns : columns ,
+ 		pageOptions: {
+		    useClient: true,
+		    perPage: 5
+		} 
 	})
 	
 	const second = {
@@ -549,7 +556,11 @@
 		] ,
 		height : 300 ,
 		data : data3 ,
-		columns : columns3
+		columns : columns3 ,
+ 		pageOptions: {
+		    useClient: true,
+		    perPage: 5
+		} 
 	})
 	
 	grid.on('click' , (ev) => {				
@@ -584,6 +595,34 @@
 		}
 	})
 	
+	grid.on('editingFinish' , (ev) => {
+		let code = ev.value ;
+		
+		if(ev.columnName == 'podtCode') {
+			if(code == 'PODT001') {
+				grid.setValue(ev.rowKey , 'codeName' , '하드콘택트 브라운') ;
+			} else if(code == 'PODT002') {
+				grid.setValue(ev.rowKey , 'codeName' , '하드콘택트 그레이') ;
+			} else if(code == 'PODT003') {
+				grid.setValue(ev.rowKey , 'codeName' , '소프트콘택트 브라운') ;
+			} else if(code == 'PODT004') {
+				grid.setValue(ev.rowKey , 'codeName' , '소프트콘택트 그레이') ;
+			} else if(code == 'PODT005') {
+				grid.setValue(ev.rowKey , 'codeName' , '하드콘택트 무색') ;
+			} else if(code == 'PODT006') {
+				grid.setValue(ev.rowKey , 'codeName' , '소프트콘택트 무색') ;
+			} else if(code == 'PODT007') {
+				grid.setValue(ev.rowKey , 'codeName' , '소프트콘택트 도수 1.0') ;
+			} else if(code == 'PODT008') {
+				grid.setValue(ev.rowKey , 'codeName' , '하드콘택트 도수 1.0') ;
+			} else if(code == 'PODT009') {
+				grid.setValue(ev.rowKey , 'codeName' , '소프트콘택트 도수 0.5') ;
+			} else if(code == 'PODT010') {
+				grid.setValue(ev.rowKey , 'codeName' , '하드콘택트 도수 0.5') ;
+			}
+		}
+	}) ;
+	
 	function qr() {
 		let code = $("#result").val() ;
 	
@@ -604,7 +643,7 @@
 		$("#txtPodtCode").val("") ;
 		$("#manDatestart").val("") ;
 		$("#manDateend").val("") ;
-		grid.clear() ;
+		$("#txtPodtName").val("") ;
 	})		
 	//---------- ↑페이지 ----------
 	//---------- ↓제품코드찾기 ----------
@@ -612,7 +651,7 @@
 		autoOpen : false ,
 		modal : true ,
 		width : 600 ,
-		height : 400 ,
+		height : 600 ,
 		buttons : {
 			"닫기" : function() {
 				dialog.dialog("close") ;
@@ -672,12 +711,18 @@
 		] ,
 		height : 300 ,
 		data : data2 ,
-		columns : columns2
+		columns : columns2 ,
+ 		pageOptions: {
+		    useClient: true,
+		    perPage: 5
+		}
 	})
 	
 	grid2.on('click',(ev) => {
-		let cusCode = data2[ev.rowKey].podtCode ;
-		$("#txtPodtCode").val(cusCode) ;
+		let podtCode = data2[ev.rowKey].podtCode ;
+		let podtName = data2[ev.rowKey].codeName ;
+		$("#txtPodtCode").val(podtCode) ;
+		$("#txtPodtName").val(podtName) ;
 		grid2.clear() ;
 		dialog.dialog("close") ;
 		$("#podtName").val("") ;

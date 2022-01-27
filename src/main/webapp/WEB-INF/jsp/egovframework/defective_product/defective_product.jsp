@@ -8,8 +8,10 @@
 <link rel="stylesheet" href="https://uicdn.toast.com/tui-grid/latest/tui-grid.css" />
 <link rel="stylesheet" href="https://uicdn.toast.com/tui.date-picker/latest/tui-date-picker.css" />
 <link rel="stylesheet" href="//code.jquery.com/ui/1.13.0/themes/base/jquery-ui.css">
+<link rel="stylesheet" href="https://uicdn.toast.com/tui.pagination/latest/tui-pagination.css" />
 
 <script src="https://uicdn.toast.com/tui.date-picker/latest/tui-date-picker.js"></script>
+<script type="text/javascript" src="https://uicdn.toast.com/tui.pagination/v3.4.0/tui-pagination.js"></script>
 <script src="https://uicdn.toast.com/tui-grid/latest/tui-grid.js"></script>
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
 <script src="https://code.jquery.com/ui/1.13.0/jquery-ui.js"></script>
@@ -43,7 +45,7 @@
 	<div id = "gridMain"></div>
 	
 	<!-- 공정목록 -->
-	<div id = "process" class="col-sm-5"></div>
+	<div id = "process"></div>
 	
 	<div id="helpDialog" title="도움말" style="text-align: center;">
 		
@@ -162,7 +164,11 @@
 		let gridProduct = new Grid({
 			el: document.getElementById('gridProduct'),
 			data: dataSourceProduct,
-			columns: columnsProduct
+			columns: columnsProduct ,
+	 		pageOptions: {
+			    useClient: true,
+			    perPage: 5
+			} 
 		}) 
 		
 		//메인 그리드
@@ -170,7 +176,11 @@
 			el : document.getElementById('gridMain'),
 			data : data,
 			columns : columnsMain,
-			rowHeaders : ['rowNum']
+			rowHeaders : ['rowNum'] ,
+	 		pageOptions: {
+			    useClient: true,
+			    perPage: 5
+			} 
 		});
  		
 		//공정 그리드
@@ -178,7 +188,11 @@
 			el : document.getElementById('process'),
 			data : data3,
 			columns : columnsProcess,
-			rowHeaders : ['rowNum']
+			rowHeaders : ['rowNum'] ,
+	 		pageOptions: {
+			    useClient: true,
+			    perPage: 5
+			} 
 		});
  		
  		let data2 ;

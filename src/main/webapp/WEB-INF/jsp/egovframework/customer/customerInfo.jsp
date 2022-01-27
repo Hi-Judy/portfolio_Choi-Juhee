@@ -8,8 +8,10 @@
 <link rel="stylesheet" href="https://uicdn.toast.com/tui-grid/latest/tui-grid.css" />
 <link rel="stylesheet" href="https://uicdn.toast.com/tui.date-picker/latest/tui-date-picker.css" />
 <link rel="stylesheet" href="//code.jquery.com/ui/1.13.0/themes/base/jquery-ui.css">
+<link rel="stylesheet" href="https://uicdn.toast.com/tui.pagination/latest/tui-pagination.css" />
 
 <script src="https://uicdn.toast.com/tui.date-picker/latest/tui-date-picker.js"></script>
+<script type="text/javascript" src="https://uicdn.toast.com/tui.pagination/v3.4.0/tui-pagination.js"></script>
 <script src="https://uicdn.toast.com/tui-grid/latest/tui-grid.js"></script>
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
 <script src="https://code.jquery.com/ui/1.13.0/jquery-ui.js"></script>
@@ -21,8 +23,8 @@
 	<br>
 	<div id="info">
 		<span>업체코드 : </span><input id="txtCusCode"><button type="button" id="btnSearch">업체코드검색</button>
-		<br>
-		<span>업체명 :  </span><input id="txtCusName">
+		<br><br>
+		<span>업체명 :  </span><input id="txtCusName" readonly>
 		<div align="right">
 			<button type="button" id="listBtn">조회</button>
 			<button type="button" id="btnAdd">추가</button>
@@ -38,18 +40,17 @@
 	</div>
 	
 	<div id="tradeInfo-dialog-form" title="거래처정보수정 / 거래내역조회" style="text-align: center;">
-		거래처정보수정
+		<h5>거래처정보수정</h5>
 		<br>
 		<div id="cusInfo"></div>
 		<br>
-		거래내역조회
+		<h5>거래내역조회</h5>
 		<div id="tradeResult" style="height: 200px;"></div>
 	</div>
 	
 	<div id="helpDialog" title="도움말" style="text-align: center;">
 		
 	</div>
-	
 <script>
 	//---------- ↓페이지 ----------
 	var Grid = tui.Grid ;
@@ -122,7 +123,11 @@
 			{ type : 'checkbox'}
 		] ,
 		data : data ,
-		columns 
+		columns ,
+ 		pageOptions: {
+		    useClient: true,
+		    perPage: 5
+		} 
 	}) ;
 	
 	$("#btnAdd").on("click" , function() {
@@ -134,14 +139,16 @@
 		
 		if(ev.columnName == 'cusCode') {
 			if(code == '제품 구매 고객') {
-				grid.setValue(ev.rowKey , 'cusType' , '구매처') ;
-			} else {
 				grid.setValue(ev.rowKey , 'cusType' , '판매처') ;
+			} else {
+				grid.setValue(ev.rowKey , 'cusType' , '구매처') ;
 			}
 		}
 	})
 	
 	$("#btnInsert").on("click" , function() {
+		grid.blur() ;
+		
 		let insertDatas = grid.getModifiedRows() ;
 		let insertData = insertDatas.createdRows ;
 		let insertCode = insertData[0].cusCode ;
@@ -249,7 +256,7 @@
 	
 	$("#clearBtn").on("click" , function() {
 		$("#txtCusCode").val("") ;
-		grid.clear() ;
+		$("#txtCusName").val("") ;
 	})
 	//---------- ↑페이지 ----------
 	
@@ -318,7 +325,11 @@
 		] ,
 		height : 300 ,
 		data : data2 ,
-		columns : columns2
+		columns : columns2 ,
+ 		pageOptions: {
+		    useClient: true,
+		    perPage: 5
+		} 
 	})
 	
 	grid2.on('click',(ev) => {
@@ -340,6 +351,8 @@
 		height : 600 ,
 		buttons : {
 			"저장" : function() {
+				grid4.blur() ;
+				
 				let datas = grid4.getModifiedRows() ;
 				let data = datas.updatedRows ;
 				let cusCode = data[0].cusCode ;
