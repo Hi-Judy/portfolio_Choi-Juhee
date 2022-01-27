@@ -116,7 +116,36 @@ div.right {
 	
 	</div>
      
-      
+     <div id="dialog-form" title="사원 데이터 입력">
+     	<button type="button" style=" float:right">저장</button> 
+     	<span style="color: red; font-size:12px;">* 비밀번호는 무엇으로 할까요</span> 
+     	<br>
+     	<div style=" width:100%; ">
+	     	이름 : <input type="text" value="이름입력 공간"> <!-- <span>* 비밀번호는 생년월일 입니다.</span> -->
+	     	<hr>
+	     	<div style=" width:50%; float:left ">
+		     	부서선택 : 
+		     	<select style="width: 100px; text-align: center;">
+		     		<option>영업</option>
+		     		<option>자재</option>
+		     		<option>생산</option>
+		     		<option>품질</option>
+		     	</select>
+		     	<hr>
+		     	직책선택 : 
+		     	<select style="width: 100px; text-align: center;">
+		     		<option>사원</option>
+		     		<option>반장</option>
+		     		<option>공장장</option>
+		     	</select>
+		     	<hr>
+	     	</div>
+	     	<div style=" width:49%; float:right ">
+	     		비고: <br>
+	     		<input type="text" value="비고 입력 공간" style="width:300px; height: 75px; font-size:15px;">
+	     	</div>
+     	</div>
+      </div> 
    
 </body>
 
@@ -140,6 +169,17 @@ toastr.options = {
         "hideMethod": "fadeOut",
         "tapToDismiss": false
       }
+      
+      
+//-------- 사원입력 설정 ----------
+var dialog = $( "#dialog-form" ).dialog({
+   autoOpen : false ,
+   modal : true ,
+   width:700, //너비
+   height:300 //높이
+});      
+      
+      
 
 var	EmpAllDatas;
 //------제품조회 ajax --------
@@ -171,12 +211,20 @@ const EmpGrid = new tui.Grid({
    bodyHeight: 500
 });
 
+
 EmpGrid.on('afterChange' , (ev) => {
 	var rowKey ;
 	ev.changes.forEach( (rst) => {
 		rowKey = rst.rowKey
 	})
 	EmpGrid.addRowClassName(rowKey , "Test")
+})
+
+
+AddData.addEventListener("click" , () => {
+	console.log(EmpAllDatas);
+	dialog.dialog( "open" ) ;
+	
 })
 
 </script>
