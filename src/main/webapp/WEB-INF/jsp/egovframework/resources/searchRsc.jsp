@@ -32,6 +32,10 @@
 			 {
 			   header: '업체',
 			   name: 'sucName'
+			},
+			{
+			 header: '재고',
+			 name: 'rscCnt'
 			}
 			];
 				

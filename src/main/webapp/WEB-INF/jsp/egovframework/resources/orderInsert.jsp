@@ -18,7 +18,7 @@
 <script src="https://code.jquery.com/ui/1.13.0/jquery-ui.js"></script>
 </head>
 <body>
-	<h2>자재 발주</h2>
+	<h2>자재 발주 관리</h2>
 	<div>
 		<hr>
 		<button id="btnSelectOrder">조회</button>
@@ -43,7 +43,7 @@
 			width : 900,
 		});
 	
-	//모달창(조회 클릭시 미입고)
+	//모달창(조회 클릭시 미입고 품목 조회)
 	let dialog4 = $( "#dialog-form-order" ).dialog({
 			autoOpen: false,
 			modal: true,
@@ -106,7 +106,6 @@
 		}	
 	];
 	
-	//ajax(api)로 값 받아오는 거 
 	const dataSource = {
 		  api: {
 			  readData: { 
@@ -162,7 +161,7 @@
 	
 	
 	btnSaveOrder.addEventListener("click", function(){
-		console.log((grid.getValue(grid.getRowCount()-1, "rscCnt")));
+		
 		if((grid.getValue(grid.getRowCount()-1, "rscCnt")) == ""){
 			alert("발주량을 입력해주세요")
 		}else if((grid.getValue(grid.getRowCount()-1, "rscCnt")) != null){

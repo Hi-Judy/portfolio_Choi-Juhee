@@ -311,6 +311,12 @@ $(function() {
 				  name: 'rscLot',
 				  sortable: true,
 				  sortingType: 'desc'
+				},
+				{
+				  header: '생산지시번호',
+				  name: 'storeEtc',
+				  sortable: true,
+				  sortingType: 'desc'
 				}
 			];
 			

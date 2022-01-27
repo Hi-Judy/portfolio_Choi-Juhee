@@ -20,25 +20,27 @@
 	
 	<!-- 자재 LOT번호 부여 후 -> 완전 입고(자재입출고에서 조회 가능) -->
 	<insert id="insertResourcesStore">
-		INSERT 
-		INTO RESOURCE_STORE(STORE_NO,
-							RSC_CODE,
-                    		IST_FLAG,
-                    		RSC_LOT,
-                    		IST_CNT,
-                    		OST_CNT,
-                    		STORE_DATE,
-                    		STORE_FLAG,
-                    		STORE_ETC)
-					VALUES(F_CODE_MAKER('RI'),
-			                #{rscCode},
-			                'Y',
-			                #{rscLot},
-			                #{rscPassCnt},
-			                0,
-			                SYSDATE,
-			                '입고',
-			                #{storeEtc})
+	<selectKey resultType="egov.mes.resources.store.dao.ResourcesStoreVO" keyProperty="ordrNo" keyColumn="ordrNo" order="BEFORE">
+		SELECT ORDR_NO FROM RESOURCE_IST_CHECK WHERE ORDR_NO = #{ordrNo}
+	</selectKey>
+		INSERT INTO RESOURCE_STORE(	STORE_NO,
+									RSC_CODE,
+		                    		IST_FLAG,
+		                    		RSC_LOT,
+		                    		IST_CNT,
+		                    		OST_CNT,
+		                    		STORE_DATE,
+		                    		STORE_FLAG,
+		                    		STORE_ETC)
+							VALUES(F_CODE_MAKER('RI'),
+					                #{rscCode},
+					                'Y',
+					                #{ordrNo} || '_' || #{rscLot},
+					                #{rscPassCnt},
+					                0,
+					                SYSDATE,
+					                '입고',
+					                #{storeEtc})
 	</insert>
 	
 	<!-- 자재입고 LOT 번호 발행 후 자재상태 '입고' -> 자재발주 테이블로 update -->
@@ -89,7 +91,8 @@
 		  		S.RSC_LOT,
 				S.STORE_FLAG,
 				S.STORE_DATE,
-				FN_GET_CODE_NAME(R.SUPLCOM_CODE) AS SUC_NAME
+				FN_GET_CODE_NAME(R.SUPLCOM_CODE) AS SUC_NAME,
+				STORE_ETC
 				FROM RESOURCE_STORE S
 		LEFT JOIN RESOURCES R
 		ON S.RSC_CODE = R.RSC_CODE

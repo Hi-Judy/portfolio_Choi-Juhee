@@ -81,7 +81,7 @@
 					class='sidebar-link'> <i class="bi bi-grid-1x2-fill"></i> <span>자재관리</span>
 				</a>
 					<ul class="submenu ">
-						<li class="submenu-item "><a href="orderInsert">자재 발주</a></li>
+						<li class="submenu-item "><a href="orderInsert">자재 발주 관리</a></li>
 						<li class="submenu-item "><a href="resourceorderList">자재
 								발주 조회</a></li>
 						<li class="submenu-item "><a href="resourcesCheck">자재입고검사
