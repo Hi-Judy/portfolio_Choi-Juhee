@@ -49,7 +49,7 @@
 	SELECT	proc_code  , podt_code , proc_index , FN_GET_CODE_NAME(proc_code) AS codeName , 'R' AS CRUD
 	FROM 	process_flowInfo 
 	WHERE	podt_code = #{podtCode}
-	ORDER BY proc_code
+	ORDER BY proc_index
 </select>
 
 <!-- 공정코드 테이블 조회-->
