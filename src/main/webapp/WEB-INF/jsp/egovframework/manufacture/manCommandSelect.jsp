@@ -22,19 +22,15 @@
 		<!-- 작업일자별로 조회 -->
 		<p style="display:inline-block;">작업일자</p>
 		<input id = "txtManDate" type="date" name="manDate" style="display:inline-block;">
-
+		<br>
+		
 		<!-- 제품코드별로 조회 -->
 		<p style="display: inline-block;">제품코드</p>
 		<input id="txtPodtCode" style="display: inline-block;">
-	</div>
-
-	<div>	
-
 		<button type="button" id="searchCommand">생산지시조회</button>
 		
 		<button type="button" id="btnInit">초기화</button>
 	</div>
-
 
 	<br>
 	

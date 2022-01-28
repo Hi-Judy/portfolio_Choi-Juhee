@@ -7,6 +7,9 @@ import egovframework.rte.psl.dataaccess.mapper.Mapper;
 @Mapper("manCommandMapper")
 public interface ManCommandMapper {
 	
+	//자재LOT 테이블에 값 추가
+	int insertLot(ManCommandVO commandVO);
+	
 	//생산지시서 조회(지시서 조회 페이지)
 	List<ManCommandVO> selectCommand(ManCommandVO commandVO);
 
