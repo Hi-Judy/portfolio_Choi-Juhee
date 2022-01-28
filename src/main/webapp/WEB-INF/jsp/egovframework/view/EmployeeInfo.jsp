@@ -107,7 +107,7 @@ div.right {
    <div id="AA">
 
       <div class="right">
-         <span> 등록된사원수 : 329 </span>
+         <span> 등록된사원수 : <input id="NUM"style="border:none;margin-left:5px; background-color:#f2f7ff; width:30px" disabled="true" > </span>
          <br>
          <br>
          <div id="EmpGrid" style="border-top: 3px solid #168; height: 600px;"></div>
@@ -117,32 +117,32 @@ div.right {
 	</div>
      
      <div id="dialog-form" title="사원 데이터 입력">
-     	<button type="button" style=" float:right">저장</button> 
-     	<span style="color: red; font-size:12px;">* 비밀번호는 무엇으로 할까요</span> 
+     	<button id="ModalSave" type="button" style=" float:right">저장</button> 
+     	<span style="color: red; font-size:12px;">* 초기비밀번호는 사번 입니다</span> 
      	<br>
      	<div style=" width:100%; ">
-	     	이름 : <input type="text" value="이름입력 공간"> <!-- <span>* 비밀번호는 생년월일 입니다.</span> -->
+	     	이름 : <input id="empName" type="text" font-size=10px; placeholder="필수입력입니다"> <!-- <span>* 비밀번호는 생년월일 입니다.</span> -->
 	     	<hr>
 	     	<div style=" width:50%; float:left ">
 		     	부서선택 : 
-		     	<select style="width: 100px; text-align: center;">
-		     		<option>영업</option>
-		     		<option>자재</option>
-		     		<option>생산</option>
-		     		<option>품질</option>
+		     	<select id="dept" style="width: 100px; text-align: center;">
+		     		<option value="D001">영업</option>
+		     		<option value="D002">자재</option>
+		     		<option value="D003">생산</option>
+		     		<option value="D004">품질</option>
 		     	</select>
 		     	<hr>
 		     	직책선택 : 
-		     	<select style="width: 100px; text-align: center;">
-		     		<option>사원</option>
-		     		<option>반장</option>
-		     		<option>공장장</option>
+		     	<select id="position" style="width: 100px; text-align: center;">
+		     		<option value="W004">사원</option>
+		     		<option value="W003">반장</option>
+		     		<option value="W002">공장장</option>
 		     	</select>
 		     	<hr>
 	     	</div>
 	     	<div style=" width:49%; float:right ">
 	     		비고: <br>
-	     		<input type="text" value="비고 입력 공간" style="width:300px; height: 75px; font-size:15px;">
+	     		<input id="empEtc" type="text" placeholder="비고 입력 공간" style="width:300px; height: 75px; font-size:15px;">
 	     	</div>
      	</div>
       </div> 
@@ -190,6 +190,7 @@ $.ajax({
 }).done( (rsts) => {
 	console.log(rsts);
 	EmpAllDatas = rsts.data
+	document.getElementById("NUM").setAttribute("value",EmpAllDatas.length); 
 })
       
       
@@ -200,8 +201,35 @@ const EmpGrid = new tui.Grid({
    columns : [
       { header : '사원번호 / ID'	, name : 'empId'   		, align : 'center' , filter: 'text' },
       { header : '이름'			, name : 'empName'		, align : 'center' , filter: 'text' },
-      { header : '부서코드'		, name : 'deptName'   	, align : 'center' , editor : 'text'  },
-      { header : '직책코드'		, name : 'positionName' , align : 'center' , editor : 'text'  },
+      { header : '부서명'		, name : 'deptCode'   	, align : 'center' ,
+    	  	formatter: 'listItemText',
+		    editor: {
+			      type: 'select',
+			      options: {
+			        listItems: [
+				        { text: '영업', value: 'D001' },
+				        { text: '자재', value: 'D002' },
+				        { text: '생산', value: 'D003' },
+				        { text: '품질', value: 'D004' }
+				    ]
+			      }
+			    } 
+      },
+      { header : '직책명'			, name : 'positionCode' , align : 'center' ,
+  	  	formatter: 'listItemText',
+	    editor: {
+		      type: 'select',
+		      options: {
+		        listItems: [
+			        { text: '사원', value: 'W004' },
+			        { text: '반장', value: 'W003' },
+			        { text: '공장장', value: 'W002' },
+			        { text: '사장', value: 'W001' }
+			        
+			    ]
+		      }
+		    } 
+      },
       { header : '비고'			, name : 'etc'   		, align : 'center' , editor : 'text'  }  
    ],
    columnOptions: {
@@ -211,7 +239,11 @@ const EmpGrid = new tui.Grid({
    bodyHeight: 500
 });
 
+/* window.addEventListener('DOMContentLoaded', function() {
+	console.log("@@@@@@@@@@@@@@@@@@@@@@@@@@@@");
+}) */
 
+//데이터수정 되면 색상변경 이벤트
 EmpGrid.on('afterChange' , (ev) => {
 	var rowKey ;
 	ev.changes.forEach( (rst) => {
@@ -219,13 +251,151 @@ EmpGrid.on('afterChange' , (ev) => {
 	})
 	EmpGrid.addRowClassName(rowKey , "Test")
 })
+//그리드 클릭 이벤트 (테스트중)
+EmpGrid.on('click' , (ev) => {
+	//selection 옵션을 주고 얘들을 세팅해야 클릭했을떄 색상이 바뀌고 색상이 사라지고 한다.
+/* 	EmpGrid.setSelectionRange({
+        start: [ev.rowKey, 0],
+        end: [ev.rowKey, EmpGrid.getColumns().length-1]
+    }); */
+})
 
-
+//추가버튼 이벤트
 AddData.addEventListener("click" , () => {
 	console.log(EmpAllDatas);
 	dialog.dialog( "open" ) ;
 	
 })
+
+var deptData;
+var position;
+//모달안에 있는 저장버튼 처리
+ModalSave.addEventListener("click" , () => {
+	deptData = document.getElementById("dept").value
+	position = document.getElementById("position").value
+	var num = 0 ;
+	var InpDatas;
+	var empName = document.getElementById("empName").value
+	var empEtc = document.getElementById("empEtc").value
+	if(empName == '' || empName == null){
+		toastr["error"]("이름을 입력해주세요"); 
+		return false; 
+	}else{
+		InpDatas = {
+					deptCode  		: deptData,
+					positionCode	: position
+			 }
+		   num++ ;
+   		}
+		if(num > 0){
+			//부서 와 직급 조건별로 empId 젤큰 사원정보 찾아오는 ajax
+			$.ajax({
+		          url: './IdFind' ,
+		          type: 'post',
+//		          dataType: 'json',
+		          data: JSON.stringify(InpDatas),
+		          contentType: "application/json",
+		          async : false, 
+		          success: function(datas) {
+					let rst = JSON.parse(datas)
+					let rstEmpId = rst.data[0].empId ;
+					rstEmpId++
+					var nm = 0 ;
+					var Insert;
+					if(rstEmpId == '' || rstEmpId == null){
+						toastr["error"]("사원번호 생성오류"); 
+						return false; 
+					}else{
+						console.log(rstEmpId);
+						Insert = {
+									empId 		: rstEmpId	,
+									empName 	: empName 	,
+									deptCode	: deptData	,
+									positionCode: position ,
+									etc		: empEtc
+									}
+						nm++
+					}
+					if(nm > 0){
+					}
+					//사원정보 추가ajax 처리
+					$.ajax({
+				          url: './EmpAddData' ,
+				          type: 'post',
+				          data: JSON.stringify(Insert),
+				          contentType: "application/json",
+				          async : false, 
+				          success: (rst) => {
+				        	  toastr["success"]("저장되었습니다")
+				        	  setTimeout(() => {
+				        		 	 dialog.dialog( "close" ) ;
+				            		 location.reload();
+				            		 },1500 );	
+			            },
+			            error: (err) => {
+			               alert("사원데이터 추가ajax 오류 " + err);
+			            }
+			         }); 
+					
+	            },
+	            error: (err) => {
+	               alert("사원번호 단건조회ajax 오류 " + err);
+	            }
+	         }); 
+		}
+	
+	
+	
+})
+
+//그리드 저장버튼 이벤트
+btnSave.addEventListener('click' , (ev) => {
+	var Modifie = EmpGrid.getModifiedRows();
+	var Updatas = new Array();
+	var dt = Modifie.updatedRows;
+	if(dt.length > 0 ){
+		Updatas = dt
+		 $.ajax({
+	          url: './UpdateDatas' ,
+	          type: 'post',
+	          data: JSON.stringify(Updatas),
+	          contentType: "application/json",
+	          async : false, 
+	          success: (rst) => {
+	        	  toastr["success"]("저장되었습니다")
+	        	  setTimeout(() => {
+	            		 location.reload();
+	            		 },1000 );
+          },
+          error: (err) => {
+             alert("사원데이터 추가ajax 오류 " + err);
+          }
+       });  
+	}else{
+		toastr["warning"]("변경된 정보가 없습니다"); 
+	}
+})
+
+
+//그리드 자체에서 입력하거나 수정 하는거 할떄는 별로 인것 같다 그냥 그리드보여주고 클릭했을떄 디자인 보여주는 부븐에서 해주는게 좋을듯함
+themesOptions = { 
+            selection: {    background: 'blue',     border: '#004082'  },
+            scrollbar: {    background: '#f5f5f5',  thumb: '#d9d9d9',  active: '#c1c1c1'    },
+            row: {    
+                hover: {    background: '#ccc'  }
+            },
+             /* cell: {  
+                normal: {   background: '#fbfbfb',  border: '#e0e0e0',  showVerticalBorder: true    },
+                header: {   background: '#eee',     border: '#ccc',     showVerticalBorder: true    },
+                rowHeader: {    border: '#eee',     showVerticalBorder: true    }, 
+                editable: { background: '#fbfbfb' },
+                selectedHeader: { background: '#eee' }, 
+   //             disabled: { text: 'red' }
+            }  */
+};
+
+//그리드 색상 옵션세팅
+tui.Grid.applyTheme('default', themesOptions);
 
 </script>
 </html>
