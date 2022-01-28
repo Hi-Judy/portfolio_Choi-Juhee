@@ -49,6 +49,7 @@
 	</div>
 	
 	<div style="float:right;">
+		<a href="viewChart">테스트페이지</a>
 		<button type="button" id="btnClear">초기화</button>		
 	</div>
 	<br>
