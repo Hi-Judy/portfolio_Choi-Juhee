@@ -20,7 +20,7 @@ public class SelectCommandController {
 	
 	// egov 메인에서 manufactureSelect.jsp로 연결
 	@RequestMapping("/manCommandSelect")
-	public String selectPlan() {
+	public String conSelectCommand() {
 		return "manufacture/manCommandSelect.tiles";
 	}
 	

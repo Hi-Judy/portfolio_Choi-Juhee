@@ -25,7 +25,7 @@ public class ManufactureController {
 
 	// egov 메인에서 manufacture.jsp로 연결
 	@RequestMapping("/manufacture")
-	public String selectPlan() {
+	public String conManufacture() {
 		return "manufacture/manufacture.tiles";
 	}
 

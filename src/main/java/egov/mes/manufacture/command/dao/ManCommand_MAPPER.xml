@@ -3,6 +3,18 @@
 
 <mapper namespace="egov.mes.manufacture.command.dao.ManCommandMapper">
 
+<!-- 자재 LOT 테이블에 값 추가 -->
+<insert id="insertLot" parameterType="egov.mes.manufacture.command.dao.ManCommandMapper">
+	insert into materials_LOT (MAT_NO, 
+							   MAT_LOTNO, 
+							   COM_CODE)
+	values ( (select nvl(max(MAT_NO),0)+1 from materials_LOT),
+			 #{rscLot}, 
+			 #{comCode}
+	)
+</insert>
+
+
 <!-- 제품코드별로 생산지시서 조회(지시서 조회 페이지) -->
 <select id="selectCommand" resultType="egov.mes.manufacture.command.dao.ManCommandVO">
 	select COM_CODE, MAN_STARTDATE, COM_NAME, PODT_CODE,
@@ -175,8 +187,7 @@
 <!-- 생산계획 디테일 상세 조회(생산지시서 관리 페이지) -->
 <select id="selectManPlanDetail" resultType="egov.mes.manufacture.command.dao.ManCommandVO">
 	select a.podt_code,  a.ord_duedate,
-	       b.plan_no_detail, b.podt_code, prod_detail(b.podt_code) podtName, 
-	       b.ord_qnt, b.plan_period, b.man_plan_no,
+	       b.plan_no_detail, b.podt_code, prod_detail(b.podt_code) podtName, b.ord_qnt, b.plan_period, b.man_plan_no,
 	       (select man_perday from manufacture_plan_d where podt_code = a.podt_code) as manPerday
 	from ord_detail_view a join manufacture_plan_d b
 	on a.podt_code = b.podt_code
