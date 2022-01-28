@@ -7,7 +7,7 @@ public class SidebarMenuVO {
 	String menuNo;
 	String menuOrdr;
 	String menuNm;
-	String upperMenuId;
+	String upperMenuNo;
 	String relateImagePath;
 	String relateImageNm;
 	String chkUrl;

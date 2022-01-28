@@ -24,16 +24,15 @@ public class MainController {
 	@RequestMapping("/login.do")
 	public String init() throws Exception {
 
-		return "com/uat/uia/EgovLoginUsr.tiles";
+		return "egovframework/com/uat/uia/EgovLoginUsr.tiles";
 	}
 	@RequestMapping("/reqsidebar")
 	public String reqside(Model model) {
 		
 		List<SidebarMenuVO> list = new ArrayList<>();
 		list = sidebarS.selectsideList();
-		model.addAttribute("result", list);
+		model.addAttribute("resultsidebar", list);
 		System.out.println("작업일자별 지시조회: "+ list);
-		System.out.println(list.get(0).getChkUrl());
 		
 		return "jsonView";
 		
