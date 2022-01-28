@@ -28,4 +28,9 @@ public class DefectiveServiceImpl implements DefectiveService {
 	public List<DefectiveVO> selectProcess(DefectiveVO defective) {
 		return mapper.selectProcess(defective) ;
 	}
+
+	@Override
+	public List<DefectiveVO> selectChart(DefectiveVO defective) {
+		return mapper.selectChart(defective) ;
+	}
 }
