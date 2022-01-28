@@ -73,10 +73,10 @@ $( function() {
 	function clickRsc(rscCode, rscName){
 		$("#txtRsc1").val(rscCode);
 		$("#txtRsc2").val(rscName);
-		dialog.dialog("close");
+		dialog2.dialog("close");
 	};
 	
-	let dialog = $( "#dialog-form-rsc" ).dialog({
+	let dialog2 = $( "#dialog-form-rsc" ).dialog({
 		autoOpen: false,
 		modal: true,
 		heigth : 500,
@@ -84,7 +84,7 @@ $( function() {
 	});
 	
 	$("#btnFindRsc").on("click", function(){
-		dialog.dialog("open");
+		dialog2.dialog("open");
 	$("#dialog-form-rsc").load("recList2",
 			function(){console.log("로드됨")})
 	});
@@ -165,28 +165,28 @@ $( function() {
 //////////////////////////////////////////////자재 LOT별 재고////////////////////////////////////////////////		
 	
 	//초기화 버튼
-	$("#btn_reset").on("click", function(){
-		$("#txtRsc1").val('');
-		$("#txtRsc2").val('');
+	$("#btn_reset_Lot").on("click", function(){
+		$("#txtRscLot1").val('');
+		$("#txtRscLot2").val('');
 	})
 	
 	//모달창(자재조회)
 	function clickRsc(rscCode, rscName){
-		$("#txtRsc1").val(rscCode);
-		$("#txtRsc2").val(rscName);
-		dialog.dialog("close");
+		$("#txtRscLot1").val(rscCode);
+		$("#txtRscLot2").val(rscName);
+		dialogLot.dialog("close");
 	};
 	
-	let dialog = $( "#dialog-form-rsc" ).dialog({
+	let dialogLot = $( "#dialog-form-rsc-Lot" ).dialog({
 		autoOpen: false,
 		modal: true,
 		heigth : 500,
 		width : 900,
 	});
 	
-	$("#btnFindRsc").on("click", function(){
-		dialog.dialog("open");
-	$("#dialog-form-rsc").load("recList2",
+	$("#btnFindRscLot").on("click", function(){
+		dialogLot.dialog("open");
+	$("#dialog-form-rsc-Lot").load("recList2",
 			function(){console.log("로드됨")})
 	});
 	
@@ -194,7 +194,7 @@ $( function() {
 	var Grid = tui.Grid;
 	Grid.applyTheme('default');
 	
-	const columns = [
+	const columnsLot = [
 			  {
 			    header: '자재코드',
 			    name: 'rscCode',
@@ -229,14 +229,10 @@ $( function() {
 				  header: '재고',
 				  name: 'rscCnt'
 				},
-				{
-				  header: '안전재고',
-				  name: ''
-				}
 			];
 	
 	//ajax(api)로 값 받아오는 거 
-	let dataSource = {
+	let dataSourceLot = {
 		  api: {
 		    readData: { 
 		    	url: 'resourceStoreInventory', 
@@ -247,15 +243,15 @@ $( function() {
 		  contentType: 'application/json'
 		};
 	
-	const grid = new Grid({
-		  el: document.getElementById('gridRsc1'),
+	const gridRscLot = new Grid({
+		  el: document.getElementById('gridRscLot'),
 		  data: null,
-		  columns
+		  columns : columnsLot
 		});
 	
 	//조회버튼 클릭시 값 가지고 오는 거
-	$("#btnSelect").on("click", function(){
-			var rscCode = $("#txtRsc1").val();
+	$("#btnSelectLot").on("click", function(){
+			var rscCode = $("#txtRscLot1").val();
 			
 			$.ajax({
 				url :'resourceStoreInventory',
@@ -264,7 +260,7 @@ $( function() {
 			}).done(function(da){
 				var datalist = JSON.parse(da);
 				console.log(datalist);
-				grid.resetData(datalist["data"]["contents"]);
+				gridRscLot.resetData(datalist["data"]["contents"]);
 			})
 					
 		})
