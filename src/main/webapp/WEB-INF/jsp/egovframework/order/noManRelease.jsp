@@ -34,7 +34,7 @@
 	<div id="info">
 		<span>납기일자 : </span><input id="dueDateStart" type="date"><span> ~ </span><input id="dueDateEnd" type="date">
 		<br><br>
-		<span>업체명 :  </span><input id="txtCusName" readonly>
+		<span>고객명 :  </span><input id="txtCusName" readonly>
 		<span>고객코드 : </span><input id="txtCusCode"><button type="button" id="btnSearch2">고객코드검색</button>
 		<br>
 		<div align="right">
@@ -43,7 +43,7 @@
 		</div>
 	</div>
 	
-	<div id="findCustomer" title="업체검색"">
+	<div id="findCustomer" title="고객검색"">
 		<input id="cusName"><button id="btnCusSearch">검색</button>
 		<div id="cusResult"></div>
 	</div>
@@ -135,6 +135,7 @@
 		] ,
 		data : data ,
 		columns : columns ,
+		bodyHeight : 350 ,
  		pageOptions: {
 		    useClient: true,
 		    perPage: 10
@@ -153,7 +154,7 @@
 		autoOpen : false ,
 		modal : true ,
 		width : 600 ,
-		height : 400 ,
+		height : 600 ,
 		buttons: {
 			"닫기" : function() {
 				dialog2.dialog("close") ;
@@ -211,7 +212,7 @@
 		rowHeaders: [
 			{ type : 'rowNum' }
 		] ,
-		height : 300 ,
+		bodyHeight : 300 ,
 		data : data3 ,
 		columns : columns3 ,
  		pageOptions: {

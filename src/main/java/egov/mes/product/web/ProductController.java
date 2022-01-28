@@ -112,7 +112,9 @@ public class ProductController {
 	@RequestMapping("viewQR/{comCode}")
 	public String productTest3(ProductVO product , Model model) {
 		List<ProductVO> list = service.selectQR(product) ;
+		List<ProductVO> list2 = service.selectMatLot(product) ;
 		model.addAttribute("qr" , list) ;
+		model.addAttribute("matLot" , list2) ;
 		return "product/product_test3" ;
 	}
 	

@@ -29,8 +29,8 @@
 <body>
 	<div id="help" align="right"><button type="button" id="helpBtn">도움말</button></div>
 	<br>
-	<h2>불량조회</h2><br>
-	
+	<div id="title" align="center"><h2>불량조회</h2></div>
+	<br>
 	<div class = "manDate">
 		<p style="display:inline-block;">작업일자</p>
 		<input id = "txtFromDate" type="date" name="from" style="display:inline-block;">
@@ -42,8 +42,9 @@
 
 	<div>
 		<!-- 제품코드 모달 -->
-		<div id = "dialog-form-defective" title="작업일자별 제품조회">
-			<div id="gridProduct"></div>
+		<div id = "dialog-form-defective" title="작업일자별 조회">
+			<div align="center"><h5>작업일자별 불량발생 제품코드</h5></div>
+			<div id="gridProductResult"></div>
 		</div>
 	</div>
 	
@@ -68,7 +69,7 @@
 		let dialogProduct = $("#dialog-form-defective").dialog({
 			autoOpen: false, 
 			modal: true,
-			height: 500,
+			height: 650,
 		    width: 900,
 			buttons: {
 				"닫기" : function(){
@@ -172,24 +173,29 @@
 		
  		//제품코드찾기 그리드 내용. 
 		let gridProduct = new Grid({
-			el: document.getElementById('gridProduct'),
+			el: document.getElementById('gridProductResult'),
+			rowHeaders: [
+				{ type : 'rowNum' }
+			] ,
+			bodyHeight : 300 ,
 			data: dataSourceProduct,
 			columns: columnsProduct ,
 	 		pageOptions: {
 			    useClient: true,
-			    perPage: 10
+			    perPage: 5
 			} 
 		}) 
-		
+ 		
 		//메인 그리드
 		var gridMain = new Grid({
 			el : document.getElementById('gridMain'),
 			data : data,
 			columns : columnsMain,
+			bodyHeight : 250 ,
 			rowHeaders : ['rowNum'] ,
 	 		pageOptions: {
 			    useClient: true,
-			    perPage: 10
+			    perPage: 5
 			} 
 		});
  		
@@ -198,10 +204,11 @@
 			el : document.getElementById('process'),
 			data : data3,
 			columns : columnsProcess,
+			bodyHeight : 250 ,
 			rowHeaders : ['rowNum'] ,
 	 		pageOptions: {
 			    useClient: true,
-			    perPage: 10
+			    perPage: 5
 			} 
 		});
  		
@@ -240,11 +247,11 @@
 		})
 		
 		//작업일자별 제품조회에서 클릭된 정보를 메인그리드로 가지고옴
-		gridProduct.on('click' , (ev) => {
+		gridProduct.on('click' , (ev) => {			
 			gridMain.clear() ;
 			
-			let podtCode = gridProduct.getValue(ev.rowKey , "podtCode") ;
-			let manDate = gridProduct.getValue(ev.rowKey , "manDate") ;
+			let podtCode = data2.result[ev.rowKey].podtCode ;
+			let manDate = data2.result[ev.rowKey].manDate ;
 			
 			$.ajax({
 				url : '${pageContext.request.contextPath}/defective/main' ,
@@ -288,7 +295,6 @@
 		$("#btnClear").on("click" , function() {
 			$("#txtFromDate").val("") ;
 			$("#txtToDate").val("") ;
-			gridMain.clear() ;
 		})
 		
 		let dialog3 = $("#helpDialog").dialog({

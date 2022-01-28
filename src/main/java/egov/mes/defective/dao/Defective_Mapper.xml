@@ -29,6 +29,7 @@
 		from defective_product_info
 		where podt_code = #{podtCode}
 		and man_date = #{manDate}
+		order by proc_code ASC 
 	</select>
 	
 	<select id="selectProcess" resultType="egov.mes.defective.dao.DefectiveVO">

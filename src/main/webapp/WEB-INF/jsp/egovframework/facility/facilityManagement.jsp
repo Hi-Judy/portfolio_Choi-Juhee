@@ -141,7 +141,7 @@
 			name : 'facRuntime' ,
 			editor : 'text' ,
 			align : 'center' ,
-			width : 70
+			width : 90
 		}
 	] ;
 	
@@ -458,7 +458,7 @@
 		autoOpen : false ,
 		modal : true ,
 		width : 600 ,
-		height : 400 ,
+		height : 600 ,
 		buttons : {
 			"닫기" : function() {
 				dialog.dialog("close") ;
@@ -538,7 +538,7 @@
 		autoOpen : false ,
 		modal : true ,
 		width : 600 ,
-		height : 400 ,
+		height : 600 ,
 		buttons : {
 			"닫기" : function() {
 				dialog2.dialog("close") ;
