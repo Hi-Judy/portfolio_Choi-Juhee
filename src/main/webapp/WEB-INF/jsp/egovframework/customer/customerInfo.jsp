@@ -32,9 +32,9 @@
 	<div id="title" align="center"><h2>고객 관리</h2></div>
 	<br>
 	<div id="info">
-		<span>업체코드 : </span><input id="txtCusCode"><button type="button" id="btnSearch">업체코드검색</button>
+		<span>고객코드 : </span><input id="txtCusCode"><button type="button" id="btnSearch">고객코드검색</button>
 		<br><br>
-		<span>업체명 :  </span><input id="txtCusName" readonly>
+		<span>고객명 :  </span><input id="txtCusName" readonly>
 		<div align="right">
 			<button type="button" id="listBtn">조회</button>
 			<button type="button" id="btnAdd">추가</button>
@@ -44,7 +44,7 @@
 		</div>
 	</div>
 	
-	<div id="findCustomer" title="업체검색"">
+	<div id="findCustomer" title="고객검색"">
 		<input id="cusName"><button id="btnCusSearch">검색</button>
 		<div id="cusResult"></div>
 	</div>
@@ -134,6 +134,7 @@
 		] ,
 		data : data ,
 		columns ,
+		bodyHeight : 350 ,
  		pageOptions: {
 		    useClient: true,
 		    perPage: 10
@@ -333,7 +334,7 @@
 		rowHeaders: [
 			{ type : 'rowNum' }
 		] ,
-		height : 300 ,
+		bodyHeight : 300 ,
 		data : data2 ,
 		columns : columns2 ,
  		pageOptions: {
@@ -513,7 +514,8 @@
 			{ type : 'rowNum' }
 		] ,
 		data : data3 ,
-		columns : columns3
+		columns : columns3 ,
+		bodyHeight : 200 
 	})
 	
 	const grid4 = new Grid({

@@ -1,10 +1,13 @@
 package egov.mes.defective.web;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.servlet.ModelAndView;
 
 import egov.mes.defective.dao.DefectiveVO;
 import egov.mes.defective.service.DefectiveService;
@@ -50,5 +53,20 @@ public class DefectiveController {
 		model.addAttribute("result" , service.selectProcess(defective)) ;
 		
 		return "jsonView" ;
+	}
+	
+	@RequestMapping("viewChart")
+	public String viewChart() {
+		return "defective_product/chart" ;
+	}
+	
+	@RequestMapping("chartData")
+	public ModelAndView chartData(DefectiveVO defective) {
+		
+		List<DefectiveVO> list = service.selectChart(defective) ;
+		
+		ModelAndView jsonView = new ModelAndView("jsonView") ;
+		jsonView.addObject("chartData" , list) ;
+		return jsonView ;
 	}
 }

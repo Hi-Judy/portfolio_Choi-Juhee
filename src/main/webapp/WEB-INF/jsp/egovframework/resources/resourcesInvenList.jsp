@@ -63,32 +63,35 @@ $( function() {
   
 //////////////////////////////////////////////안전재고조회////////////////////////////////////////////////	
 
-	//초기화 버튼
-	$("#btn_reset").on("click", function(){
-		$("#txtRsc1").val('');
-		$("#txtRsc2").val('');
-	})
 	
-	//모달창(자재조회)
-	function clickRsc(rscCode, rscName){
-		$("#txtRsc1").val(rscCode);
-		$("#txtRsc2").val(rscName);
-		dialog.dialog("close");
-	};
-	
-	let dialog = $( "#dialog-form-rsc" ).dialog({
+	//모달창 설정
+	let dialog2 = $( "#dialog-form-rsc" ).dialog({
 		autoOpen: false,
 		modal: true,
 		heigth : 500,
 		width : 900,
 	});
 	
+	//모달창 오픈
 	$("#btnFindRsc").on("click", function(){
-		dialog.dialog("open");
+		dialog2.dialog("open");
 	$("#dialog-form-rsc").load("recList2",
 			function(){console.log("로드됨")})
 	});
+
+	//클릭한 값을 input태그에 넣고 모달창 종료
+	function clickRsc(rscCode, rscName){
+		$("#txtRsc1").val(rscCode);
+		$("#txtRsc2").val(rscName);
+		dialog2.dialog("close");
+	};
 	
+	//input 태그 초기화 버튼
+	$("#btn_reset").on("click", function(){
+		$("#txtRsc1").val('');
+		$("#txtRsc2").val('');
+	})
+
 	//그리드 
 	var Grid = tui.Grid;
 	Grid.applyTheme('default');
@@ -110,21 +113,17 @@ $( function() {
 				header: '단위',
 				name: 'rscUnit'
 			   },
-			  {
-				header: '입고량',
-				name: 'istCnt'
-			   },
-				{
-				  header: '출고량',
-				  name: 'ostCnt'
+			   {
+			     header: '안전재고',
+				 name: 'rscSfinvc'
 				},
 				{
 				  header: '재고',
 				  name: 'rscCnt'
 				},
 				{
-				  header: '안전재고',
-				  name: ''
+				  header: '미달량',
+				  name: 'shortage'
 				}
 			];
 	
@@ -132,7 +131,7 @@ $( function() {
 	let dataSource = {
 		  api: {
 		    readData: { 
-		    	url: 'resourceStoreInventory', 
+		    	url: 'rscStoreInv', 
 		    	method: 'GET'
 		    	}
 		  },
@@ -151,7 +150,7 @@ $( function() {
 			var rscCode = $("#txtRsc1").val();
 			
 			$.ajax({
-				url :'resourceStoreInventory',
+				url :'rscStoreInv',
 				data: {'rscCode' : rscCode },
 				contentType: 'application/json; charset=UTF-8'
 			}).done(function(da){
@@ -162,39 +161,51 @@ $( function() {
 					
 		})
 		
+		grid.on("onGridUpdated", function(ev){
+			console.log(ev);
+			for(i=0; i<grid.getRowCount(); i++){
+				let gr = grid.getValue(i, "rscSfinvc")-grid.getValue(i, "rscCnt")
+				console.log(gr);
+				grid.setValue(i, "shortage", gr);
+			}
+		})
+		
 //////////////////////////////////////////////자재 LOT별 재고////////////////////////////////////////////////		
 	
-	//초기화 버튼
-	$("#btn_reset").on("click", function(){
-		$("#txtRsc1").val('');
-		$("#txtRsc2").val('');
-	})
-	
-	//모달창(자재조회)
-	function clickRsc(rscCode, rscName){
-		$("#txtRsc1").val(rscCode);
-		$("#txtRsc2").val(rscName);
-		dialog.dialog("close");
-	};
-	
-	let dialog = $( "#dialog-form-rsc" ).dialog({
+	//모달창 설정
+	let dialogLot = $( "#dialog-form-rsc-Lot" ).dialog({
 		autoOpen: false,
 		modal: true,
 		heigth : 500,
 		width : 900,
 	});
 	
-	$("#btnFindRsc").on("click", function(){
-		dialog.dialog("open");
-	$("#dialog-form-rsc").load("recList2",
+	//모달창 오픈
+	$("#btnFindRscLot").on("click", function(){
+		dialogLot.dialog("open");
+	$("#dialog-form-rsc-Lot").load("recList2",
 			function(){console.log("로드됨")})
 	});
+	
+	//클릭한 값을 input태그에 넣고 모달창 종료
+	function clickRsc(rscCode, rscName){
+		$("#txtRscLot1").val(rscCode);
+		$("#txtRscLot2").val(rscName);
+		dialogLot.dialog("close");
+	};
+	
+	//input 태그 초기화 버튼
+	$("#btn_reset_Lot").on("click", function(){
+		$("#txtRscLot1").val('');
+		$("#txtRscLot2").val('');
+	})
+	
 	
 	//그리드 
 	var Grid = tui.Grid;
 	Grid.applyTheme('default');
 	
-	const columns = [
+	const columnsLot = [
 			  {
 			    header: '자재코드',
 			    name: 'rscCode',
@@ -229,14 +240,10 @@ $( function() {
 				  header: '재고',
 				  name: 'rscCnt'
 				},
-				{
-				  header: '안전재고',
-				  name: ''
-				}
 			];
 	
 	//ajax(api)로 값 받아오는 거 
-	let dataSource = {
+	let dataSourceLot = {
 		  api: {
 		    readData: { 
 		    	url: 'resourceStoreInventory', 
@@ -247,15 +254,15 @@ $( function() {
 		  contentType: 'application/json'
 		};
 	
-	const grid = new Grid({
-		  el: document.getElementById('gridRsc1'),
+	const gridRscLot = new Grid({
+		  el: document.getElementById('gridRscLot'),
 		  data: null,
-		  columns
+		  columns : columnsLot
 		});
 	
 	//조회버튼 클릭시 값 가지고 오는 거
-	$("#btnSelect").on("click", function(){
-			var rscCode = $("#txtRsc1").val();
+	$("#btnSelectLot").on("click", function(){
+			var rscCode = $("#txtRscLot1").val();
 			
 			$.ajax({
 				url :'resourceStoreInventory',
@@ -264,7 +271,7 @@ $( function() {
 			}).done(function(da){
 				var datalist = JSON.parse(da);
 				console.log(datalist);
-				grid.resetData(datalist["data"]["contents"]);
+				gridRscLot.resetData(datalist["data"]["contents"]);
 			})
 					
 		})

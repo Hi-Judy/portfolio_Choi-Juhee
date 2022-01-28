@@ -40,8 +40,8 @@
 			<option value="완료">완료</option>
 			<option value="미생산완료">미생산완료</option>
 		</select>
-		<span>업체명 :  </span><input id="txtCusName" readonly>
-		<span>업체코드 : </span><input id="txtCusCode"><button type="button" id="btnSearch">업체코드검색</button>
+		<span>고객명 :  </span><input id="txtCusName" readonly>
+		<span>고객코드 : </span><input id="txtCusCode"><button type="button" id="btnSearch">고객코드검색</button>
 		<br><br>
 		<span>접수일자 : </span><input id="ordDateStart" type="date"><span> ~ </span><input id="ordDateEnd" type="date">
 		<span>납기일자 : </span><input id="dueDateStart" type="date"><span> ~ </span><input id="dueDateEnd" type="date">
@@ -53,7 +53,7 @@
 		</div>
 	</div>
 	
-	<div id="findCustomer" title="업체검색"">
+	<div id="findCustomer" title="고객검색"">
 		<input id="cusName"><button id="btnCusSearch">검색</button>
 		<div id="cusResult"></div>
 	</div>
@@ -133,7 +133,7 @@
 		rowHeaders: [
 			{ type : 'rowNum' }
 		] ,
-		height : 300 ,
+		bodyHeight : 300 ,
 		data : data ,
 		columns : columns ,
  		pageOptions: {
@@ -252,6 +252,7 @@
 		] ,
 		data : data2 ,
 		columns : columns2 ,
+		bodyHeight : 250 ,
  		pageOptions: {
 		    useClient: true,
 		    perPage: 10
@@ -443,6 +444,7 @@
 		] ,
 		data : data3 ,
 		columns : columns3 ,
+		bodyHeight : 250 ,
 		summary : {
 			height : 30 ,
 			columnContent : {

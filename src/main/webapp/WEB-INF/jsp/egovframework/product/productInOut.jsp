@@ -56,9 +56,12 @@
 	</div>
 	
 	<div id="qr" title="LOT정보조회" align='center'>
-		<input type="text" id="result" readonly>
+		<div style="display:none;"><input type="text" id="result" readonly></div>
+		<div align="center"><h5>LOT정보</h5></div>
 		<br>
 		<div id="qrTable"></div>
+		<br>
+		<div align="center"><h5>사용자재정보</h5></div>
 		<div id="matLot"></div>
 	</div>
 	
@@ -270,7 +273,7 @@
 			{ type : 'rowNum' } ,
 			{ type : 'checkbox' }
 		] ,
-		height : 300 ,
+		bodyHeight : 350 ,
 		data : data , 
 		columns : columns ,
  		pageOptions: {
@@ -705,13 +708,9 @@
 		rowHeaders: [
 			{ type : 'rowNum' }
 		] ,
-		height : 300 ,
+		bodyHeight : 50 ,
 		data : data3 ,
-		columns : columns3 ,
- 		pageOptions: {
-		    useClient: true,
-		    perPage: 10
-		} 
+		columns : columns3
 	})
 	
 	const columns4 = [
@@ -734,12 +733,12 @@
 		rowHeaders: [
 			{ type : 'rowNum' }
 		] ,
-		height : 300 ,
+		bodyHeight : 250 ,
 		data : data4 ,
 		columns : columns4 ,
  		pageOptions: {
 		    useClient: true,
-		    perPage: 10
+		    perPage: 5
 		}
 	})
 	
@@ -904,7 +903,7 @@
 		rowHeaders: [
 			{ type : 'rowNum' }
 		] ,
-		height : 300 ,
+		bodyHeight : 300 ,
 		data : data2 ,
 		columns : columns2 ,
  		pageOptions: {

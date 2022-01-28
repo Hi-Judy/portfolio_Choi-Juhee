@@ -139,13 +139,13 @@
 				 name: 'rscPrc'
 				},
 				{
+				 header: '반품량',
+				 name: 'rtngdCnt'
+				},
+				{
 				 header: '합계',
 				 name: 'rscTotal'
 				},
-			  {
-				header: '반품량',
-				name: 'rtngdCnt'
-			   },
 				{
 				  header: '불량코드',
 				  name: 'defCode'
@@ -173,16 +173,13 @@
 		  data: null,
 		  columns
 		});
-
+	
 	//조회버튼 클릭시 값 가지고 오는 거
 	$("#btnSelect").on("click", function(){
 			var rscCode = $("#txtRsc1").val();
 			var sucCode = $("#txtSuc1").val();
 			var ordeDate = $("#txtOrde1").val();
 			var ordeDate2 = $("#txtOrde2").val();
-			console.log(ordeDate);
-			console.log(typeof(ordeDate));
-			console.log(ordeDate2);
 			
 			$.ajax({
 				url :'resourcesRtngd',
@@ -193,7 +190,7 @@
 				console.log(datalist);
 				grid.resetData(datalist["data"]["contents"]);
 			})
-					
+			
 		})
 	
 	

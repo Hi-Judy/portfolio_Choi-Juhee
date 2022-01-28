@@ -23,7 +23,7 @@ public class ManCommandController {
 	ManCommandService service;
 	
 	@RequestMapping("/manCommand")
-	public String selectCommand() {
+	public String conCommand() {
 		return "manufacture/manCommand.tiles";
 	}
 	
