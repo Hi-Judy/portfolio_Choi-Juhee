@@ -10,6 +10,7 @@ public interface ResourceStoreMapper {
 	List<ResourcesStoreVO> searchResourcesStoreOut(ResourcesStoreVO vo);
 	List<ResourcesStoreVO> findResourcesInventory(ResourcesStoreVO vo);
 	List<ResourcesStoreVO> resourceStoreInventory(ResourcesStoreVO vo);
+	List<ResourcesStoreVO> rscStoreInv(ResourcesStoreVO vo);
 	int insertResourcesStore(ResourcesStoreVO vo);
 	int updateResourcesStore(ResourcesStoreVO vo);
 	int insertResourcesInventoryIn(ResourcesStoreVO vo);

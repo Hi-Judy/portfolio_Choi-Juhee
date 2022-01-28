@@ -38,5 +38,6 @@ public class ResourcesStoreVO {
 	String sucCode;			//업체코드
 	String sucName;			//업체명
 	String rscCnt;			///재고량
+	String rscSfinvc;		//안전재고
 	
 }
