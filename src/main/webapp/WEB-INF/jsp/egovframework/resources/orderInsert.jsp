@@ -137,7 +137,6 @@
 	
 	//그리드 클릭시 columnName = rscCode 
 	grid.on("click", function(ev){
-		console.log(grid.getValue(ev["rowKey"], "rscCode"));
 		if(ev["columnName"]=="rscCode" && grid.getValue(ev["rowKey"], ev["columnName"])!=null){
 			rscRowKey=ev["rowKey"];
 		dialog3.dialog("open");
@@ -152,11 +151,7 @@
 	btnAdd.addEventListener("click", function(){
 		grid.appendRow({});
 	})
-	
-	//btnUpd.addEventListener("click", function(){
-		//grid.updatedRows(true);
-	//})
-	
+
 	btnDel.addEventListener("click", function(){
 		grid.removeCheckedRows(true);
 	}) 

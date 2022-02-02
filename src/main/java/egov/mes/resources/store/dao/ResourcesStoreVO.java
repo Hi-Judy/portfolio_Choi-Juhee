@@ -39,5 +39,6 @@ public class ResourcesStoreVO {
 	String sucName;			//업체명
 	String rscCnt;			///재고량
 	String rscSfinvc;		//안전재고
+	String shortage;
 	
 }
