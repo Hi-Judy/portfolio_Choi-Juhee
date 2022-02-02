@@ -16,7 +16,7 @@
 <select id="EmpFind" resultType="egov.mes.Proc.dao.ProcessControlVO">
 	select * 
 	from Employee_info 
-	where position_code = 'W003'
+	where dept_code = 'D003' AND position_code = 'W003'
 </select>
 
 <select id="FacFind" resultType="egov.mes.Proc.dao.ProcessControlVO">

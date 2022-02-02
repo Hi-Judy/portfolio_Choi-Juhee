@@ -44,7 +44,6 @@ public class EmployeeController {
 	@ResponseBody
 	@PostMapping(value = "EmpAddData" )
 	public void ProcInsert (@RequestBody EmployeeVO empVO ) {
-		System.out.println(empVO);
 		service.EmpAddData(empVO);
 			
 	}
@@ -53,7 +52,6 @@ public class EmployeeController {
 	@ResponseBody
 	@PostMapping(value = "UpdateDatas" )
 	public void UpdateDatas (@RequestBody List<EmployeeVO> empVO ) {
-		System.out.println(empVO);
 		service.UpdateDatas(empVO);
 				
 	}

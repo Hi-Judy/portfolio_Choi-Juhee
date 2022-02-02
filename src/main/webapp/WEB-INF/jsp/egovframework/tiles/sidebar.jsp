@@ -110,6 +110,7 @@ function makesidebar(){
 				</a>
 					<ul class="submenu ">
 						<li class="submenu-item "><a href="CommonGroup">공통 자료 관리</a></li>
+						<li class="submenu-item "><a href="MaterialManagement">자재정보 관리</a></li>
 						<li class="submenu-item "><a href="ProductBom">제품 BOM 관리</a></li>
 						<li class="submenu-item "><a href="ProcessControl">공정 관리</a></li>
 						<li class="submenu-item "><a href="EmployeeView">사원 정보 관리</a></li>
