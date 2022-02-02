@@ -40,7 +40,9 @@
 		<br>
 		<div align="right">
 <!-- 테스트 -->
+<!--  
 			<a href="ProductTestPage">테스트페이지</a>
+-->
 <!-- 테스트 -->
 			<button type="button" id="listBtn">조회</button>
 			<button type="button" id="btnAdd">추가</button>
@@ -65,8 +67,23 @@
 		<div id="matLot"></div>
 	</div>
 	
-	<div id="helpDialog" title="도움말" style="text-align: center;">
-		
+	<div id="helpDialog" title="도움말">
+		<br>
+		제품명 : 제품코드를 검색해서 검색결과를 선택하면 자동으로 입력됩니다.<br><br>
+		제품코드검색 : 검색어를 포함한 제품명으로 제품코드를 검색합니다.<br><br>
+		조회 : 조건 없이 조회하면 전체목록을 조회합니다.<br><br>
+		추가 : <br>
+		&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;제품코드 : 제품을 선택하면 자동으로 입력됩니다.<br>
+		&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;제품명 : 제품코드를 선택 시 자동으로 입력됩니다.<br>
+		&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;출고량 : 선택한 Lot의 재고량보다 큰 값을 입력하면 저장할 수 없습니다.<br>
+		&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;완제품Lot : 해당 Lot에 재고가 남아있는 번호만 선택가능합니다.<br>
+		&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;모든 값을 다 입력해야 저장이 가능합니다.<br><br>
+		초기화 : 입력한 조회 조건을 초기화합니다.<br><br>
+		Lot 번호 : 부여된 Lot번호를 클릭하면 상세정보를 조회합니다.<br><br>		
+		QR코드 : Lot번호에 대한 정보를 조회할 수 있는 QR코드를 조회합니다.<br>
+		&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+		&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+		&nbsp;&nbsp;QR코드를 클릭시 인쇄할 수 있습니다.
 	</div>
 	
 <script>
@@ -107,13 +124,19 @@
 			header: '입고량' ,
 			name : 'podtInput' ,
 			editor: 'text' ,
-			align: 'center'
+			align: 'center',
+			formatter(value) {
+				return value.value.toString().replace(/\B(?<!\.\d*)(?=(\d{3})+(?!\d))/g, ",") ;
+			}
 		} ,
 		{
 			header: '출고량' ,
 			name : 'podtOutput' ,
 			editor: 'text' ,
-			align: 'center'
+			align: 'center',
+			formatter(value) {
+				return value.value.toString().replace(/\B(?<!\.\d*)(?=(\d{3})+(?!\d))/g, ",") ;
+			}
 		} ,
 		{
 			header: '비고	' ,
@@ -273,7 +296,7 @@
 			{ type : 'rowNum' } ,
 			{ type : 'checkbox' }
 		] ,
-		bodyHeight : 350 ,
+		bodyHeight : 430 ,
 		data : data , 
 		columns : columns ,
  		pageOptions: {
@@ -485,7 +508,7 @@
 				let insertEtc = insertData[0].podtEtc ;
 				let insertLot = insertData[0].podtLot ;
 				
-				if (insertCode == '' || insertDate == '' || insertInput == '' || insertOutput == '' || insertCode == '') {
+				if (insertCode == null || insertDate == null || insertInput == null || insertOutput == null || insertCode == null) {
 					alert('입력값을 확인하세요') ;
 					return ;
 				}
@@ -857,6 +880,19 @@
 	
 	$("#btnSearch").on("click" , function() {
 		dialog.dialog("open") ;
+		$.ajax({
+			url : 'findProductAll' ,
+			dataType : 'json' ,
+			async : false ,
+			success : function(datas) {
+				data2 = datas.findproductall ;
+				grid2.resetData(data2) ;
+				grid2.resetOriginData() ;
+			} ,
+			error : function(reject) {
+				console.log(reject) ;
+			}
+		})
 		grid2.refreshLayout() ;
 	})
 	

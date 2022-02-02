@@ -63,8 +63,14 @@
 		<div id="selectInfo"></div>
 	</div>
 	
-	<div id="helpDialog" title="도움말" style="text-align: center;">
-		
+	<div id="helpDialog" title="도움말">
+		<br>
+		고객명 : 고객코드를 검색해서 검색결과를 선택하면 자동으로 입력됩니다.<br><br>
+		고객코드검색 : 검색어를 포함한 고객명으로 고객코드를 검색합니다.<br><br>
+		조회 : 조건 없이 조회하면 전체목록을 조회합니다.<br><br>
+		미생산출하 : 체크한 주문에 대해 생산계획 작성없이 바로 출하처리합니다.<br><br>
+		초기화 : 입력한 조회 조건을 초기화합니다.	<br><br>
+		거래상세정보 : 주문 클릭 시 주문에 대한 상세 정보를 조회합니다.
 	</div>
 <script>
 
@@ -87,6 +93,19 @@
 	
 	$("#btnSearch").on("click" , function() {
 		dialog.dialog("open") ;
+		$.ajax({
+			url : 'findCustomerAll' ,
+			dataType : 'json' ,
+			async : false ,
+			success : function(datas) {
+				data = datas.customerall ;
+				grid.resetData(data) ;
+				grid.resetOriginData() ;
+			} ,
+			error : function(reject) {
+				console.log(reject) ;
+			}
+		})
 		grid.refreshLayout() ;
 	})
 	
@@ -400,12 +419,18 @@
 		{
 			header : '주문량' ,
 			name : 'ordQnt' ,
-			align: 'center'
+			align: 'center',
+			formatter(value) {
+				return value.value.toString().replace(/\B(?<!\.\d*)(?=(\d{3})+(?!\d))/g, ",") ;
+			}
 		} ,
 		{
 			header : '재고량' ,
 			name : 'podtQnt' , 
-			align: 'center'
+			align: 'center',
+			formatter(value) {
+				return value.value.toString().replace(/\B(?<!\.\d*)(?=(\d{3})+(?!\d))/g, ",") ;
+			}
 		}
 	] ;
 	
@@ -450,7 +475,7 @@
 			columnContent : {
 				ordQnt: {
 					template(summary) {
-						return ' 총 주문량 : ' + summary.sum + ' 개'
+						return ' 총 주문량 : ' + summary.sum.toString().replace(/\B(?<!\.\d*)(?=(\d{3})+(?!\d))/g, ",") + ' 개'
 					}
 				}
 			}

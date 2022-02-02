@@ -32,9 +32,9 @@
 	<div id="title" align="center"><h2>고객 관리</h2></div>
 	<br>
 	<div id="info">
+		<span>고객명 :  </span><input id="txtCusName" readonly> 
 		<span>고객코드 : </span><input id="txtCusCode"><button type="button" id="btnSearch">고객코드검색</button>
-		<br><br>
-		<span>고객명 :  </span><input id="txtCusName" readonly>
+		<br>		
 		<div align="right">
 			<button type="button" id="listBtn">조회</button>
 			<button type="button" id="btnAdd">추가</button>
@@ -58,8 +58,16 @@
 		<div id="tradeResult" style="height: 200px;"></div>
 	</div>
 	
-	<div id="helpDialog" title="도움말" style="text-align: center;">
-		
+	<div id="helpDialog" title="도움말"">
+		<br>
+		고객명 : 고객코드를 검색해서 검색결과를 선택하면 자동으로 입력됩니다.<br><br>
+		고객코드검색 : 검색어를 포함한 고객명으로 고객코드를 검색합니다.<br><br>
+		조회 : 조건 없이 조회하면 전체목록을 조회합니다.<br><br>
+		추가 : <br>
+		&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;업체코드 : 구매고객/판매고객을 선택하면 저장시 자동으로 입력됩니다.<br>
+		&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;고객구분 : 업체코드를 선택 시 자동으로 입력됩니다.<br>
+		&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;모든 값을 다 입력해야 저장이 가능합니다.<br><br>
+		초기화 : 입력한 조회 조건을 초기화합니다.
 	</div>
 <script>
 	//---------- ↓페이지 ----------
@@ -134,7 +142,7 @@
 		] ,
 		data : data ,
 		columns ,
-		bodyHeight : 350 ,
+		bodyHeight : 430 ,
  		pageOptions: {
 		    useClient: true,
 		    perPage: 10
@@ -167,7 +175,7 @@
 		let insertPhone = insertData[0].cusPhone ;
 		let codeDesct ;
 		
-		if (insertCode == '' || insertName == '' || insertPhone == '') {
+		if (insertCode == null || insertName == null || insertPhone == null) {
 			alert('입력값을 확인하세요') ;
 			return ;
 		}
@@ -288,6 +296,19 @@
 	
 	$("#btnSearch").on("click" , function() {
 		dialog.dialog("open") ;
+		$.ajax({
+			url : 'findCustomerAll' ,
+			dataType : 'json' ,
+			async : false ,
+			success : function(datas) {
+				data2 = datas.customerall ;
+				grid2.resetData(data2) ;
+				grid2.resetOriginData() ;
+			} ,
+			error : function(reject) {
+				console.log(reject) ;
+			}
+		})		
 		grid2.refreshLayout() ;
 	})
 	
@@ -422,12 +443,14 @@
 		{
 			header: '주문코드' ,
 			name: 'ordCode' ,
-			align: 'center'
+			align: 'center' ,
+			width : 90
 		} ,
 		{
 			header: '제품코드' ,
 			name: 'podtCode' ,
-			align: 'center'
+			align: 'center' ,
+			width : 70
 		} ,
 		{
 			header: '제품명' ,
@@ -438,12 +461,16 @@
 		{
 			header: '주문일' ,
 			name: 'ordDate' ,
-			align: 'center'
+			align: 'center' ,
+			width : 90
 		} ,
 		{
 			header: '주문량' ,
 			name: 'ordQnt' ,
-			align: 'center'
+			align: 'center' ,
+			formatter(value) {
+				return value.value.toString().replace(/\B(?<!\.\d*)(?=(\d{3})+(?!\d))/g, ",") ;
+			}
 		}
 	] ;
 	

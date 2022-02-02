@@ -7,6 +7,7 @@ import egov.mes.product.dao.ProductVO;
 public interface ProductService {
 	List<ProductVO> podtList(ProductVO product) ;
 	List<ProductVO> findProduct(ProductVO product) ;
+	List<ProductVO> findProductAll(ProductVO product) ;
 	void insertInOut(ProductVO product) ;
 	void updateLotno(ProductVO product) ;
 	void deleteInOut(ProductVO product) ;

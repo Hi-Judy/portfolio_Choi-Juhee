@@ -34,6 +34,12 @@
 		order by podt_code ASC 
 	</select>
 	
+	<select id="findProductAll" resultType="egov.mes.product.dao.ProductVO">
+		select podt_code , fn_get_code_name(podt_code) as codeName 
+		from product
+		order by podt_code ASC
+	</select>
+	
 	<insert id="insertInOut">
 		{ call p_insert_lotno(#{podtCode},#{manDate},#{podtInput},#{podtOutput},#{podtEtc},#{podtLot}) }
 	</insert>

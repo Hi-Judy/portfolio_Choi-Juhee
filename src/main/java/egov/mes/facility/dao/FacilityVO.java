@@ -30,4 +30,7 @@ public class FacilityVO {
 	String codeName ;
 	
 	String code ;
+	
+	String procCode ;
+	String procName ;
 }

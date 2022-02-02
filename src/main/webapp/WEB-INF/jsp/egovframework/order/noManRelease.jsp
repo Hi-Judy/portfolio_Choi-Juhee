@@ -48,8 +48,12 @@
 		<div id="cusResult"></div>
 	</div>
 	
-	<div id="helpDialog" title="도움말" style="text-align: center;">
-		
+	<div id="helpDialog" title="도움말">
+		<br>
+		고객명 : 고객코드를 검색해서 검색결과를 선택하면 자동으로 입력됩니다.<br><br>
+		고객코드검색 : 검색어를 포함한 고객명으로 고객코드를 검색합니다.<br><br>
+		조회 : 조건 없이 조회하면 전체목록을 조회합니다.<br><br>
+		초기화 : 입력한 조회 조건을 초기화합니다.	<br><br>
 	</div>
 <script>
 	var Grid = tui.Grid ;
@@ -84,7 +88,10 @@
 		{
 			header : '총주문량' ,
 			name : 'ordQnt' ,
-			align : 'center'
+			align : 'center',
+			formatter(value) {
+				return value.value.toString().replace(/\B(?<!\.\d*)(?=(\d{3})+(?!\d))/g, ",") ;
+			}
 		}
 	] ;
 	
@@ -135,7 +142,7 @@
 		] ,
 		data : data ,
 		columns : columns ,
-		bodyHeight : 350 ,
+		bodyHeight : 430 ,
  		pageOptions: {
 		    useClient: true,
 		    perPage: 10
@@ -166,6 +173,19 @@
 	
 	$("#btnSearch2").on("click" , function() {
 		dialog2.dialog("open") ;
+		$.ajax({
+			url : 'findCustomerAll' ,
+			dataType : 'json' ,
+			async : false ,
+			success : function(datas) {
+				data3 = datas.customerall ;
+				grid3.resetData(data3) ;
+				grid3.resetOriginData() ;
+			} ,
+			error : function(reject) {
+				console.log(reject) ;
+			}
+		})
 		grid3.refreshLayout() ;
 	})
 	

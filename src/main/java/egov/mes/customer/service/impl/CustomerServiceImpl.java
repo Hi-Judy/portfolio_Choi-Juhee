@@ -44,4 +44,9 @@ public class CustomerServiceImpl implements CustomerService {
 		mapper.deleteCustomer(customer) ;
 	}
 
+	@Override
+	public List<CustomerVO> findCustomerAll(CustomerVO customer) {
+		return mapper.findCustomerAll(customer) ;
+	}
+
 }

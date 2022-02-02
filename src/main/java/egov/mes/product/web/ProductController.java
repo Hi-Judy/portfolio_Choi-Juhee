@@ -48,6 +48,14 @@ public class ProductController {
 		return jsonView ;
 	}
 	
+	@RequestMapping("findProductAll")
+	public ModelAndView findProductAll(ProductVO product) {
+		List<ProductVO> list = service.findProductAll(product) ;
+		ModelAndView jsonView = new ModelAndView("jsonView") ;
+		jsonView.addObject("findproductall" , list) ;
+		return jsonView ;
+	}
+	
 	@RequestMapping("productInOut")
 	public ModelAndView productInOut(ProductVO product) {
 		service.insertInOut(product) ;
