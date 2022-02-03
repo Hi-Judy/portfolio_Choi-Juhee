@@ -93,6 +93,17 @@ public class ProductBomServiceImpl implements ProductBomService {
 		return 0;
 	}
 	
+	//공정흐름 데이터수정
+	@Override
+	public void ProcUpdate(List<ProductBomVO> bomVO) {
+		System.out.println("Imp 수정준비");
+		for(ProductBomVO BomVO : bomVO) {
+			System.out.println(BomVO);
+			bomMapper.ProcUpdate(BomVO);
+		}
+		System.out.println("Imp 수정완료");
+	}
+	
 	
 	//자재데이터 추가
 	@Override
@@ -126,6 +137,7 @@ public class ProductBomServiceImpl implements ProductBomService {
 		bomMapper.ResAllDelete(BomVO);
 		return 0;
 	}
+
 
 	
 

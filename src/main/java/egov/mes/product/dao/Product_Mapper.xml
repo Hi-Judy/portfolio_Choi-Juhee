@@ -6,7 +6,7 @@
 		select qnt_infono , podt_code , fn_get_code_name(podt_code) as codeName , man_date , podt_input , podt_output , podt_etc , podt_lot ,
 			   com_code
 		from product_qnt_info
-		where 1=1
+		where podt_etc != '작년'
 		
 		<if test="podtCode != null">
 			and podt_code = #{podtCode}
@@ -32,6 +32,12 @@
 		from product
 		where fn_get_code_name(podt_code) like '%' || #{podtCode} || '%'
 		order by podt_code ASC 
+	</select>
+	
+	<select id="findProductAll" resultType="egov.mes.product.dao.ProductVO">
+		select podt_code , fn_get_code_name(podt_code) as codeName 
+		from product
+		order by podt_code ASC
 	</select>
 	
 	<insert id="insertInOut">
@@ -71,6 +77,14 @@
 	
 	<select id="selectPodtOptions" resultType="egov.mes.product.dao.ProductVO">
 		select code , code_name from common_code where group_code = 'podt'
+	</select>
+	
+	<select id="selectMatLot" resultType="egov.mes.product.dao.ProductVO">
+		select ml.mat_no , ml.mat_lotno , ml.com_code , fn_get_code_name(rs.rsc_code) as codeName
+		from materials_LOT ml
+		join resource_store rs
+		on ml.mat_lotno = rs.rsc_lot
+		where ml.com_code = #{comCode}
 	</select>
 	
 </mapper>

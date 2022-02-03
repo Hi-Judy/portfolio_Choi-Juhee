@@ -6,13 +6,25 @@
 <meta charset="UTF-8">
 <title>Insert title here</title>
 <link rel="stylesheet" href="https://uicdn.toast.com/tui-grid/latest/tui-grid.css" />
+
 <link rel="stylesheet" href="https://uicdn.toast.com/tui.date-picker/latest/tui-date-picker.css" />
+<script src="https://uicdn.toast.com/tui.date-picker/latest/tui-date-picker.js"></script>
+   
+<link rel="stylesheet" href="https://uicdn.toast.com/tui.pagination/latest/tui-pagination.css" />
+<script type="text/javascript" src="https://uicdn.toast.com/tui.pagination/v3.4.0/tui-pagination.js"></script>
+
+<script src="https://uicdn.toast.com/tui-grid/latest/tui-grid.js"></script>
+<script src="https://code.jquery.com/jquery-3.6.0.js"></script>
+
+<link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.css" />
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
+
+<link rel="stylesheet" href="https://uicdn.toast.com/grid/latest/tui-grid.css" />
+
+<script src="https://code.jquery.com/ui/1.13.0/jquery-ui.js"></script>
 <link rel="stylesheet" href="//code.jquery.com/ui/1.13.0/themes/base/jquery-ui.css">
 
-<script src="https://uicdn.toast.com/tui.date-picker/latest/tui-date-picker.js"></script>
-<script src="https://uicdn.toast.com/tui-grid/latest/tui-grid.js"></script>
-<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
-<script src="https://code.jquery.com/ui/1.13.0/jquery-ui.js"></script>
+<script src="https://uicdn.toast.com/grid/latest/tui-grid.js"></script>
 </head>
 <body>
 	<div id="help" align="right"><button type="button" id="helpBtn">도움말</button></div>
@@ -20,9 +32,9 @@
 	<div id="title" align="center"><h2>고객 관리</h2></div>
 	<br>
 	<div id="info">
-		<span>업체코드 : </span><input id="txtCusCode"><button type="button" id="btnSearch">업체코드검색</button>
-		<br>
-		<span>업체명 :  </span><input id="txtCusName">
+		<span>고객명 :  </span><input id="txtCusName" readonly> 
+		<span>고객코드 : </span><input id="txtCusCode"><button type="button" id="btnSearch">고객코드검색</button>
+		<br>		
 		<div align="right">
 			<button type="button" id="listBtn">조회</button>
 			<button type="button" id="btnAdd">추가</button>
@@ -32,24 +44,31 @@
 		</div>
 	</div>
 	
-	<div id="findCustomer" title="업체검색"">
+	<div id="findCustomer" title="고객검색"">
 		<input id="cusName"><button id="btnCusSearch">검색</button>
 		<div id="cusResult"></div>
 	</div>
 	
 	<div id="tradeInfo-dialog-form" title="거래처정보수정 / 거래내역조회" style="text-align: center;">
-		거래처정보수정
+		<h5>거래처정보수정</h5>
 		<br>
 		<div id="cusInfo"></div>
 		<br>
-		거래내역조회
+		<h5>거래내역조회</h5>
 		<div id="tradeResult" style="height: 200px;"></div>
 	</div>
 	
-	<div id="helpDialog" title="도움말" style="text-align: center;">
-		
+	<div id="helpDialog" title="도움말"">
+		<br>
+		고객명 : 고객코드를 검색해서 검색결과를 선택하면 자동으로 입력됩니다.<br><br>
+		고객코드검색 : 검색어를 포함한 고객명으로 고객코드를 검색합니다.<br><br>
+		조회 : 조건 없이 조회하면 전체목록을 조회합니다.<br><br>
+		추가 : <br>
+		&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;업체코드 : 구매고객/판매고객을 선택하면 저장시 자동으로 입력됩니다.<br>
+		&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;고객구분 : 업체코드를 선택 시 자동으로 입력됩니다.<br>
+		&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;모든 값을 다 입력해야 저장이 가능합니다.<br><br>
+		초기화 : 입력한 조회 조건을 초기화합니다.
 	</div>
-	
 <script>
 	//---------- ↓페이지 ----------
 	var Grid = tui.Grid ;
@@ -122,7 +141,12 @@
 			{ type : 'checkbox'}
 		] ,
 		data : data ,
-		columns 
+		columns ,
+		bodyHeight : 430 ,
+ 		pageOptions: {
+		    useClient: true,
+		    perPage: 10
+		} 
 	}) ;
 	
 	$("#btnAdd").on("click" , function() {
@@ -134,14 +158,16 @@
 		
 		if(ev.columnName == 'cusCode') {
 			if(code == '제품 구매 고객') {
-				grid.setValue(ev.rowKey , 'cusType' , '구매처') ;
-			} else {
 				grid.setValue(ev.rowKey , 'cusType' , '판매처') ;
+			} else {
+				grid.setValue(ev.rowKey , 'cusType' , '구매처') ;
 			}
 		}
 	})
 	
 	$("#btnInsert").on("click" , function() {
+		grid.blur() ;
+		
 		let insertDatas = grid.getModifiedRows() ;
 		let insertData = insertDatas.createdRows ;
 		let insertCode = insertData[0].cusCode ;
@@ -149,7 +175,7 @@
 		let insertPhone = insertData[0].cusPhone ;
 		let codeDesct ;
 		
-		if (insertCode == '' || insertName == '' || insertPhone == '') {
+		if (insertCode == null || insertName == null || insertPhone == null) {
 			alert('입력값을 확인하세요') ;
 			return ;
 		}
@@ -249,7 +275,7 @@
 	
 	$("#clearBtn").on("click" , function() {
 		$("#txtCusCode").val("") ;
-		grid.clear() ;
+		$("#txtCusName").val("") ;
 	})
 	//---------- ↑페이지 ----------
 	
@@ -270,6 +296,19 @@
 	
 	$("#btnSearch").on("click" , function() {
 		dialog.dialog("open") ;
+		$.ajax({
+			url : 'findCustomerAll' ,
+			dataType : 'json' ,
+			async : false ,
+			success : function(datas) {
+				data2 = datas.customerall ;
+				grid2.resetData(data2) ;
+				grid2.resetOriginData() ;
+			} ,
+			error : function(reject) {
+				console.log(reject) ;
+			}
+		})		
 		grid2.refreshLayout() ;
 	})
 	
@@ -316,9 +355,13 @@
 		rowHeaders: [
 			{ type : 'rowNum' }
 		] ,
-		height : 300 ,
+		bodyHeight : 300 ,
 		data : data2 ,
-		columns : columns2
+		columns : columns2 ,
+ 		pageOptions: {
+		    useClient: true,
+		    perPage: 10
+		} 
 	})
 	
 	grid2.on('click',(ev) => {
@@ -340,6 +383,8 @@
 		height : 600 ,
 		buttons : {
 			"저장" : function() {
+				grid4.blur() ;
+				
 				let datas = grid4.getModifiedRows() ;
 				let data = datas.updatedRows ;
 				let cusCode = data[0].cusCode ;
@@ -398,12 +443,14 @@
 		{
 			header: '주문코드' ,
 			name: 'ordCode' ,
-			align: 'center'
+			align: 'center' ,
+			width : 90
 		} ,
 		{
 			header: '제품코드' ,
 			name: 'podtCode' ,
-			align: 'center'
+			align: 'center' ,
+			width : 70
 		} ,
 		{
 			header: '제품명' ,
@@ -414,12 +461,16 @@
 		{
 			header: '주문일' ,
 			name: 'ordDate' ,
-			align: 'center'
+			align: 'center' ,
+			width : 90
 		} ,
 		{
 			header: '주문량' ,
 			name: 'ordQnt' ,
-			align: 'center'
+			align: 'center' ,
+			formatter(value) {
+				return value.value.toString().replace(/\B(?<!\.\d*)(?=(\d{3})+(?!\d))/g, ",") ;
+			}
 		}
 	] ;
 	
@@ -490,7 +541,8 @@
 			{ type : 'rowNum' }
 		] ,
 		data : data3 ,
-		columns : columns3
+		columns : columns3 ,
+		bodyHeight : 200 
 	})
 	
 	const grid4 = new Grid({

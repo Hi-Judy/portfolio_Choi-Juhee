@@ -40,6 +40,14 @@ public class CustomerController {
 		return jsonView ;
 	}
 	
+	@RequestMapping("findCustomerAll")
+	public ModelAndView findCustomerAll(CustomerVO customer) {
+		List<CustomerVO> list = service.findCustomerAll(customer) ;
+		ModelAndView jsonView = new ModelAndView("jsonView") ;
+		jsonView.addObject("customerall" , list) ;
+		return jsonView ;
+	}
+	
 	@RequestMapping("selectTradeInfo/{cusCode}")
 	public ModelAndView selectTradeInfo(CustomerVO customer) {
 		List<CustomerVO> list = service.selectTradeInfo(customer) ;

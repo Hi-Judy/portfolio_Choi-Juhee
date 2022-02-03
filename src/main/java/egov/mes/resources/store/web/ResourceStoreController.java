@@ -103,7 +103,7 @@ public class ResourceStoreController {
 		return "jsonView";
 	}
 	
-	//자재 LOT 조회 페이지
+	//자재LOT조회 페이지
 	@RequestMapping("resourcesInventoryList")
 	public String resourcesInventoryList() {
 		System.out.println("=================자재 LOT 조회 페이지 이동================");
@@ -121,14 +121,14 @@ public class ResourceStoreController {
       return "jsonView";
 	}
 	
-	//자재 LOT 재고 조회 페이지
+	//자재LOT재고조회 페이지
 	@RequestMapping("resourcesInvenList")
 	public String resourcesInvenList() {
 		System.out.println("=================자재 LOT 재고 조회 페이지 이동================");
 		return "resources/resourcesInvenList.tiles";
 	}
 	
-	//자재 LOT 재고 조회 페이지
+	//자재LOT재고 조회 
 	@RequestMapping("resourceStoreInventory")
 	public String resourceStoreInventory(Model model, ResourcesStoreVO vo) {
 	  model.addAttribute("result",true);
@@ -139,6 +139,16 @@ public class ResourceStoreController {
       return "jsonView";
 	}
 	
+	//자재안전재고 조회
+	@RequestMapping("rscStoreInv")
+	public String rscStoreInv(Model model, ResourcesStoreVO vo) {
+	  model.addAttribute("result",true);
+      Map<String,Object> map = new HashMap<String,Object>();
+      map.put("contents", service.rscStoreInv(vo));
+      model.addAttribute("data", map);
+	  System.out.println("================자재 LOT 재고 조회================");
+      return "jsonView";
+	}
 	
 }
 	

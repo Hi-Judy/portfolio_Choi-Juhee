@@ -1,5 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <!DOCTYPE html>
 <html>
 <head>
@@ -30,21 +31,30 @@
 				<td>${qr[0].podtName}</td>
 		      </tr>
 		      <tr>
-		      	<th style="background-color: skyblue;">생산완료일</th>
-		      	<td>${qr[0].manDate2}</td>
-		      </tr>
-		      <tr>
-		      	<th style="background-color: skyblue;">생산지시코드</th>
-				<td>${qr[0].comCode}</td>
+		      	<th style="background-color: skyblue;">주문코드</th>
+				<td>${qr[0].ordCode}</td>
 		      </tr>
 		      <tr>
 				<th style="background-color: skyblue;">생산계획코드</th>
 				<td>${qr[0].manPlanNo}</td>
 		      </tr>
 		      <tr>
-		      	<th style="background-color: skyblue;">주문코드</th>
-				<td>${qr[0].ordCode}</td>
+		      	<th style="background-color: skyblue;">생산지시코드</th>
+				<td>${qr[0].comCode}</td>
 		      </tr>
+		      <tr>
+		      	<th style="background-color: skyblue;">생산완료일</th>
+		      	<td>${qr[0].manDate2}</td>
+		      </tr>
+		      <tr>
+	      		<th style="background-color: skyblue;">자재Lot번호</th>
+	      			<td>
+				      <c:forEach var="mat" items="${matLot}">
+				      	${mat.matLotno} ,
+				      </c:forEach>
+			      	</td>	      		
+	      	  </tr>
+
 		  </table>
 		</div>
 	</div>

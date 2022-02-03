@@ -18,7 +18,14 @@
 <script src="https://code.jquery.com/ui/1.13.0/jquery-ui.js"></script>
 </head>
 <body>
-	<h2>안전재고조회</h2>
+	<h2>재고조회</h2>
+<div id="tabs">
+  <ul>
+    <li><a href="#tabs-1">안전 재고</a></li>
+    <li><a href="#tabs-2">LOT별 재고</a></li>
+  </ul>
+  
+  <div id="tabs-1">	
 	<hr>
 	자재코드  <input id="txtRsc1">  <button id="btnFindRsc">돋보기</button>  자재명 <input id="txtRsc2" readonly><br>
 	<hr>
@@ -28,41 +35,180 @@
 	<button id="btn_reset" type="reset">초기화</button>
 	<button>엑셀</button>
 	<hr>	
-	<div id="grid"></div>
+	<div id="gridRsc1"></div>
 	<hr>
+	</div>
 	
+	
+	<div id="tabs-2">
+	<hr>
+	자재코드  <input id="txtRscLot1">  <button id="btnFindRscLot">돋보기</button>  자재명 <input id="txtRscLot2" readonly><br>
+	<hr>
+	<div id="dialog-form-rsc-Lot" title="자재 검색"></div>
+	<br>
+	<button id="btnSelectLot">조회</button>
+	<button id="btn_reset_Lot" type="reset">초기화</button>
+	<button>엑셀</button>
+	<hr>
+	<div id="gridRscLot"></div>
+	</div>
+</div>	
+
 <script type="text/javascript">
-	//초기화 버튼
-	$("#btn_reset").on("click", function(){
-		$("#txtRsc1").val('');
-		$("#txtRsc2").val('');
-	})
+
+$( function() {
+    $( "#tabs" ).tabs();
+  } );
+  
+  
+//////////////////////////////////////////////안전재고조회////////////////////////////////////////////////	
+
 	
-	//모달창(자재조회)
-	function clickRsc(rscCode, rscName){
-		$("#txtRsc1").val(rscCode);
-		$("#txtRsc2").val(rscName);
-		dialog1.dialog("close");
-	};
-	
-	let dialog1 = $( "#dialog-form-rsc" ).dialog({
+	//모달창 설정
+	let dialog2 = $( "#dialog-form-rsc" ).dialog({
 		autoOpen: false,
 		modal: true,
 		heigth : 500,
 		width : 900,
 	});
 	
+	//모달창 오픈
 	$("#btnFindRsc").on("click", function(){
-		dialog1.dialog("open");
+		dialog2.dialog("open");
 	$("#dialog-form-rsc").load("recList2",
 			function(){console.log("로드됨")})
 	});
+
+	//클릭한 값을 input태그에 넣고 모달창 종료
+	function clickRsc(rscCode, rscName){
+		$("#txtRsc1").val(rscCode);
+		$("#txtRsc2").val(rscName);
+		dialog2.dialog("close");
+	};
 	
+	//input 태그 초기화 버튼
+	$("#btn_reset").on("click", function(){
+		$("#txtRsc1").val('');
+		$("#txtRsc2").val('');
+	})
+
 	//그리드 
 	var Grid = tui.Grid;
 	Grid.applyTheme('default');
 	
 	const columns = [
+			  {
+			    header: '자재코드',
+			    name: 'rscCode',
+			    sortable: true,
+			    sortingType: 'desc'
+			  },
+			  {
+				header: '자재명',
+				name: 'rscName',
+			    sortable: true,
+			    sortingType: 'desc'
+			  },
+			  {
+				header: '단위',
+				name: 'rscUnit'
+			   },
+			   {
+			     header: '안전재고',
+				 name: 'rscSfinvc'
+				},
+				{
+				  header: '재고',
+				  name: 'rscCnt',
+				  formatter(value) {
+		          	return value.value.toString().replace(/\B(?<!\.\d*)(?=(\d{3})+(?!\d))/g, ",");
+		          }
+				},
+				{
+				  header: '미달량',
+				  name: 'shortage'
+				}
+			];
+	
+	//ajax(api)로 값 받아오는 거 
+	let dataSource = {
+		  api: {
+		    readData: { 
+		    	url: 'rscStoreInv', 
+		    	method: 'GET'
+		    	}
+		  },
+
+		  contentType: 'application/json'
+		};
+	
+	const grid = new Grid({
+		  el: document.getElementById('gridRsc1'),
+		  data: null,
+		  columns
+		});
+	
+	//조회버튼 클릭시 값 가지고 오는 거
+	$("#btnSelect").on("click", function(){
+			var rscCode = $("#txtRsc1").val();
+			
+			$.ajax({
+				url :'rscStoreInv',
+				data: {'rscCode' : rscCode },
+				contentType: 'application/json; charset=UTF-8'
+			}).done(function(da){
+				var datalist = JSON.parse(da);
+				console.log(datalist);
+				grid.resetData(datalist["data"]["contents"]);
+			})
+					
+		})
+		
+		grid.on("onGridUpdated", function(ev){
+			console.log(ev);
+			for(i=0; i<grid.getRowCount(); i++){
+				let gr = grid.getValue(i, "rscSfinvc")-grid.getValue(i, "rscCnt")
+				console.log(gr);
+				grid.setValue(i, "shortage", gr);
+			}
+		})
+		
+//////////////////////////////////////////////자재 LOT별 재고////////////////////////////////////////////////		
+	
+	//모달창 설정
+	let dialogLot = $( "#dialog-form-rsc-Lot" ).dialog({
+		autoOpen: false,
+		modal: true,
+		heigth : 500,
+		width : 900,
+	});
+	
+	//모달창 오픈
+	$("#btnFindRscLot").on("click", function(){
+		dialogLot.dialog("open");
+	$("#dialog-form-rsc-Lot").load("recList2",
+			function(){console.log("로드됨")})
+	});
+	
+	//클릭한 값을 input태그에 넣고 모달창 종료
+	function clickRsc(rscCode, rscName){
+		$("#txtRscLot1").val(rscCode);
+		$("#txtRscLot2").val(rscName);
+		dialogLot.dialog("close");
+	};
+	
+	//input 태그 초기화 버튼
+	$("#btn_reset_Lot").on("click", function(){
+		$("#txtRscLot1").val('');
+		$("#txtRscLot2").val('');
+	})
+	
+	
+	//그리드 
+	var Grid = tui.Grid;
+	Grid.applyTheme('default');
+	
+	const columnsLot = [
 			  {
 			    header: '자재코드',
 			    name: 'rscCode',
@@ -97,33 +243,29 @@
 				  header: '재고',
 				  name: 'rscCnt'
 				},
-				{
-				  header: '안전재고',
-				  name: ''
-				}
 			];
 	
 	//ajax(api)로 값 받아오는 거 
-	let dataSource = {
+	let dataSourceLot = {
 		  api: {
 		    readData: { 
 		    	url: 'resourceStoreInventory', 
 		    	method: 'GET'
 		    	}
 		  },
-		  //initialRequest: false,
+
 		  contentType: 'application/json'
 		};
 	
-	const grid = new Grid({
-		  el: document.getElementById('grid'),
+	const gridRscLot = new Grid({
+		  el: document.getElementById('gridRscLot'),
 		  data: null,
-		  columns
+		  columns : columnsLot
 		});
 	
 	//조회버튼 클릭시 값 가지고 오는 거
-	$("#btnSelect").on("click", function(){
-			var rscCode = $("#txtRsc1").val();
+	$("#btnSelectLot").on("click", function(){
+			var rscCode = $("#txtRscLot1").val();
 			
 			$.ajax({
 				url :'resourceStoreInventory',
@@ -132,10 +274,11 @@
 			}).done(function(da){
 				var datalist = JSON.parse(da);
 				console.log(datalist);
-				grid.resetData(datalist["data"]["contents"]);
+				gridRscLot.resetData(datalist["data"]["contents"]);
 			})
 					
 		})
+
 </script>
 </body>
 </html>

@@ -18,7 +18,7 @@
 <script src="https://code.jquery.com/ui/1.13.0/jquery-ui.js"></script>
 </head>
 <body>
-	<h2>자재 발주</h2>
+	<h2>자재 발주 관리</h2>
 	<div>
 		<hr>
 		<button id="btnSelectOrder">조회</button>
@@ -35,7 +35,7 @@
 	<script type="text/javascript">
 	let rscRowKey;
 	
-	//모달창(자재 조회)
+	//모달창 설정(자재 조회)
 	let dialog3 = $( "#dialog-form-rsc" ).dialog({
 			autoOpen: false,
 			modal: true,
@@ -43,7 +43,7 @@
 			width : 900,
 		});
 	
-	//모달창(조회 클릭시 미입고)
+	//모달창 설정(조회 클릭시 미입고 품목 조회)
 	let dialog4 = $( "#dialog-form-order" ).dialog({
 			autoOpen: false,
 			modal: true,
@@ -51,17 +51,19 @@
 			width : 900,
 		});
 	
-	function clickOrder(ordrNo){
-		console.log(ordrNo);
-		grid.readData(1, {'ordrNo':ordrNo}, true);
-		dialog4.dialog("close");
-	};
-	
+	//모달창 오픈
 	$("#btnSelectOrder").on("click", function(){
 			dialog4.dialog("open");
 		$("#dialog-form-order").load("searchOrderList",
 				function(){console.log("로드됨")})
 		});
+	
+	//모달창 닫기
+	function clickOrder(ordrNo){
+		console.log(ordrNo);
+		grid.readData(1, {'ordrNo':ordrNo}, true);
+		dialog4.dialog("close");
+	};
 	
 	
 	//발주 insert 그리드 
@@ -106,7 +108,6 @@
 		}	
 	];
 	
-	//ajax(api)로 값 받아오는 거 
 	const dataSource = {
 		  api: {
 			  readData: { 
@@ -136,7 +137,6 @@
 	
 	//그리드 클릭시 columnName = rscCode 
 	grid.on("click", function(ev){
-		console.log(grid.getValue(ev["rowKey"], "rscCode"));
 		if(ev["columnName"]=="rscCode" && grid.getValue(ev["rowKey"], ev["columnName"])!=null){
 			rscRowKey=ev["rowKey"];
 		dialog3.dialog("open");
@@ -151,18 +151,14 @@
 	btnAdd.addEventListener("click", function(){
 		grid.appendRow({});
 	})
-	
-	//btnUpd.addEventListener("click", function(){
-		//grid.updatedRows(true);
-	//})
-	
+
 	btnDel.addEventListener("click", function(){
 		grid.removeCheckedRows(true);
 	}) 
 	
 	
 	btnSaveOrder.addEventListener("click", function(){
-		console.log((grid.getValue(grid.getRowCount()-1, "rscCnt")));
+		
 		if((grid.getValue(grid.getRowCount()-1, "rscCnt")) == ""){
 			alert("발주량을 입력해주세요")
 		}else if((grid.getValue(grid.getRowCount()-1, "rscCnt")) != null){

@@ -48,6 +48,14 @@ public class ProductController {
 		return jsonView ;
 	}
 	
+	@RequestMapping("findProductAll")
+	public ModelAndView findProductAll(ProductVO product) {
+		List<ProductVO> list = service.findProductAll(product) ;
+		ModelAndView jsonView = new ModelAndView("jsonView") ;
+		jsonView.addObject("findproductall" , list) ;
+		return jsonView ;
+	}
+	
 	@RequestMapping("productInOut")
 	public ModelAndView productInOut(ProductVO product) {
 		service.insertInOut(product) ;
@@ -112,7 +120,9 @@ public class ProductController {
 	@RequestMapping("viewQR/{comCode}")
 	public String productTest3(ProductVO product , Model model) {
 		List<ProductVO> list = service.selectQR(product) ;
+		List<ProductVO> list2 = service.selectMatLot(product) ;
 		model.addAttribute("qr" , list) ;
+		model.addAttribute("matLot" , list2) ;
 		return "product/product_test3" ;
 	}
 	
@@ -129,4 +139,12 @@ public class ProductController {
 		jsonView.addObject("qr" , list) ;
 		return jsonView ;
 	}	
+	
+	@RequestMapping("selectMatLot/{comCode}")
+	public ModelAndView selectMatLot(ProductVO product) {
+		List<ProductVO> list = service.selectMatLot(product) ;
+		ModelAndView jsonView = new ModelAndView("jsonView") ;
+		jsonView.addObject("selectmatlot" , list) ;
+		return jsonView ;
+	}
 }

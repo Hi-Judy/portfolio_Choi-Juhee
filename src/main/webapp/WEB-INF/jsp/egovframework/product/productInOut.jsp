@@ -6,13 +6,25 @@
 <meta charset="UTF-8">
 <title>Insert title here</title>
 <link rel="stylesheet" href="https://uicdn.toast.com/tui-grid/latest/tui-grid.css" />
+
 <link rel="stylesheet" href="https://uicdn.toast.com/tui.date-picker/latest/tui-date-picker.css" />
+<script src="https://uicdn.toast.com/tui.date-picker/latest/tui-date-picker.js"></script>
+   
+<link rel="stylesheet" href="https://uicdn.toast.com/tui.pagination/latest/tui-pagination.css" />
+<script type="text/javascript" src="https://uicdn.toast.com/tui.pagination/v3.4.0/tui-pagination.js"></script>
+
+<script src="https://uicdn.toast.com/tui-grid/latest/tui-grid.js"></script>
+<script src="https://code.jquery.com/jquery-3.6.0.js"></script>
+
+<link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.css" />
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
+
+<link rel="stylesheet" href="https://uicdn.toast.com/grid/latest/tui-grid.css" />
+
+<script src="https://code.jquery.com/ui/1.13.0/jquery-ui.js"></script>
 <link rel="stylesheet" href="//code.jquery.com/ui/1.13.0/themes/base/jquery-ui.css">
 
-<script src="https://uicdn.toast.com/tui.date-picker/latest/tui-date-picker.js"></script>
-<script src="https://uicdn.toast.com/tui-grid/latest/tui-grid.js"></script>
-<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
-<script src="https://code.jquery.com/ui/1.13.0/jquery-ui.js"></script>
+<script src="https://uicdn.toast.com/grid/latest/tui-grid.js"></script>
 </head>
 <body>
 	<div id="help" align="right"><button type="button" id="helpBtn">도움말</button></div>
@@ -20,6 +32,7 @@
 	<div id="title" align="center"><h2>제품 입/출고 관리</h2></div>
 	<br>
 	<div id="info">
+		<span>제품명 :  </span><input id="txtPodtName" readonly>
 		<span>제품코드 : </span><input id="txtPodtCode"><button type="button" id="btnSearch">제품코드검색</button>
 		<br>
 		<br>
@@ -27,7 +40,9 @@
 		<br>
 		<div align="right">
 <!-- 테스트 -->
+<!--  
 			<a href="ProductTestPage">테스트페이지</a>
+-->
 <!-- 테스트 -->
 			<button type="button" id="listBtn">조회</button>
 			<button type="button" id="btnAdd">추가</button>
@@ -42,14 +57,33 @@
 		<div id="podtResult"></div>
 	</div>
 	
-	<div id="qr" title="QR코드조회" align='center'>
-		<input type="text" id="result" readonly>
+	<div id="qr" title="LOT정보조회" align='center'>
+		<div style="display:none;"><input type="text" id="result" readonly></div>
+		<div align="center"><h5>LOT정보</h5></div>
 		<br>
 		<div id="qrTable"></div>
+		<br>
+		<div align="center"><h5>사용자재정보</h5></div>
+		<div id="matLot"></div>
 	</div>
 	
-	<div id="helpDialog" title="도움말" style="text-align: center;">
-		
+	<div id="helpDialog" title="도움말">
+		<br>
+		제품명 : 제품코드를 검색해서 검색결과를 선택하면 자동으로 입력됩니다.<br><br>
+		제품코드검색 : 검색어를 포함한 제품명으로 제품코드를 검색합니다.<br><br>
+		조회 : 조건 없이 조회하면 전체목록을 조회합니다.<br><br>
+		추가 : <br>
+		&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;제품코드 : 제품을 선택하면 자동으로 입력됩니다.<br>
+		&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;제품명 : 제품코드를 선택 시 자동으로 입력됩니다.<br>
+		&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;출고량 : 선택한 Lot의 재고량보다 큰 값을 입력하면 저장할 수 없습니다.<br>
+		&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;완제품Lot : 해당 Lot에 재고가 남아있는 번호만 선택가능합니다.<br>
+		&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;모든 값을 다 입력해야 저장이 가능합니다.<br><br>
+		초기화 : 입력한 조회 조건을 초기화합니다.<br><br>
+		Lot 번호 : 부여된 Lot번호를 클릭하면 상세정보를 조회합니다.<br><br>		
+		QR코드 : Lot번호에 대한 정보를 조회할 수 있는 QR코드를 조회합니다.<br>
+		&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+		&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+		&nbsp;&nbsp;QR코드를 클릭시 인쇄할 수 있습니다.
 	</div>
 	
 <script>
@@ -90,13 +124,19 @@
 			header: '입고량' ,
 			name : 'podtInput' ,
 			editor: 'text' ,
-			align: 'center'
+			align: 'center',
+			formatter(value) {
+				return value.value.toString().replace(/\B(?<!\.\d*)(?=(\d{3})+(?!\d))/g, ",") ;
+			}
 		} ,
 		{
 			header: '출고량' ,
 			name : 'podtOutput' ,
 			editor: 'text' ,
-			align: 'center'
+			align: 'center',
+			formatter(value) {
+				return value.value.toString().replace(/\B(?<!\.\d*)(?=(\d{3})+(?!\d))/g, ",") ;
+			}
 		} ,
 		{
 			header: '비고	' ,
@@ -256,9 +296,55 @@
 			{ type : 'rowNum' } ,
 			{ type : 'checkbox' }
 		] ,
-		height : 300 ,
+		bodyHeight : 430 ,
 		data : data , 
-		columns : columns
+		columns : columns ,
+ 		pageOptions: {
+		    useClient: true,
+		    perPage: 10
+		} 
+	})
+	
+	grid.on('editingFinish' , (ev) => {
+		
+		let output = grid.getValue(ev.rowKey , 'podtOutput') ;
+		let Lot = grid.getValue(ev.rowKey , 'podtLot') ;
+		
+		if(ev.columnName == 'podtLot') {			
+			$.ajax({
+				url : 'selectOptions' ,
+				dataType : 'json' ,
+				async : false ,
+				success : function(datas) {
+					
+					let test = [] ;
+					
+					for (let a = 0 ; a < datas.selectoptions.length ; a++) {
+						let data = { podtLot : datas.selectoptions[a].podtLot , qnt : datas.selectoptions[a].qnt} ;
+						test.push(data) ;	
+					}
+
+					// 중복제거
+					let set1 = new Set(test) ;
+					let set2 = [...set1] ;
+					
+					for (let c = 0 ; c < set2.length ; c++) {
+						
+						if (set2[c].podtLot == Lot) {
+							if (Number(set2[c].qnt) < Number(output)) {
+								alert('해당 LOT의 재고가 부족합니다') ;
+								grid.setValue(ev.rowKey , 'podtOutput' , '') ;
+								grid.setValue(ev.rowKey , 'podtLot' , null) ;
+								return ;
+							}
+						}
+					}				
+				} ,
+				error : function(reject) {
+					console.log(reject) ;
+				}
+			})
+		}
 	})
 	
 	const second = {
@@ -291,25 +377,74 @@
 	$("#btnAdd").on("click" , function() {
 		let data = { podtEtc : '출하' , podtInput : '0'} ;
 		grid.appendRow(data) ;
+		
+		$.ajax({
+			url : 'selectOptions' ,
+			dataType : 'json' ,
+			async : false ,
+			success : function(datas) {
+				
+				// 조회 누를때마다 중복으로 안들어가도록 함
+				second.생산완료 = [] ;
+				second.출하 = [] ;
+				second.미생산출하 = [] ;
+				
+				let lots = [] ;
+				let lots2 = [] ;
+				
+				for (let a = 0 ; a < datas.selectoptions.length ; a++) {
+					lots.push(datas.selectoptions[a].podtLot) ;
+					let data = { podtLot : datas.selectoptions[a].podtLot , qnt : datas.selectoptions[a].qnt} ;
+					lots2.push(data) ;	
+				}
+
+
+				// 중복제거
+				let set1 = new Set(lots) ;
+				let set2 = [...set1] ;
+				
+				// 중복제거한거 options로 넣음
+				for (let b = 0 ; b < set2.length ; b++) {
+					let options2 = { text : set2[b] , value : set2[b] } ;
+					second.생산완료.push(options2) ;
+					second.출하완료.push(options2) ;
+				}
+										
+				for (let c = 0 ; c < lots2.length ; c++) {
+					if (lots2[c].qnt > 0) {
+						let options3 = { text : lots2[c].podtLot , value : lots2[c].podtLot } ;
+						second.출하.push(options3) ;
+						second.미생산출하.push(options3) ;	
+					}
+				}
+				
+				grid.resetData(data) ;
+				grid.resetOriginData() ;
+				
+			} ,
+			error : function(reject) {
+				console.log(reject) ;
+			}
+		})
 	})
 	
-	$("#btnInsert").on("click" , function() {
+	$("#btnInsert").on("click" , function() {		
 		let insertDatas = grid.getModifiedRows() ;
 		let insertData = insertDatas.createdRows ;
 		
-		let datas = grid.getModifiedRows() ;
-		let data = datas.updatedRows ;
+		let updateDatas = grid.getModifiedRows() ;
+		let updateData = updateDatas.updatedRows ;
 		
-		 if (data != '') {
+		 if (updateData != '') {
 			
 	  		let ok = 1 ;
-			for (let i = 0 ; i < data.length ; i++) {
+			for (let i = 0 ; i < updateData.length ; i++) {
 				
-				let no = data[i].qntInfono ;
-				let lot = data[i].podtLot ;
-				let podtCode = data[i].podtCode ;
-				let input = data[i].podtInput ;
-				let output = data[i].podtOutput ;
+				let no = updateData[i].qntInfono ;
+				let lot = updateData[i].podtLot ;
+				let podtCode = updateData[i].podtCode ;
+				let input = updateData[i].podtInput ;
+				let output = updateData[i].podtOutput ;
 				
 	 			$.ajax({
 					url : 'updateLotno' ,
@@ -373,7 +508,7 @@
 				let insertEtc = insertData[0].podtEtc ;
 				let insertLot = insertData[0].podtLot ;
 				
-				if (insertCode == '' || insertDate == '' || insertInput == '' || insertOutput == '' || insertCode == '') {
+				if (insertCode == null || insertDate == null || insertInput == null || insertOutput == null || insertCode == null) {
 					alert('입력값을 확인하세요') ;
 					return ;
 				}
@@ -473,6 +608,55 @@
 								grid.resetData(data) ;
 								grid.resetOriginData() ;
 								
+								$.ajax({
+									url : 'selectOptions' ,
+									dataType : 'json' ,
+									async : false ,
+									success : function(datas) {
+										
+										// 조회 누를때마다 중복으로 안들어가도록 함
+										second.생산완료 = [] ;
+										second.출하 = [] ;
+										second.미생산출하 = [] ;
+										
+										let lots = [] ;
+										let lots2 = [] ;
+										
+										for (let a = 0 ; a < datas.selectoptions.length ; a++) {
+											lots.push(datas.selectoptions[a].podtLot) ;
+											let data = { podtLot : datas.selectoptions[a].podtLot , qnt : datas.selectoptions[a].qnt} ;
+											lots2.push(data) ;	
+										}
+
+
+										// 중복제거
+										let set1 = new Set(lots) ;
+										let set2 = [...set1] ;
+										
+										// 중복제거한거 options로 넣음
+										for (let b = 0 ; b < set2.length ; b++) {
+											let options2 = { text : set2[b] , value : set2[b] } ;
+											second.생산완료.push(options2) ;
+											second.출하완료.push(options2) ;
+										}
+																
+										for (let c = 0 ; c < lots2.length ; c++) {
+											if (lots2[c].qnt > 0) {
+												let options3 = { text : lots2[c].podtLot , value : lots2[c].podtLot } ;
+												second.출하.push(options3) ;
+												second.미생산출하.push(options3) ;	
+											}
+										}
+										
+										grid.resetData(data) ;
+										grid.resetOriginData() ;
+										
+									} ,
+									error : function(reject) {
+										console.log(reject) ;
+									}
+								})
+								
 							} ,
 							error : function(reject) {
 								console.log(reject) ;
@@ -495,7 +679,7 @@
 		autoOpen : false ,
 		modal : true ,
 		width : 800 ,
-		height : 500 ,
+		height : 800 ,
 		buttons : {
 			"QR코드" : function() {
 				qr() ;
@@ -547,12 +731,41 @@
 		rowHeaders: [
 			{ type : 'rowNum' }
 		] ,
-		height : 300 ,
+		bodyHeight : 50 ,
 		data : data3 ,
 		columns : columns3
 	})
 	
-	grid.on('click' , (ev) => {				
+	const columns4 = [
+		{
+			header: '자재명' ,
+			name: 'codeName' ,
+			align: 'center'
+		} ,
+		{
+			header: '자재Lot번호' ,
+			name: 'matLotno' , 
+			align: 'center'
+		}		
+	] ;
+	
+	let data4 ;
+	
+	const grid4 = new Grid({
+		el : document.getElementById('matLot') ,
+		rowHeaders: [
+			{ type : 'rowNum' }
+		] ,
+		bodyHeight : 250 ,
+		data : data4 ,
+		columns : columns4 ,
+ 		pageOptions: {
+		    useClient: true,
+		    perPage: 5
+		}
+	})
+	
+	grid.on('click' , (ev) => {		
 		if(ev.columnName != 'podtLot') {
 			return ev.stop() ;
 		}
@@ -581,8 +794,51 @@
 					console.log(reject) ;
 				}
 			})
+			
+			$.ajax({
+				url : 'selectMatLot/' + comCode ,
+				dataType : 'json' ,
+				async : false ,
+				success : function(datas) {
+					data4 = datas.selectmatlot ;					
+					grid4.resetData(data4) ;
+					grid4.resetOriginData() ;
+					grid4.refreshLayout() ;
+				} ,
+				error : function(reject) {
+					console.log(reject) ; 
+				}
+			})
 		}
 	})
+	
+	grid.on('editingFinish' , (ev) => {
+		let code = ev.value ;
+		
+		if(ev.columnName == 'podtCode') {
+			if(code == 'PODT001') {
+				grid.setValue(ev.rowKey , 'codeName' , '하드콘택트 브라운') ;
+			} else if(code == 'PODT002') {
+				grid.setValue(ev.rowKey , 'codeName' , '하드콘택트 그레이') ;
+			} else if(code == 'PODT003') {
+				grid.setValue(ev.rowKey , 'codeName' , '소프트콘택트 브라운') ;
+			} else if(code == 'PODT004') {
+				grid.setValue(ev.rowKey , 'codeName' , '소프트콘택트 그레이') ;
+			} else if(code == 'PODT005') {
+				grid.setValue(ev.rowKey , 'codeName' , '하드콘택트 무색') ;
+			} else if(code == 'PODT006') {
+				grid.setValue(ev.rowKey , 'codeName' , '소프트콘택트 무색') ;
+			} else if(code == 'PODT007') {
+				grid.setValue(ev.rowKey , 'codeName' , '소프트콘택트 도수 1.0') ;
+			} else if(code == 'PODT008') {
+				grid.setValue(ev.rowKey , 'codeName' , '하드콘택트 도수 1.0') ;
+			} else if(code == 'PODT009') {
+				grid.setValue(ev.rowKey , 'codeName' , '소프트콘택트 도수 0.5') ;
+			} else if(code == 'PODT010') {
+				grid.setValue(ev.rowKey , 'codeName' , '하드콘택트 도수 0.5') ;
+			}
+		}
+	}) ;
 	
 	function qr() {
 		let code = $("#result").val() ;
@@ -604,7 +860,7 @@
 		$("#txtPodtCode").val("") ;
 		$("#manDatestart").val("") ;
 		$("#manDateend").val("") ;
-		grid.clear() ;
+		$("#txtPodtName").val("") ;
 	})		
 	//---------- ↑페이지 ----------
 	//---------- ↓제품코드찾기 ----------
@@ -612,7 +868,7 @@
 		autoOpen : false ,
 		modal : true ,
 		width : 600 ,
-		height : 400 ,
+		height : 600 ,
 		buttons : {
 			"닫기" : function() {
 				dialog.dialog("close") ;
@@ -624,6 +880,19 @@
 	
 	$("#btnSearch").on("click" , function() {
 		dialog.dialog("open") ;
+		$.ajax({
+			url : 'findProductAll' ,
+			dataType : 'json' ,
+			async : false ,
+			success : function(datas) {
+				data2 = datas.findproductall ;
+				grid2.resetData(data2) ;
+				grid2.resetOriginData() ;
+			} ,
+			error : function(reject) {
+				console.log(reject) ;
+			}
+		})
 		grid2.refreshLayout() ;
 	})
 	
@@ -670,14 +939,20 @@
 		rowHeaders: [
 			{ type : 'rowNum' }
 		] ,
-		height : 300 ,
+		bodyHeight : 300 ,
 		data : data2 ,
-		columns : columns2
+		columns : columns2 ,
+ 		pageOptions: {
+		    useClient: true,
+		    perPage: 10
+		}
 	})
 	
 	grid2.on('click',(ev) => {
-		let cusCode = data2[ev.rowKey].podtCode ;
-		$("#txtPodtCode").val(cusCode) ;
+		let podtCode = data2[ev.rowKey].podtCode ;
+		let podtName = data2[ev.rowKey].codeName ;
+		$("#txtPodtCode").val(podtCode) ;
+		$("#txtPodtName").val(podtName) ;
 		grid2.clear() ;
 		dialog.dialog("close") ;
 		$("#podtName").val("") ;

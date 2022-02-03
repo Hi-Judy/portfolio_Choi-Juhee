@@ -2,4 +2,49 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="egov.mes.Employee.dao.EmployeeMapper">
 
+<!-- 사원정보 전체조회 -->
+<select id="EmpAllFind" resultType="egov.mes.Employee.dao.EmployeeVO">
+select emp_id , emp_name , dept_code , position_code , etc
+from Employee_info
+ORDER BY emp_id 
+</select>
+
+<!-- 사원id 부서,직책별 최대값 가져오기 -->
+<select id="IdFind" resultType="egov.mes.Employee.dao.EmployeeVO">
+select MAX(emp_id) AS empId
+from Employee_info 
+where dept_code = #{deptCode} AND position_code = #{positionCode} 
+</select>
+
+
+<insert id="EmpAddData" parameterType="egov.mes.Employee.dao.EmployeeVO">
+insert into Employee_info (
+							emp_id,
+							emp_name,
+							dept_code,
+							position_code,
+							etc
+							)
+					values(
+							#{empId},
+							#{empName},
+							#{deptCode},
+							#{positionCode},
+							#{etc}
+							)			
+
+
+</insert>
+
+<update id="UpdateDatas" parameterType="egov.mes.Employee.dao.EmployeeVO">
+	UPDATE Employee_info
+	SET
+	dept_code 		= #{deptCode},
+	position_code 	= #{positionCode},
+	etc 			= #{etc}
+	WHERE emp_id = #{empId}
+	
+
+</update>
+
 </mapper>

@@ -6,13 +6,25 @@
 <meta charset="UTF-8">
 <title>Insert title here</title>
 <link rel="stylesheet" href="https://uicdn.toast.com/tui-grid/latest/tui-grid.css" />
+
 <link rel="stylesheet" href="https://uicdn.toast.com/tui.date-picker/latest/tui-date-picker.css" />
+<script src="https://uicdn.toast.com/tui.date-picker/latest/tui-date-picker.js"></script>
+   
+<link rel="stylesheet" href="https://uicdn.toast.com/tui.pagination/latest/tui-pagination.css" />
+<script type="text/javascript" src="https://uicdn.toast.com/tui.pagination/v3.4.0/tui-pagination.js"></script>
+
+<script src="https://uicdn.toast.com/tui-grid/latest/tui-grid.js"></script>
+<script src="https://code.jquery.com/jquery-3.6.0.js"></script>
+
+<link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.css" />
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
+
+<link rel="stylesheet" href="https://uicdn.toast.com/grid/latest/tui-grid.css" />
+
+<script src="https://code.jquery.com/ui/1.13.0/jquery-ui.js"></script>
 <link rel="stylesheet" href="//code.jquery.com/ui/1.13.0/themes/base/jquery-ui.css">
 
-<script src="https://uicdn.toast.com/tui.date-picker/latest/tui-date-picker.js"></script>
-<script src="https://uicdn.toast.com/tui-grid/latest/tui-grid.js"></script>
-<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
-<script src="https://code.jquery.com/ui/1.13.0/jquery-ui.js"></script>
+<script src="https://uicdn.toast.com/grid/latest/tui-grid.js"></script>
 </head>
 <body>
 	<div id="help" align="right"><button type="button" id="helpBtn">도움말</button></div>
@@ -21,6 +33,8 @@
 	<br>
 	<div id="info">
 		<span>납기일자 : </span><input id="dueDateStart" type="date"><span> ~ </span><input id="dueDateEnd" type="date">
+		<br><br>
+		<span>고객명 :  </span><input id="txtCusName" readonly>
 		<span>고객코드 : </span><input id="txtCusCode"><button type="button" id="btnSearch2">고객코드검색</button>
 		<br>
 		<div align="right">
@@ -29,13 +43,17 @@
 		</div>
 	</div>
 	
-	<div id="findCustomer" title="업체검색"">
+	<div id="findCustomer" title="고객검색"">
 		<input id="cusName"><button id="btnCusSearch">검색</button>
 		<div id="cusResult"></div>
 	</div>
 	
-	<div id="helpDialog" title="도움말" style="text-align: center;">
-		
+	<div id="helpDialog" title="도움말">
+		<br>
+		고객명 : 고객코드를 검색해서 검색결과를 선택하면 자동으로 입력됩니다.<br><br>
+		고객코드검색 : 검색어를 포함한 고객명으로 고객코드를 검색합니다.<br><br>
+		조회 : 조건 없이 조회하면 전체목록을 조회합니다.<br><br>
+		초기화 : 입력한 조회 조건을 초기화합니다.	<br><br>
 	</div>
 <script>
 	var Grid = tui.Grid ;
@@ -70,7 +88,10 @@
 		{
 			header : '총주문량' ,
 			name : 'ordQnt' ,
-			align : 'center'
+			align : 'center',
+			formatter(value) {
+				return value.value.toString().replace(/\B(?<!\.\d*)(?=(\d{3})+(?!\d))/g, ",") ;
+			}
 		}
 	] ;
 	
@@ -120,14 +141,19 @@
 			{ type : 'rowNum' }
 		] ,
 		data : data ,
-		columns : columns
+		columns : columns ,
+		bodyHeight : 430 ,
+ 		pageOptions: {
+		    useClient: true,
+		    perPage: 10
+		} 
 	}) ;
 	
 	$("#clearBtn").on("click" , function() {
 		$("#txtCusCode").val("") ;
 		$("#dueDateStart").val("") ;
 		$("#dueDateEnd").val("") ;
-		grid.clear() ;
+		$("#txtCusName").val("") ;
 	})
 	//---------- ↑페이지 ----------
 	//---------- ↓업체찾기 ----------
@@ -135,7 +161,7 @@
 		autoOpen : false ,
 		modal : true ,
 		width : 600 ,
-		height : 400 ,
+		height : 600 ,
 		buttons: {
 			"닫기" : function() {
 				dialog2.dialog("close") ;
@@ -147,6 +173,19 @@
 	
 	$("#btnSearch2").on("click" , function() {
 		dialog2.dialog("open") ;
+		$.ajax({
+			url : 'findCustomerAll' ,
+			dataType : 'json' ,
+			async : false ,
+			success : function(datas) {
+				data3 = datas.customerall ;
+				grid3.resetData(data3) ;
+				grid3.resetOriginData() ;
+			} ,
+			error : function(reject) {
+				console.log(reject) ;
+			}
+		})
 		grid3.refreshLayout() ;
 	})
 	
@@ -193,14 +232,20 @@
 		rowHeaders: [
 			{ type : 'rowNum' }
 		] ,
-		height : 300 ,
+		bodyHeight : 300 ,
 		data : data3 ,
-		columns : columns3
+		columns : columns3 ,
+ 		pageOptions: {
+		    useClient: true,
+		    perPage: 10
+		} 
 	})
 	
 	grid3.on('click',(ev) => {
 		let cusCode = data3[ev.rowKey].cusCode ;
+		let cusName = data3[ev.rowKey].codeName ;
 		$("#txtCusCode").val(cusCode) ;
+		$("#txtCusName").val(cusName) ;
 		grid3.clear() ;
 		dialog2.dialog("close") ;
 		$("#cusName").val("") ;

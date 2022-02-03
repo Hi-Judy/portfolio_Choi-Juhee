@@ -16,19 +16,20 @@
 <select id="EmpFind" resultType="egov.mes.Proc.dao.ProcessControlVO">
 	select * 
 	from Employee_info 
-	where position_code = 'W003'
+	where dept_code = 'D003' AND position_code = 'W003'
 </select>
 
 <select id="FacFind" resultType="egov.mes.Proc.dao.ProcessControlVO">
-	select * 
+	select fac_no , fac_code , FN_GET_CODE_NAME(fac_code) AS facName , fac_output , fac_runtime 
 	from facility_status
-	where fac_no not in ( select fac_no from facility_process)
+	where fac_no not in ( select fac_no from facility_process) AND fac_status = 'Y'
 </select>
 
 <select id="SelectedFac" resultType="egov.mes.Proc.dao.ProcessControlVO">
-	select fac_no 
-	from facility_process
-	where proc_code = #{procCode}
+    select p.fac_no , FN_GET_CODE_NAME(s.fac_code) AS facName
+	from facility_process p join facility_status s
+    on p.fac_no = s.fac_no
+	where p.proc_code = #{procCode}
 </select>
 
 

@@ -6,13 +6,25 @@
 <meta charset="UTF-8">
 <title>Insert title here</title>
 <link rel="stylesheet" href="https://uicdn.toast.com/tui-grid/latest/tui-grid.css" />
+
 <link rel="stylesheet" href="https://uicdn.toast.com/tui.date-picker/latest/tui-date-picker.css" />
+<script src="https://uicdn.toast.com/tui.date-picker/latest/tui-date-picker.js"></script>
+   
+<link rel="stylesheet" href="https://uicdn.toast.com/tui.pagination/latest/tui-pagination.css" />
+<script type="text/javascript" src="https://uicdn.toast.com/tui.pagination/v3.4.0/tui-pagination.js"></script>
+
+<script src="https://uicdn.toast.com/tui-grid/latest/tui-grid.js"></script>
+<script src="https://code.jquery.com/jquery-3.6.0.js"></script>
+
+<link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.css" />
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
+
+<link rel="stylesheet" href="https://uicdn.toast.com/grid/latest/tui-grid.css" />
+
+<script src="https://code.jquery.com/ui/1.13.0/jquery-ui.js"></script>
 <link rel="stylesheet" href="//code.jquery.com/ui/1.13.0/themes/base/jquery-ui.css">
 
-<script src="https://uicdn.toast.com/tui.date-picker/latest/tui-date-picker.js"></script>
-<script src="https://uicdn.toast.com/tui-grid/latest/tui-grid.js"></script>
-<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
-<script src="https://code.jquery.com/ui/1.13.0/jquery-ui.js"></script>
+<script src="https://uicdn.toast.com/grid/latest/tui-grid.js"></script>
 </head>
 <body>
 	<div id="help" align="right"><button type="button" id="helpBtn">도움말</button></div>
@@ -25,11 +37,11 @@
 			<option value="" selected>선택</option>
 			<option value="미진행">미진행</option>
 			<option value="진행중">진행중</option>
-			<option value="취소">취소</option>
 			<option value="완료">완료</option>
 			<option value="미생산완료">미생산완료</option>
 		</select>
-		<span>업체코드 : </span><input id="txtCusCode"><button type="button" id="btnSearch">업체코드검색</button>
+		<span>고객명 :  </span><input id="txtCusName" readonly>
+		<span>고객코드 : </span><input id="txtCusCode"><button type="button" id="btnSearch">고객코드검색</button>
 		<br><br>
 		<span>접수일자 : </span><input id="ordDateStart" type="date"><span> ~ </span><input id="ordDateEnd" type="date">
 		<span>납기일자 : </span><input id="dueDateStart" type="date"><span> ~ </span><input id="dueDateEnd" type="date">
@@ -41,17 +53,24 @@
 		</div>
 	</div>
 	
-	<div id="findCustomer" title="업체검색"">
+	<div id="findCustomer" title="고객검색"">
 		<input id="cusName"><button id="btnCusSearch">검색</button>
 		<div id="cusResult"></div>
 	</div>
-	
+	<br>
+	<div align="center"><h5>거래상세정보</h5></div>
 	<div id="tradeDetail" title="주문상세정보" align="center">
 		<div id="selectInfo"></div>
 	</div>
 	
-	<div id="helpDialog" title="도움말" style="text-align: center;">
-		
+	<div id="helpDialog" title="도움말">
+		<br>
+		고객명 : 고객코드를 검색해서 검색결과를 선택하면 자동으로 입력됩니다.<br><br>
+		고객코드검색 : 검색어를 포함한 고객명으로 고객코드를 검색합니다.<br><br>
+		조회 : 조건 없이 조회하면 전체목록을 조회합니다.<br><br>
+		미생산출하 : 체크한 주문에 대해 생산계획 작성없이 바로 출하처리합니다.<br><br>
+		초기화 : 입력한 조회 조건을 초기화합니다.	<br><br>
+		거래상세정보 : 주문 클릭 시 주문에 대한 상세 정보를 조회합니다.
 	</div>
 <script>
 
@@ -62,7 +81,7 @@
 		autoOpen : false ,
 		modal : true ,
 		width : 600 ,
-		height : 400 ,
+		height : 600 ,
 		buttons: {
 			"닫기" : function() {
 				dialog.dialog("close") ;
@@ -74,6 +93,19 @@
 	
 	$("#btnSearch").on("click" , function() {
 		dialog.dialog("open") ;
+		$.ajax({
+			url : 'findCustomerAll' ,
+			dataType : 'json' ,
+			async : false ,
+			success : function(datas) {
+				data = datas.customerall ;
+				grid.resetData(data) ;
+				grid.resetOriginData() ;
+			} ,
+			error : function(reject) {
+				console.log(reject) ;
+			}
+		})
 		grid.refreshLayout() ;
 	})
 	
@@ -120,14 +152,20 @@
 		rowHeaders: [
 			{ type : 'rowNum' }
 		] ,
-		height : 300 ,
+		bodyHeight : 300 ,
 		data : data ,
-		columns : columns
+		columns : columns ,
+ 		pageOptions: {
+		    useClient: true,
+		    perPage: 10
+		} 
 	})
 	
 	grid.on('click',(ev) => {
 		let cusCode = data[ev.rowKey].cusCode ;
+		let cusName = data[ev.rowKey].codeName ;
 		$("#txtCusCode").val(cusCode) ;
+		$("#txtCusName").val(cusName) ;
 		grid.clear() ;
 		dialog.dialog("close") ;
 		$("#cusName").val("") ;
@@ -232,7 +270,12 @@
 			{ type : 'checkbox'}
 		] ,
 		data : data2 ,
-		columns : columns2
+		columns : columns2 ,
+		bodyHeight : 250 ,
+ 		pageOptions: {
+		    useClient: true,
+		    perPage: 10
+		} 
 	}) ;
 	
 	$("#clearBtn").on("click" , function() {
@@ -242,7 +285,7 @@
 		$("#ordDateEnd").val("") ;
 		$("#dueDateStart").val("") ;
 		$("#dueDateEnd").val("") ;
-		grid2.clear() ;
+		$("#txtCusName").val("") ;
 	})
 	
 	grid2.on('check' , (ev) => {
@@ -270,11 +313,19 @@
 				let ordStatus = rowStatus[i] ;
 				if(ordStatus == '완료' || ordStatus == '미생산출하' || ordStatus == ''){
 					no = 2 ;
-				}
+				} else if (ordStatus == '진행중') {
+					no = 3 ;
+				} 
 			} 
 		}
 		if (no == 2) {
 			alert('이미 완료된 주문입니다') ;
+			rowCodes = [] ;
+			rowStatus = [] ;
+			return ;
+		}
+		if (no == 3) {
+			alert('이미 진행중인 주문입니다') ;
 			rowCodes = [] ;
 			rowStatus = [] ;
 			return ;
@@ -368,12 +419,18 @@
 		{
 			header : '주문량' ,
 			name : 'ordQnt' ,
-			align: 'center'
+			align: 'center',
+			formatter(value) {
+				return value.value.toString().replace(/\B(?<!\.\d*)(?=(\d{3})+(?!\d))/g, ",") ;
+			}
 		} ,
 		{
 			header : '재고량' ,
 			name : 'podtQnt' , 
-			align: 'center'
+			align: 'center',
+			formatter(value) {
+				return value.value.toString().replace(/\B(?<!\.\d*)(?=(\d{3})+(?!\d))/g, ",") ;
+			}
 		}
 	] ;
 	
@@ -401,7 +458,7 @@
 			}
 		})
 		
-		dialog2.dialog("open") ;
+		//dialog2.dialog("open") ;
 		grid3.refreshLayout() ;
 	})
 	
@@ -412,19 +469,24 @@
 		] ,
 		data : data3 ,
 		columns : columns3 ,
+		bodyHeight : 250 ,
 		summary : {
 			height : 30 ,
 			columnContent : {
 				ordQnt: {
 					template(summary) {
-						return ' 총 주문량 : ' + summary.sum + ' 개'
+						return ' 총 주문량 : ' + summary.sum.toString().replace(/\B(?<!\.\d*)(?=(\d{3})+(?!\d))/g, ",") + ' 개'
 					}
 				}
 			}
-		}
+		} ,
+ 		pageOptions: {
+		    useClient: true,
+		    perPage: 10
+		} 
 	}) ;
 	
-	let dialog2 = $("#tradeDetail").dialog({
+/* 	let dialog2 = $("#tradeDetail").dialog({
 		autoOpen : false ,
 		modal : true ,
 		width : 800 ,
@@ -435,7 +497,7 @@
 				grid.clear() ;
 			}
 		}
-	})
+	}) */
 	
 	let dialog3 = $("#helpDialog").dialog({
 		autoOpen : false ,

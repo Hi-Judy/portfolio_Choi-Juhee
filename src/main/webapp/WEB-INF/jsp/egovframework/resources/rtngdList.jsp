@@ -136,16 +136,22 @@
 			   },
 			   {
 				 header: '단가',
-				 name: 'rscPrc'
+				 name: 'rscPrc',
+				 formatter(value) {
+		                return value.value.toString().replace(/\B(?<!\.\d*)(?=(\d{3})+(?!\d))/g, ",");
+		            }
+				},
+				{
+				 header: '반품량',
+				 name: 'rtngdCnt',
+				 formatter(value) {
+		                return value.value.toString().replace(/\B(?<!\.\d*)(?=(\d{3})+(?!\d))/g, ",");
+		            }
 				},
 				{
 				 header: '합계',
 				 name: 'rscTotal'
 				},
-			  {
-				header: '반품량',
-				name: 'rtngdCnt'
-			   },
 				{
 				  header: '불량코드',
 				  name: 'defCode'
@@ -171,18 +177,35 @@
 	const grid = new Grid({
 		  el: document.getElementById('grid'),
 		  data: null,
-		  columns
+		  columns,
+		  summary: {
+			    position: 'bottom',
+			    height: 40, 
+			    columnContent: {
+			      rtngdCnt: {
+			        template(summary) {
+			        	console.log(summary);
+			        	return '반품량: ' + summary.sum;
+			        }
+			      }
+			    }
+			  }
 		});
-
+	
+	
+	grid.on("onGridUpdated", function(ev){
+		for(i=0; i<grid.getRowCount(); i++){
+			let gr = grid.getValue(i, "rscPrc")*grid.getValue(i, "rtngdCnt")
+			grid.setValue(i, "rscTotal", gr.toString().replace(/\B(?<!\.\d*)(?=(\d{3})+(?!\d))/g, ","));
+		}
+	})
+	
 	//조회버튼 클릭시 값 가지고 오는 거
 	$("#btnSelect").on("click", function(){
 			var rscCode = $("#txtRsc1").val();
 			var sucCode = $("#txtSuc1").val();
 			var ordeDate = $("#txtOrde1").val();
 			var ordeDate2 = $("#txtOrde2").val();
-			console.log(ordeDate);
-			console.log(typeof(ordeDate));
-			console.log(ordeDate2);
 			
 			$.ajax({
 				url :'resourcesRtngd',
@@ -193,7 +216,7 @@
 				console.log(datalist);
 				grid.resetData(datalist["data"]["contents"]);
 			})
-					
+			
 		})
 	
 	

@@ -1,6 +1,77 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
+<script>
+window.onload=function(){
+	if(sessionStorage.getItem("MenuList") != null){
+		makesidebar();
+	}else{
+		$.ajax({
+			url : '${pageContext.request.contextPath}/reqsidebar',
+			method : 'GET',
+			dataType : 'JSON',
+			success : function(sidebardatas) {
+				sessionStorage.setItem("MenuList",JSON.stringify(sidebardatas.resultsidebar)) ;
+				console.log(JSON.stringify(sidebardatas.resultsidebar));
+				makesidebar();
+			},
+			error : function(reject) {
+				console.log('reject: ' + reject);
+			}
+		})
+	}
+}
+function makesidebar(){	
+	list = JSON.parse(sessionStorage.getItem("MenuList"));
+	var menu = document.querySelector('.menu');
+	var ul=$('<ul></ul>');
+	var outterli=$('<li></li>');
+	for(item of list){
+		if(item.upperMenuNo == 0){
+			var outterli = $('<li class="sidebar-item  has-sub"></li>');
+			var outterlia = $("<a href='#' class='sidebar-link'></a>");
+			var outterlii = $("<i class='bi bi-collection-fill'></i> ");
+			var outterlispan = $("<span></span>");
+			ul = $('<ul class="submenu "></ul>');			
+			outterlispan.text(item.menuNm);
+			
+			outterlia.append(outterlii[0]);
+			outterlia.append(outterlispan[0]);
+			outterli.append(outterlia[0]);
+			outterli.append(ul[0]);
+			
+		}else{
+			var innerli = $('<li class="submenu-item "></li>');
+			var innerlia = $('<a></a>')
+			innerlia.href=item.chkUrl;
+			innerlia.text(item.menuNm);
+			innerli.append(innerlia[0]);
+			ul.append(innerli[0]);
+			console.log(ul[0]);
+		}
+		menu.append(outterli[0]);
+		
+		/*
+		<li class="sidebar-item  has-sub">
+			<a href="#" class='sidebar-link'> 
+				<i class="bi bi-collection-fill"></i> 
+				<span>egov test</span>
+			</a>
+			<ul class="submenu ">
+				<li class="submenu-item "><a href="/yedamfinal2/sec/ram/EgovAuthorList.do">권한 관리</a></li>
+				<li class="submenu-item "><a href="/yedamfinal2/sec/rgm/EgovAuthorGroupList.do">권한 그룹 관리</a></li>
+				<li class="submenu-item "><a href="/yedamfinal2/sec/gmt/EgovGroupList.do">그룹 관리</a></li>
+				<li class="submenu-item "><a href="/yedamfinal2/sec/rmt/EgovRoleList.do">롤 관리</a></li>
+				<li class="submenu-item "><a href="/yedamfinal2/sym/mnu/mpm/EgovMenuListSelect.do">메뉴리스트관리</a></li>
+				<li class="submenu-item "><a href="/yedamfinal2/sym/mnu/mpm/EgovMenuManageSelect.do">메뉴관리리스트</a></li>
+				<li class="submenu-item "><a href="/yedamfinal2/sym/mnu/mcm/EgovMenuCreatManageSelect.do">메뉴생성관리</a></li>
+				<li class="submenu-item "><a href="/yedamfinal2/sym/mnu/stm/EgovSiteMapng.do">사이트맵</a></li>
+			</ul>
+		</li>
+		*/
+	}
+}
+</script>
 <div id="sidebar" class="active">
 	<div class="sidebar-wrapper active"
 		style="padding-right: 0px; resize: horizontal;">
@@ -39,6 +110,7 @@
 				</a>
 					<ul class="submenu ">
 						<li class="submenu-item "><a href="CommonGroup">공통 자료 관리</a></li>
+						<li class="submenu-item "><a href="MaterialManagement">자재정보 관리</a></li>
 						<li class="submenu-item "><a href="ProductBom">제품 BOM 관리</a></li>
 						<li class="submenu-item "><a href="ProcessControl">공정 관리</a></li>
 						<li class="submenu-item "><a href="EmployeeView">사원 정보 관리</a></li>
@@ -61,14 +133,16 @@
 				</a>
 					<ul class="submenu ">
 						<li class="submenu-item "><a href="manufacture">생산 계획 관리</a></li>
-						<li class="submenu-item "><a href="manufactureSelect">생산
-								계획 상세 조회</a></li>
+						<li class="submenu-item "><a href="manufactureSelect">생산 계획 상세 조회</a></li>
 						<li class="submenu-item "><a href="manCommand">생산 지시 관리</a></li>
 						<li class="submenu-item "><a href="manCommandSelect">생산 지시 상세 조회</a></li>
+
 						<li class="submenu-item "><a href="manProcess">생산 현황 조회</a></li>
 						<li class="submenu-item "><a href="manMovement">공정이동표</a></li>
 						<li class="submenu-item "><a href="DefectiveProduct">생산
 								실적 조회</a></li>
+								
+
 					</ul></li>
 				<li class="sidebar-item  has-sub"><a href="#"
 					class='sidebar-link'> <i class="bi bi-grid-1x2-fill"></i> <span>설비관리</span>
@@ -81,7 +155,7 @@
 					class='sidebar-link'> <i class="bi bi-grid-1x2-fill"></i> <span>자재관리</span>
 				</a>
 					<ul class="submenu ">
-						<li class="submenu-item "><a href="orderInsert">자재 발주</a></li>
+						<li class="submenu-item "><a href="orderInsert">자재 발주 관리</a></li>
 						<li class="submenu-item "><a href="resourceorderList">자재
 								발주 조회</a></li>
 						<li class="submenu-item "><a href="resourcesCheck">자재입고검사
