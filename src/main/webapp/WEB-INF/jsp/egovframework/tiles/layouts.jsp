@@ -44,6 +44,15 @@
    href="//code.jquery.com/ui/1.13.0/themes/base/jquery-ui.css">
 
 <script src="https://uicdn.toast.com/grid/latest/tui-grid.js"></script>
+
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.7.1/font/bootstrap-icons.css">
+<style>
+	.tui-is-selected {
+		background : #007b88 ;
+		background-color : #007b88 !important;	
+	}
+</style>
 </head>
 <body>
 	<tiles:insertAttribute name="tiles_side_bar" />
