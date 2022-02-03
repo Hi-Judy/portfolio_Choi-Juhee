@@ -48,6 +48,14 @@ public class FacilityController {
 		return jsonView ; 
 	}
 	
+	@RequestMapping("findFacilityAll")
+	public ModelAndView findFacilityAll(FacilityVO facility) {
+		List<FacilityVO> list = service.findFacilityAll(facility) ;
+		ModelAndView jsonView = new ModelAndView("jsonView") ;
+		jsonView.addObject("findfacilityall" , list) ;
+		return jsonView ; 
+	}
+	
 	@RequestMapping("facilityBreakInfo/{facNo}")
 	public ModelAndView facilityBreakInfo(FacilityVO facility) {
 		List<FacilityVO> list = service.facilityBreakInfo(facility) ;
@@ -70,6 +78,14 @@ public class FacilityController {
 		List<FacilityVO> list = service.selectFacOptions(facility) ;
 		ModelAndView jsonView = new ModelAndView("jsonView") ;
 		jsonView.addObject("selectfacoptions" , list) ;
+		return jsonView ;
+	}
+	
+	@RequestMapping("selectProcOptions")
+	public ModelAndView selectProcOptions(FacilityVO facility) {
+		List<FacilityVO> list = service.selectProcOptions(facility) ;
+		ModelAndView jsonView = new ModelAndView("jsonView") ;
+		jsonView.addObject("selectprocoptions" , list) ;
 		return jsonView ;
 	}
 	

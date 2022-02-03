@@ -3,8 +3,12 @@
 <mapper namespace="egov.mes.facility.dao.FacilityMapper">
 
 	<select id="facilityList" resultType="egov.mes.facility.dao.FacilityVO">
-		select fac_no , fn_get_code_name(fac_code) as codeName , fac_code , fac_status , fac_cause , fac_checkdate , fac_output , fac_runtime
-		from facility_status
+		select fs.fac_no , fn_get_code_name(fs.fac_code) as codeName , fs.fac_code , 
+		    fs.fac_status , fs.fac_cause , fs.fac_checkdate , fs.fac_output , fs.fac_runtime ,
+		    fp.proc_code , fn_get_code_name(fp.proc_code) as procName
+		from facility_status fs
+	    join facility_process fp
+	    on fs.fac_no = fp.fac_no
 		where 1=1
 		
 		<if test="facCode != null">
@@ -36,6 +40,12 @@
 		order by fac_code ASC
 	</select>
 	
+	<select id="findFacilityAll" resultType="egov.mes.facility.dao.FacilityVO">
+		select fac_code , fn_get_code_name(fac_code) as codeName
+		from facility_status
+		order by fac_code ASC
+	</select>
+	
 	<select id="facilityBreakInfo" resultType="egov.mes.facility.dao.FacilityVO">
 		select b.fac_infono , b.fac_no , b.fac_cause , b.fac_causedate , fn_get_code_name(s.fac_code) as codeName
 		from facility_breakinfo b 
@@ -53,8 +63,12 @@
 		select code_name from common_code where group_code = 'fac'
 	</select>
 	
+	<select id="selectProcOptions" resultType="egov.mes.facility.dao.FacilityVO">
+		select code from common_code where group_code = 'proc'
+	</select>
+	
 	<insert id="insertFacility" statementType="CALLABLE">
-		{ call p_insert_fac(#{facCode},#{facStatus},#{facOutput},#{facRuntime}) }  
+		{ call p_insert_fac(#{facCode},#{facStatus},#{facOutput},#{facRuntime},#{procCode}) }  
 	</insert>
 	
 	<delete id="deleteFacility" statementType="CALLABLE">

@@ -48,5 +48,15 @@ public class FacilityServiceImpl implements FacilityService {
 	public void deleteFacility(FacilityVO facility) {
 		mapper.deleteFacility(facility) ;
 	}
+
+	@Override
+	public List<FacilityVO> selectProcOptions(FacilityVO facility) {
+		return mapper.selectProcOptions(facility) ;
+	}
+
+	@Override
+	public List<FacilityVO> findFacilityAll(FacilityVO facility) {
+		return mapper.findFacilityAll(facility) ;
+	}
 	
 }

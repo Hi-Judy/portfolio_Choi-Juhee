@@ -21,6 +21,12 @@
 		order by cus_code ASC
 	</select>
 	
+	<select id="findCustomerAll" resultType="egov.mes.customer.dao.CustomerVO">
+		select cus_code , fn_get_code_name(cus_code) as codeName
+		from customer_info
+		order by cus_code ASC
+	</select>
+	
 	<select id="selectTradeInfo" resultType="egov.mes.customer.dao.CustomerVO">
 		select o.ord_code , t.podt_code , fn_get_code_name(t.podt_code) as podt_name , 
 			   to_char(o.ord_date,'yyyy-MM-dd') as ord_date , t.ord_qnt

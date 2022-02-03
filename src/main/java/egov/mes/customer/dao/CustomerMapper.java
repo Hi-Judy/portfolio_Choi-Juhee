@@ -8,6 +8,7 @@ import egovframework.rte.psl.dataaccess.mapper.Mapper;
 public interface CustomerMapper {
 	List<CustomerVO> customerList(CustomerVO customer) ;
 	List<CustomerVO> findCustomer(CustomerVO customer) ;
+	List<CustomerVO> findCustomerAll(CustomerVO customer) ;
 	List<CustomerVO> selectTradeInfo(CustomerVO customer) ;
 	int updateCustomer(CustomerVO customer) ;
 	void insertCustomer(CustomerVO customer) ;

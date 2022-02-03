@@ -66,4 +66,9 @@ public class ProductServiceImpl implements ProductService{
 		return mapper.selectMatLot(product) ;
 	}
 
+	@Override
+	public List<ProductVO> findProductAll(ProductVO product) {
+		return mapper.findProductAll(product) ;
+	}
+
 }

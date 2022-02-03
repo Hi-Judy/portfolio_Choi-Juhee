@@ -37,10 +37,17 @@
 	</select>
 	
 	<select id="selectChart" resultType="egov.mes.defective.dao.DefectiveVO">
-		select proc_code , sum(def_qnt) as defQnt
+		select fn_get_code_name(proc_code) as procCode , sum(def_qnt) as defQnt
 		from defective_product_info 
 		group by proc_code 
 		order by proc_code
+	</select>
+	
+	<select id="selectChart2" resultType="egov.mes.defective.dao.DefectiveVO">
+		select to_char(man_date,'MM') as manDate , sum(def_qnt) as defQnt
+		from defective_product_info
+		group by to_char(man_date,'MM')
+		order by to_char(man_date,'MM') 
 	</select>
 	
 </mapper>

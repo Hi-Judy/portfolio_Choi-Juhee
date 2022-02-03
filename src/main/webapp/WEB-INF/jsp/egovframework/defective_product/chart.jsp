@@ -14,7 +14,9 @@
 	<button type="button" onclick="test()">테스트</button>
 	<script>
 		const Chart = toastui.Chart;
+		
 		const el = document.getElementById('chart');
+		
 		var data = {
 		  categories: [],
 		  series: [
@@ -22,42 +24,44 @@
 		      name: '불량수',
 		      data: []
 		    }
-		  ],
+		  ]
 		};
+		
 		var options = {
 		  chart: { width: 700, height: 400 },
 		  series : {
 			  stack : true
 		  }
 		};
-
-		$.ajax({
-			url : 'chartData' ,
-			dataType : "json" ,
-			success : function(datas) {
-				
-				let categoriesData = [] ;
-				let seriesData = [] ;
-				
-					for (let i = 0 ; i < datas.chartData.length ; i++) {
-						data.categories.push(datas.chartData[i].procCode) ;
-						data.series[0].data.push(datas.chartData[i].defQnt) ;
-					} ; 					
-					
-					console.log(data.categories) ;
-					console.log(data.series) ;
-									
-			} ,
-			error : function(reject) {
-				console.log(reject) ;
-			}
-			
-		})
 		
 		const chart = Chart.barChart({ el, data, options });
 		
 		function test() {
-			
+			$.ajax({
+				url : 'chartData' ,
+				dataType : "json" ,
+				success : function(datas) {
+					chart.destroy() ;
+					
+					let str = 0 ;
+					let dataList = [] ;
+					
+					for (let i = 0 ; i < datas.chartData.length ; i++) {
+						data.categories.push(datas.chartData[i].procCode) ;
+						data.series[0].data.push(Number(datas.chartData[i].defQnt)) ;
+					} ;									
+					
+					console.log(data.categories) ;
+					console.log(data.series) ;
+					
+					const chart2 = Chart.barChart({ el , data , options }) ;
+									
+				} ,
+				error : function(reject) {
+					console.log(reject) ;
+				}
+				
+			})
 		}
 	</script>
 </body>

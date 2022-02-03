@@ -69,4 +69,14 @@ public class DefectiveController {
 		jsonView.addObject("chartData" , list) ;
 		return jsonView ;
 	}
+	
+	@RequestMapping("chartData2")
+	public ModelAndView chartData2(DefectiveVO defective) {
+		
+		List<DefectiveVO> list = service.selectChart2(defective) ;
+		
+		ModelAndView jsonView = new ModelAndView("jsonView") ;
+		jsonView.addObject("chartData2" , list) ;
+		return jsonView ;
+	}
 }
