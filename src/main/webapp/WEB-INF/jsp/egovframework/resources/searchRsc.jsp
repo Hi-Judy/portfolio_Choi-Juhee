@@ -58,7 +58,7 @@
 		});
 	
 	
-	//리스트에서 선택한 값 가지고 오기...$(여기 어떻게 쓰지? )
+	//리스트에서 선택한 값 가지고 오기
 	gridRsc.on("dblclick", (ev) => {
 		console.log(gridRsc.getValue(ev["rowKey"],'rscCode'))
 		grid.setValue(rscRowKey, "rscCode", gridRsc.getValue(ev["rowKey"],'rscCode'), false)

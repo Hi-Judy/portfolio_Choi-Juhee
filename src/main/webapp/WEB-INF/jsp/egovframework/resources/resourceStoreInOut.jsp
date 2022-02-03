@@ -9,13 +9,16 @@
 <link rel="stylesheet" href="https://uicdn.toast.com/tui.date-picker/latest/tui-date-picker.css" />
 <link rel="stylesheet" href="//code.jquery.com/ui/1.13.0/themes/base/jquery-ui.css">
 <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">
+<link rel="stylesheet" href="https://uicdn.toast.com/tui.pagination/latest/tui-pagination.css" />
 
+<script type="text/javascript" src="https://uicdn.toast.com/tui.pagination/v3.4.0/tui-pagination.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p" crossorigin="anonymous"></script>
 <script src="https://uicdn.toast.com/tui.date-picker/latest/tui-date-picker.js"></script>
 <script src="https://uicdn.toast.com/tui-grid/latest/tui-grid.js"></script>
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
 <script src="https://code.jquery.com/jquery-3.6.0.js"></script>
 <script src="https://code.jquery.com/ui/1.13.0/jquery-ui.js"></script>
+
 </head>
 <body>
 	<h2>자재입/출고조회</h2>
@@ -29,8 +32,8 @@
 	<hr>
 	입고일자  <input id="txtStoreIn1" type="date" data-role="datebox" data-options='{"mode": "calbox"}'>
 	~ 		<input id="txtStoreIn2" type="date" data-role="datebox" data-options='{"mode": "calbox"}'><br>
-	업체코드  <input id="txtStoreInSuc1">  <button id="btnStoreInSuc">돋보기</button>  업체명 <input id="txtStoreInSuc2" readonly><br>
-	자재코드  <input id="txtStoreInRsc1">  <button id="btnStoreInRsc">돋보기</button>  자재명 <input id="txtStoreInRsc2" readonly><br>
+	업체명 <input id="txtStoreInSuc2" readonly>	업체코드  <input id="txtStoreInSuc1">  <button id="btnStoreInSuc">돋보기</button><br>
+	자재명 <input id="txtStoreInRsc2" readonly>	자재코드  <input id="txtStoreInRsc1">  <button id="btnStoreInRsc">돋보기</button><br> 
 	<div id="dialog-form-in-rsc" title="자재 검색"></div>
 	<div id="dialog-form-in-suc" title="업체 검색"></div>
 	<br>
@@ -47,8 +50,8 @@
 	<hr>
 	출고일자  <input id="txtStoreOut1" type="date" data-role="datebox" data-options='{"mode": "calbox"}'>
 	~ 		<input id="txtStoreOut2" type="date" data-role="datebox" data-options='{"mode": "calbox"}'><br>
-	업체코드  <input id="txtStoreOutSuc1">  <button id="btnStoreOutSuc">돋보기</button>  업체명 <input id="txtStoreOutSuc2" readonly><br>
-	자재코드  <input id="txtStoreOutRsc1">  <button id="btnStoreOutRsc">돋보기</button>  자재명 <input id="txtStoreOutRsc2" readonly><br>
+	업체명 <input id="txtStoreOutSuc2" readonly>	업체코드  <input id="txtStoreOutSuc1">  <button id="btnStoreOutSuc">돋보기</button><br>
+	자재명 <input id="txtStoreOutRsc2" readonly>	자재코드  <input id="txtStoreOutRsc1">  <button id="btnStoreOutRsc">돋보기</button>	<br>
 	<div id="dialog-form-Out-rsc" title="자재 검색"></div>
 	<div id="dialog-form-Out-suc" title="업체 검색"></div>
 	<br>
@@ -158,7 +161,10 @@ $(function() {
 			   },
 			  {
 				header: '단가',
-				name: 'rscPrc'
+				name: 'rscPrc',
+				 formatter(value) {
+	                return value.value.toString().replace(/\B(?<!\.\d*)(?=(\d{3})+(?!\d))/g, ",");
+	            }
 				},
 			   {
 				 header: '업체',
@@ -190,7 +196,23 @@ $(function() {
 	const gridStoreIn = new Grid({
 		  el: document.getElementById('gridStoreIn'),
 		  data: null,
-		  columns: columnsStoreIn
+		  columns: columnsStoreIn,
+		  summary: {
+			    position: 'bottom',
+			    height: 40, 
+			    columnContent: {
+			    	istCnt: {
+			        template(summary) {
+			        	console.log(summary);
+			        	return '입고량: ' + (summary.sum*1).toString().replace(/\B(?<!\.\d*)(?=(\d{3})+(?!\d))/g, ",");
+			        }
+			      }
+			    }
+			  },
+		 		pageOptions: {
+				    useClient: true,
+				    perPage: 15
+				} 
 		});
 	
 	//조회버튼 클릭시 값 가지고 오는 거
@@ -246,7 +268,9 @@ $(function() {
 	$("#btnStoreOutRsc").on("click", function(){
 		dialogOutRsc.dialog("open");
 		$("#dialog-form-Out-rsc").load("recList2",
-				function(){console.log("로드됨")})
+				function(){
+					console.log("로드됨")
+				})
 		});
 
 	//모달창(업체조회)
@@ -263,8 +287,10 @@ $(function() {
 	
 	$("#btnStoreOutSuc").on("click", function(){
 		dialogOutSuc.dialog("open");
-		$("#dialog-form-Out-rsc").load("sucList",
-				function(){console.log("로드됨")})
+		$("#dialog-form-Out-suc").load("sucList",
+				function(){
+					console.log("로드됨")
+				})
 		});
 	
 	//그리드 
@@ -334,7 +360,23 @@ $(function() {
 	const gridStoreOut = new Grid({
 		  el: document.getElementById('gridStoreOut'),
 		  data: null,
-		  columns: columnsStoreOut
+		  columns: columnsStoreOut,
+		  summary: {
+			    position: 'bottom',
+			    height: 40, 
+			    columnContent: {
+			    	ostCnt: {
+			        template(summary) {
+			        	console.log(summary);
+			        	return '출고량: ' + (summary.sum*1).toString().replace(/\B(?<!\.\d*)(?=(\d{3})+(?!\d))/g, ",");
+			        }
+			      }
+			    }
+			  },
+	 		pageOptions: {
+			    useClient: true,
+			    perPage: 15
+			} 
 		});
 	
 	//조회버튼 클릭시 값 가지고 오는 거

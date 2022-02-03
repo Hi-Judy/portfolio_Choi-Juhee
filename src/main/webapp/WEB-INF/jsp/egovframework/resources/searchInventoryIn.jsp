@@ -53,10 +53,9 @@
 		});
 	
 	
-	//리스트에서 선택한 값 가지고 오기...$(여기 어떻게 쓰지? )
+	//리스트에서 선택한 값 가지고 오기
 	gridInvIn.on("dblclick", (ev) => {
 			grid.appendRow({});
-			console.log(grid.getRowCount());
 			grid.setValue(grid.getRowCount()-1, "rscCode", gridInvIn.getValue(ev["rowKey"],'rscCode'), false)
 			grid.setValue(grid.getRowCount()-1, "rscName", gridInvIn.getValue(ev["rowKey"],'rscName'), false)
 			grid.setValue(grid.getRowCount()-1, "rscLot", gridInvIn.getValue(ev["rowKey"],'rscLot'), false)

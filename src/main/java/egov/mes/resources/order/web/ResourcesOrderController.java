@@ -26,7 +26,7 @@ public class ResourcesOrderController {
 		return "resources/orderList.tiles";
 	}
 	
-	//발주 select
+	//발주리스트 조회 select
 	@RequestMapping("resourcesOrder")
 		public String order(Model model, ResourcesOrderVO vo) {
 		  model.addAttribute("result",true);
@@ -46,7 +46,7 @@ public class ResourcesOrderController {
 		return "resources/searchRsc";
 	}
 	
-	//발주 -> 모달창(자재면,코드,단가 등등..조회)
+	//발주 -> 모달창(자재명,코드,단가 등등..조회)
 	@RequestMapping("recList2")
 	public String recList2(Model model, ResourcesOrderVO vo) {
 		model.addAttribute("recList2", service.searchRec(vo));
@@ -84,22 +84,22 @@ public class ResourcesOrderController {
 		return "jsonView";
 	}
 	
-	//발주리스트->모달창(업체조회)
+	//발주리스트->모달창(미검사 조회)
 		@RequestMapping("searchOrderList")
 		public String orderList(Model model, ResourcesOrderVO vo) {
 			model.addAttribute("searchOrderList", service.searchResourcesOrder(vo));
-			System.out.println("=================발주리스트->모달창(업체조회)================");
+			System.out.println("=================발주리스트->모달창(미검사 조회)================");
 			return "resources/searchOrderList";
 		}
 		
-		//모달창(업체조회)
+		//모달창(미검사 조회)
 		@RequestMapping("searchResourcesOrder")
 		public String searchResourcesOrder(Model model, ResourcesOrderVO vo) {
 			model.addAttribute("result",true);
 			Map<String,Object> map = new HashMap<String,Object>();
 			map.put("contents", service.searchResourcesOrder(vo));
 			model.addAttribute("data", map);
-			System.out.println("=================모달창(업체조회)================");
+			System.out.println("=================모달창(미검사 조회)================");
 			return "jsonView";
 		}
 
