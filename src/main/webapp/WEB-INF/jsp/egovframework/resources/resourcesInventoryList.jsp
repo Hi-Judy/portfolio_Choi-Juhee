@@ -21,7 +21,8 @@
 </head>
 <body>
 	<h2>자재 LOT재고 조정 조회</h2>
-	<hr>
+	<div class="card bg-light text-dark">
+		<div class="card-body">
 	조정일자  <input id="txtInven1" type="date" data-role="datebox" data-options='{"mode": "calbox"}'>
 	~ 		<input id="txtInven2" type="date" data-role="datebox" data-options='{"mode": "calbox"}'><br>
 	자재코드  <input id="txtRsc1">  <button id="btnFindRsc">돋보기</button>  자재명 <input id="txtRsc2" readonly><br>
@@ -31,7 +32,8 @@
 	<button id="btn_reset" type="reset">초기화</button>
 
 	<button>엑셀</button>
-	<hr>	
+	</div>
+	</div>	
 	<div id="grid"></div>
 	
 <script type="text/javascript">

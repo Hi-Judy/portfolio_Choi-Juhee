@@ -19,13 +19,15 @@
 </head>
 <body>
 	<h2>자재 발주 관리</h2>
-	<div>
-		<hr>
+
+
+	<div class="card">
+		<div class="card-body">
 		<button id="btnSelectOrder">미검사 조회</button>
 		<button id="btnSaveOrder">저장</button>
 		<button id="btnAdd">추가</button>
 		<button id="btnDel">삭제</button>
-		<hr>
+		</div>
 	</div>
 	
 	<div id="dialog-form-rsc" title="자재 검색"></div>
