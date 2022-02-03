@@ -95,15 +95,7 @@ div.right {
 
    <div id="top">
       <div>
-         <!-- 탑바 왼쪽 드롭바 -->
-         <!-- <span style="margin-top: 13px; float: left;"> &nbsp;&nbsp;그룹코드
-            &nbsp; <select>
-               <option value="">공통관리</option>
-               <option value="">불량관리</option>
-         </select> 
-            </span>-->
-            
-             <span style="float: right; margin-top: 3.5px;">
+		 <span style="float: right; margin-top: 3.5px;">
             <button id="" type="button" class="btn btn btn-new"
                style="padding: 5px 30px;">리셋</button> &nbsp;&nbsp;
             <button id="BomSave" type="button" class="btn"

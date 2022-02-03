@@ -2,5 +2,85 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="egov.mes.materialmanage.dao.MaterialManageMapper">
 
+<!-- 자재 간략정보 조회 -->
+<select id="MaterialListAllFind" resultType="egov.mes.materialmanage.dao.MaterialManageVO">
+select rsc_code , FN_GET_CODE_NAME(rsc_code) AS rscName , rsc_flag
+from resources 
+</select>
+
+<!-- 자재테이블 단건조회 -->
+<select id="resSearch" resultType="egov.mes.materialmanage.dao.MaterialManageVO">
+select rsc_code ,  FN_GET_CODE_NAME(rsc_code) AS rscName , rsc_unit , rsc_prc ,rsc_man_code , suplcom_code , FN_GET_CODE_NAME(suplcom_code) AS suplcomName
+from resources
+where rsc_code = #{rscCode}
+</select>
+
+<!-- 자재 입/출고 단건조회 -->
+<select id="resStListSearch" resultType="egov.mes.materialmanage.dao.MaterialManageVO">
+select  rsc_lot , store_no , ist_cnt , store_etc 
+from resource_store
+where rsc_code = #{rscCode} AND ist_flag = 'Y'
+</select>
+
+<!-- 사원조회(자재반장만) -->
+<select id="EmpFind" resultType="egov.mes.materialmanage.dao.MaterialManageVO">
+select * 
+from Employee_info
+where dept_code = 'D002' AND  position_code = 'W003'
+</select>
+
+<select id="ClientFind" resultType="egov.mes.materialmanage.dao.MaterialManageVO">
+select * 
+from common_code
+where group_code = 'cus' AND code_desct = '구매처'
+</select>
+
+<!-- 사원정보 신규등록 -->
+<insert id="AddMat" parameterType="egov.mes.materialmanage.dao.MaterialManageVO">
+insert into resources (
+							rsc_code,
+							rsc_unit,
+							rsc_prc,
+							rsc_man_code,
+							suplcom_code,
+							rsc_flag
+						)
+				values (
+							#{rscCode},
+							#{rscUnit},
+							#{rscPrc},
+							#{rscManCode},
+							#{suplcomCode},
+							'N'	
+						)
+</insert>
+
+<insert id="AddCommon" parameterType="egov.mes.materialmanage.dao.MaterialManageVO">
+	insert into common_code (
+							code,
+							group_code,
+							code_name,
+							code_flag
+						)
+				values (
+							#{rscCode},
+							'rsc',
+							#{rscName},
+							'N'
+						)
+</insert>
+
+
+<!-- 사원정보 수정 -->
+<update id="UpdateMat" parameterType="egov.mes.materialmanage.dao.MaterialManageVO">
+	update resources
+	set
+	rsc_man_code = #{rscManCode},
+	suplcom_code = #{suplcomCode},
+	rsc_prc		 = #{rscPrc}
+	where rsc_code = #{rscCode}
+</update>
+
+
 
 </mapper>
