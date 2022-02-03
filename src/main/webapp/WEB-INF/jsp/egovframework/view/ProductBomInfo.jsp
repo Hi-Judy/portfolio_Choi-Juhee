@@ -42,31 +42,6 @@
 
 
 <style>
-div#top {
-   margin-left: 10px;
-   width: 1500px;
-   height: 50px;
-   margin-top: 30px;
-   border-top: 1px solid black;
-   border-bottom: 1px solid black;
-   background-color: ghostwhite;
-}
-
-div#productView {
-   width: 1500px;
-   margin-left: 10px;
-   margin-top: 15px;
-   border-top: 3px solid black;
-   height: 94.5px;
-   border-bottom: 1px solid black;
-}
-
-div#AA {
-   width: 1500px;
-   height: 600px;
-   margin-top: 10px; /*위에서 부터 벌어질 크기*/
-}
-
 div.left {
    margin-left: 8px;
    float: left;
@@ -81,22 +56,16 @@ div.right {
    box-sizing: border-box;
 }
 
-
-.btn {
-   border-radius: 5px;
-   background-color: white;
-   padding: 2px 15px;
-}
 </style>
 
 </head>
 <body>
 
 
-   <div id="top">
-      <div>
-		 <span style="float: right; margin-top: 3.5px;">
-            <button id="" type="button" class="btn btn btn-new"
+   <div id="top" style="height: 103px;">
+      <div style="height: 40px; margin-top: 12px;">
+		 <span style="float: right; ">
+            <button id="" type="button" class="btn"
                style="padding: 5px 30px;">리셋</button> &nbsp;&nbsp;
             <button id="BomSave" type="button" class="btn"
                style="padding: 5px 30px;">저장</button> &nbsp;&nbsp;
@@ -104,30 +73,27 @@ div.right {
                style="padding: 5px 30px;">BOM 삭제</button> &nbsp;&nbsp;
          </span>
 
-      </div>
-   </div>
-   
-   <!-- 제품정보 보여주는 div 공간 -->
-   <div id="productView">
-      <div
-         style="height: 40px; border-bottom: 1px solid black; margin-top: 5px; margin-bottom: 5px;">
-         <span>제품코드 <input id="proId" type="text" readonly>
-         </span> &nbsp;&nbsp; <span> 제품명 <input id="proName" type="text"
-            readonly>
-         </span>
-      </div>
-      <div style="height: 40px; margin-top: 7px; margin-bottom: 5px;">
-         <span>제품분류 <input id="proFlag" type="text" readonly>
-         </span> &nbsp;&nbsp; <span>생산구분 <input id="manFlag" type="text"	
-            readonly>&nbsp;
-         </span> <span>관리단위 <input id="proUnit" type="text" readonly>
-         </span>
-      </div>
-
+     
+	      <div style="margin-left: 10px;">
+	         <span>제품코드 <input id="proId" type="text" readonly>
+	         </span> &nbsp;&nbsp; <span> 제품명 <input id="proName" type="text"
+	            readonly>
+	         </span>
+	   	  </div>
+	      
+	      <div style="height: 40px; margin-top: 15px; margin-bottom: 5px; margin-left: 10px;">
+	         <span>제품분류 <input id="proFlag" type="text" readonly>
+	         </span> &nbsp;&nbsp; <span>생산구분 <input id="manFlag" type="text"	
+	            readonly>&nbsp;
+	         </span> 
+	         <span>관리단위 <input id="proUnit" type="text" readonly></span>
+	      </div>
+	
+	   </div>
    </div>
 
    <br>
-   <div id="AA">
+   <div id=OverallSize>
       <div class="left">
          <span style="font-size: 1.5em; color: blue"> 사용자재 관리 </span>
           <span style="float: right; margin-top: 5px; color: rgb(158, 158, 158);">

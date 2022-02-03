@@ -64,7 +64,7 @@ public class ManProcessServiceImpl implements ManProcessService {
 		return mapper.updateFirstProc(processVO);
 	}
 	
-	
+	/*
 	//스케쥴러
 	@Scheduled(fixedDelay=10000) //10초마다 실행된다(10000). 5초마다 실행된다.(5000)
 	public void selectProcessTimer() { // 주기적으로 실행될 processTimer
@@ -160,7 +160,7 @@ public class ManProcessServiceImpl implements ManProcessService {
 		}
 		
 	}
-
+	*/
 	//생산지시서 조회
 	@Override
 	public List<ManProcessVO> selectCommand(ManProcessVO processVO) {
