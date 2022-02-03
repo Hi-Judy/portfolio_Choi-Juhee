@@ -41,7 +41,7 @@
 			<option value="미생산완료">미생산완료</option>
 		</select>
 		<span>고객명 :  </span><input id="txtCusName" readonly>
-		<span>고객코드 : </span><input id="txtCusCode"><button type="button" id="btnSearch">고객코드검색</button>
+		<span>고객코드 : </span><input id="txtCusCode">&nbsp;<button type="button" id="btnSearch">고객코드검색</button>
 		<br><br>
 		<span>접수일자 : </span><input id="ordDateStart" type="date"><span> ~ </span><input id="ordDateEnd" type="date">
 		<span>납기일자 : </span><input id="dueDateStart" type="date"><span> ~ </span><input id="dueDateEnd" type="date">
@@ -196,12 +196,16 @@
 		{
 			header : '접수일' ,
 			name : 'ordDate' ,
-			align: 'center'
+			align: 'center',
+		    sortable: true,
+		    sortingType: 'desc'
 		} ,
 		{
 			header : '납기일' ,
 			name : 'ordDuedate' , 
-			align: 'center'
+			align: 'center',
+		    sortable: true,
+		    sortingType: 'desc'
 		}
 	] ;
 	
@@ -422,7 +426,9 @@
 			align: 'center',
 			formatter(value) {
 				return value.value.toString().replace(/\B(?<!\.\d*)(?=(\d{3})+(?!\d))/g, ",") ;
-			}
+			},
+		    sortable: true,
+		    sortingType: 'desc'
 		} ,
 		{
 			header : '재고량' ,
@@ -430,7 +436,9 @@
 			align: 'center',
 			formatter(value) {
 				return value.value.toString().replace(/\B(?<!\.\d*)(?=(\d{3})+(?!\d))/g, ",") ;
-			}
+			},
+		    sortable: true,
+		    sortingType: 'desc'
 		}
 	] ;
 	
