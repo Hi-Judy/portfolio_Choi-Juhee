@@ -58,5 +58,9 @@ public class ManCommandVO {
 	String outputDay; //일 생산량
 
 	
+	//사원
+	String empId; //사번
+	String empName; //사원 이름
+	String etc; //부서명
 	
 }

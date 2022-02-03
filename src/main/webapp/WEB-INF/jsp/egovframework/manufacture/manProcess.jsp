@@ -55,6 +55,12 @@
 		<br>
 
 	</div>
+	
+	<div >
+		<p style="display: inline-block;">생산지시번호</p>
+		<p id="comCode" style="display: inline-block;"></p>
+		<br>
+	</div>
 	<br>
 
 	<!-- 생산지시서 조회 모달 -->
@@ -94,7 +100,6 @@
 			buttons : {
 				"확인" : function() {
 					console.log("확인 테스트");
-					checkedCommand
 					
 					fetch("${pageContext.request.contextPath}/selectProcess/"+checkedCommand[0].podtCode)
 					.then((response) => response.json())
@@ -110,6 +115,7 @@
 						document.getElementById("manDate").innerHTML = mandate
 						document.getElementById("podtCode").innerHTML = data.data.contents[0].podtCode
 						document.getElementById("podtName").innerHTML = data.data.contents[0].podtName
+						document.getElementById("comCode").innerHTML = data.data.contents[0].comCode
 					})
 					
 					dialogCommand.dialog("close");
@@ -206,16 +212,20 @@
 				name : 'procName'
 			}, 
 			{
+				header : '지시량',
+				name : 'manGoalPerday'
+			}, 
+			{
+				header : '작업완료량',
+				name : 'manQnt'
+			}, 
+			{
 				header : '시작시간',
-				name : 'manStartTime'
+				name : 'manStarttime'
 			}, 
 			{
 				header : '종료시간',
-				name : 'manEndTime'
-			},
-			{
-				header : '불량갯수',
-				name : 'defQnt'
+				name : 'manEndtime'
 			}
 		]
 		
@@ -228,139 +238,62 @@
 		})
 		
 		
-		//******************************PROC 스위치******************************
-		var cnt = 0;	
-		function switchcase(procno){
-			switch(procno) {
-			 case 'PROC001' : proc1(); break;
-			 case 'PROC002' : proc2(); break;
-			 case 'PROC003' : proc3(); break;
-			 case 'PROC004' : proc4(); break;
-			 case 'PROC005' : proc5(); break;
-			 case 'PROC006' : proc6(); break;
-			 case 'PROC007' : proc7(); break;
-			 case 'PROC008' : proc8(); break;
-			 case 'PROC009' : proc9(); break;
-			 case 'PROC010' : proc10(); break;
-			 case 'PROC011' : proc11(); break;
-			}
-		}
 		
 		//******************************공정시작 버튼******************************
+		let processData;
+		
 		$("#btnStart").click(function(){
 			console.log('공정시작버튼 클릭');
-			proc1(); //1공정 함수 호출 -> 1공정 함수 안에서 다음 공정으로 넘어가도록 설정
+			console.log(document.getElementById("podtCode").innerHTML);
+			
+			$.ajax({ //시작버튼 클릭 -> 제품에 해당하는 공정 조회 -> 그 공정갯수만큼 진행공정 테이블에 insert
+				url: '${pageContext.request.contextPath}/selectProc',
+				method: 'POST',
+				data : JSON.stringify( 
+						{'podtCode' : document.getElementById("podtCode").innerHTML , 
+						 'comCode': document.getElementById("comCode").innerHTML} 
+						),
+				dataType: 'JSON',
+				contentType: 'application/json',
+				success: function(datas){
+					console.log("진행공정 테이블 값 추가 성공");
+					resetProcess();
+					
+				},
+				error: function(reject){
+					console.log(reject)
+				}
+			})
+			
+			
 		})
 		
-		function proc1(){ //1공정
-			setTimeout(function() {
-				console.log('1공정 끝');
-				console.log(gridProcess.getValue(1,'procCode')); 
-				
-				let nextProc = gridProcess.getValue(1,'procCode'); //다음 단계 공정 코드 가져오기
-				procno = nextProc;
-				switchcase(procno);
-			}, 1800); //1.8초 뒤에 다음 공정 실행
+		
+		//******************************생산현황 화면 reset******************************
+		function resetProcess(){
+			fetch('${pageContext.request.contextPath}/selectProcList',{
+				method: "POST",
+				headers: {
+					"Content-Type": "application/json" //json으로 포맷설정.
+				},
+				body: JSON.stringify(
+					{'comCode' : document.getElementById("comCode").innerHTML } //vo에 담긴 필드명 : 실제 들어갈 값
+				)
+			})
+			.then((response) => response.json())
+			.then((data)=> {
+				console.log(data.result);
+				gridProcess.resetData(data.result) //파싱한 결과 = data
+				gridProcess.refreshLayout();
+				resetProcess(); //재귀함수
+			})
+			
+			
 		}
 		
-		function proc2(){ //2공정
-			setTimeout(function() {
-				console.log('2공정 끝');
-				console.log(gridProcess.getValue(2,'procCode')); 
-				
-				let nextProc = gridProcess.getValue(2,'procCode'); //다음 단계 공정 코드 가져오기
-				procno = nextProc;
-				switchcase(procno);
-			}, 1800);
-		}
 		
-		function proc3(){ //3공정
-			setTimeout(function() {
-				console.log('2공정 끝');
-				console.log(gridProcess.getValue(2,'procCode')); 
-				
-				let nextProc = gridProcess.getValue(2,'procCode'); //다음 단계 공정 코드 가져오기
-				procno = nextProc;
-				switchcase(procno);
-			}, 1800);
-		}
 		
-		function proc4(){ //4공정
-			setTimeout(function() {
-				console.log('2공정 끝');
-				console.log(gridProcess.getValue(2,'procCode')); 
-				
-				let nextProc = gridProcess.getValue(2,'procCode'); //다음 단계 공정 코드 가져오기
-				procno = nextProc;
-				switchcase(procno);
-			}, 9000);
-		}
 		
-		function proc5(){ //5공정
-			setTimeout(function() {
-				console.log('2공정 끝');
-				console.log(gridProcess.getValue(2,'procCode')); 
-				
-				let nextProc = gridProcess.getValue(2,'procCode'); //다음 단계 공정 코드 가져오기
-				procno = nextProc;
-				switchcase(procno);
-			}, 3000);
-		}
-		
-		function proc6(){ //6공정
-			setTimeout(function() {
-				console.log('2공정 끝');
-				console.log(gridProcess.getValue(2,'procCode')); 
-				
-				let nextProc = gridProcess.getValue(2,'procCode'); //다음 단계 공정 코드 가져오기
-				procno = nextProc;
-				switchcase(procno);
-			}, 3000);
-		}
-		
-		function proc7(){ //7공정
-			setTimeout(function() {
-				console.log('2공정 끝');
-				console.log(gridProcess.getValue(2,'procCode')); 
-				
-				let nextProc = gridProcess.getValue(2,'procCode'); //다음 단계 공정 코드 가져오기
-				procno = nextProc;
-				switchcase(procno);
-			}, 3000);
-		}
-		
-		function proc8(){ //8공정
-			setTimeout(function() {
-				console.log('2공정 끝');
-				console.log(gridProcess.getValue(2,'procCode')); 
-				
-				let nextProc = gridProcess.getValue(2,'procCode'); //다음 단계 공정 코드 가져오기
-				procno = nextProc;
-				switchcase(procno);
-			}, 3000);
-		}
-		
-		function proc9(){ //9공정
-			setTimeout(function() {
-				console.log('2공정 끝');
-				console.log(gridProcess.getValue(2,'procCode')); 
-				
-				let nextProc = gridProcess.getValue(2,'procCode'); //다음 단계 공정 코드 가져오기
-				procno = nextProc;
-				switchcase(procno);
-			}, 3000);
-		}
-		
-		function proc10(){ //10공정
-			setTimeout(function() {
-				console.log('2공정 끝');
-				console.log(gridProcess.getValue(2,'procCode')); 
-				
-				let nextProc = gridProcess.getValue(2,'procCode'); //다음 단계 공정 코드 가져오기
-				procno = nextProc;
-				switchcase(procno);
-			}, 3000);
-		}
 	</script>
 
 </body>

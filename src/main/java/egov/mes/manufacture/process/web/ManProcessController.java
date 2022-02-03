@@ -27,7 +27,28 @@ public class ManProcessController {
 		return "manufacture/manProcess.tiles";
 	}
 	
-	//공정현황 조회
+	//브라우저 화면에 보여줄 진행공정 테이블
+	@PostMapping("/selectProcList")
+	public String selectProcList(@RequestBody ManProcessVO processVO, Model model ) {
+		model.addAttribute("result", service.selectSumManQnt(processVO));
+		System.out.println("브라우저 화면에 보여줄 진행공정 테이블 TEST");
+		return "jsonView";
+	}
+	
+	
+	//제품에 해당하는 공정 조회
+	@PostMapping("/selectProc")
+	public String selectProc(@RequestBody ManProcessVO processVO, Model model) {
+		//System.out.println("제품에 해당하는 공정 조회: "+ service.selectProc(processVO));
+		ManProcessVO vo = service.selectProc(processVO); //insert 하는 impl 메소드
+		model.addAttribute("result", vo);
+		
+		service.updateFirstProc(vo); //insert 하는 impl 메소드 끝 -> update 메소드 부른다.
+		return "jsonView";
+	}
+	
+	
+	//지시된 제품에 해당하는 공정 조회
 	@GetMapping("/selectProcess/{podtCode}")
 	public String selectedCommand(@PathVariable String podtCode,
 								  ManProcessVO processVO,

@@ -60,6 +60,11 @@
 	</div>
 	<br>
 
+	<!-- 사번 조회 모달 -->
+	<div id="dialog-form-emp" title="사번 조회">
+		<div id="gridEmp"></div>
+	</div>
+
 	<!-- 자재&설비 조회 -->
 	<div>
 		<p style="display: inline-block;">제품코드</p>
@@ -82,10 +87,10 @@
 
 	<!-- 자재조회 그리드 -->
 	<div>자재</div>
-	<div id="gridResource" class="col-sm-6" style="float: left; margin-right: 2%;"></div>
+	<div id="gridResource" class="col-sm-6" style="float: left; margin-right: 2%"></div>
 
 	<!-- 자재LOT 조회 그리드 -->
-	<div id="gridResLOT" class="col-sm-5" style="float: left; margin-right: 6%;"></div>
+	<div id="gridResLOT" class="col-sm-5" style="float: left; margin-right: 6%"></div>
 
 
 	<!-- 설비조회 그리드 -->
@@ -132,7 +137,7 @@
 				border : 'red'
 			}
 		});
-
+		
 		
 		
 		//******************************생산계획 모달******************************
@@ -146,19 +151,19 @@
 				"확인" : function() { //확인 버튼 눌렀을 때 체크된 값에 해당하는 데이터를 gridMain에 뿌려준다.
 					//console.log("확인 테스트");
 					//console.log(checkedPlanDetail[0].planNoDetail);
-					$.ajax({
-						url : '${pageContext.request.contextPath}/selectManPlanDetail/'
-								+ checkedPlanDetail[0].planNoDetail,
-						method : 'GET',
-						dataType : 'JSON',
-						success : function(datas) {
-							//console.log(datas);
-							gridMain.resetData(datas.data.contents);
-							gridInsertCommand.resetData(datas.data.contents);
-							girdUpdatePlanStatus.resetData(datas.data.contents);
-						}
-					})
-							
+					$
+							.ajax({
+								url : '${pageContext.request.contextPath}/selectManPlanDetail/'
+										+ checkedPlanDetail[0].planNoDetail,
+								method : 'GET',
+								dataType : 'JSON',
+								success : function(datas) {
+									//console.log(datas);
+									gridMain.resetData(datas.data.contents);
+									gridInsertCommand.resetData(datas.data.contents);
+									girdUpdatePlanStatus.resetData(datas.data.contents);
+								}
+							})
 					dialogManPlan.dialog("close");
 				},
 
@@ -187,8 +192,9 @@
 				name : 'manPlanName'
 			} ,
 			{
-				header : '계획디테일번호',
+				header : '생산계획디테일번호',
 				name : 'planNoDetail'
+				
 			} 
 		]
 
@@ -199,7 +205,7 @@
 
 		//생산계획 조회 버튼 클릭
 		$('#btnSearchManPlan').click(function() {
-			console.log('생산계획조회 테스트');
+			//console.log('생산계획조회 테스트');
 
 			let planFromDate = document.querySelector('#planFromDate').value;
 			let planToDate = document.querySelector('#planToDate').value;
@@ -216,8 +222,7 @@
 					'planToDate' : planToDate
 				},
 				dataType : 'JSON',
-				success : function(datas) { //datas = model
-					console.log(datas);
+				success : function(datas) {
 					data = datas;
 					gridManPlan.resetData(data.result);
 					gridManPlan.resetOriginData();
@@ -288,12 +293,8 @@
 				header : '사번',
 				name : 'empId',
 				editor : 'text'
-			}, 
-			{
-				header : '비고',
-				name : 'manEtc',
-				editor : 'text'
-			} 
+			}
+			
 		]
 
 		//메인 그리드 데이터
@@ -332,6 +333,84 @@
 			}
 			
 			
+		})
+		
+		
+		//******************************사원조회 그리드******************************
+		//메인그리드의 사원 컬럼 클릭
+		gridMain.on('click', function(ev){
+			console.log(gridMain.getValue(ev["rowKey"], "empId"));
+			
+			if(ev["columnName"] == "empId" && gridMain.getValue(ev["rowKey"], "empId") == null){
+				dialogEmp.dialog("open");
+			}
+			
+			fetch("${pageContext.request.contextPath}/selectEmp")
+			.then((response) => response.json())
+			.then((data)=>{
+				console.log(data.data.contents);
+				
+				
+				gridEmp.resetData(data.data.contents)
+				gridEmp.refreshLayout();
+		
+			})
+			
+		})		
+		
+		
+		//******************************사원조회 모달******************************
+		//사원조회 모달 설정
+		let dialogEmp = $("#dialog-form-emp").dialog({
+			autoOpen : false,
+			modal : true,
+			height : 500,
+			width : 900,
+			buttons : {
+				"확인" : function() { //확인 버튼 눌렀을 때 체크된 값에 해당하는 데이터를 gridMain에 뿌려준다.
+					console.log("확인 테스트");
+					//console.log(checkedEmp);
+					//console.log(checkedEmp[0].empId);
+					gridMain.setValue(0, 'empId', checkedEmp[0].empId)
+					dialogEmp.dialog("close");
+				},
+							
+				"취소" : function() {
+					dialogEmp.dialog("close");
+				}
+			}
+		})
+		
+		//사원조회 모달 컬럼
+		const columnsEmp = [
+			{
+				header : '사번',
+				name : 'empId'
+			}, 
+			{
+				header : '이름',
+				name : 'empName'
+			}, 
+			{
+				header : '부서',
+				name : 'etc'
+			}
+		]		
+		
+		//사원조회 그리드 내용
+		let gridEmp = new Grid({
+			el : document.getElementById('gridEmp'),
+			data : null,
+			columns : columnsEmp,
+			rowHeaders : [ 'checkbox' ]
+		})
+		
+		//사원조회 그리드에서 체크된 계획
+		let checkedEmp;
+		
+		//사원조회 그리드에서 체크된 행
+		gridEmp.on('check', function(ev) {
+			checkedEmp = gridEmp.getCheckedRows();
 		})
 
 		
@@ -513,14 +592,14 @@
 			checkedResLot = gridResLOT.getCheckedRows();
 			console.log(gridResource.getValue(ev.rowKey, 'resCode'));
 
-			let resCode = gridResource.getValue(ev.rowKey, 'resCode');
+			let podtCode = gridResource.getValue(ev.rowKey, 'podtCode');
 			//dialogResLOT.dialog("open");
 
 			$.ajax({
 				url : '${pageContext.request.contextPath}/selectResLot',
 				method : 'POST',
 				data : {
-					'resCode' : resCode
+					'podtCode' : podtCode
 				},
 				dataType : 'JSON',
 				success : function(datas) {
@@ -707,8 +786,8 @@
 				name : 'ordDuedate'
 			},
 			{
-				header : '비고',
-				name : 'manEtc'
+				header : '사원',
+				name : 'empId'
 			}
 		]
 		
@@ -725,6 +804,10 @@
 		//******************************자재 테이블에 값 추가 히든 그리드******************************
 		//자재테이블 값 추가 히든 그리드 컬럼
 		let columnsUpdateRes = [
+			{
+				header : '자재코드',
+				name : 'resCode'
+			},
 			{
 				header : '자재로트',
 				name : 'rscLot'

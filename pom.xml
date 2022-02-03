@@ -64,6 +64,7 @@
 	</repositories>
 
 	<dependencies>
+		
 		<dependency>
 			<groupId>egovframework.rte</groupId>
 			<artifactId>egovframework.rte.ptl.mvc</artifactId>
