@@ -49,8 +49,9 @@
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.7.1/font/bootstrap-icons.css">
 <style>
 	.tui-is-selected {
-		background : #007b88 ;
+		background : #007b88 !important;
 		background-color : #007b88 !important;	
+		border : #007b88 !important;
 	}
 </style>
 </head>
