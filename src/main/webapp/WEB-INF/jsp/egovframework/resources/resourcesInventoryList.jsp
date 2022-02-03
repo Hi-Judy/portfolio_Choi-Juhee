@@ -9,7 +9,9 @@
 <link rel="stylesheet" href="https://uicdn.toast.com/tui.date-picker/latest/tui-date-picker.css" />
 <link rel="stylesheet" href="//code.jquery.com/ui/1.13.0/themes/base/jquery-ui.css">
 <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">
+<link rel="stylesheet" href="https://uicdn.toast.com/tui.pagination/latest/tui-pagination.css" />
 
+<script type="text/javascript" src="https://uicdn.toast.com/tui.pagination/v3.4.0/tui-pagination.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p" crossorigin="anonymous"></script>
 <script src="https://uicdn.toast.com/tui.date-picker/latest/tui-date-picker.js"></script>
 <script src="https://uicdn.toast.com/tui-grid/latest/tui-grid.js"></script>
@@ -134,7 +136,29 @@
 	const grid = new Grid({
 		  el: document.getElementById('grid'),
 		  data: null,
-		  columns: columns
+		  columns: columns,
+		  pageOptions: {
+			    useClient: true,
+			    perPage: 15
+			},
+			summary: {
+			    position: 'bottom',
+			    height: 40, 
+			    columnContent: {
+			    	istCnt: {
+			        template(summary) {
+			        	console.log(summary);
+			        	return '입고량: ' + (summary.sum*1).toString().replace(/\B(?<!\.\d*)(?=(\d{3})+(?!\d))/g, ",");
+			        }
+			      },
+			      ostCnt: {
+				        template(summary) {
+				        	console.log(summary);
+				        	return '출고량: ' + (summary.sum*1).toString().replace(/\B(?<!\.\d*)(?=(\d{3})+(?!\d))/g, ",");
+				        }
+				      },
+			    	}
+			  },
 		});
 
 	//조회버튼 클릭시 값 가지고 오는 거

@@ -8,7 +8,12 @@
 </head>
 <body>
 
-<div id="gridRsc"></div>
+<div id="gridRsc">
+	&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+	<input id=""><button>검색</button>
+	<br>
+	&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+</div>
 <script type="text/javascript">
 
 	//자재 발주 페이지에서 사용
@@ -51,6 +56,7 @@
 		var rscCode = gridRsc.getValue(ev["rowKey"],'rscCode');
 		var rscName = gridRsc.getValue(ev["rowKey"],'rscName');
 		clickRsc(rscCode, rscName)
+		clickRsc2(rscCode, rscName)
 	});
 
 
