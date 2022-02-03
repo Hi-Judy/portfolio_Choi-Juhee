@@ -119,7 +119,10 @@ $( function() {
 				},
 				{
 				  header: '재고',
-				  name: 'rscCnt'
+				  name: 'rscCnt',
+				  formatter(value) {
+		          	return value.value.toString().replace(/\B(?<!\.\d*)(?=(\d{3})+(?!\d))/g, ",");
+		          }
 				},
 				{
 				  header: '미달량',
