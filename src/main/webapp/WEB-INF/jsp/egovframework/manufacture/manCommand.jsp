@@ -60,6 +60,11 @@
 	</div>
 	<br>
 
+	<!-- 사번 조회 모달 -->
+	<div id="dialog-form-emp" title="사번 조회">
+		<div id="gridEmp"></div>
+	</div>
+
 	<!-- 자재&설비 조회 -->
 	<div>
 		<p style="display: inline-block;">제품코드</p>
@@ -112,6 +117,9 @@
 	
 	<!-- 자재 테이블에 출고량, 생산지시디테일 번호 추가 히든 그리드 -->
 	<div id="gridUpdateRes"></div>
+	
+	<!-- 생산 자재 LOT 테이블에 값 추가 히든 그리드 -->
+	<div id="gridInsertLot"></div>
 
 	<script>
 		var Grid = tui.Grid; //그리드 객체 생성
@@ -129,7 +137,7 @@
 				border : 'red'
 			}
 		});
-
+		
 		
 		
 		//******************************생산계획 모달******************************
@@ -182,6 +190,11 @@
 			{
 				header : '생산계획명',
 				name : 'manPlanName'
+			} ,
+			{
+				header : '생산계획디테일번호',
+				name : 'planNoDetail'
+				
 			} 
 		]
 
@@ -280,12 +293,8 @@
 				header : '사번',
 				name : 'empId',
 				editor : 'text'
-			}, 
-			{
-				header : '비고',
-				name : 'manEtc',
-				editor : 'text'
-			} 
+			}
+			
 		]
 
 		//메인 그리드 데이터
@@ -320,10 +329,88 @@
 			let a = gridMain.getValue(0,'manGoalPerday'); //메인 그리드의 일 목표 생산량의 값
 
 			for (i of r){
-				gridResource.setValue(i.rowKey, 'resUsage', i.resUsage*1*a);
+				gridResource.setValue(i.rowKey, 'resUsage', (i.resUsage*1*a)/100);
 			}
 			
 			
+		})
+		
+		
+		//******************************사원조회 그리드******************************
+		//메인그리드의 사원 컬럼 클릭
+		gridMain.on('click', function(ev){
+			console.log(gridMain.getValue(ev["rowKey"], "empId"));
+			
+			if(ev["columnName"] == "empId" && gridMain.getValue(ev["rowKey"], "empId") == null){
+				dialogEmp.dialog("open");
+			}
+			
+			fetch("${pageContext.request.contextPath}/selectEmp")
+			.then((response) => response.json())
+			.then((data)=>{
+				console.log(data.data.contents);
+				
+				
+				gridEmp.resetData(data.data.contents)
+				gridEmp.refreshLayout();
+		
+			})
+			
+		})		
+		
+		
+		//******************************사원조회 모달******************************
+		//사원조회 모달 설정
+		let dialogEmp = $("#dialog-form-emp").dialog({
+			autoOpen : false,
+			modal : true,
+			height : 500,
+			width : 900,
+			buttons : {
+				"확인" : function() { //확인 버튼 눌렀을 때 체크된 값에 해당하는 데이터를 gridMain에 뿌려준다.
+					console.log("확인 테스트");
+					//console.log(checkedEmp);
+					//console.log(checkedEmp[0].empId);
+					gridMain.setValue(0, 'empId', checkedEmp[0].empId)
+					dialogEmp.dialog("close");
+				},
+							
+				"취소" : function() {
+					dialogEmp.dialog("close");
+				}
+			}
+		})
+		
+		//사원조회 모달 컬럼
+		const columnsEmp = [
+			{
+				header : '사번',
+				name : 'empId'
+			}, 
+			{
+				header : '이름',
+				name : 'empName'
+			}, 
+			{
+				header : '부서',
+				name : 'etc'
+			}
+		]		
+		
+		//사원조회 그리드 내용
+		let gridEmp = new Grid({
+			el : document.getElementById('gridEmp'),
+			data : null,
+			columns : columnsEmp,
+			rowHeaders : [ 'checkbox' ]
+		})
+		
+		//사원조회 그리드에서 체크된 계획
+		let checkedEmp;
+		
+		//사원조회 그리드에서 체크된 행
+		gridEmp.on('check', function(ev) {
+			checkedEmp = gridEmp.getCheckedRows();
 		})
 
 		
@@ -505,14 +592,14 @@
 			checkedResLot = gridResLOT.getCheckedRows();
 			console.log(gridResource.getValue(ev.rowKey, 'resCode'));
 
-			let resCode = gridResource.getValue(ev.rowKey, 'resCode');
+			let podtCode = gridResource.getValue(ev.rowKey, 'podtCode');
 			//dialogResLOT.dialog("open");
 
 			$.ajax({
 				url : '${pageContext.request.contextPath}/selectResLot',
 				method : 'POST',
 				data : {
-					'resCode' : resCode
+					'podtCode' : podtCode
 				},
 				dataType : 'JSON',
 				success : function(datas) {
@@ -521,6 +608,7 @@
 					gridResLOT.resetData(resLotData.result);
 					gridResLOT.resetOriginData();
 					gridUpdateRes.resetData(resLotData.result);
+					gridInsertLot.resetData(resLotData.result);
 					console.log(resLotData.result);
 
 				},
@@ -698,8 +786,8 @@
 				name : 'ordDuedate'
 			},
 			{
-				header : '비고',
-				name : 'manEtc'
+				header : '사원',
+				name : 'empId'
 			}
 		]
 		
@@ -716,6 +804,10 @@
 		//******************************자재 테이블에 값 추가 히든 그리드******************************
 		//자재테이블 값 추가 히든 그리드 컬럼
 		let columnsUpdateRes = [
+			{
+				header : '자재코드',
+				name : 'resCode'
+			},
 			{
 				header : '자재로트',
 				name : 'rscLot'
@@ -765,6 +857,28 @@
 		
 		
 		
+		//******************************자재 LOT 테이블에 값 추가 히든 그리드******************************
+		//자재 LOT 테이블 값 추가 히든그리드 컬럼
+		let columnsInsertLot = [
+			{
+				header : '생산지시번호',
+				name : 'comCode'
+			},
+			{
+				header : '자재 LOT',
+				name : 'rscLot'
+			}
+		]
+		
+		//자재LOT 테이블 값추가 히든그리드 내용
+		let gridInsertLot = new Grid({
+			el : document.getElementById('gridInsertLot'),
+			data : null,
+			columns : columnsInsertLot,
+			rowHeaders : [ 'rowNum' ]
+		})
+		
+		
 
 		//******************************버튼 클릭 이벤트******************************
 		//초기화 버튼 이벤트
@@ -793,6 +907,7 @@
 			a.commandDetail = gridInsertCommandDetail.getData();
 			a.res = gridUpdateRes.getData();
 			a.plan = girdUpdatePlanStatus.getData();
+			a.resLot = gridInsertLot.getData();
 			
 			console.log(a);
 			

@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 
 import egov.mes.manufacture.command.dao.ManCommandVO;
 import egov.mes.manufacture.command.service.ManCommandService;
+import egov.mes.manufacture.process.dao.ManProcessVO;
 
 @Controller
 public class ManCommandController {
@@ -26,6 +27,24 @@ public class ManCommandController {
 	public String selectCommand() {
 		return "manufacture/manCommand.tiles";
 	}
+	
+	//사원조회
+	@GetMapping("/selectEmp")
+	public String selectEmp(ManCommandVO commandVO,Model model) {
+		Map<String, List<ManCommandVO>> maps = new HashMap<>();
+		maps.put("contents", service.selectEmp(commandVO));
+		
+		Map<String, Object> map = new HashMap<>();
+		map.put("data", maps);
+		
+		model.addAttribute("result", true);
+		model.addAttribute("data", maps);
+		
+		System.out.println("사원조회 : "+ service.selectEmp(commandVO));
+		
+		return "jsonView";
+	}
+								  
 	
 	//히든그리드 가져오기
 	@PostMapping("/hidden")
@@ -79,7 +98,7 @@ public class ManCommandController {
 	@PostMapping("/selectManPlan")
 	public String selectManPlan(ManCommandVO commandVO, Model model) {
 		model.addAttribute("result", service.selectManPlan(commandVO));
-		//System.out.println("생산계획 조회: " + service.selectManPlan(commandVO));
+		System.out.println("생산계획 조회: " + service.selectManPlan(commandVO));
 		
 		return "jsonView";
 	}

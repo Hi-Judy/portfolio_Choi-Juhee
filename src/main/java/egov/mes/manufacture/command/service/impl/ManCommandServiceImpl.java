@@ -21,7 +21,8 @@ public class ManCommandServiceImpl implements ManCommandService{
 	//지시가 없는 생산계획 디테일 조회(생산지시 관리 페이지)
 	@Override
 	public List<ManCommandVO> selectManPlan(ManCommandVO commandVO) {
-		return mapper.selectCommand(commandVO);
+		System.out.println("TEST!!!!!!!: "+mapper.selectManPlan(commandVO));
+		return mapper.selectManPlan(commandVO);
 	}
 
 	//생산계획 디테일 상세 조회(생산지시서 관리 페이지)
@@ -104,13 +105,28 @@ public class ManCommandServiceImpl implements ManCommandService{
 		voList = (commandVO.get("res"));
 		
 		if(voList.size() != 0) { //VO에 담긴 자재코드에 값이 있으면
+			
 			for(ManCommandVO vo : voList) {//VO에 담긴 자재코드 갯수 만큼 for문. 안에서 쿼리돌기
 				vo.setComCode(resSeq);
 				System.out.println("자재테이블 추가: " + voList);
-
+				
 				mapper.insertRes(vo);
 			}
+		}
 		
+		//자재 LOT에 값 추가
+		String resLotSeq = ( ( mapper.selectResSeq() ) ); //자재에서 쓸 생산지시 디테일 번호
+		
+		List<ManCommandVO> resList = new ArrayList<>();
+		resList = (commandVO.get("resLot"));
+		
+		if(resList.size() != 0) {
+			for(ManCommandVO resVO : resList) {
+				resVO.setComCode(resLotSeq);
+				System.out.println("자재 LOT 테이블 값 추가: "+ resList);
+				
+				mapper.insertLot(resVO);
+			}
 		}
 		
 		return 0;
@@ -121,6 +137,12 @@ public class ManCommandServiceImpl implements ManCommandService{
 	@Override
 	public List<ManCommandVO> selectCommand(ManCommandVO commandVO) {
 		return mapper.selectCommand(commandVO);
+	}
+
+	//사원조회
+	@Override
+	public List<ManCommandVO> selectEmp(ManCommandVO commandVO) {
+		return mapper.selectEmp(commandVO);
 	}
 	
 	

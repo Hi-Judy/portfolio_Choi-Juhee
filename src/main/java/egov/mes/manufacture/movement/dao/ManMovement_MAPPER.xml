@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="egov.mes.manufacture.movement.dao.ManMovementMapper">
+
+<!-- 생산지시조회 -->
+<select id="selectCommand" resultType="egov.mes.manufacture.movement.dao.ManMovementVO">
+	select COM_CODE, PODT_CODE, prod_detail(PODT_CODE) as podtName, MAN_STARTDATE, COM_ETC
+	from manufacture_command_d
+	where podt_code = #{podtCode}
+	and com_etc='지시완료'
+</select>
+
+
+</mapper>

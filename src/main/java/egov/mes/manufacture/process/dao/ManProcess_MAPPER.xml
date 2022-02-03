@@ -1,0 +1,287 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="egov.mes.manufacture.process.dao.ManProcessMapper">
+
+<!-- 스케쥴러 종료 -->
+<update id="updateEndTime">
+	update manufacture_process
+	set man_endTime= sysdate
+	where proc_code = #{procCode}
+	and com_code = #{comCode}
+</update>
+
+<!-- 인덱스 최대값 -->
+<select id="selectIndexMax" resultType="int">
+	select max(PROC_INDEX) 
+     from process_flowInfo 
+     where podt_code = #{podtCode}
+     and proc_Code = #{procCode}
+</select>
+
+
+<!-- 현재 내공정의 인덱스 -->
+<select id="selectIndexNow" resultType="int">
+	 select PROC_INDEX 
+     from process_flowInfo 
+     where podt_code = #{podtCode}
+     and proc_Code = #{procCode}                                       
+</select>
+
+
+<!-- 다음 공정의 시작날짜 조회 -->
+<select id="selectNextProc" resultType="egov.mes.manufacture.process.dao.ManProcessVO">
+	select nvl(to_char(man_starttime),0) as manStarttime, proc_code, com_code
+    from manufacture_process
+    where proc_code = (select DISTINCT PROC_CODE 
+                       from process_flowInfo 
+                       where proc_index = ( select PROC_INDEX 
+                                            from process_flowInfo 
+                                            where podt_code = #{podtCode}
+                                            and proc_Code = #{procCode}) +1
+                        and podt_code = #{podtCode}                               
+                       )
+    and com_code = #{comCode}
+</select>
+
+
+<!-- 현재 공정의 시작날짜를 update -->
+<update id="updateNowProc">
+	update manufacture_process
+	set man_starttime = sysdate
+	where proc_code = #{procCode}
+	and com_code = #{comCode}
+</update>
+
+
+<!-- 현재공정조회 -->
+<select id="selectProcNow" resultType="string">
+	select man_starttime
+	from manufacture_process
+	where proc_code = #{procCode}
+	and com_code = #{comCode}
+</select>
+
+
+<!-- 첫 번째 공정만 시작시간을 sysdate로 업데이트 -->
+<update id="updateFirstProc">
+	update manufacture_process 
+	set man_starttime = sysdate
+	where proc_code = 'PROC001'
+	and com_code = #{comCode}
+</update>
+
+
+<!-- 업데이트할 공정의 시작날짜를 select -->
+<select id="SelectStartTime">
+	select man_startTime 
+	from manufacture_process
+	where com_code = #{comCode}
+</select>
+
+
+<!-- 브라우저 화면에 보여줄 진행공정 테이블 -->
+<select id="selectProcList" resultType="egov.mes.manufacture.process.dao.ManProcessVO">
+	select c.man_startTime as manStarttime, c.man_endTime as manEndtime, c.man_qnt,
+           d.fac_code, prod_detail(d.fac_code) as facName, 
+           d.proc_code, prod_detail(d.proc_code) as procName,
+           e.man_goalperday as manGoalPerday
+	from manufacture_process c join (select a.fac_no, a.fac_code,
+                                            b.proc_code
+	                                 from facility_status a join facility_process b
+	                                 on a.fac_no = b.fac_no
+	                                 where a.fac_status='Y') d
+	on c.proc_code = d.proc_code
+	join manufacture_command_d e
+	on c.podt_Code = e.podt_code
+	where c.com_Code = #{comCode}
+	
+	group by c.man_startTime, c.man_endTime, c.man_qnt, d.fac_code, d.proc_code, e.man_goalperday
+	order by d.proc_Code
+</select>
+
+
+<!-- 작업완료량 합계 -->
+<select id="selectSumManQnt" resultType="string">
+	select nvl(sum(man_qnt),0) as manQnt
+	from manufacture_process
+	where com_Code = #{comCode}
+</select>
+
+
+<!-- 앞공정의 생산수량 유무 확인 -->
+<select id="selectPreManQnt" resultType="egov.mes.manufacture.process.dao.ManProcessVO">
+	<!-- select rownuma, proc_code, nvl(man_qnt,0) as manQnt
+	from ( select f.*
+	       from ( select rownum rownuma,a.* 
+	           	  from ( select proc_code,nvl(man_qnt,0) as man_qnt,podt_code 
+	                	 from manufacture_process 
+	                	 where podt_code = #{podtCode} 
+	                	 order by proc_code
+	           			) a	
+	           	) f	
+	     ) e     		
+	where rownuma = ( select d.rownumd 
+					  from ( select rownum rownumd, b.* 
+							 from ( select c.* 
+							 		from ( select proc_code, nvl(man_qnt,0) as man_qnt ,podt_code 
+							 			   from manufacture_process 
+							 			   order by proc_code
+							 			 ) c 
+        						  ) b
+    					    ) d 
+    				  where proc_code= #{procCode}
+					) -1 -->
+	
+	select p.man_qnt 
+    from manufacture_process p 
+    where  1=1                
+    and  p.proc_code = (                 
+                        select DISTINCT proc_code 
+                        from process_flowInfo
+                        where proc_index= (                                       
+                                           select proc_index                                
+                                           from process_flowInfo                    
+                                           where podt_Code =#{podtCode}                                         
+                                           and proc_code = #{procCode}                     
+                                          ) -1                                                      
+                         and proc_code = substr(#{procCode},1,4)||lpad(substr(#{procCode},5,3)-1,3,'0')                                                                        
+                        )                                                                                     
+    and com_code =  (                                                                                             
+                     select COM_CODE                                                                                        
+                     from manufacture_command_d                                                                           
+                     where podt_code = #{podtCode}                                                                                       
+                    )                                                                                          
+                                                              
+</select>
+
+
+<!-- 진행공정 테이블에 insert -->
+<insert id="insertProcess">
+	insert into manufacture_process (MAN_NO, 
+									 PROC_CODE , 
+									 COM_CODE, 
+									 MAN_STARTTIME,
+									 MAN_ENDTIME , 
+									 MAN_GOALQNT ,
+									 MAN_QNT , 
+									 PODT_CODE , 
+									 EMP_NO, 
+									 MAN_DATE)
+	values ( (select 'PR'||
+          	  to_Char(Sysdate, 'yyMMdd') || 
+          	  (lpad( (select SUBSTR( nvl (max(man_no),'PR' || to_char(sysdate, 'yyMMdd') || '000'),9,3) 
+          	  		  from manufacture_process) +1,3,'0')) 
+          	  as manNo from dual),
+			#{procCode},
+			(select com_code from manufacture_command_d where podt_code = #{podtCode}),
+			null,
+			null,
+			(select man_goalperday from manufacture_command_d where podt_code = #{podtCode}),
+			null,
+			#{podtCode},
+			null,
+			(select man_startdate from manufacture_command_d where com_code = (select com_code from manufacture_command_d where podt_code = #{podtCode}))
+	)
+	
+</insert>
+
+
+<!-- 10초가 지났을 때 작업완료량 update -->
+<update id="updateSecondQnt">
+	update manufacture_process 
+	set man_qnt = to_number(#{manQnt})
+	where proc_code = #{procCode}
+	and com_code = #{comCode}
+</update>
+
+
+<!-- 해당 공정의 10초당 생산량 -->
+<select id="selectSecondQnt" resultType="egov.mes.manufacture.process.dao.ManProcessVO">
+	select  DISTINCT trunc(((a.fac_output/a.fac_runtime)/60)/6) as qntPer10Second
+    from facility_status a join facility_process b
+    on a.fac_no = b.fac_no
+    where a.fac_status='Y'
+    and b.proc_code = #{procCode}
+</select>
+
+
+<!-- 10초당 생산량 조회 -->
+<select id="qntPer10Second" resultType="egov.mes.manufacture.process.dao.ManProcessVO">
+	select a.fac_no, a.fac_code, trunc(((a.fac_output/a.fac_runtime)/60)/6) as qntPer10Second, 
+	          b.proc_code
+	from facility_status a join facility_process b
+	on a.fac_no = b.fac_no
+	where a.fac_status='Y'
+</select>
+
+
+<!-- 주기적으로 진행공정 테이블을 조회 -->
+<select id="selectProcTable" resultType="egov.mes.manufacture.process.dao.ManProcessVO">
+	select MAN_NO, 
+		   PROC_CODE, 
+		   COM_CODE , 
+		   MAN_STARTTIME , 
+		   MAN_ENDTIME, 
+		   MAN_GOALQNT, 
+		   nvl(MAN_QNT,0) as manQnt,
+		   PODT_CODE, 
+		   EMP_NO, 
+		   MAN_DATE
+	from manufacture_process 
+	where man_starttime is not null 
+	and MAN_ENDTIME is null
+	order by proc_Code
+	
+</select>
+
+
+<!-- 제품에 해당하는 공정 조회 -->
+<select id="selectProc" resultType="egov.mes.manufacture.process.dao.ManProcessVO">
+	select a.proc_code, b.com_code
+	from process_flowInfo a join manufacture_command_d b
+    on a.podt_code = b.podt_code
+	where a.podt_code = #{podtCode}
+	order by a.proc_index
+</select>
+
+
+<!-- 지시된 제품에 해당하는 공정 조회 -->
+<select id="selectProcess" resultType="egov.mes.manufacture.process.dao.ManProcessVO">
+	select c.podt_code, prod_detail(c.podt_code) as podtName, c.proc_index,
+           d.fac_code, prod_detail(d.fac_code) as facName, 
+           d.proc_code, prod_detail(d.proc_code) as procName,
+           e.com_code, e.man_goalperday as manGoalPerday
+	from process_flowInfo c join ( select a.fac_no, a.fac_code,
+	                                      b.proc_code
+                                   from facility_status a join facility_process b
+                                   on a.fac_no = b.fac_no
+                                   where a.fac_status='Y') d
+	on c.proc_code = d.proc_code
+    join manufacture_command_d e
+    on c.podt_Code = e.podt_code
+	where c.podt_code = #{podtCode}
+	group by c.podt_code, d.fac_code,  d.proc_code, e.man_goalperday, c.proc_index, e.com_code
+	order by c.proc_index
+</select>
+
+
+<!-- 생산지시조회 -->
+<select id="selectCommand" resultType="egov.mes.manufacture.process.dao.ManProcessVO">
+	select podt_code, prod_detail(podt_code) podtName, 
+		   man_startdate, man_goalperday, com_code
+	from man_command_view
+	where man_startdate = to_date(#{manStartDate}, 'rr/MM/dd')
+</select>
+
+
+<!-- 조회된 생산지시 -->
+<!-- <select id="selectedCommand" resultType="egov.mes.manufacture.process.dao.ManProcessVO" >
+	select podt_code, prod_detail(podt_code) podtName, 
+		   man_startdate, man_goalperday, com_code
+	from man_command_view
+	where com_code = #{comCode}
+</select>
+ -->
+
+</mapper>

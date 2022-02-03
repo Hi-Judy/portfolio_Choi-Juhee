@@ -7,6 +7,9 @@ import egov.mes.manufacture.command.dao.ManCommandVO;
 
 public interface ManCommandService {
 	
+	//사원조회
+	List<ManCommandVO> selectEmp(ManCommandVO commandVO);
+	
 	//생산지시서 조회(지시서 조회 페이지)
 	List<ManCommandVO> selectCommand(ManCommandVO commandVO);
 		
