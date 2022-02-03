@@ -127,8 +127,6 @@ div.right {
 
 		<div class="right">
 			<br>
-			
-
 			<div style="border-top: 2px solid black;">
 				<div style="height: 40px; border-bottom: 1px solid black; margin-top: 5px; margin-bottom: 5px;">
 			        <span> 자재코드 <input id="rscCode" type="text" > </span> &nbsp;&nbsp; 
