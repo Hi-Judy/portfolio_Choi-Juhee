@@ -48,6 +48,13 @@ public class MaterialManageServiceImpl implements MaterialManageService {
 		return mapper.ClientFind();
 	}
 	
+	//월별자재재고 조회
+	@Override
+	public List<MaterialManageVO> MonthlyInventory( String RscCode ) {
+		
+		return mapper.MonthlyInventory(RscCode);
+	}
+	
 	
 	//자재 신규등록
 	@Override
@@ -69,6 +76,8 @@ public class MaterialManageServiceImpl implements MaterialManageService {
 		
 		mapper.UpdateMat(matVO);
 	}
+
+
 	
 
 

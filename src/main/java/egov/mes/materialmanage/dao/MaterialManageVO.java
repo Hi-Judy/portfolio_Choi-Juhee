@@ -32,5 +32,14 @@ public class MaterialManageVO {
 	String code;		//업체코드
 	String codeName;	//업체명
 	String codeEtc;		//업체 비고
+	
+	//자재 월별재고 조회 관련
+	String month;		//월
+	String matInto;		//입고
+	String matOut;		//출고	
+	String checkInto;	//정산입고
+	String checkOut;	//정산출고
+	String matReturn;	//반품
+	String matSum;		//현재고량
 
 }

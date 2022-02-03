@@ -27,13 +27,13 @@
 <script src="https://uicdn.toast.com/grid/latest/tui-grid.js"></script>
 </head>
 <body>
-	<div id="help" align="right"><button type="button" id="helpBtn">도움말</button></div>
+	<div id="help" align="right"><button type="button" id="helpBtn"><span class="bi bi-patch-question"></span></button></div>
 	<br>
 	<div id="title" align="center"><h2>고객 관리</h2></div>
 	<br>
 	<div id="info">
 		<span>고객명 :  </span><input id="txtCusName" readonly> 
-		<span>고객코드 : </span><input id="txtCusCode"><button type="button" id="btnSearch">고객코드검색</button>
+		<span>고객코드 : </span><input id="txtCusCode">&nbsp;<button type="button" id="btnSearch">고객코드검색</button>
 		<br>		
 		<div align="right">
 			<button type="button" id="listBtn">조회</button>
@@ -86,7 +86,9 @@
 					]
 				}
 			} ,
-			align: 'center'
+			align: 'center',
+		    sortable: true,
+		    sortingType: 'desc'
 		} ,
 		{
 			header : '고객구분' ,
@@ -99,7 +101,9 @@
 			header: '업체명' ,
 			name: 'codeName' ,
 			editor: 'text' ,
-			align: 'center'
+			align: 'center',
+		    sortable: true,
+		    sortingType: 'desc'
 		} ,
 		{
 			header: '연락처' ,

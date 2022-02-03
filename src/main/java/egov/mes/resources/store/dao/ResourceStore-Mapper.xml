@@ -195,7 +195,7 @@
 				ORDER BY STORE_DATE
 	</select>
 	
-	<!-- 자재재고 조회 -->
+	<!-- 자재 LOT별재고 조회 -->
 	<select id="resourceStoreInventory" resultType="egov.mes.resources.store.dao.ResourcesStoreVO">
 		SELECT  RSC_LOT , 
 		        SUM(IST_CNT) AS IST_CNT,
@@ -231,6 +231,7 @@
 		LEFT JOIN resource_store S
 		ON R.RSC_CODE = S.RSC_CODE
 		WHERE CODE LIKE '%' || 'RSC' || '%'
+        AND CODE_FLAG = 'Y'
 		GROUP BY C.CODE,C.CODE_NAME,FN_GET_RSC_PRC(C.CODE),FN_GET_RSC_UNIT(C.CODE),FN_GET_CODE_NAME(R.SUPLCOM_CODE)
 		ORDER BY C.CODE
 	</select>

@@ -29,13 +29,17 @@
 			 header: '단위',
 			 name: 'rscUnit'
 			},
+
 			 {
 			  header: '발주량',
 			  name: 'rscCnt'
 			},
 			{
 			 header: '합계',
-			 name: 'rscTotal'
+			 name: 'rscTotal',
+				formatter(value) {
+	                return value.value.toString().replace(/\B(?<!\.\d*)(?=(\d{3})+(?!\d))/g, ",");
+	            }
 			},
 			{
 			 header: '발주일',
@@ -61,11 +65,13 @@
 	var gridOrder = new Grid({
 		  el: document.getElementById('gridOrder'),
 		  data: dataSourceOrder,
-		  columns: columnsOrder
+		  columns: columnsOrder,
+		  rowHeaders: ['checkbox'],
 		});
 	
-	//리스트에서 선택한 값 가지고 오기...$(여기 어떻게 쓰지? )
-	gridOrder.on("dblclick", (ev) => {
+	
+	//리스트에서 선택한 값 가지고 오기
+	gridOrder.on("check", (ev) => {
 		//grid.appendRow({'rscCode':gridOrder.getValue(ev["rowKey"],'rscCode'),
 						//'rscName':gridOrder.getValue(ev["rowKey"],'rscName'),
 						//'rscUnit':gridOrder.getValue(ev["rowKey"],'rscUnit'),
@@ -75,8 +81,7 @@
 						//'istReqDate':gridOrder.getValue(ev["rowKey"],'istReqDate')
 						//});
 		let ordrNo = gridOrder.getValue(ev["rowKey"],'ordrNo');
-		console.log(ordrNo);
-		clickOrder(ordrNo)
+		clickOrder(ordrNo);
 	});
 </script>
 </body>

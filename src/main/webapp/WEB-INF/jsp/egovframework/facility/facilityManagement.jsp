@@ -33,7 +33,7 @@
 	<br>
 	<div id="info">
 		<span>설비명 :  </span><input id="txtFacName" readonly>
-		<span>설비코드 : </span><input id="txtfacCode"><button type="button" id="btnSearch">설비코드검색</button>
+		<span>설비코드 : </span><input id="txtfacCode">&nbsp;<button type="button" id="btnSearch">설비코드검색</button>
 		<br><br>
 		<span>설비상태 : </span>
 		<select id="selectStatus">
@@ -86,7 +86,9 @@
 			header : '설비번호' ,
 			name : 'facNo' ,
 			align: 'center' ,
-			width : 70
+			width : 80,
+		    sortable: true,
+		    sortingType: 'desc'
 		} ,
 		{
 			header : '설비코드' ,
@@ -137,7 +139,9 @@
 				}
 			} ,
 			align: 'center' ,
-			width : 90
+			width : 90,
+		    sortable: true,
+		    sortingType: 'desc'
 		} ,
 		{
 			header : '공정코드' ,

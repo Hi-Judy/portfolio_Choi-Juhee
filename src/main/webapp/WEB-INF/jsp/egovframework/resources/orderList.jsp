@@ -9,7 +9,9 @@
 <link rel="stylesheet" href="https://uicdn.toast.com/tui.date-picker/latest/tui-date-picker.css" />
 <link rel="stylesheet" href="//code.jquery.com/ui/1.13.0/themes/base/jquery-ui.css">
 <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">
+<link rel="stylesheet" href="https://uicdn.toast.com/tui.pagination/latest/tui-pagination.css" />
 
+<script type="text/javascript" src="https://uicdn.toast.com/tui.pagination/v3.4.0/tui-pagination.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p" crossorigin="anonymous"></script>
 <script src="https://uicdn.toast.com/tui.date-picker/latest/tui-date-picker.js"></script>
 <script src="https://uicdn.toast.com/tui-grid/latest/tui-grid.js"></script>
@@ -22,8 +24,8 @@
 	<hr>
 	발주일자  <input id="txtOrde1" type="date" data-role="datebox" data-options='{"mode": "calbox"}'>
 	~ 		<input id="txtOrde2" type="date" data-role="datebox" data-options='{"mode": "calbox"}'><br>
-	업체코드  <input id="txtSuc1">  <button id="btnFindSuc">돋보기</button>  업체명 <input id="txtSuc2" readonly><br>
-	자재코드  <input id="txtRsc1">  <button id="btnFindRsc">돋보기</button>  자재명 <input id="txtRsc2" readonly><br>
+	업체명 <input id="txtSuc2" readonly>	업체코드  <input id="txtSuc1">  <button id="btnFindSuc">돋보기</button><br>
+	자재명 <input id="txtRsc2" readonly>	자재코드  <input id="txtRsc1">  <button id="btnFindRsc">돋보기</button><br>
 	<div id="dialog-form-rsc" title="자재 검색"></div>
 	<div id="dialog-form-suc" title="업체 검색"></div>
 	<br>
@@ -51,7 +53,6 @@
 		$("#txtRsc2").val('');
 	})
 	
-	
 	//모달창(자재조회)
 	function clickRsc(rscCode, rscName){
 		$("#txtRsc1").val(rscCode);
@@ -62,8 +63,13 @@
 	let dialog1 = $( "#dialog-form-rsc" ).dialog({
 			autoOpen: false,
 			modal: true,
-			heigth : 500,
-			width : 900,
+			width : 600 ,
+			height : 600,
+			buttons: {
+				"닫기" : function() {
+					dialog1.dialog("close") ;
+				}
+			},
 		});
 	
 	$("#btnFindRsc").on("click", function(){
@@ -89,8 +95,10 @@
 	$("#btnFindSuc").on("click", function(){
 			dialog2.dialog("open");
 		$("#dialog-form-suc").load("sucList",
-				function(){console.log("로드됨")})
-		});
+				function(){
+					console.log("로드됨")
+					})
+			});
 
 	//그리드 
 	var Grid = tui.Grid;
@@ -127,7 +135,10 @@
 			   },
 			  {
 				header: '발주량',
-				name: 'rscCnt'
+				name: 'rscCnt',
+				formatter(value) {
+	                return value.value.toString().replace(/\B(?<!\.\d*)(?=(\d{3})+(?!\d))/g, ",");
+	            }
 			   },
 			   {
 				 header: '입고량',
@@ -165,7 +176,34 @@
 	const grid = new Grid({
 		  el: document.getElementById('grid'),
 		  data: null,
-		  columns
+		  columns,
+		  summary: {
+			    position: 'bottom',
+			    height: 40, 
+			    columnContent: {
+			    	rscCnt: {
+			        template(summary) {
+			        	console.log(summary);
+			        	return '발주량: ' + (summary.sum*1).toString().replace(/\B(?<!\.\d*)(?=(\d{3})+(?!\d))/g, ",");
+			        }
+			      },
+			      rscPassCnt: {
+				        template(summary) {
+				        	console.log(summary);
+				        	return '입고량: ' + (summary.sum*1).toString().replace(/\B(?<!\.\d*)(?=(\d{3})+(?!\d))/g, ",");
+				        }
+				      },
+				      rscDefCnt: {
+					    template(summary) {
+					       return '불량량: ' + (summary.sum*1).toString().replace(/\B(?<!\.\d*)(?=(\d{3})+(?!\d))/g, ",");
+					    }
+					}, 
+			    }
+			  },
+			  pageOptions: {
+				    useClient: true,
+				    perPage: 15
+				}
 		});
 	
 	//엑셀버튼 클릭시 파일로 저장
