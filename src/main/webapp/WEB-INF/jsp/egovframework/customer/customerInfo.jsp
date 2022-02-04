@@ -25,40 +25,28 @@
 <link rel="stylesheet" href="//code.jquery.com/ui/1.13.0/themes/base/jquery-ui.css">
 
 <script src="https://uicdn.toast.com/grid/latest/tui-grid.js"></script>
-<style>
-	.bi-question-circle {
-		font-size : 50px ;
-		width : 50px ;
-		height : 50px ;
-	}
-	
-	.bi-search {
-		font-size : 25px ;
-		width : 25px ;
-		height : 25px ;
-	}
-</style>
 </head>
 <body>
-	<div id="help" align="right"><button type="button" id="helpBtn" style="border : none; background-color : white; padding-right : 30px; color : #007b88;"><i class="bi bi-question-circle"></i></button></div>
+	<div id="help" align="right" style="width : 1500px ;"><button type="button" id="helpBtn" style="border : none; background-color : white; color : #007b88; float : right ;"><i class="bi bi-question-circle"></i></button></div>
 	<br>
-	<div id="title" align="center"><h2>고객 관리</h2></div>
-	<br>
-	<div id="info">
-		<span>고객명 :  </span><input id="txtCusName" readonly> 
-		<span>고객코드 : </span><input id="txtCusCode">&nbsp;<button type="button" id="btnSearch" style="border : none; background-color : white; color : #007b88;"><i class="bi bi-search"></i></button>
-		<br>		
-		<div align="right">
-			<button type="button" id="listBtn">조회</button>
-			<button type="button" id="btnAdd">추가</button>
-			<button type="button" id="btnDelete">삭제</button>
-			<button type="button" id="btnInsert">저장</button>
-			<button type="button" id="clearBtn">초기화</button>
-		</div>
+	<div id="title" style="margin-left : 10px;"><h3 style="color : #054148; font-weight : bold">고객 관리</h3></div>	
+	<div id="top" style="height : 110px; padding : 10px;">
+		<span style="margin : 20px;">고객명</span><input id="txtCusName" style="margin-top : 10px;" readonly> 
+		<span style="margin : 20px;">고객코드</span><input id="txtCusCode">&nbsp;<button type="button" id="btnSearch" style="border : none; background-color : #f8f8ff; color : #007b88;"><i class="bi bi-search"></i></button>		
+		<br>
+		<button type="button" id="clearBtn" class="btn" style="float : right; margin : 5px;">초기화</button>
+		<button type="button" id="btnInsert" class="btn" style="float : right; margin : 5px;">저장</button>
+		<button type="button" id="btnDelete" class="btn" style="float : right; margin : 5px;">삭제</button>
+		<button type="button" id="btnAdd" class="btn" style="float : right; margin : 5px;">추가</button>
+		<button type="button" id="listBtn" class="btn" style="float : right; margin : 5px;">조회</button>
+	</div>
+	
+	<div id="OverallSize" style="margin-left : 10px;">
+		<div id="info"></div>
 	</div>
 	
 	<div id="findCustomer" title="고객검색"">
-		<input id="cusName"><button id="btnCusSearch">검색</button>
+		<input id="cusName">&nbsp;<button id="btnCusSearch" class="btn">검색</button>
 		<div id="cusResult"></div>
 	</div>
 	

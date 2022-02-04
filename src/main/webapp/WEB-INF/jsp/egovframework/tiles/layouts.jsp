@@ -82,6 +82,12 @@ div#OverallSize {
    padding: 2px 15px;
    padding: 5px 30px;
 }
+/* 도움말 버튼 */
+.bi-question-circle {
+	font-size : 25px ;
+	width : 25px ;
+	height : 25px ;
+}
 </style>
 </head>
 <body>

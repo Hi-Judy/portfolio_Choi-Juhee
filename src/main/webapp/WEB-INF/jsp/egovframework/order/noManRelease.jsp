@@ -27,24 +27,26 @@
 <script src="https://uicdn.toast.com/grid/latest/tui-grid.js"></script>
 </head>
 <body>
-	<div id="help" align="right"><button type="button" id="helpBtn">도움말</button></div>
+	<div id="help" align="right" style="width : 1500px ;"><button type="button" id="helpBtn" style="border : none; background-color : white; color : #007b88; float : right ;"><i class="bi bi-question-circle"></i></button></div>
 	<br>
-	<div id="title" align="center"><h2>미생산 출하 조회</h2></div>
-	<br>
-	<div id="info">
-		<span>납기일자 : </span><input id="dueDateStart" type="date"><span> ~ </span><input id="dueDateEnd" type="date">
+	<div id="title" style="margin-left : 10px;"><h3 style="color : #054148; font-weight : bold">미생산 출하 조회</h3></div>
+	
+	<div id="top" style="height : 160px; padding : 10px;">
+		<span style="margin : 20px;">납기일자</span><input id="dueDateStart" type="date" style="margin-top : 10px;"><span> ~ </span><input id="dueDateEnd" type="date">
 		<br><br>
-		<span>고객명 :  </span><input id="txtCusName" readonly>
-		<span>고객코드 : </span><input id="txtCusCode"><button type="button" id="btnSearch2">고객코드검색</button>
+		<span style="margin : 20px;">고객명</span><input id="txtCusName" style="margin-left : 15px;" readonly>
+		<span style="margin : 20px;">고객코드</span><input id="txtCusCode">&nbsp;<button type="button" id="btnSearch2" class="btn">고객코드검색</button>
 		<br>
-		<div align="right">
-			<button type="button" id="listBtn">조회</button>
-			<button type="button" id="clearBtn">초기화</button>
-		</div>
+		<button type="button" id="clearBtn" class="btn" style="float : right; margin : 5px;">초기화</button>
+		<button type="button" id="listBtn" class="btn" style="float : right; margin : 5px;">조회</button>
+	</div>
+	
+	<div id="OverallSize" style="margin-left : 10px;">
+		<div id="info"></div>
 	</div>
 	
 	<div id="findCustomer" title="고객검색"">
-		<input id="cusName"><button id="btnCusSearch">검색</button>
+		<input id="cusName">&nbsp;<button id="btnCusSearch" class="btn">검색</button>
 		<div id="cusResult"></div>
 	</div>
 	
