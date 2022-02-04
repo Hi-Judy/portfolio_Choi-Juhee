@@ -5,44 +5,7 @@
 <html lang="ko" dir="ltr">
 <head>
 <meta charset="utf-8">
-<title>HTML CSS Left Right Split</title>
-<!-- 토스트그리드 cdn -->
-<link rel="stylesheet"
-   href="https://uicdn.toast.com/tui-grid/latest/tui-grid.css" />
-
-<!-- 토스트 그리드 위에 데이트피커 가 선언되어야 작동이 된다 (순서가중요) -->
-<link rel="stylesheet"
-   href="https://uicdn.toast.com/tui.date-picker/latest/tui-date-picker.css" />
-<script
-   src="https://uicdn.toast.com/tui.date-picker/latest/tui-date-picker.js"></script>
-   
-<!-- 토스트 그래프 -->
-<link rel="stylesheet" href="https://uicdn.toast.com/chart/latest/toastui-chart.min.css" />
-<script src="https://uicdn.toast.com/chart/latest/toastui-chart.min.js"></script>
-
-<!-- 토스트그리드 cdn -->
-<script src="https://uicdn.toast.com/tui-grid/latest/tui-grid.js"></script>
-<script src="https://code.jquery.com/jquery-3.6.0.js"></script>
-
-<!-- toastr css라이브러리 -->
-<link rel="stylesheet" type="text/css"
-   href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.css" />
-<!-- toastr cdn 라이브러리 둘다 제이쿼리 밑에 있어야함 -->
-<script type="text/javascript"
-   src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
-
-<link rel="stylesheet"
-   href="https://uicdn.toast.com/grid/latest/tui-grid.css" />
-
-<!-- 모달창 만들떄 필요한 ui 라이브러리 -->
-<script src="https://code.jquery.com/ui/1.13.0/jquery-ui.js"></script>
-<link rel="stylesheet"
-   href="//code.jquery.com/ui/1.13.0/themes/base/jquery-ui.css">
-
-<script src="https://uicdn.toast.com/grid/latest/tui-grid.js"></script>
-
-<!-- 부트스트랩 cdn 링크 -->
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.7.1/font/bootstrap-icons.css">
+<title>자재정보 관리</title>
 
 <style>
 
@@ -75,16 +38,28 @@ div.right {
 	background-color: #d2e5eb; 
 }
 
+span.ui-dialog-title {
+	text-align: center;
+}
+
 
 
 </style>
 
 </head>
 <body>
+	<div style="width : 1500px ;">
+		<span style="float: right;">
+			<button type="button" id="helpBtn" style="border : none; background-color : white; color : #007b88; float : right ;">
+			<i class="bi bi-question-circle"></i>
+			</button>
+		</span>
+		<h4 style="margin-left: 10px">자재정보 관리</h4>
+	</div>
 
 	<div id="top">
 		<div>
-			<span style="margin-top: 13px; float: left;"> &nbsp;&nbsp;자재정보관리
+			<span style="margin-top: 13px; float: left;">
 			</span> 
 			<span style="float: right; margin-top: 4.5px;">
 				<button id="ResetBtn" type="button" class="btn" >새자료</button> &nbsp;&nbsp;
@@ -95,7 +70,7 @@ div.right {
 		</div>
 	</div>
 
-	<div id="OverallSize">
+	<div id="OverallSize" style="margin-left: 10px;">
 		<div class="left">
 			<span color="blue"> 코드 </span>
 			<br>
@@ -108,25 +83,28 @@ div.right {
 			<div style="border-top: 2px solid black;">
 				<div style="height: 40px; border-bottom: 1px solid black; margin-top: 5px; margin-bottom: 5px;">
 			        <span> 자재코드 <input id="rscCode" type="text" > </span> &nbsp;&nbsp; 
-			        <span> 자재명 &nbsp;&nbsp; <input id="rscName" type="text" > </span>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <span> 자재명 &nbsp;&nbsp;&nbsp; <input id="rscName" type="text" > </span>
 			    </div>
 			      
 			    <div style="height: 40px; border-bottom: 1px solid black; margin-top: 5px; margin-bottom: 5px;">
-			         <span>관리단위 <input id="rscUnit" type="text" > </span> &nbsp;&nbsp; 
-			         <span>담당관리자 <input  type="text" readonly>
-				         <button id="rscManCode" type="button" class="btn-secondary" >
-				         	<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-search" viewBox="0 0 16 16">
-							  <path d="M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398h-.001c.03.04.062.078.098.115l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.85-3.85a1.007 1.007 0 0 0-.115-.1zM12 6.5a5.5 5.5 0 1 1-11 0 5.5 5.5 0 0 1 11 0z"/>
-							</svg>
+			           <span>관리단위 <input id="rscUnit" type="text" > </span> &nbsp;&nbsp; 
+&nbsp;&nbsp;&nbsp;&nbsp;<span>담당관리자 <input id="rscManCodeInp" type="text" readonly>
+				         <button type="button" id="rscManCode" style="border : none; background-color :#f2f7ff; color : #007b88;">
+				         	<i class="bi bi-search"></i>
 				         </button>
 			          </span> &nbsp;&nbsp;
-					 <span>안전재고량 <input id="" type="text" > </span> 
+					 <!-- <span>안전재고량 &nbsp;<input id="" type="text" > </span>  -->
 			    </div>
 			    
 			    <div style="height: 40px; border-bottom: 1px solid black; margin-top: 5px; margin-bottom: 5px;">
-			         <span>입고업체 <input id="suplcomCode" type="text" readonly> </span> &nbsp;&nbsp; 
+			         <span>
+			         입고업체 <input id="suplcomCodeInp" type="text" readonly>
+			          <button type="button" id="suplcomCode" style="border : none; background-color : #f2f7ff; color : #007b88;">
+				         	<i class="bi bi-search"></i>
+				       </button>
+			         </span> &nbsp;&nbsp; 
 			         <span>업체명 &nbsp;&nbsp; <input id="suplcomName" class="inpBC" type="text" readonly> </span> &nbsp;&nbsp; 
-			    	 <span>입고단가 <input id="rscPrc"  type="text" > </span> 
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span>입고단가 &nbsp;&nbsp; <input id="rscPrc"  type="text" > </span> 
 			    </div>
 			    
 			    <div style="width: 100%;">
@@ -147,16 +125,16 @@ div.right {
 		<input id="ModalCheck" style=" float: right;" class="btn" type="button" value="확인">
 	</div>
 	
-	<div id="ClientModal" tite="거래처 목록">
+	<div id="ClientModal" title="거래처 목록">
 		<div id="ClientGrid"></div>
 		<hr>
 		<input id="ClientGridCheck" style=" float: right;" class="btn" type="button" value="확인">
 	</div>
 	
-	<div id="MatInvenModal" tite="월별 자재재고 조회">
+	<div id="MatInvenModal" title="월별 자재재고 조회">
 		<div id="MatInvenGrid"></div>
 		<hr>
-		<input id="" style=" float: right;" class="btn" type="button" value="확인">
+		<input id="MatInvenModalCheck" style=" float: right;" class="btn" type="button" value="확인">
 	</div>
 </body>
 
@@ -182,10 +160,10 @@ toastr.options = {
       }
 //옵션세팅
 themesOptions = { 
-            selection: {    background: 'blue',     border: '#004082'  },//  <- 클릭한 셀 색상변경 border(테두리색) , background (백그라운드)
+            selection: {    background: '#007b88',     border: '#004082'  },//  <- 클릭한 셀 색상변경 border(테두리색) , background (백그라운드)
             scrollbar: {    background: '#f5f5f5',  thumb: '#d9d9d9',  active: '#c1c1c1'    }, //<- 그리드 스크롤바 옵션
             row: {    
-                hover: {    background: '#007b8833'  }// <-마우스 올라갔을떄 한row 에 색상넣기
+                hover: {    background: '#ccc'  }// <-마우스 올라갔을떄 한row 에 색상넣기
             },
             cell: {   // <- 셀클릭했을떄 조건들 주는것이다.
                 normal: {   background: '#fbfbfb',  border: '#e0e0e0',  showVerticalBorder: true    },// <- showVerticalBorder : 세로(아래,위) 테두리가 보이는지 여부
@@ -264,8 +242,8 @@ $.ajax({
 		var	rcName	 	= document.getElementById("rscName") 	 //자재명
 		var rcUnit		= document.getElementById("rscUnit") 	 //관리단위
 		var rcPrc		= document.getElementById("rscPrc")		 //자재 입고단가
-		var rcManCode	= document.getElementById("rscManCode")  //담당 관리자 코드
-		var spcCode 	= document.getElementById("suplcomCode") //입고업체코드
+		var rcManCode	= document.getElementById("rscManCodeInp")  //담당 관리자 코드
+		var spcCode 	= document.getElementById("suplcomCodeInp") //입고업체코드
 		var spcName		= document.getElementById("suplcomName") //입고업체명
       Grid.on('click' , (ev) => {
 		
@@ -307,32 +285,10 @@ $.ajax({
     			Grid2.resetData(FindData);
     			Grid2.resetOriginData();
     			
-    			var Test = new Array();
-    			var TTT ;
-    			MatInvenData = rsts.MatInven;
-    			for(let Outside = 1 ; Outside<13 ; Outside++){
 
-	    			for(let a = 0 ; a<MatInvenData.length ; a++){
-	    					console.log(MatInvenData[a].matSum)
-		    			MatInvenData.forEach((rst) => {
-		    				console.log(rst)
-		    				TTT = {
-		    					Carryover : MatInvenData[a].matSum,
-		    					month : rst.month ,
-		    					matInto : rst.matInto ,
-		    					matOut : rst.matOut ,
-		    					checkInto : rst.checkInto ,
-		    					checkOut : rst.checkOut ,
-		    					matReturn : rst.matReturn , 
-		    					matSum : rst.matSum
-		    				}
-		    				Test.push(TTT);
-		    			})
-	    			}
-    			}
-    			
-    			console.log(Test)
-    			
+    			MatInvenData = rsts.MatInven;
+    			console.log(MatInvenData);
+
     			if(FindData.length == 0){
     				toastr["warning"]("LOT 미할당 자재입니다"); 
     			}
@@ -359,7 +315,7 @@ $.ajax({
 		  data : MatInvenData ,
 		  columns : [
 			 { header : '월'			, name : 'month'   		, align : 'center' 	},
-			 { header : '이월량'		, name : 'Carryover'   	, align : 'center' 	},
+			 { header : '이월량'		, name : 'carryOver'   	, align : 'center' 	},
 		     { header : '입고'		, name : 'matInto'   	, align : 'center' 	},
 		     { header : '출고'		, name : 'matOut'   	, align : 'center' 	},
 		     { header : '정산입고'		, name : 'checkInto'   	, align : 'center' 	},
@@ -510,8 +466,8 @@ ClientGrid.on('click' , (ev) => {
 })	
 
 ClientGridCheck.addEventListener('click' , () => {
-	suplcomCode.value = "";
-	suplcomCode.value = ClientCode;
+	suplcomCodeInp.value = "";
+	suplcomCodeInp.value = ClientCode;
 	suplcomName.value = "";
 	suplcomName.value = ClientName
 	ClientModal.dialog( "close" ) ;
@@ -520,11 +476,21 @@ ClientGridCheck.addEventListener('click' , () => {
 
 //--------- 월별 자재재고 조회 ------------
 MatInvenBtn.addEventListener('click' , () => {
+	Getclass = document.getElementById("rscCode").classList.item(0);
+	console.log(Getclass);
+	if(Getclass == "inpBC"){
+		MatInvenGrid.resetData(MatInvenData);
+		MatInvenGrid.resetOriginData();
+		MatInvenModal.dialog( "open" )
+		MatInvenGrid.refreshLayout() ;
+	}else{
+		toastr["warning"]("선택된 자재가 없습니다"); 
+	}
+	
+})
 
-	MatInvenGrid.resetData(MatInvenData);
-	MatInvenGrid.resetOriginData();
-	MatInvenModal.dialog( "open" )
-	MatInvenGrid.refreshLayout() ;
+MatInvenModalCheck.addEventListener('click' , () => {
+	MatInvenModal.dialog( "close" )
 })
 
       

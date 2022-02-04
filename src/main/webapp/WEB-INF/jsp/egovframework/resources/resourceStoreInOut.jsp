@@ -21,7 +21,7 @@
 
 </head>
 <body>
-	<h2>자재입/출고조회</h2>
+<h3 style="color : #054148; font-weight : bold">자재 입/출고 조회</h3>
 <div id="tabs">
   <ul>
     <li><a href="#tabs-1">입고</a></li>

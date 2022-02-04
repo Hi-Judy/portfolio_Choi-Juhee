@@ -1,5 +1,7 @@
 package egov.mes.materialmanage.dao;
 
+import java.util.List;
+
 import lombok.Data;
 
 @Data
@@ -35,11 +37,14 @@ public class MaterialManageVO {
 	
 	//자재 월별재고 조회 관련
 	String month;		//월
+	String carryOver;	//이월량
 	String matInto;		//입고
 	String matOut;		//출고	
 	String checkInto;	//정산입고
 	String checkOut;	//정산출고
 	String matReturn;	//반품
 	String matSum;		//현재고량
+	String pmonth;
+	List<Integer> list;
 
 }

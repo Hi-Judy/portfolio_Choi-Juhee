@@ -18,7 +18,7 @@
 <script src="https://code.jquery.com/ui/1.13.0/jquery-ui.js"></script>
 </head>
 <body>
-	<h2>자재입고관리</h2>
+	<h3 style="color : #054148; font-weight : bold">자재 입고 관리</h3>
 	<hr>
 		<button id="findResourcesStore">조회</button>
 		<button id="saveResourcesStore">저장</button>

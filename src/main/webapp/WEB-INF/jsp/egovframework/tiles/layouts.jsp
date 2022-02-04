@@ -45,7 +45,7 @@
 
 <script src="https://uicdn.toast.com/grid/latest/tui-grid.js"></script>
 
-<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">
+<!-- <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous"> -->
 
 <!-- 부트스트랩 cdn 링크 -->
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.7.1/font/bootstrap-icons.css">
@@ -82,15 +82,99 @@ div#OverallSize {
    padding: 2px 15px;
    padding: 5px 30px;
 }
+  
 /* 도움말 버튼 */
 .bi-question-circle {
 	font-size : 25px ;
 	width : 25px ;
 	height : 25px ;
+  
+/* 재철이형 돋보기 버튼 스타일 */
+.bi-search {
+   font-size : 20px ;
+   width : 20px ;
+   height : 20px ;
+}
+   
+.inpBC{
+	text-align:center;
+	background-color: #d2e5eb; 
 }
 </style>
 </head>
 <body>
+<script>
+window.addEventListener('load',function(){
+	if(sessionStorage.getItem("MenuList") != null){
+		makesidebar();
+	}else{
+		$.ajax({
+			url : '${pageContext.request.contextPath}/reqsidebar',
+			method : 'GET',
+			dataType : 'JSON',
+			success : function(sidebardatas) {
+				sessionStorage.setItem("MenuList",JSON.stringify(sidebardatas.resultsidebar)) ;
+				makesidebar();
+			},
+			error : function(reject) {
+				console.log('reject: ' + reject);
+			}
+		})
+	}
+});
+function makesidebar(){	
+	list = JSON.parse(sessionStorage.getItem("MenuList"));
+	var menu = document.querySelector('.menu');
+	var ul=$('<ul></ul>');
+	var outterli=$('<li class="sidebar-title">Menu</li>');
+	for(item of list){
+		if(item.upperMenuNo == 0){
+			var outterli = $('<li class="sidebar-item  has-sub"></li>');
+			var outterlia = $("<a href='#' class='sidebar-link'></a>");
+			var outterlii = $("<i class='bi bi-collection-fill'></i> ");
+			var outterlispan = $("<span></span>");
+			ul = $('<ul class="submenu "></ul>');			
+			outterlispan.text(item.menuNm);
+			
+			outterlia.append(outterlii[0]);
+			outterlia.append(outterlispan[0]);
+			outterli.append(outterlia[0]);
+			outterli.append(ul[0]);
+			
+		}else{
+			var innerli = $('<li class="submenu-item "></li>');
+			var innerlia = $('<a href="'+item.chkUrl+'"></a>')
+			innerlia.href=item.chkUrl;
+			innerlia.text(item.menuNm);
+			innerli.append(innerlia[0]);
+			ul.append(innerli[0]);
+		}
+		menu.append(outterli[0]);
+		
+	}
+	function slideToggle(t, e, o) {
+		0 === t.clientHeight ? j(t, e, o, !0) : j(t, e, o)
+	}
+	function slideUp(t, e, o) { j(t, e, o) }
+	function slideDown(t, e, o) { j(t, e, o, !0) }
+	function j(t, e, o, i) { void 0 === e && (e = 400), void 0 === i && (i = !1), t.style.overflow = "hidden", i && (t.style.display = "block"); var p, l = window.getComputedStyle(t), n = parseFloat(l.getPropertyValue("height")), a = parseFloat(l.getPropertyValue("padding-top")), s = parseFloat(l.getPropertyValue("padding-bottom")), r = parseFloat(l.getPropertyValue("margin-top")), d = parseFloat(l.getPropertyValue("margin-bottom")), g = n / e, y = a / e, m = s / e, u = r / e, h = d / e; window.requestAnimationFrame(function l(x) { void 0 === p && (p = x); var f = x - p; i ? (t.style.height = g * f + "px", t.style.paddingTop = y * f + "px", t.style.paddingBottom = m * f + "px", t.style.marginTop = u * f + "px", t.style.marginBottom = h * f + "px") : (t.style.height = n - g * f + "px", t.style.paddingTop = a - y * f + "px", t.style.paddingBottom = s - m * f + "px", t.style.marginTop = r - u * f + "px", t.style.marginBottom = d - h * f + "px"), f >= e ? (t.style.height = "", t.style.paddingTop = "", t.style.paddingBottom = "", t.style.marginTop = "", t.style.marginBottom = "", t.style.overflow = "", i || (t.style.display = "none"), "function" == typeof o && o()) : window.requestAnimationFrame(l) }) }
+
+		let sidebarItems = document.querySelectorAll('.sidebar-item.has-sub');
+		for (var i = 0; i < sidebarItems.length; i++) {
+			let sidebarItem = sidebarItems[i];
+			sidebarItems[i].querySelector('.sidebar-link').addEventListener('click', function(e) {
+				e.preventDefault();
+
+				let submenu = sidebarItem.querySelector('.submenu');
+				if (submenu.classList.contains('active')) submenu.style.display = "block"
+
+				if (submenu.style.display == "none") submenu.classList.add('active')
+				else submenu.classList.remove('active')
+				slideToggle(submenu, 300)
+			})
+		}
+}
+</script>
 	<tiles:insertAttribute name="tiles_side_bar" />
 	<div id="wraper" class="margin3">
 		<div id="header">

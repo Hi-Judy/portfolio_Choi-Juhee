@@ -37,11 +37,18 @@ div.right {
 
 </head>
 <body>
-
-
+	<div style="width : 1500px ;">
+		<span style="float: right;">
+			<button type="button" id="helpBtn" style="border : none; background-color : white; color : #007b88; float : right ;">
+			<i class="bi bi-question-circle"></i>
+			</button>
+		</span>
+		<h4 style="margin-left: 10px">공통자료 관리</h4>
+	</div>
+	
 	<div id="top">
 		<div>
-			</span> <span style="float: right; margin-top: 3.5px;">
+			</span> <span style="float: right; margin-top: 4.5px;">
 				<button id="btnAdd" type="button" class="btn"
 					style="padding: 5px 30px;">자료추가</button> &nbsp;&nbsp;
 				<button id="btnSave" type="button" class="btn"
@@ -52,7 +59,7 @@ div.right {
 	</div>
 
 	<div id="OverallSize" style="margin-left: 13px;">
-		<div class="left" style="margin-left: 0px; padding-left: 0px;">
+		<div class="left">
 			<span style="font-size: 1.5em; color: blue"> 코드 </span>
 			<br>
 			<br>
@@ -71,11 +78,29 @@ div.right {
 </body>
 
 <script>
+//옵션세팅
+themesOptions = { 
+            selection: {    background: '#007b88',     border: '#004082'  },//  <- 클릭한 셀 색상변경 border(테두리색) , background (백그라운드)
+            scrollbar: {    background: '#f5f5f5',  thumb: '#d9d9d9',  active: '#c1c1c1'    }, //<- 그리드 스크롤바 옵션
+            row: {    
+                hover: {    background: '#ccc'  }// <-마우스 올라갔을떄 한row 에 색상넣기
+            },
+            cell: {   // <- 셀클릭했을떄 조건들 주는것이다.
+                normal: {   background: '#fbfbfb',  border: '#e0e0e0',  showVerticalBorder: true    },// <- showVerticalBorder : 세로(아래,위) 테두리가 보이는지 여부
+                header: {   background: '#eee',     border: '#ccc',     showVerticalBorder: true    },// <- showVerticalBorder : 가로(양옆) 테두리가 보이는지 여부
+                rowHeader: {    border: '#eee',     showVerticalBorder: true    },// <- 행의헤더 색상영역
+                editable: { background: '#fbfbfb' },//  <-편집가능한 셀들의 색상을 주는영역
+                selectedHeader: { background: '#eee' },//  <- 선택한 셀의 백그라룬드	
+                disabled: { text: '#b0b0b0' }// <- 편집할수없는(비활성화된) 셀들에 대한 스타일 조절
+            }
+};
+
+tui.Grid.applyTheme('default', themesOptions);
   	
    
     var Grid = tui.Grid; //그리드 선언
     
-    Grid.applyTheme('clean' ,{
+    /* Grid.applyTheme('clean' ,{
     	cell : {
     		header : {
     			background: '#f0f6f9'
@@ -85,7 +110,7 @@ div.right {
     		      background: '#dfeff7' 
     		    }
     		  }
-    });
+    }); */
     
 	//공통그룹tr 영역
     const columns = [
@@ -179,8 +204,8 @@ div.right {
     	dataType : 'json',
     	async : false
     }).done(function (datas) {
-    /* 	console.log("콘솔로그 성공");
-    	console.log(datas); */
+     	console.log("콘솔로그 성공");
+    	console.log(datas); 
 		data = datas.data
 		
 	});
@@ -188,7 +213,8 @@ div.right {
     const grid = new Grid({
 		el : document.getElementById('grid'),
 		data : data ,
-		columns 
+		columns ,
+		bodyHeight: 379
 	 
     });
     
@@ -199,6 +225,12 @@ div.right {
     	var rst = data[ev.rowKey].groupCode ;
     	
     	findSelect(rst);
+    	
+    	//선택한값 색상 넣고 뺴기
+    	grid.setSelectionRange({
+        	start: [ev.rowKey, 0],
+        	end: [ev.rowKey, grid.getColumns().length-1]
+        });
 			
 		
     });
@@ -226,9 +258,11 @@ div.right {
 		el : document.getElementById('grid2'),
 		data : data2 ,
 //		rowHeaders : ['checkbox'], //난중에 다시 해보는걸로~ 천마 정답이있긴함
-		columns : columns2 
+		columns : columns2 ,
+		bodyHeight: 379
 	 
     });
+    
     
     // toastr 옵션 옵션설정이 위에 먼저 와있어야 설정이 먹는다. (전역변수로 선언)
 	toastr.options = {
@@ -242,13 +276,15 @@ div.right {
 			  "showDuration": "3",
 			  "hideDuration": "100",
 			  "timeOut": "1500",   //사라지는데 걸리는 시간
-			  "extendedTimeOut": "1000",  //마우스 올리고 연장된 시간
+			  "extendedTimeOut": "10000",  //마우스 올리고 연장된 시간
 			  "showEasing": "swing",
 			  "hideEasing": "linear",
 			  "showMethod": "fadeIn",
 			  "hideMethod": "fadeOut",
 			  "tapToDismiss": false
 			}
+    
+    
     //저장된 ID , NAME 값 수정안되게 처리 해주기
     grid2.on('editingStart' , (ev) => {
     	try{

@@ -6,6 +6,7 @@
 <select id="MaterialListAllFind" resultType="egov.mes.materialmanage.dao.MaterialManageVO">
 select rsc_code , FN_GET_CODE_NAME(rsc_code) AS rscName , rsc_flag
 from resources 
+ORDER BY rsc_code
 </select>
 
 <!-- 자재테이블 단건조회 -->
@@ -36,19 +37,44 @@ from common_code
 where group_code = 'cus' AND code_desct = '구매처'
 </select>
 
-<!--  -->
-<select id="MonthlyInventory" resultType="egov.mes.materialmanage.dao.MaterialManageVO">
-select to_char(store_date , 'MM') AS month
-      ,sum(case when store_flag='입고' then ist_cnt else 0 end) - nvl((select SUM(rtngd_cnt) from resource_rtngd where rsc_code= #{rscCode} and to_char(rtngd_date,'MM') = to_char(store_date , 'MM') ),0) AS matInto
-      ,sum(case when store_flag='출고' then ost_cnt else 0 end) AS matOut
-      ,sum(case when store_flag='정산입고' then ist_cnt else 0 end) AS checkInto
-      ,sum(case when store_flag='정산출고' then ost_cnt else 0 end) AS checkOut
-      ,nvl((select SUM(rtngd_cnt) from resource_rtngd where rsc_code= #{rscCode} and to_char(rtngd_date,'MM') = to_char(store_date , 'MM') ),0) AS matReturn
-      ,sum(case when store_flag='입고' then ist_cnt else 0 end) - nvl((select SUM(rtngd_cnt) from resource_rtngd where rsc_code= #{rscCode} and to_char(rtngd_date,'MM') = to_char(store_date , 'MM') ),0) - sum(case when store_flag='출고' then ost_cnt else 0 end) + sum(case when store_flag='정산입고' then ist_cnt else 0 end) - sum(case when store_flag='정산출고' then ost_cnt else 0 end) AS matSum
-from resource_store 
-where rsc_code = #{rscCode}
-group by to_char(store_date , 'MM') 
-order by to_char(store_date,'MM')
+<select id="selectpmonth" resultType="egov.mes.materialmanage.dao.MaterialManageVO">
+select to_number(to_char(store_date , 'MM'))+1 pmonth from resource_store where rsc_code =#{rscCode} group by to_number(to_char(store_date , 'MM'))+1 
+</select>
+
+<!-- 월별자재 재고조회 -->
+<select id="MonthlyInventory" resultType="egov.mes.materialmanage.dao.MaterialManageVO" parameterType="map">
+
+select * from (
+    select to_char(store_date , 'MM') AS month
+          ,nvl(lag(sum(case when store_flag='입고' then ist_cnt else 0 end) - nvl((select SUM(rtngd_cnt) from resource_rtngd where rsc_code= #{rscCode} and to_char(rtngd_date,'MM') = to_char(store_date , 'MM') ),0) - sum(case when store_flag='출고' then ost_cnt else 0 end) + sum(case when store_flag='정산입고' then ist_cnt else 0 end) - sum(case when store_flag='정산출고' then ost_cnt else 0 end)) over (order by to_char(store_date , 'MM')),0) AS carryOver
+          ,sum(case when store_flag='입고' then ist_cnt else 0 end) AS matInto
+          ,sum(case when store_flag='출고' then ost_cnt else 0 end) AS matOut
+          ,sum(case when store_flag='정산입고' then ist_cnt else 0 end) AS checkInto
+          ,sum(case when store_flag='정산출고' then ost_cnt else 0 end) AS checkOut
+          ,nvl((select SUM(rtngd_cnt) from resource_rtngd where rsc_code= #{rscCode} and to_char(rtngd_date,'MM') = to_char(store_date , 'MM') ),0) AS matReturn
+          ,nvl(lag(sum(case when store_flag='입고' then ist_cnt else 0 end) - nvl((select SUM(rtngd_cnt) from resource_rtngd where rsc_code= #{rscCode} and to_char(rtngd_date,'MM') = to_char(store_date , 'MM') ),0) - sum(case when store_flag='출고' then ost_cnt else 0 end) + sum(case when store_flag='정산입고' then ist_cnt else 0 end) - sum(case when store_flag='정산출고' then ost_cnt else 0 end)) over (order by to_char(store_date , 'MM')),0)+sum(case when store_flag='입고' then ist_cnt else 0 end) - nvl((select SUM(rtngd_cnt) from resource_rtngd where rsc_code= #{rscCode} and to_char(rtngd_date,'MM') = to_char(store_date , 'MM') ),0) - sum(case when store_flag='출고' then ost_cnt else 0 end) + sum(case when store_flag='정산입고' then ist_cnt else 0 end) - sum(case when store_flag='정산출고' then ost_cnt else 0 end) AS matSum
+    from resource_store r
+    where rsc_code = #{rscCode}
+group by to_char(store_date , 'MM')
+    union
+    SELECT lpad(level-1,2,'0') 
+          ,0 
+          ,0 
+          ,0 
+          ,0 
+          ,0 
+          ,0 
+          ,0 
+    from dual d 
+    where level not in 
+      <foreach collection="list" item="vo" open="(" close=")" separator=",">
+       ${vo.pmonth}
+    </foreach>
+<![CDATA[
+    CONNECT BY LEVEL <=13
+]]>
+)
+order by month
 </select>
 
 <!-- 사원정보 신규등록 -->
