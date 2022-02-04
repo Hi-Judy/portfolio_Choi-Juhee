@@ -6,6 +6,13 @@ import egovframework.rte.psl.dataaccess.mapper.Mapper;
 
 @Mapper("manProcessMapper")
 public interface ManProcessMapper {
+	
+	//불량량 브라우저에 보여주기
+	List<ManProcessVO> selectDefQnt(ManProcessVO processVO);
+	
+	//이전공정의 종료시간 구하기
+	ManProcessVO selectPreEndTime(ManProcessVO processVO);
+	
 	//작업지시량만큼 업데이트
 	int updateManQnt(ManProcessVO processVO);
 	

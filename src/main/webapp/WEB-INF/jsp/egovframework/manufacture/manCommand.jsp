@@ -569,12 +569,16 @@
 				name : 'resCode'
 			}, 
 			{
+				header : '자재명',
+				name : 'rscName'
+			}, 
+			{
 				header : '자재LOT',
 				name : 'rscLot'
 			}, 
 			{
-				header : '입고량',
-				name : 'istCnt'
+				header : '재고량',
+				name : 'rscCnt'
 			}, 
 			{
 				header : '출고량',

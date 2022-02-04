@@ -212,6 +212,10 @@
 				name : 'procName'
 			}, 
 			{
+				header : '관리자',
+				name : 'procCode'
+			},
+			{
 				header : '지시량',
 				name : 'manGoalPerday'
 			}, 
@@ -227,6 +231,7 @@
 				header : '종료시간',
 				name : 'manEndtime'
 			}
+			
 		]
 		
 		//공정현황 그리드 내용
@@ -290,8 +295,6 @@
 			
 			
 		}
-		
-		
 		
 		
 	</script>

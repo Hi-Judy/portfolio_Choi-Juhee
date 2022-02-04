@@ -35,11 +35,13 @@ public class ManCommandVO {
 	
 	//자재
 	String resCode; //자재코드
+	String rscName; //자재명
 	String rscLot; //자재 로트
 	String resUsage; //자재소요량
 	String istCnt; //입고량
 	String ostCnt; //출고량
 	String storeEtc; //비고(지시디테일번호)
+	String rscCnt; //재고량
 
 	
 	//공정

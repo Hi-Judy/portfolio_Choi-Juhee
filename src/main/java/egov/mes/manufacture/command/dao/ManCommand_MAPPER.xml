@@ -131,7 +131,7 @@
 <!-- 이전 생산지시 조회 -->
 <select id="selectPreCommand" resultType="egov.mes.manufacture.command.dao.ManCommandVO">
 	select a.podt_code, prod_detail(a.podt_code) podtName, a.ord_qnt, 
-		   a.ord_duedate, a.man_goalperday, a.man_startdate, a.man_etc,
+		   a.ord_duedate, a.man_goalperday, a.man_startdate, a.com_etc,
 	       b.plan_period, b.man_perday, b.plan_etc       
 	from man_command_view a left join manufacture_plan_d b
 	on a.podt_code = b.podt_code
@@ -143,13 +143,20 @@
 
 <!-- 자재코드에 해당하는 자재LOT 조회 -->
 <select id="selectResLot" resultType="egov.mes.manufacture.command.dao.ManCommandVO">
-	select a.podt_code, prod_detail(a.podt_code) podtName, a.res_code, a.res_usage, 
-		   a.proc_code, prod_detail(a.proc_code) ProcName,
-           b.rsc_code, b.rsc_lot, b.ist_cnt, b.ost_cnt
-	from prdt_bom_res a join resource_store b
-	on a.res_code = b.rsc_code
-    where a.podt_code= #{podtCode}
-    order by b.rsc_code
+	select a.podt_code, 
+          b.RSC_LOT, 
+          SUM(b.IST_CNT) AS istCnt,
+        
+         (SUM(b.IST_CNT)-SUM(b.OST_CNT)) AS rscCnt, 
+          b.RSC_CODE as resCode,
+          FN_GET_CODE_NAME(b.RSC_CODE) AS rscName,
+          FN_GET_RSC_UNIT(b.RSC_CODE) AS RSC_UNIT
+from prdt_bom_res a join RESOURCE_STORE b
+on a.res_code = b.rsc_code
+where a.podt_code= #{podtCode}
+GROUP BY a.podt_code, b.RSC_LOT , b.RSC_CODE 
+having SUM(b.IST_CNT)-SUM(b.OST_CNT)>0
+order by b.rsc_code
 </select>
 
 
