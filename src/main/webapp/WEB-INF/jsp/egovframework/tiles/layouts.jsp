@@ -53,7 +53,7 @@
 			<tiles:insertAttribute name="tiles_nav" />
 		</div>
 		<div id="contents">
-			<tiles:insertAttribute name="tiles_content" />
+			<tiles:insertAttribute name="x" />
 		</div>
 	</div>
 </body>
