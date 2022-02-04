@@ -115,7 +115,6 @@ public class ManProcessServiceImpl implements ManProcessService {
 				
 			} 
 			
-			
 			if(Integer.parseInt(processVO.getManGoalqnt()) <= Integer.parseInt(processVO.getManQnt())
 					//앞전 공정의 생산량 == 목표량
 					//앞전 공정의 종료시간이 찍혀있거나

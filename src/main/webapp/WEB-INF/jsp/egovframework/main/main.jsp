@@ -4,9 +4,9 @@
 <script>
 
 	var index = 0;
-	window.onload = function() {
+	window.addEventListener('load', function() {
 		slideShow();
-	}
+	});
 
 	function slideShow() {
 		var i;
