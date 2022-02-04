@@ -39,7 +39,7 @@ public class MaterialManageController {
 		ModelAndView jsonView = new ModelAndView("jsonView");
 		jsonView.addObject("OneData" , service.resSearch(RscCode));
 		jsonView.addObject("Datas" , service.resStListSearch(RscCode));
-		jsonView.addObject("MatInven" , service.MonthlyInventory(RscCode));	//월별자재재고 조회
+		jsonView.addObject("MatInven" , service.MonthlyInventory(RscCode,service.selectpmonth(RscCode)));	//월별자재재고 조회
 		return jsonView;
 	}
 	
