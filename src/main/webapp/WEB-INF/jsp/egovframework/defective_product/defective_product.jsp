@@ -30,16 +30,28 @@
 <script src="https://uicdn.toast.com/grid/latest/tui-grid.js"></script>
 </head>
 <body>
-	<div id="help" align="right"><button type="button" id="helpBtn">도움말</button></div>
+	<div id="help" align="right" style="width : 1500px ;"><button type="button" id="helpBtn" style="border : none; background-color : white; color : #007b88; float : right ;"><i class="bi bi-question-circle"></i></button></div>
 	<br>
-	<div id="title" align="center"><h2>불량 조회</h2></div>
-	<br>
-	<div class = "manDate">
-		<p style="display:inline-block;">작업일자</p>
-		<input id = "txtFromDate" type="date" name="from" style="display:inline-block;">
-		
-		<p style="display:inline-block;"> ~ </p>
-		<input id = "txtToDate" type="date" name="to" style="display:inline-block;">&nbsp;<button type="button" id="btnFind">검색</button><br>
+	<div id="title" style="margin-left : 10px;"><h3 style="color : #054148; font-weight : bold">불량 조회</h3></div>
+	
+	<div id="top" style="height : 130px; padding : 10px;">
+		<div class = "manDate">
+			<p style="display:inline-block; margin : 20px;">작업일자</p>
+			<input id = "txtFromDate" type="date" name="from" style="display:inline-block;">
+			<p style="display:inline-block;"> ~ </p>
+			<input id = "txtToDate" type="date" name="to" style="display:inline-block;">&nbsp;<button type="button" id="btnFind" class="btn">검색</button>
+			<br>
+			<button type="button" id="btnClear" class="btn" style="float : right; margin : 5px;">초기화</button>	
+			<button type="button" id="btnFacDate" class="btn" style="float : right; margin : 5px;">월별 불량</button>
+			<button type="button" id="btnFacProc" class="btn" style="float : right; margin : 5px;">공정별 불량</button>
+		</div>
+	</div>
+
+	<div id="OverallSize" style="margin-left : 10px;">
+		<div id = "gridMain"></div>
+		<br>
+		<div align="center"><h5>공정목록</h5></div>
+		<div id = "process"></div>
 	</div>
 
 	<div>
@@ -48,20 +60,7 @@
 			<div align="center"><h5>작업일자별 불량발생 제품코드</h5></div>
 			<div id="gridProductResult"></div>
 		</div>
-	</div>
-	
-	<div style="float:right;">
-		<button type="button" id="btnFacProc">공정별 불량</button>
-		<button type="button" id="btnFacDate">월별 불량</button>
-		<button type="button" id="btnClear">초기화</button>		
-	</div>
-	<br>
-	<!-- 메인화면 그리드 -->
-	<div id = "gridMain"></div>
-	<br>
-	<!-- 공정목록 -->
-	<div align="center"><h5>공정목록</h5></div>
-	<div id = "process"></div>
+	</div>	
 	
 	<div id="defChart" title="불량 수량 그래프" style="text-align: center;">
 		<div align="center"><h5 id="defTitle">불량 수량 그래프 조회</h5></div>

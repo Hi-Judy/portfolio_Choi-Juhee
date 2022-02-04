@@ -12,26 +12,25 @@
 <div id="gridOrder"></div>
 
 <script type="text/javascript">
-	
-	//그리드
-	var columnsOrder = [
-			{
-			 header: '발주번호',
-			 name: 'ordrNo'
-			},
-			{
-			 header: '자재코드',
-			 name: 'rscCode'
-			 },
-			{
-			 header: '자재명',
-			 name: 'rscName'
-			},
-			{
-			 header: '단위',
-			 name: 'rscUnit'
-			},
-
+   
+   //그리드
+   var columnsOrder = [
+         {
+          header: '발주번호',
+          name: 'ordrNo'
+         },
+         {
+          header: '자재코드',
+          name: 'rscCode'
+          },
+         {
+          header: '자재명',
+          name: 'rscName'
+         },
+         {
+          header: '단위',
+          name: 'rscUnit'
+         },
 			 {
 			  header: '발주량',
 			  name: 'rscCnt',

@@ -27,33 +27,29 @@
 <script src="https://uicdn.toast.com/grid/latest/tui-grid.js"></script>
 </head>
 <body>
-	<div id="help" align="right"><button type="button" id="helpBtn">도움말</button></div>
+	<div id="help" align="right" style="width : 1500px ;"><button type="button" id="helpBtn" style="border : none; background-color : white; color : #007b88; float : right ;"><i class="bi bi-question-circle"></i></button></div>
 	<br>
-	<div id="title" align="center"><h2>제품 입/출고 관리</h2></div>
-	<br>
-	<div id="info">
-		<span>제품명 :  </span><input id="txtPodtName" readonly>
-		<span>제품코드 : </span><input id="txtPodtCode">&nbsp;<button type="button" id="btnSearch">제품코드검색</button>
+	<div id="title" style="margin-left : 10px;"><h3 style="color : #054148; font-weight : bold">제품 입/출고 관리</h3></div>
+	
+	<div id="top" style="height : 160px; padding : 10px;">
+		<span style="margin : 20px;">제품명</span><input id="txtPodtName" style="margin-top : 10px; margin-left : 20px;" readonly>
+		<span style="margin : 20px;">제품코드</span><input id="txtPodtCode">&nbsp;<button type="button" id="btnSearch" class="btn">제품코드검색</button>
+		<br><br>
+		<span style="margin : 20px;">작업일자</span><input id="manDatestart" type="date"><span> ~ </span><input id="manDateend" type="date">
 		<br>
-		<br>
-		<span>작업일자 : </span><input id="manDatestart" type="date"><span> ~ </span><input id="manDateend" type="date">
-		<br>
-		<div align="right">
-<!-- 테스트 -->
-<!--  
-			<a href="ProductTestPage">테스트페이지</a>
--->
-<!-- 테스트 -->
-			<button type="button" id="listBtn">조회</button>
-			<button type="button" id="btnAdd">추가</button>
-			<button type="button" id="btnDelete">삭제</button>
-			<button type="button" id="btnInsert">저장</button>
-			<button type="button" id="clearBtn">초기화</button>
-		</div>
+		<button type="button" id="clearBtn" class="btn" style="float : right; margin : 5px;">초기화</button>
+		<button type="button" id="btnInsert" class="btn" style="float : right; margin : 5px;">저장</button>
+		<button type="button" id="btnDelete" class="btn" style="float : right; margin : 5px;">삭제</button>
+		<button type="button" id="btnAdd" class="btn" style="float : right; margin : 5px;">추가</button>
+		<button type="button" id="listBtn" class="btn" style="float : right; margin : 5px;">조회</button>
+	</div>
+	
+	<div id="OverallSize" style="margin-left : 10px;">
+		<div id="info"></div>
 	</div>
 	
 	<div id="findProduct" title="제품코드검색">
-		<input id="podtName"><button id="btnPodtSearch">검색</button>
+		<input id="podtName">&nbsp;<button id="btnPodtSearch" class="btn">검색</button>
 		<div id="podtResult"></div>
 	</div>
 	
@@ -127,18 +123,18 @@
 			name : 'podtInput' ,
 			editor: 'text' ,
 			align: 'center',
-			formatter(value) {
+/* 			formatter(value) {
 				return value.value.toString().replace(/\B(?<!\.\d*)(?=(\d{3})+(?!\d))/g, ",") ;
-			}
+			} */
 		} ,
 		{
 			header: '출고량' ,
 			name : 'podtOutput' ,
 			editor: 'text' ,
 			align: 'center',
-			formatter(value) {
+/* 			formatter(value) {
 				return value.value.toString().replace(/\B(?<!\.\d*)(?=(\d{3})+(?!\d))/g, ",") ;
-			}
+			} */
 		} ,
 		{
 			header: '비고	' ,

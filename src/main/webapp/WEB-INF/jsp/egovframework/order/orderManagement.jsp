@@ -27,41 +27,43 @@
 <script src="https://uicdn.toast.com/grid/latest/tui-grid.js"></script>
 </head>
 <body>
-	<div id="help" align="right"><button type="button" id="helpBtn">도움말</button></div>
+	<div id="help" align="right" style="width : 1500px ;"><button type="button" id="helpBtn" style="border : none; background-color : white; color : #007b88; float : right ;"><i class="bi bi-question-circle"></i></button></div>
 	<br>
-	<div id="title" align="center"><h2>주문 관리</h2></div>
-	<br>
-	<div id="info">
-		<span>진행상태 : </span>
-		<select id="selectStatus">
+	<div id="title" style="margin-left : 10px;"><h3 style="color : #054148; font-weight : bold">주문 관리</h3></div>
+	<div id="top" style="height : 160px; padding : 10px;">
+		<span style="margin : 20px;">진행상태</span>
+		<select id="selectStatus" style="margin : 20px;">
 			<option value="" selected>선택</option>
 			<option value="미진행">미진행</option>
 			<option value="진행중">진행중</option>
 			<option value="완료">완료</option>
 			<option value="미생산완료">미생산완료</option>
 		</select>
-		<span>고객명 :  </span><input id="txtCusName" readonly>
-		<span>고객코드 : </span><input id="txtCusCode">&nbsp;<button type="button" id="btnSearch">고객코드검색</button>
-		<br><br>
-		<span>접수일자 : </span><input id="ordDateStart" type="date"><span> ~ </span><input id="ordDateEnd" type="date">
-		<span>납기일자 : </span><input id="dueDateStart" type="date"><span> ~ </span><input id="dueDateEnd" type="date">
+		<span style="margin : 20px;">고객명</span><input id="txtCusName" readonly>
+		<span style="margin : 20px;">고객코드</span><input id="txtCusCode">&nbsp;<button type="button" id="btnSearch" class="btn">고객코드검색</button>
+		<br>	
+		<span style="margin : 20px;">접수일자</span>&nbsp;&nbsp;&nbsp;&nbsp;<input id="ordDateStart" type="date"><span> ~ </span><input id="ordDateEnd" type="date" style="margin-right : 60px;">
+		<span style="margin : 20px;">납기일자</span>&nbsp;&nbsp;&nbsp;<input id="dueDateStart" type="date"><span> ~ </span><input id="dueDateEnd" type="date">
 		<br>
-		<div align="right">
-			<button type="button" id="listBtn">조회</button>
-			<button type="button" id="releaseBtn">미생산출하</button>
-			<button type="button" id="clearBtn">초기화</button>
+		<button type="button" id="clearBtn" class="btn" style="float : right; margin : 5px;">초기화</button>
+		<button type="button" id="releaseBtn" class="btn" style="float : right; margin : 5px;">미생산출하</button>
+		<button type="button" id="listBtn" class="btn" style="float : right; margin : 5px;">조회</button>
+	</div>
+	
+	<div id="OverallSize" style="margin-left : 10px;">
+		<div id="info"></div>
+		<br>
+		<div><h5 style="color : #007b88;">거래상세정보</h5></div>
+		<div id="tradeDetail" title="주문상세정보" align="center">
+			<div id="selectInfo"></div>
 		</div>
 	</div>
 	
 	<div id="findCustomer" title="고객검색"">
-		<input id="cusName"><button id="btnCusSearch">검색</button>
+		<input id="cusName">&nbsp;<button id="btnCusSearch" class="btn">검색</button>
 		<div id="cusResult"></div>
 	</div>
-	<br>
-	<div align="center"><h5>거래상세정보</h5></div>
-	<div id="tradeDetail" title="주문상세정보" align="center">
-		<div id="selectInfo"></div>
-	</div>
+	
 	
 	<div id="helpDialog" title="도움말">
 		<br>

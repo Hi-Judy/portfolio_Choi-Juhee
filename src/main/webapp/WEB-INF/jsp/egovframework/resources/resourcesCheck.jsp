@@ -197,8 +197,6 @@
 	delRscCheck.addEventListener("click", function(){
 		grid.removeCheckedRows(true);
 	}) 
-	
-	
 </script>
 </body>
 </html>
