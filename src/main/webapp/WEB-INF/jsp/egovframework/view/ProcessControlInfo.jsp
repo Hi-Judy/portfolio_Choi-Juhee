@@ -6,67 +6,16 @@
 <head>
 <meta charset="utf-8">
 <title>공정관리</title>
-<!-- 토스트그리드 cdn -->
-<link rel="stylesheet"
-   href="https://uicdn.toast.com/tui-grid/latest/tui-grid.css" />
-
-<!-- 토스트 그리드 위에 데이트피커 가 선언되어야 작동이 된다 (순서가중요) -->
-<link rel="stylesheet"
-   href="https://uicdn.toast.com/tui.date-picker/latest/tui-date-picker.css" />
-<script
-   src="https://uicdn.toast.com/tui.date-picker/latest/tui-date-picker.js"></script>
-   
-<!-- 토스트 그래프 -->
-<link rel="stylesheet" href="https://uicdn.toast.com/chart/latest/toastui-chart.min.css" />
-<script src="https://uicdn.toast.com/chart/latest/toastui-chart.min.js"></script>
-
-<!-- 토스트그리드 cdn -->
-<script src="https://uicdn.toast.com/tui-grid/latest/tui-grid.js"></script>
-<script src="https://code.jquery.com/jquery-3.6.0.js"></script>
-
-<!-- toastr css라이브러리 -->
-<link rel="stylesheet" type="text/css"
-   href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.css" />
-<!-- toastr cdn 라이브러리 둘다 제이쿼리 밑에 있어야함 -->
-<script type="text/javascript"
-   src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
-
-<link rel="stylesheet"
-   href="https://uicdn.toast.com/grid/latest/tui-grid.css" />
-
-<!-- 모달창 만들떄 필요한 ui 라이브러리 -->
-<script src="https://code.jquery.com/ui/1.13.0/jquery-ui.js"></script>
-<link rel="stylesheet"
-   href="//code.jquery.com/ui/1.13.0/themes/base/jquery-ui.css">
-
-<script src="https://uicdn.toast.com/grid/latest/tui-grid.js"></script>
-
 
 <style>
-div#top {
-   margin-left: 10px;
-   width: 1500px;
-   height: 50px;
-   margin-top: 30px;
-   border-top: 1px solid black;
-   border-bottom: 1px solid black;
-   background-color: ghostwhite;
-}
 
-
-div#AA {
-   width: 1500px;
-   height: 600px;
-   margin-left: 10px;
- /*  margin-top: 5px; /*위에서 부터 벌어질 크기*/
-}
 
 
 
 div.right {
    float: right;
    width: 1500px;
-  /* padding: 5px; */
+  margin-left: 10px;
    box-sizing: border-box;
 }
 
@@ -82,13 +31,6 @@ div.Gridright {
    width: 55%;
  /*  padding: 5px; */
  /*  box-sizing: border-box; */
-}
-
-
-.btn {
-   border-radius: 5px;
-   background-color: cornflowerblue;
-   padding: 2px 15px;
 }
 
 .test {
@@ -124,13 +66,13 @@ div.Gridright {
    
   
    <br>
-   <div id="AA">
+   <div id="OverallSize">
 
-      <div class="right">
+      <div>
          <span> 등록된 공정수 : 12509 </span>
          <br>
          <br>
-         <div id="Grid" style="border-top: 3px solid #168; height: 600px;"></div>
+         <div id="Grid" style="border-top: 3px solid #168;"></div>
       </div>
 	
 	<div id="dialog-form" title="작업반장 조회">

@@ -28,30 +28,30 @@
   </ul>
   
   <div id="tabs-1">	
-	<hr>
+	<div class="card bg-light text-dark">
+		<div class="card-body">
 	자재코드  <input id="txtRsc1">  <button id="btnFindRsc">돋보기</button>  자재명 <input id="txtRsc2" readonly><br>
-	<hr>
 	<div id="dialog-form-rsc" title="자재 검색"></div>
 	<br>
 	<button id="btnSelect">조회</button>
 	<button id="btn_reset" type="reset">초기화</button>
 	<button>엑셀</button>
-	<hr>	
+		</div>
+	</div>	
 	<div id="gridRsc1"></div>
-	<hr>
 	</div>
 	
-	
 	<div id="tabs-2">
-	<hr>
+	<div class="card bg-light text-dark">
+		<div class="card-body">
 	자재코드  <input id="txtRscLot1">  <button id="btnFindRscLot">돋보기</button>  자재명 <input id="txtRscLot2" readonly><br>
-	<hr>
 	<div id="dialog-form-rsc-Lot" title="자재 검색"></div>
 	<br>
 	<button id="btnSelectLot">조회</button>
 	<button id="btn_reset_Lot" type="reset">초기화</button>
 	<button>엑셀</button>
-	<hr>
+		</div>
+	</div>
 	<div id="gridRscLot"></div>
 	</div>
 </div>	

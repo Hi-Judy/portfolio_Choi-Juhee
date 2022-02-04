@@ -46,8 +46,8 @@
 <!-- 테스트 -->
 			<button type="button" id="listBtn">조회</button>
 			<button type="button" id="btnAdd">추가</button>
-			<button type="button" id="btnInsert">저장</button>
 			<button type="button" id="btnDelete">삭제</button>
+			<button type="button" id="btnInsert">저장</button>
 			<button type="button" id="clearBtn">초기화</button>
 		</div>
 	</div>

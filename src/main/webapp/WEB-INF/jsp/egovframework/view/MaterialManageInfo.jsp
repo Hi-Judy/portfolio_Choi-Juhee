@@ -41,50 +41,27 @@
 
 <script src="https://uicdn.toast.com/grid/latest/tui-grid.js"></script>
 
-
+<!-- 부트스트랩 cdn 링크 -->
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.7.1/font/bootstrap-icons.css">
 
 <style>
-div#top {
-	width: 1500px;
-	height: 50px;
-	margin-left: 10px;
-	margin-top: 30px;
-	border-top: 1px solid black;
-	border-bottom: 1px solid black;
-	background-color: ghostwhite;
-}
 
-div#AA {
-	width: 1500px;
-	height: 600px;
-	margin-top: 10px; /*위에서 부터 벌어질 크기*/
-}
 
 div.left {
-	margin-left: 8px;
+	 /* margin-left: 8px; */ 
 	float: left;
 	box-sizing: border-box;
-	/* border-top: 1px solid black; */
-	/* border-bottom: 1px solid black; */
-	padding: 5px;
+	/* padding: 5px; */
 }
 
 div.right {
 	float: right;
 	width: 67%;
-	padding: 5px;
+	/* padding: 5px; */
 	box-sizing: border-box;
-	/* background: #ece6cc; */
 }
 
-.btn {
-   color: white;
-   border-radius: 5px;
-   background-color: #007b88;
-   padding: 2px 15px;
-   padding: 5px 30px;
-}
+
 
 .btn-secondary {
     color: white;
@@ -108,7 +85,8 @@ div.right {
 	<div id="top">
 		<div>
 			<span style="margin-top: 13px; float: left;"> &nbsp;&nbsp;자재정보관리
-			</span> <span style="float: right; margin-top: 3.5px;">
+			</span> 
+			<span style="float: right; margin-top: 4.5px;">
 				<button id="ResetBtn" type="button" class="btn" >새자료</button> &nbsp;&nbsp;
 				<button id="" type="button" class="btn" >삭제</button> &nbsp;&nbsp;
 				<button id="SaveBtn" type="button" class="btn" >저장</button> &nbsp;&nbsp;
@@ -117,12 +95,12 @@ div.right {
 		</div>
 	</div>
 
-	<div id="AA">
+	<div id="OverallSize">
 		<div class="left">
 			<span color="blue"> 코드 </span>
 			<br>
 			
-			<div id="grid" style="border-top: 3px solid #168; width: 450px; height: 500px;"></div>
+			<div id="grid" style="border-top: 3px solid #168; width: 450px;"></div>
 		</div>
 
 		<div class="right">
