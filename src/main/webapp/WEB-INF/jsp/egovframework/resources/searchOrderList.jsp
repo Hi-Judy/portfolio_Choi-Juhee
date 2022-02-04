@@ -7,6 +7,8 @@
 <title>Insert title here</title>
 </head>
 <body>
+
+<!-- 미입고 검색 그리드 -->
 <div id="gridOrder"></div>
 
 <script type="text/javascript">
@@ -32,7 +34,10 @@
 
 			 {
 			  header: '발주량',
-			  name: 'rscCnt'
+			  name: 'rscCnt',
+				formatter(value) {
+	                return value.value.toString().replace(/\B(?<!\.\d*)(?=(\d{3})+(?!\d))/g, ",");
+	            }
 			},
 			{
 			 header: '합계',
@@ -62,6 +67,7 @@
 		  contentType: 'application/json'
 		};
 	
+	//그리드 속성
 	var gridOrder = new Grid({
 		  el: document.getElementById('gridOrder'),
 		  data: dataSourceOrder,
@@ -71,6 +77,8 @@
 	
 	
 	//리스트에서 선택한 값 가지고 오기
+	//var ordrNo = [];
+	
 	gridOrder.on("check", (ev) => {
 		//grid.appendRow({'rscCode':gridOrder.getValue(ev["rowKey"],'rscCode'),
 						//'rscName':gridOrder.getValue(ev["rowKey"],'rscName'),
@@ -80,8 +88,9 @@
 						//'sucName':gridOrder.getValue(ev["rowKey"],'sucName'),
 						//'istReqDate':gridOrder.getValue(ev["rowKey"],'istReqDate')
 						//});
-		let ordrNo = gridOrder.getValue(ev["rowKey"],'ordrNo');
-		clickOrder(ordrNo);
+		
+		//ordrNo[ev.rowKey] = gridOrder.getValue(ev["rowKey"],'ordrNo');
+		
 	});
 </script>
 </body>

@@ -20,9 +20,9 @@
 <script src="https://code.jquery.com/ui/1.13.0/jquery-ui.js"></script>
 </head>
 <body>
-	<h2>발주조회</h2>
-	<div class="card bg-light text-dark">
-		<div class="card-body">
+	<h3 style="color : #054148; font-weight : bold">자재 발주 조회</h3>
+	<div id="top" style="height: 150px;">
+		 <div style="height: 40px; margin: 12px;">
 	발주일자  <input id="txtOrde1" type="date" data-role="datebox" data-options='{"mode": "calbox"}'>
 	~ 		<input id="txtOrde2" type="date" data-role="datebox" data-options='{"mode": "calbox"}'><br>
 	업체명 <input id="txtSuc2" readonly>	업체코드  <input id="txtSuc1">  <button id="btnFindSuc">돋보기</button><br>
@@ -30,13 +30,14 @@
 	<div id="dialog-form-rsc" title="자재 검색"></div>
 	<div id="dialog-form-suc" title="업체 검색"></div>
 	<br>
-	<button id="btnSelect">조회</button>
-	<button id="btn_reset" type="reset">초기화</button>
-	<button id="btnXlsx">엑셀</button>
+	<button id="btnSelect" class="btn">조회</button>
+	<button id="btn_reset" type="reset" class="btn">초기화</button>
+	<button id="btnXlsx" class="btn">엑셀</button>
 		</div>
 	</div>
-	<div id="grid"></div>
-	
+	<div id=OverallSize>
+		<div id="grid"></div>
+	</div>
 <script type="text/javascript">
 
 	//발주일자 초기값 
@@ -171,7 +172,6 @@
 		    	method: 'GET'
 		    	}
 		  },
-		  //initialRequest: false,
 		  contentType: 'application/json'
 		};
 	

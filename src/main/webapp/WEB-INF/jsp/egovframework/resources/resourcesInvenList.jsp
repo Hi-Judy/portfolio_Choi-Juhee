@@ -20,7 +20,7 @@
 <script src="https://code.jquery.com/ui/1.13.0/jquery-ui.js"></script>
 </head>
 <body>
-	<h2>재고조회</h2>
+<h3 style="color : #054148; font-weight : bold">재고조회</h3>
 <div id="tabs">
   <ul>
     <li><a href="#tabs-1">안전 재고</a></li>
@@ -160,7 +160,6 @@ $( function() {
 	//조회버튼 클릭시 값 가지고 오는 거
 	$("#btnSelect").on("click", function(){
 			var rscCode = $("#txtRsc1").val();
-			
 			$.ajax({
 				url :'rscStoreInv',
 				data: {'rscCode' : rscCode },

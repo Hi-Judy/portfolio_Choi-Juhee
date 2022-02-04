@@ -18,7 +18,7 @@
 <script src="https://code.jquery.com/ui/1.13.0/jquery-ui.js"></script>
 </head>
 <body>
-	<h2>재고조정 관리</h2>
+	<h3 style="color : #054148; font-weight : bold">재고 조정 관리</h3>
 	<div>
 		<hr>
 		<button id="btnSelectInventory">조회</button>
