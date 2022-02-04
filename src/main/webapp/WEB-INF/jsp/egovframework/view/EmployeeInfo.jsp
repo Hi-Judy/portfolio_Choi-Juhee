@@ -71,11 +71,6 @@ div.right {
 }
 
 
-.btn {
-   border-radius: 5px;
-   background-color: cornflowerblue;
-   padding: 2px 15px;
-}
 
 .Test{
 	background-color: darksalmon;
@@ -104,7 +99,7 @@ div.right {
    
   
    <br>
-   <div id="AA">
+   <div id="OverallSize">
 
       <div class="right">
          <span> 등록된사원수 : <input id="NUM"style="border:none;margin-left:5px; background-color:#f2f7ff; width:30px" disabled="true" > </span>

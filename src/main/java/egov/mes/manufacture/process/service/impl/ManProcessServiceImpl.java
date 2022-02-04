@@ -74,7 +74,7 @@ public class ManProcessServiceImpl implements ManProcessService {
 //		pList = mapper.selectProcTable(); 
 ////		System.out.println("주기적으로 진행공정 테이블을 조회 111: "+ pList);
 //		
-//		for(ManProcessVO processVO : pList) { //주기적으로 조회한 행들 갯수만큼 for문
+//		for(ManProcessVO processVO : pList) { //주기적으로 조회한 행들 갯수만큼 for문aste
 //			
 ////			System.out.println("000");
 ////			
@@ -95,6 +95,7 @@ public class ManProcessServiceImpl implements ManProcessService {
 //				//현재 공정의 인덱스와 마지막 공정의 인덱스가 같지 않으면 (마지막 공정 전 모든 공정) -> 현재 공정을 update
 //				
 //			}
+
 ////			else if((mapper.selectNextProc(processVO)).getManStarttime().equals("0")) {
 //////				System.out.println("***************eeeeee*******");
 ////				mapper.updateNowProc(mapper.selectNextProc(processVO));
@@ -160,7 +161,6 @@ public class ManProcessServiceImpl implements ManProcessService {
 //		}
 //		
 //	}
-
 	//생산지시서 조회
 	@Override
 	public List<ManProcessVO> selectCommand(ManProcessVO processVO) {
