@@ -21,7 +21,8 @@
 </head>
 <body>
 	<h2>자재반품 조회</h2>
-	<hr>
+	<div class="card bg-light text-dark">
+		<div class="card-body">
 	반품일자  <input id="txtOrde1" type="date" data-role="datebox" data-options='{"mode": "calbox"}'>
 	~ 		<input id="txtOrde2" type="date" data-role="datebox" data-options='{"mode": "calbox"}'><br>
 	업체코드  <input id="txtSuc1">  <button id="btnFindSuc">돋보기</button>  업체명 <input id="txtSuc2" readonly><br>
@@ -32,7 +33,8 @@
 	<button id="btnSelect">조회</button>
 	<button id="btn_reset" type="reset">초기화</button>
 	<button>엑셀</button>
-	<hr>	
+		</div>
+	</div>
 	<div id="grid"></div>
 	<hr>
 	

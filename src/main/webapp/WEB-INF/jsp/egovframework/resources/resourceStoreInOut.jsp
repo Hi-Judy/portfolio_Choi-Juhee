@@ -29,7 +29,8 @@
   </ul>
   
   <div id="tabs-1">
-	<hr>
+	<div class="card bg-light text-dark">
+		<div class="card-body">
 	입고일자  <input id="txtStoreIn1" type="date" data-role="datebox" data-options='{"mode": "calbox"}'>
 	~ 		<input id="txtStoreIn2" type="date" data-role="datebox" data-options='{"mode": "calbox"}'><br>
 	업체명 <input id="txtStoreInSuc2" readonly>	업체코드  <input id="txtStoreInSuc1">  <button id="btnStoreInSuc">돋보기</button><br>
@@ -41,13 +42,15 @@
 	<button id="btnStoreInreset" type="reset">초기화</button>
 
 	<button>엑셀</button>
-	<hr>	
+		</div>
+	</div>	
 	<div id="gridStoreIn"></div>
   </div>
   
   
   <div id="tabs-2">
-	<hr>
+	<div class="card bg-light text-dark">
+		<div class="card-body">
 	출고일자  <input id="txtStoreOut1" type="date" data-role="datebox" data-options='{"mode": "calbox"}'>
 	~ 		<input id="txtStoreOut2" type="date" data-role="datebox" data-options='{"mode": "calbox"}'><br>
 	업체명 <input id="txtStoreOutSuc2" readonly>	업체코드  <input id="txtStoreOutSuc1">  <button id="btnStoreOutSuc">돋보기</button><br>
@@ -59,7 +62,8 @@
 	<button id="btnStoreOutreset" type="reset">초기화</button>
 
 	<button>엑셀</button>
-	<hr>	
+		</div>
+	</div>	
 	<div id="gridStoreOut"></div>
 	</div>
 </div>
