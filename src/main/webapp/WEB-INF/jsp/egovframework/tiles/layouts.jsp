@@ -45,7 +45,7 @@
 
 <script src="https://uicdn.toast.com/grid/latest/tui-grid.js"></script>
 
-<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">
+<!-- <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous"> -->
 
 <!-- 부트스트랩 cdn 링크 -->
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.7.1/font/bootstrap-icons.css">
@@ -81,6 +81,17 @@ div#OverallSize {
    background-color: #007b88;
    padding: 2px 15px;
    padding: 5px 30px;
+}
+/* 재철이형 돋보기 버튼 스타일 */
+.bi-search {
+   font-size : 20px ;
+   width : 20px ;
+   height : 20px ;
+}
+   
+.inpBC{
+	text-align:center;
+	background-color: #d2e5eb; 
 }
 </style>
 </head>

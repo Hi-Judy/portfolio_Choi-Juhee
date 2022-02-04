@@ -6,44 +6,10 @@
 <head>
 <meta charset="utf-8">
 <title>제품BOM</title>
-<!-- 토스트그리드 cdn -->
-<link rel="stylesheet"
-   href="https://uicdn.toast.com/tui-grid/latest/tui-grid.css" />
-
-<!-- 토스트 그리드 위에 데이트피커 가 선언되어야 작동이 된다 (순서가중요) -->
-<link rel="stylesheet"
-   href="https://uicdn.toast.com/tui.date-picker/latest/tui-date-picker.css" />
-<script
-   src="https://uicdn.toast.com/tui.date-picker/latest/tui-date-picker.js"></script>
-
-<!-- 토스트그리드 cdn -->
-<script src="https://uicdn.toast.com/tui-grid/latest/tui-grid.js"></script>
-<script src="https://code.jquery.com/jquery-3.6.0.js"></script>
-
-<!-- toastr css라이브러리 -->
-<link rel="stylesheet" type="text/css"
-   href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.css" />
-<!-- toastr cdn 라이브러리 둘다 제이쿼리 밑에 있어야함 -->
-<script type="text/javascript"
-   src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
-
-<link rel="stylesheet"
-   href="https://uicdn.toast.com/grid/latest/tui-grid.css" />
-
-<!-- 모달창 만들떄 필요한 ui 라이브러리 -->
-<script src="https://code.jquery.com/ui/1.13.0/jquery-ui.js"></script>
-<link rel="stylesheet"
-   href="//code.jquery.com/ui/1.13.0/themes/base/jquery-ui.css">
-
-
-
-
-<script src="https://uicdn.toast.com/grid/latest/tui-grid.js"></script>
-
 
 <style>
 div.left {
-   margin-left: 8px;
+   margin-left: 6px;
    float: left;
    box-sizing: border-box;
    padding: 5px;
@@ -75,25 +41,26 @@ div.right {
 
      
 	      <div style="margin-left: 10px;">
-	         <span>제품코드 <input id="proId" type="text" readonly>
-	         </span> &nbsp;&nbsp; <span> 제품명 <input id="proName" type="text"
-	            readonly>
+	         <span>제품코드 <input id="proIdInp" type="text" class="inpBC" readonly>
+		         <button type="button" id="proId" style="border : none; background-color :#f8f8ff; color : #007b88;">
+				 	<i class="bi bi-search"></i>
+				 </button>
+	         </span> &nbsp;&nbsp; <span> 제품명 <input id="proName" type="text" class="inpBC" readonly>
 	         </span>
 	   	  </div>
 	      
 	      <div style="height: 40px; margin-top: 15px; margin-bottom: 5px; margin-left: 10px;">
-	         <span>제품분류 <input id="proFlag" type="text" readonly>
-	         </span> &nbsp;&nbsp; <span>생산구분 <input id="manFlag" type="text"	
-	            readonly>&nbsp;
-	         </span> 
-	         <span>관리단위 <input id="proUnit" type="text" readonly></span>
+	         <span>제품분류 <input id="proFlag" type="text" class="inpBC" readonly></span>
+	          &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+	          <span>생산구분 <input id="manFlag" type="text" class="inpBC" readonly></span> &nbsp;
+	         <span>관리단위 <input id="proUnit" type="text" class="inpBC" readonly></span>
 	      </div>
 	
 	   </div>
    </div>
 
    <br>
-   <div id=OverallSize>
+   <div id=OverallSize style="width: 1515px;">
       <div class="left">
          <span style="font-size: 1.5em; color: blue"> 사용자재 관리 </span>
           <span style="float: right; margin-top: 5px; color: rgb(158, 158, 158);">
@@ -103,7 +70,7 @@ div.right {
 
          <!-- style="overflow:scroll; width:504px; height:500px; " -->
          <div id="MatGrid"
-            style="border-top: 3px solid #168; width: 800px; height: 500px;"></div>
+            style="border-top: 3px solid #168; width: 800px; "></div>
       </div>
 
       <div class="right">
@@ -208,7 +175,7 @@ toastr.options = {
          }).done( (rsts) =>{
         	 console.log(rsts)
             proData = rsts.ProDetail;
-            document.getElementById("proId").setAttribute("value",proCode);         //제품코드
+            document.getElementById("proIdInp").setAttribute("value",proCode);         //제품코드
             document.getElementById("proName").setAttribute("value",proData[0].codeName);   //제품명
             document.getElementById("proFlag").setAttribute("value",proData[0].podtFlag);   //제품구분
             document.getElementById("manFlag").setAttribute("value",proData[0].manFlag);   //제품구분
@@ -305,7 +272,8 @@ toastr.options = {
             { header : '비고'      	, name : 'resEtc'   	, align : 'center' , editor : 'text'	},
             { header : 'DB'			, name: 'crud'		  	, hidden : true }
          ],
-         rowHeaders: ['checkbox']
+         rowHeaders: ['checkbox'],
+         bodyHeight: 257
       });
       
       
@@ -460,7 +428,8 @@ toastr.options = {
             { header: 'DB'		, name: 'crud'		  , hidden : true }
          ],
          rowHeaders: ['rowNum'],
-         draggable: true
+         draggable: true,
+         bodyHeight: 417
       });
        
        
@@ -576,7 +545,7 @@ toastr.options = {
     	
     	var ProcInput = ProcModiRow.createdRows ;
 	    	if(ProcInput.length > 0) {
-	    		 var proIdValue = document.getElementById("proId").value ;
+	    		 var proIdValue = document.getElementById("proIdInp").value ;
 	        	 var num = 0 ;	
 	        	 var PI ;
 	        	 var ProcInpData = new Array();
@@ -627,7 +596,7 @@ toastr.options = {
 		//------------- 공정흐름 업데이트 ---------------------
 	    var ProcUpdt = ProcModiRow.updatedRows;
 		if(ProcUpdt.length > 0){
-			var proIdValue = document.getElementById("proId").value ;
+			var proIdValue = document.getElementById("proIdInp").value ;
        	 	var num = 0 ;	
        	 	var PU ;
        		var ProcUpData = new Array();
@@ -704,7 +673,7 @@ toastr.options = {
      
      //---------- BOM 삭제버튼 이벤트 ---------------
      BomDataAllDelete.addEventListener("click" , () => {
-    	var proIdValue = document.getElementById("proId").value;
+    	var proIdValue = document.getElementById("proIdInp").value;
   	   
  	  	if(proIdValue == '' || proIdValue == null)
  	   		{
@@ -769,7 +738,7 @@ toastr.options = {
        })
        
        btnRightDel.addEventListener('click' , (ev) => {
-    	   var proIdValue = document.getElementById("proId").value;
+    	   var proIdValue = document.getElementById("proIdInp").value;
     	   
     	  	if(proIdValue == '' || proIdValue == null)
     	   		{
@@ -820,7 +789,7 @@ toastr.options = {
 	  
    	//자재 데이터 추가(인설트)
     function Minpt(MatInput) {
-   	 var proIdValue = document.getElementById("proId").value ;
+   	 var proIdValue = document.getElementById("proIdInp").value ;
    	 var num = 0 ;	
    	 var MI ;
    	 var Check = false ;
@@ -871,7 +840,7 @@ toastr.options = {
    	
     //---------- 자재 업데이트 ---------------
    	function MUpdate(MatUpdate) {
-   		var proIdValue = document.getElementById("proId").value ;
+   		var proIdValue = document.getElementById("proIdInp").value ;
       	 var num = 0 ;	
       	 var MU ;
       	 var Check = false ;
