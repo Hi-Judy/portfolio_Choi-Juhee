@@ -31,7 +31,7 @@ public class ManProcessController {
 	@PostMapping("/selectProcList")
 	public String selectProcList(@RequestBody ManProcessVO processVO, Model model ) {
 		model.addAttribute("result", service.selectSumManQnt(processVO));
-		System.out.println("브라우저 화면에 보여줄 진행공정 테이블 TEST");
+		//System.out.println("브라우저 화면에 보여줄 진행공정 테이블 TEST");
 		return "jsonView";
 	}
 	

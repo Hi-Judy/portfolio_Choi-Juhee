@@ -29,10 +29,26 @@ from Employee_info
 where dept_code = 'D002' AND  position_code = 'W003'
 </select>
 
+<!-- 구매업체 조회 -->
 <select id="ClientFind" resultType="egov.mes.materialmanage.dao.MaterialManageVO">
 select * 
 from common_code
 where group_code = 'cus' AND code_desct = '구매처'
+</select>
+
+<!--  -->
+<select id="MonthlyInventory" resultType="egov.mes.materialmanage.dao.MaterialManageVO">
+select to_char(store_date , 'MM') AS month
+      ,sum(case when store_flag='입고' then ist_cnt else 0 end) - nvl((select SUM(rtngd_cnt) from resource_rtngd where rsc_code= #{rscCode} and to_char(rtngd_date,'MM') = to_char(store_date , 'MM') ),0) AS matInto
+      ,sum(case when store_flag='출고' then ost_cnt else 0 end) AS matOut
+      ,sum(case when store_flag='정산입고' then ist_cnt else 0 end) AS checkInto
+      ,sum(case when store_flag='정산출고' then ost_cnt else 0 end) AS checkOut
+      ,nvl((select SUM(rtngd_cnt) from resource_rtngd where rsc_code= #{rscCode} and to_char(rtngd_date,'MM') = to_char(store_date , 'MM') ),0) AS matReturn
+      ,sum(case when store_flag='입고' then ist_cnt else 0 end) - nvl((select SUM(rtngd_cnt) from resource_rtngd where rsc_code= #{rscCode} and to_char(rtngd_date,'MM') = to_char(store_date , 'MM') ),0) - sum(case when store_flag='출고' then ost_cnt else 0 end) + sum(case when store_flag='정산입고' then ist_cnt else 0 end) - sum(case when store_flag='정산출고' then ost_cnt else 0 end) AS matSum
+from resource_store 
+where rsc_code = #{rscCode}
+group by to_char(store_date , 'MM') 
+order by to_char(store_date,'MM')
 </select>
 
 <!-- 사원정보 신규등록 -->

@@ -25,21 +25,34 @@
 <link rel="stylesheet" href="//code.jquery.com/ui/1.13.0/themes/base/jquery-ui.css">
 
 <script src="https://uicdn.toast.com/grid/latest/tui-grid.js"></script>
+<style>
+	.bi-question-circle {
+		font-size : 50px ;
+		width : 50px ;
+		height : 50px ;
+	}
+	
+	.bi-search {
+		font-size : 25px ;
+		width : 25px ;
+		height : 25px ;
+	}
+</style>
 </head>
 <body>
-	<div id="help" align="right"><button type="button" id="helpBtn">도움말</button></div>
+	<div id="help" align="right"><button type="button" id="helpBtn" style="border : none; background-color : white; padding-right : 30px; color : #007b88;"><i class="bi bi-question-circle"></i></button></div>
 	<br>
 	<div id="title" align="center"><h2>고객 관리</h2></div>
 	<br>
 	<div id="info">
 		<span>고객명 :  </span><input id="txtCusName" readonly> 
-		<span>고객코드 : </span><input id="txtCusCode"><button type="button" id="btnSearch">고객코드검색</button>
+		<span>고객코드 : </span><input id="txtCusCode">&nbsp;<button type="button" id="btnSearch" style="border : none; background-color : white; color : #007b88;"><i class="bi bi-search"></i></button>
 		<br>		
 		<div align="right">
 			<button type="button" id="listBtn">조회</button>
 			<button type="button" id="btnAdd">추가</button>
-			<button type="button" id="btnInsert">저장</button>
 			<button type="button" id="btnDelete">삭제</button>
+			<button type="button" id="btnInsert">저장</button>
 			<button type="button" id="clearBtn">초기화</button>
 		</div>
 	</div>
@@ -86,7 +99,9 @@
 					]
 				}
 			} ,
-			align: 'center'
+			align: 'center',
+		    sortable: true,
+		    sortingType: 'desc'
 		} ,
 		{
 			header : '고객구분' ,
@@ -99,7 +114,9 @@
 			header: '업체명' ,
 			name: 'codeName' ,
 			editor: 'text' ,
-			align: 'center'
+			align: 'center',
+		    sortable: true,
+		    sortingType: 'desc'
 		} ,
 		{
 			header: '연락처' ,

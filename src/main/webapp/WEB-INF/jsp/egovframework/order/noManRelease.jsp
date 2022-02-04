@@ -78,12 +78,16 @@
 		{
 			header : '접수일' ,
 			name : 'ordDate' ,
-			align: 'center'
+			align: 'center',
+		    sortable: true,
+		    sortingType: 'desc'
 		} ,
 		{
 			header : '납기일' ,
 			name : 'ordDuedate' , 
-			align: 'center'
+			align: 'center',
+		    sortable: true,
+		    sortingType: 'desc'
 		} , 
 		{
 			header : '총주문량' ,

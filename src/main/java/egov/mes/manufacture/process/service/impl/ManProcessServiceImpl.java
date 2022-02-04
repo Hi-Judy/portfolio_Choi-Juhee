@@ -59,92 +59,79 @@ public class ManProcessServiceImpl implements ManProcessService {
 	//첫 번째 공정만 시작시간을 sysdate로 업데이트
 	@Override
 	public int updateFirstProc(ManProcessVO processVO) {
+		
+		mapper.updateComEtc(processVO);
 		return mapper.updateFirstProc(processVO);
 	}
 	
 	
 	//스케쥴러
-	@Scheduled(fixedDelay=5000) //10초마다 실행된다.
-	public void selectProcessTimer() { // 주기적으로 실행될 processTimer
+	@Scheduled(fixedDelay=5000)
+	public void selectProcessTimer() { 
 		
-		//주기적으로 진행공정 테이블을 조회해온다. 조회한 행들을 담아줄 배열 pList
 		List<ManProcessVO> pList = new ArrayList<>(); 
 		pList = mapper.selectProcTable(); 
-//		System.out.println("스케쥴러 테스트: "+ pList);
+//		System.out.println("111:" +pList);
 		
-		for(ManProcessVO processVO : pList) { //주기적으로 조회한 행들 갯수만큼 for문
+		for(ManProcessVO processVO : pList) { 
 			
-//			System.out.println("000");
-			
-//			System.out.println("TEST n번: "+ processVO);
-//			System.out.println(mapper.selectNextProc(processVO));
-			if((mapper.selectNextProc(processVO)) == null) { //다음 공정의 시작 시간이 0이면 
-//				System.out.println("다음공정 찾기");
-				//ManProcessVO secondQnt = mapper.selectSecondQnt(processVO); //10초당 생산량 조회
-				
-				mapper.updateNowProc(mapper.selectNextProc(processVO));
-				//현재 공정의 인덱스와 마지막 공정의 인덱스가 같지 않으면 (마지막 공정 전 모든 공정) -> 현재 공정을 update
-				
-			}
-			else if((mapper.selectNextProc(processVO)).getManStarttime().equals("0")) {
-//				System.out.println("***************eeeeee*******");
-				mapper.updateNowProc(mapper.selectNextProc(processVO));
+			System.out.println(processVO);
+			//System.out.println("다음공정:"+(mapper.selectNextProc(processVO)).getManStarttime());
+		
+			if(!processVO.getProcCode().equals("PROC011")) { //마지막 공정이 아니면
+				if( (mapper.selectNextProc(processVO)).getManStarttime().equals("0") //다음 공정의 시작 시간이 0이면
+					
+				) {
+//					System.out.println("222:" +processVO);
+					mapper.updateNowProc(mapper.selectNextProc(processVO));
+				}	
 			}
 			
-			//작업 목표량이 실제 작업 완료량보다 크면 10초당 생산량을 up.
+			
+			
 			if (Integer.parseInt(processVO.getManGoalqnt()) > Integer.parseInt(processVO.getManQnt())) {
-//				System.out.println("111");
-				ManProcessVO secondQnt = mapper.selectSecondQnt(processVO); //10초당 생산량 조회
 				
-//				System.out.println("222");
+				ManProcessVO secondQnt = mapper.selectSecondQnt(processVO); 
 				
-				processVO.setManQnt(String.valueOf((Integer.parseInt(secondQnt.getQntPer10Second()) //기존의 생산량 + update된 생산량
+				processVO.setManQnt(String.valueOf((Integer.parseInt(secondQnt.getQntPer10Second()) 
 						+ Integer.parseInt(processVO.getManQnt()) ) ) ); 
 				
-//				System.out.println("스케쥴러 테스트2: "+processVO);
-				
-				if(processVO.getProcCode().equals("PROC001")) { //proc001이면 생산수량 update
-//					System.out.println("333");
+//				System.out.println("333:" +secondQnt.getQntPer10Second());
+//				System.out.println("444:" +processVO.getManQnt());
+//				System.out.println("555:" +processVO);
+//				
+				if(processVO.getProcCode().equals("PROC001")) { 
 					mapper.updateSecondQnt(processVO);
-//					System.out.println("진행공정 TEST11: "+ processVO);
 				} 
 				
-				else if(mapper.selectPreManQnt(processVO) != null //proc001이 아니고 현재 공정 앞전 공정의 생산수량이 있으면 update
-						&& Integer.parseInt((mapper.selectPreManQnt(processVO)).getManQnt()) >= 
-							Integer.parseInt(processVO.getManQnt()) + ( Integer.parseInt(secondQnt.getQntPer10Second()) )
-					   ) {
-//								System.out.println("진행공정 TEST22: "+ processVO);
-//								if((mapper.selectNextProc(processVO).getManStarttime())==null) { //현재공정(vo)을 조회해왔을 때 거기의 startTime== null => sysdate 로 update
-//									System.out.println("다음공정 찾기");
-//									mapper.updateNowProc(processVO);
-//									System.out.println("444");
-//								}
-//								System.out.println("555");
-								mapper.updateSecondQnt(processVO);
-								
-						}
+				else if(mapper.selectPreManQnt(processVO) != null 
+						&& 
+						Integer.parseInt((mapper.selectPreManQnt(processVO)).getManQnt()) >= 
+							Integer.parseInt(processVO.getManQnt() )
+			    ) {
+					mapper.updateSecondQnt(processVO);
+						
+				}
 				
 			} 
 			
-//			System.out.println("TEST n번: "+ processVO);
-//			System.out.println(mapper.selectNextProc(processVO).getManStarttime());
-//			else if((mapper.selectNextProc(processVO).getManStarttime()).equals("0")) { //다음 공정의 시작 시간이 0이면 
-//				System.out.println("다음공정 찾기");
-//				//현재 공정의 인덱스와 마지막 공정의 인덱스가 같지 않으면 (마지막 공정 전 모든 공정) -> 현재 공정을 update
-//				if(mapper.selectIndexNow(processVO) != mapper.selectIndexMax(processVO)) {
-//					mapper.updateNowProc(mapper.selectNextProc(processVO));
-//					
-//				}
-//			}
+			
+			if(Integer.parseInt(processVO.getManGoalqnt()) <= Integer.parseInt(processVO.getManQnt())
+					//앞전 공정의 생산량 == 목표량
+					//앞전 공정의 종료시간이 찍혀있거나
+					) 
+					
+					{
+				mapper.updateEndTime(processVO);
+				mapper.updateManQnt(processVO);
+			}
 		
-		if(Integer.parseInt(processVO.getManGoalqnt()) <= Integer.parseInt(processVO.getManQnt())) {
-			mapper.updateEndTime(processVO);
-		}
-		
+			//최
 		}
 		
 	}
 
+	
 	//생산지시서 조회
 	@Override
 	public List<ManProcessVO> selectCommand(ManProcessVO processVO) {
@@ -157,9 +144,6 @@ public class ManProcessServiceImpl implements ManProcessService {
 	public List<ManProcessVO> selectProcess(ManProcessVO processVO) {
 		return mapper.selectProcess(processVO);
 	}
-
-
-	
 
 
 }

@@ -1,7 +1,5 @@
 package egov.mes.materialmanage.web;
 
-import java.util.List;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -11,7 +9,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
-import egov.mes.BOM.dao.ProductBomVO;
 import egov.mes.materialmanage.dao.MaterialManageVO;
 import egov.mes.materialmanage.service.MaterialManageService;
 
@@ -35,13 +32,14 @@ public class MaterialManageController {
 		return jsonView;
 	}
 	
-	//자재 단건 상세조회
+	//자재 단건 상세조회 (월별자재재고 조회)
 	@ResponseBody
 	@RequestMapping("Details/{RscCode}")
 	public ModelAndView DetailsList( @PathVariable String RscCode ) {
 		ModelAndView jsonView = new ModelAndView("jsonView");
 		jsonView.addObject("OneData" , service.resSearch(RscCode));
 		jsonView.addObject("Datas" , service.resStListSearch(RscCode));
+		jsonView.addObject("MatInven" , service.MonthlyInventory(RscCode));	//월별자재재고 조회
 		return jsonView;
 	}
 	

@@ -33,7 +33,7 @@
 	<br>
 	<div id="info">
 		<span>제품명 :  </span><input id="txtPodtName" readonly>
-		<span>제품코드 : </span><input id="txtPodtCode"><button type="button" id="btnSearch">제품코드검색</button>
+		<span>제품코드 : </span><input id="txtPodtCode">&nbsp;<button type="button" id="btnSearch">제품코드검색</button>
 		<br>
 		<br>
 		<span>작업일자 : </span><input id="manDatestart" type="date"><span> ~ </span><input id="manDateend" type="date">
@@ -46,8 +46,8 @@
 <!-- 테스트 -->
 			<button type="button" id="listBtn">조회</button>
 			<button type="button" id="btnAdd">추가</button>
-			<button type="button" id="btnInsert">저장</button>
 			<button type="button" id="btnDelete">삭제</button>
+			<button type="button" id="btnInsert">저장</button>
 			<button type="button" id="clearBtn">초기화</button>
 		</div>
 	</div>
@@ -118,7 +118,9 @@
 			header: '작업일자' ,
 			name : 'manDate' ,
 			editor: 'datePicker' ,
-			align: 'center'
+			align: 'center',
+		    sortable: true,
+		    sortingType: 'desc'
 		} ,
 		{
 			header: '입고량' ,
@@ -745,7 +747,9 @@
 		{
 			header: '자재Lot번호' ,
 			name: 'matLotno' , 
-			align: 'center'
+			align: 'center',
+		    sortable: true,
+		    sortingType: 'desc'
 		}		
 	] ;
 	
@@ -847,9 +851,9 @@
 		// 학원 192.168.0.60
 		// 우리조서버 52.86.104.126:8080
 		// 집
-		//let url = "http://192.168.0.8/yedamfinal2/viewQR/" + code ;
+		//let url = "http://192.168.0.8/yedamfinal2/ProductTest2Page/" + code ;
 		// 학원
-		//let url = "http://192.168.0.60/yedam_final2/viewQR/" + code ;
+		//let url = "http://192.168.0.60/yedam_final2/ProductTest2Page/" + code ;
 		// 서버
 		let url = "http://52.86.104.126:8080/ProductTest2Page/" + code ;
 		let option = "width = 355 , height = 355" ;

@@ -6,6 +6,14 @@ import egovframework.rte.psl.dataaccess.mapper.Mapper;
 
 @Mapper("manProcessMapper")
 public interface ManProcessMapper {
+	//작업지시량만큼 업데이트
+	int updateManQnt(ManProcessVO processVO);
+	
+	//작업지시량조회
+	String selectManGoalQnt(ManProcessVO processVO);
+	
+	//지시테이블의 상태 값 변경
+	int updateComEtc(ManProcessVO processVO);
 	
 	//스케쥴러 종료
 	int updateEndTime(ManProcessVO processVO);

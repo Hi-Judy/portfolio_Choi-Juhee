@@ -9,7 +9,9 @@
 <link rel="stylesheet" href="https://uicdn.toast.com/tui.date-picker/latest/tui-date-picker.css" />
 <link rel="stylesheet" href="//code.jquery.com/ui/1.13.0/themes/base/jquery-ui.css">
 <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">
+<link rel="stylesheet" href="https://uicdn.toast.com/tui.pagination/latest/tui-pagination.css" />
 
+<script type="text/javascript" src="https://uicdn.toast.com/tui.pagination/v3.4.0/tui-pagination.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p" crossorigin="anonymous"></script>
 <script src="https://uicdn.toast.com/tui.date-picker/latest/tui-date-picker.js"></script>
 <script src="https://uicdn.toast.com/tui-grid/latest/tui-grid.js"></script>
@@ -26,30 +28,30 @@
   </ul>
   
   <div id="tabs-1">	
-	<hr>
+	<div class="card bg-light text-dark">
+		<div class="card-body">
 	자재코드  <input id="txtRsc1">  <button id="btnFindRsc">돋보기</button>  자재명 <input id="txtRsc2" readonly><br>
-	<hr>
 	<div id="dialog-form-rsc" title="자재 검색"></div>
 	<br>
 	<button id="btnSelect">조회</button>
 	<button id="btn_reset" type="reset">초기화</button>
 	<button>엑셀</button>
-	<hr>	
+		</div>
+	</div>	
 	<div id="gridRsc1"></div>
-	<hr>
 	</div>
 	
-	
 	<div id="tabs-2">
-	<hr>
+	<div class="card bg-light text-dark">
+		<div class="card-body">
 	자재코드  <input id="txtRscLot1">  <button id="btnFindRscLot">돋보기</button>  자재명 <input id="txtRscLot2" readonly><br>
-	<hr>
 	<div id="dialog-form-rsc-Lot" title="자재 검색"></div>
 	<br>
 	<button id="btnSelectLot">조회</button>
 	<button id="btn_reset_Lot" type="reset">초기화</button>
 	<button>엑셀</button>
-	<hr>
+		</div>
+	</div>
 	<div id="gridRscLot"></div>
 	</div>
 </div>	
@@ -115,14 +117,17 @@ $( function() {
 			   },
 			   {
 			     header: '안전재고',
-				 name: 'rscSfinvc'
+				 name: 'rscSfinvc',
+				 formatter(value) {
+		                return value.value.toString().replace(/\B(?<!\.\d*)(?=(\d{3})+(?!\d))/g, ",");
+		            }
 				},
 				{
 				  header: '재고',
 				  name: 'rscCnt',
-				  formatter(value) {
-		          	return value.value.toString().replace(/\B(?<!\.\d*)(?=(\d{3})+(?!\d))/g, ",");
-		          }
+					 formatter(value) {
+		                return value.value.toString().replace(/\B(?<!\.\d*)(?=(\d{3})+(?!\d))/g, ",");
+		            }
 				},
 				{
 				  header: '미달량',
@@ -145,7 +150,11 @@ $( function() {
 	const grid = new Grid({
 		  el: document.getElementById('gridRsc1'),
 		  data: null,
-		  columns
+		  columns,
+		  pageOptions: {
+				useClient: true,
+				perPage: 15
+			}
 		});
 	
 	//조회버튼 클릭시 값 가지고 오는 거
@@ -169,7 +178,7 @@ $( function() {
 			for(i=0; i<grid.getRowCount(); i++){
 				let gr = grid.getValue(i, "rscSfinvc")-grid.getValue(i, "rscCnt")
 				console.log(gr);
-				grid.setValue(i, "shortage", gr);
+				grid.setValue(i, "shortage", gr.toString().replace(/\B(?<!\.\d*)(?=(\d{3})+(?!\d))/g, ","));
 			}
 		})
 		
@@ -191,7 +200,7 @@ $( function() {
 	});
 	
 	//클릭한 값을 input태그에 넣고 모달창 종료
-	function clickRsc(rscCode, rscName){
+	function clickRsc2(rscCode, rscName){
 		$("#txtRscLot1").val(rscCode);
 		$("#txtRscLot2").val(rscName);
 		dialogLot.dialog("close");
@@ -260,7 +269,11 @@ $( function() {
 	const gridRscLot = new Grid({
 		  el: document.getElementById('gridRscLot'),
 		  data: null,
-		  columns : columnsLot
+		  columns : columnsLot,
+		  pageOptions: {
+				useClient: true,
+				perPage: 15
+			}
 		});
 	
 	//조회버튼 클릭시 값 가지고 오는 거

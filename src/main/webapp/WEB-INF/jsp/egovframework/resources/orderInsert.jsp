@@ -19,17 +19,20 @@
 </head>
 <body>
 	<h2>자재 발주 관리</h2>
-	<div>
-		<hr>
-		<button id="btnSelectOrder">조회</button>
+
+
+	<div class="card">
+		<div class="card-body">
+		<button id="btnSelectOrder">미검사 조회</button>
 		<button id="btnSaveOrder">저장</button>
-		<hr>
 		<button id="btnAdd">추가</button>
 		<button id="btnDel">삭제</button>
+		</div>
 	</div>
 	
 	<div id="dialog-form-rsc" title="자재 검색"></div>
 	<div id="dialog-form-order" title="미입고 검색"></div>
+	
 	<div id="grid" ></div>
 
 	<script type="text/javascript">
@@ -41,6 +44,11 @@
 			modal: true,
 			heigth : 500,
 			width : 900,
+			buttons: {
+				"닫기" : function() {
+					dialog3.dialog("close") ;
+				}
+			},
 		});
 	
 	//모달창 설정(조회 클릭시 미입고 품목 조회)
@@ -49,21 +57,28 @@
 			modal: true,
 			heigth : 500,
 			width : 900,
+			buttons: {
+				"선택" : function clickOrder(ordrNo){
+					console.log(ordrNo);
+					grid.readData(1, {'ordrNo':ordrNo}, true);
+					dialog4.dialog("close");
+				},
+				"닫기" : function() {
+					dialog4.dialog("close") ;
+				}
+			},
 		});
 	
 	//모달창 오픈
 	$("#btnSelectOrder").on("click", function(){
 			dialog4.dialog("open");
 		$("#dialog-form-order").load("searchOrderList",
-				function(){console.log("로드됨")})
+				function(){
+					console.log("로드됨")
+			})
 		});
 	
-	//모달창 닫기
-	function clickOrder(ordrNo){
-		console.log(ordrNo);
-		grid.readData(1, {'ordrNo':ordrNo}, true);
-		dialog4.dialog("close");
-	};
+
 	
 	
 	//발주 insert 그리드 
@@ -91,11 +106,17 @@
 	   },
 	   {
 		header: '단가',
-		name: 'rscPrc'
+		name: 'rscPrc',
+		formatter(value) {
+            return value.value.toString().replace(/\B(?<!\.\d*)(?=(\d{3})+(?!\d))/g, ",");
+        }
 		},
 	   {
 		 header: '합계',
-		 name: 'rscTotal'
+		 name: 'rscTotal',
+			formatter(value) {
+             return value.value.toString().replace(/\B(?<!\.\d*)(?=(\d{3})+(?!\d))/g, ",");
+         }
 		},
 		{
 		  header: '업체',

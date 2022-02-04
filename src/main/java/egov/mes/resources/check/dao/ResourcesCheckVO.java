@@ -38,5 +38,6 @@ public class ResourcesCheckVO {
 	String rtngdNo;		//반품번호
 	String rtngdCnt;	//반품량
 	String rtngdDate; 	//반품일
+	String rscTotal;
 
 }

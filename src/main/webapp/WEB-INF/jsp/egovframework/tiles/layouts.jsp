@@ -44,6 +44,45 @@
    href="//code.jquery.com/ui/1.13.0/themes/base/jquery-ui.css">
 
 <script src="https://uicdn.toast.com/grid/latest/tui-grid.js"></script>
+
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">
+
+<!-- 부트스트랩 cdn 링크 -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.7.1/font/bootstrap-icons.css">
+<style>
+	.tui-is-selected {
+		background : #007b88 !important;
+		background-color : #007b88 !important;	
+		border : #007b88 !important;
+	}
+	/* 상단 공간 */
+	div#top {
+	width: 1500px;
+	height: 50px;
+	margin-left: 10px;
+	margin-top: 30px;
+	border-top: 1px solid black;
+	border-bottom: 1px solid black;
+	border-left: 1px solid black;
+	border-right: 1px solid black;
+	border-radius: 5px; 
+	background-color: ghostwhite;
+}
+/*탑을 위에 먼저넣고 해야함 */
+div#OverallSize {
+	width: 1500px;
+	height: 600px;	/*전체높이*/
+	margin-top: 10px; /*위에서 부터 벌어질 크기*/
+}
+/* 버튼 클래스 */
+.btn {
+   color: white;
+   border-radius: 5px;
+   background-color: #007b88;
+   padding: 2px 15px;
+   padding: 5px 30px;
+}
+</style>
 </head>
 <body>
 	<tiles:insertAttribute name="tiles_side_bar" />

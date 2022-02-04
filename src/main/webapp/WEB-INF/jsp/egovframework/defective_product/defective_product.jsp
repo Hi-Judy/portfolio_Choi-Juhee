@@ -39,8 +39,7 @@
 		<input id = "txtFromDate" type="date" name="from" style="display:inline-block;">
 		
 		<p style="display:inline-block;"> ~ </p>
-		<input id = "txtToDate" type="date" name="to" style="display:inline-block;">
-		<button type="button" id="btnFind">검색</button><br>
+		<input id = "txtToDate" type="date" name="to" style="display:inline-block;">&nbsp;<button type="button" id="btnFind">검색</button><br>
 	</div>
 
 	<div>
@@ -198,7 +197,9 @@
 		const columnsProduct = [
 			{
 				header: '작업일자',
-				name: 'manDate'
+				name: 'manDate',
+			    sortable: true,
+			    sortingType: 'desc'
 			},
 			{
 				header: '공정코드',
@@ -251,14 +252,18 @@
 			},
 			{
 				header:'작업일',
-				name: 'manDate'
+				name: 'manDate',
+			    sortable: true,
+			    sortingType: 'desc'
 			},
 			{
 				header:'불량량',
 				name: 'defQnt',
 				formatter(value) {
 					return value.value.toString().replace(/\B(?<!\.\d*)(?=(\d{3})+(?!\d))/g, ",") ;
-				}
+				},
+			    sortable: true,
+			    sortingType: 'desc'
 			}
 		]
 		
