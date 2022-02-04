@@ -18,10 +18,10 @@
 <script src="https://code.jquery.com/ui/1.13.0/jquery-ui.js"></script>
 </head>
 <body>
-	<h2>자재입고검사관리</h2>
+	<h3 style="color : #054148; font-weight : bold">자재입고검사관리</h3>
 	<hr>
 		<button id="findResourcesCheck">미검사 조회</button>
-		<button id="deleteResourcesCheck">삭제</button>
+		<button id="delRscCheck">삭제</button>
 		<button id="saveResourcesCheck">저장</button>
 	<hr>
 	<div id="dialog-form-def" title="자재 불량 검사 관리"></div>
@@ -31,13 +31,36 @@
 <script type="text/javascript">
 	let defRowKey;
 	
-	
+	var poNoList=[];
 	//모달창 설정(조회 클릭시 미입고 품목 조회)
 	let dialog5 = $( "#dialog-form-check" ).dialog({
 			autoOpen: false,
 			modal: true,
 			heigth : 500,
 			width : 900,
+			buttons: {
+				"확인" : function (){
+						console.log(gridOrder.getCheckedRows());
+						console.log(gridOrder.getCheckedRows().length);
+						console.log(gridOrder.findRows({ordrNo : 'ordrNo' }));
+						//여기서는 getCheckedRows에 있는 값을 
+						for(i=0; i <getCheckedRows().length; i++ ){
+							
+							//중복체크하고 값이 없는 경우에만 
+							if(findRows().length == 0) {
+								grid.appendRow({ });
+								
+							}
+							
+							
+						}
+
+					dialog5.dialog("close");
+				},
+				"닫기" : function() {
+					dialog5.dialog("close");
+				}
+			},
 		});
 	
 	//모달창 오픈
@@ -46,13 +69,7 @@
 		$("#dialog-form-check").load("searchOrderList",
 				function(){console.log("로드됨")})
 		});
-	
-	//모달창 닫기
-	function clickOrder(ordrNo){
-		console.log(ordrNo);
-		grid.readData(1, {'ordrNo':ordrNo}, true);
-		dialog5.dialog("close");
-	};
+
 	
 	//그리드 
 	var Grid = tui.Grid;
@@ -116,7 +133,7 @@
 	let dataSource = {
 		  api: {
 		    readData: { 
-		    	url: 'resourcesOrder', 
+		    	url: '', 
 		    	method: 'GET'
 		    	},
 		    	modifyData: { url: 'resourcesCheckModify', method: 'POST' }
@@ -162,14 +179,12 @@
 	
 	//저장버튼 클릭시 modify rscIstCnt
 	saveResourcesCheck.addEventListener("click", function(){
-		console.log((grid.getValue(grid.getRowCount()-1, "rscCnt")));
-		console.log((grid.getValue(grid.getRowCount()-1, "rscIstCnt")));
 		if((grid.getValue(grid.getRowCount()-1, "rscCnt")) != (grid.getValue(grid.getRowCount()-1, "rscIstCnt"))){
 			alert("발주량과 입고량이 일치하지 않습니다")
 		}else if((grid.getValue(grid.getRowCount()-1, "rscCnt")) == (grid.getValue(grid.getRowCount()-1, "rscIstCnt"))){
 		  grid.request('modifyData');
 		}
-}) 
+	}) 
 
 	//저장시 데이터 다시 읽어서 수정한 품목(입고 완료한) 사라지게
 	grid.on("response",function(ev){
@@ -178,6 +193,10 @@
 			grid.readData();
 		} 
 	})
+	
+	delRscCheck.addEventListener("click", function(){
+		grid.removeCheckedRows(true);
+	}) 
 	
 	
 </script>

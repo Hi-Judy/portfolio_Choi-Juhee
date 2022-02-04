@@ -16,6 +16,9 @@
 			   FN_GET_RSC_UNIT(RSC_CODE) AS RSC_UNIT
 		FROM RESOURCE_ORDER
 		WHERE RSC_ST = '발주'
+		<if test="ordrNo != null and ordrNo != ''">
+			and ORDR_NO = #{ordrNo}		
+		</if>
 		ORDER BY ORDR_NO
 	</select>
 	

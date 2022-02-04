@@ -20,7 +20,7 @@
 <script src="https://code.jquery.com/ui/1.13.0/jquery-ui.js"></script>
 </head>
 <body>
-	<h2>자재반품 조회</h2>
+	<h3 style="color : #054148; font-weight : bold">자재 반품 조회</h3>
 	<div class="card bg-light text-dark">
 		<div class="card-body">
 	반품일자  <input id="txtOrde1" type="date" data-role="datebox" data-options='{"mode": "calbox"}'>
