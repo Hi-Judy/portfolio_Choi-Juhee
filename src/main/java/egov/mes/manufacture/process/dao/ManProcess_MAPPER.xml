@@ -2,6 +2,33 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
 <mapper namespace="egov.mes.manufacture.process.dao.ManProcessMapper">
+
+<!-- 이전공정의 종료시간 구하기 -->
+<select id="selectPreEndTime" resultType="egov.mes.manufacture.process.dao.ManProcessVO">
+	select p.man_endTime 
+    from manufacture_process p 
+    where  1=1                
+    and  p.proc_code = (                 
+                        select DISTINCT proc_code 
+                        from process_flowInfo
+                        where proc_index= (                                       
+                                           select proc_index                                
+                                           from process_flowInfo                    
+                                           where podt_Code = #{podtCode}                                       
+                                           and proc_code = #{procCode}                  
+                                          ) -1
+                                          and podt_code= #{podtCode}                                                   
+                                                                 
+                        )                                                                                     
+    and com_code =  (                                                                                             
+                     select COM_CODE                                                                                        
+                     from manufacture_command_d                                                                           
+                     where podt_code =#{podtCode}                                                                               
+                    )   
+
+</select>
+
+
 <!-- 작업지시량만큼 작업완료량 update -->
 <update id="updateManQnt">
 	update manufacture_process
@@ -9,6 +36,7 @@
 	where com_code = #{comCode}
 	and proc_code = #{procCode}
 </update>
+
 
 <!-- 작업지시량 가져오기 -->
 <select id="selectManGoalQnt" resultType="string">
@@ -28,11 +56,12 @@
 
 
 <!-- 스케쥴러 종료 -->
-<update id="updateEndTime">
-	update manufacture_process
+<update id="updateEndTime" >
+	<!-- update manufacture_process
 	set man_endTime= sysdate
 	where proc_code = #{procCode}
-	and com_code = #{comCode}
+	and com_code = #{comCode} -->
+	{ call p_endTime (#{procCode},#{comCode},#{podtCode}) }
 </update>
 
 <!-- 인덱스 최대값 -->
@@ -135,28 +164,6 @@
 
 <!-- 앞공정의 생산수량 유무 확인 -->
 <select id="selectPreManQnt" resultType="egov.mes.manufacture.process.dao.ManProcessVO">
-	<!-- select rownuma, proc_code, nvl(man_qnt,0) as manQnt
-	from ( select f.*
-	       from ( select rownum rownuma,a.* 
-	           	  from ( select proc_code,nvl(man_qnt,0) as man_qnt,podt_code 
-	                	 from manufacture_process 
-	                	 where podt_code = #{podtCode} 
-	                	 order by proc_code
-	           			) a	
-	           	) f	
-	     ) e     		
-	where rownuma = ( select d.rownumd 
-					  from ( select rownum rownumd, b.* 
-							 from ( select c.* 
-							 		from ( select proc_code, nvl(man_qnt,0) as man_qnt ,podt_code 
-							 			   from manufacture_process 
-							 			   order by proc_code
-							 			 ) c 
-        						  ) b
-    					    ) d 
-    				  where proc_code= #{procCode}
-					) -1 -->
-	
 	select p.man_qnt 
     from manufacture_process p 
     where  1=1                
@@ -298,6 +305,5 @@
 	from man_command_view
 	where man_startdate = to_date(#{manStartDate}, 'rr/MM/dd')
 </select>
-
 
 </mapper>

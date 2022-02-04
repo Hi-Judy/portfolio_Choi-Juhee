@@ -43,12 +43,11 @@ public class ManProcessServiceImpl implements ManProcessService {
 	public ManProcessVO selectProc(ManProcessVO processVO) {
 		List<ManProcessVO> pList = new ArrayList<>();
 		pList = mapper.selectProc(processVO);
-		System.out.println(pList.size());
 		
 		for(ManProcessVO pVO : pList) {
 			pVO.setPodtCode(processVO.getPodtCode());
 			mapper.insertProcess(pVO);
-			System.out.println("0202 INSERT TEST: "+ pVO);
+			System.out.println("공정 현황 INSERT TEST: "+ pVO);
 		}
 		//System.out.println("UPDATE TEST...ㅠㅠ" + mapper.updateFirstProc(processVO));
 		
@@ -56,7 +55,7 @@ public class ManProcessServiceImpl implements ManProcessService {
 	}
 	
 	
-	//첫 번째 공정만 시작시간을 sysdate로 업데이트
+	//첫번째 공정이 시작되면 지시 테이블에 '생산중'으로 변경 -> 시작시간 update
 	@Override
 	public int updateFirstProc(ManProcessVO processVO) {
 		
@@ -71,63 +70,48 @@ public class ManProcessServiceImpl implements ManProcessService {
 		
 		List<ManProcessVO> pList = new ArrayList<>(); 
 		pList = mapper.selectProcTable(); 
-//		System.out.println("111:" +pList);
 		
-		for(ManProcessVO processVO : pList) { 
-			
-			System.out.println(processVO);
-			//System.out.println("다음공정:"+(mapper.selectNextProc(processVO)).getManStarttime());
-		
+		for(ManProcessVO processVO : pList) {
 			if(!processVO.getProcCode().equals("PROC011")) { //마지막 공정이 아니면
-				if( (mapper.selectNextProc(processVO)).getManStarttime().equals("0") //다음 공정의 시작 시간이 0이면
-					
-				) {
-//					System.out.println("222:" +processVO);
+				
+				if( (mapper.selectNextProc(processVO)).getManStarttime().equals("0") ) { //다음 공정의 시작 시간이 0이면
+				
 					mapper.updateNowProc(mapper.selectNextProc(processVO));
 				}	
 			}
 			
 			
-			
-			if (Integer.parseInt(processVO.getManGoalqnt()) > Integer.parseInt(processVO.getManQnt())) {
+			if (Integer.parseInt(processVO.getManGoalqnt()) > Integer.parseInt(processVO.getManQnt()) ) {
 				
 				ManProcessVO secondQnt = mapper.selectSecondQnt(processVO); 
 				
 				processVO.setManQnt(String.valueOf((Integer.parseInt(secondQnt.getQntPer10Second()) 
 						+ Integer.parseInt(processVO.getManQnt()) ) ) ); 
 				
-//				System.out.println("333:" +secondQnt.getQntPer10Second());
-//				System.out.println("444:" +processVO.getManQnt());
-//				System.out.println("555:" +processVO);
-//				
 				if(processVO.getProcCode().equals("PROC001")) { 
 					mapper.updateSecondQnt(processVO);
-				} 
-				
-				else if(mapper.selectPreManQnt(processVO) != null 
+				}else if(mapper.selectPreManQnt(processVO) != null 
 						&& 
 						Integer.parseInt((mapper.selectPreManQnt(processVO)).getManQnt()) >= 
-							Integer.parseInt(processVO.getManQnt() )
-			    ) {
+							Integer.parseInt(processVO.getManQnt() ) ) {
+				
 					mapper.updateSecondQnt(processVO);
-						
 				}
 				
 			} 
 			
-			if(Integer.parseInt(processVO.getManGoalqnt()) <= Integer.parseInt(processVO.getManQnt())
-					//앞전 공정의 생산량 == 목표량
-					//앞전 공정의 종료시간이 찍혀있거나
-					) 
-					
-					{
+			
+			if(Integer.parseInt(processVO.getManGoalqnt()) <= Integer.parseInt(processVO.getManQnt()) //현재 공정의 종료시간 update
+//			   &&
+//			   //앞전 공정의 종료시간에 값이 들어오면
+//			   mapper.selectPreEndTime(processVO).getManEndtime() != null
+			   ) {
+
 				mapper.updateEndTime(processVO);
 				mapper.updateManQnt(processVO);
 			}
-		
-			//최
+			 
 		}
-		
 	}
 
 	
