@@ -50,9 +50,9 @@ public class MaterialManageServiceImpl implements MaterialManageService {
 	
 	//월별자재재고 조회
 	@Override
-	public List<MaterialManageVO> MonthlyInventory( String RscCode ) {
+	public List<MaterialManageVO> MonthlyInventory( String RscCode, List<MaterialManageVO> list ) {
 		
-		return mapper.MonthlyInventory(RscCode);
+		return mapper.MonthlyInventory(RscCode,list);
 	}
 	
 	
@@ -77,7 +77,12 @@ public class MaterialManageServiceImpl implements MaterialManageService {
 		mapper.UpdateMat(matVO);
 	}
 
+	@Override
+	public List<MaterialManageVO> selectpmonth( String RscCode ) {
+		return mapper.selectpmonth( RscCode );
+	}
 
+	
 	
 
 

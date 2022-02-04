@@ -8,9 +8,7 @@
 <link rel="stylesheet" href="https://uicdn.toast.com/tui-grid/latest/tui-grid.css" />
 <link rel="stylesheet" href="https://uicdn.toast.com/tui.date-picker/latest/tui-date-picker.css" />
 <link rel="stylesheet" href="//code.jquery.com/ui/1.13.0/themes/base/jquery-ui.css">
-<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">
 
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p" crossorigin="anonymous"></script>
 <script src="https://uicdn.toast.com/tui.date-picker/latest/tui-date-picker.js"></script>
 <script src="https://uicdn.toast.com/tui-grid/latest/tui-grid.js"></script>
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
@@ -18,22 +16,23 @@
 <script src="https://code.jquery.com/ui/1.13.0/jquery-ui.js"></script>
 </head>
 <body>
-	<h2>자재 발주 관리</h2>
+	<h3 style="color : #054148; font-weight : bold">자재 발주 관리</h3>
 
-
-	<div class="card">
-		<div class="card-body">
-		<button id="btnSelectOrder">미검사 조회</button>
-		<button id="btnSaveOrder">저장</button>
-		<button id="btnAdd">추가</button>
-		<button id="btnDel">삭제</button>
+	<div id="top">
+		<div>
+		<button id="btnSelectOrder" class="btn">미검사 조회</button>
+		<button id="btnSaveOrder" class="btn">저장</button>
+		<button id="btnAdd" class="btn">추가</button>
+		<button id="btnDel" class="btn">삭제</button>
 		</div>
 	</div>
 	
 	<div id="dialog-form-rsc" title="자재 검색"></div>
 	<div id="dialog-form-order" title="미입고 검색"></div>
 	
+	<div id="OverallSize">
 	<div id="grid" ></div>
+	</div>
 
 	<script type="text/javascript">
 	let rscRowKey;
@@ -50,7 +49,7 @@
 				}
 			},
 		});
-	
+	var poNoList=[];
 	//모달창 설정(조회 클릭시 미입고 품목 조회)
 	let dialog4 = $( "#dialog-form-order" ).dialog({
 			autoOpen: false,
@@ -58,13 +57,26 @@
 			heigth : 500,
 			width : 900,
 			buttons: {
-				"선택" : function clickOrder(ordrNo){
-					console.log(ordrNo);
-					grid.readData(1, {'ordrNo':ordrNo}, true);
+				"확인" : function (){
+					$.ajax({
+						url: 'resourcesCheckList',
+						method :'GET',
+						dataType : 'JSON',
+						success : function(datas){
+							for(let a = 0; a < datas.data.contents.length; a++){
+								for(let b = 0; b<ordrNo.length; b++) {
+									if(datas.data.contents[a].ordrNo == ordrNo[b]){
+										poNoList.push(datas.data.contents[a]);
+									}
+								}
+							}
+							grid.resetData(poNoList);
+						}
+					})
 					dialog4.dialog("close");
 				},
 				"닫기" : function() {
-					dialog4.dialog("close") ;
+					dialog4.dialog("close");
 				}
 			},
 		});
@@ -79,7 +91,7 @@
 		});
 	
 
-	
+
 	
 	//발주 insert 그리드 
 	var Grid = tui.Grid;
@@ -102,19 +114,22 @@
 	  {
 		header: '발주량',
 		name: 'rscCnt',
-		editor: 'text'
+		editor: 'text',
+		 formatter(value) {
+            return value.value.toString().replace(/\B(?<!\.\d*)(?=(\d{3})+(?!\d))/g, ",");
+        }
 	   },
 	   {
 		header: '단가',
 		name: 'rscPrc',
-		formatter(value) {
+		 formatter(value) {
             return value.value.toString().replace(/\B(?<!\.\d*)(?=(\d{3})+(?!\d))/g, ",");
         }
 		},
 	   {
 		 header: '합계',
 		 name: 'rscTotal',
-			formatter(value) {
+		 formatter(value) {
              return value.value.toString().replace(/\B(?<!\.\d*)(?=(\d{3})+(?!\d))/g, ",");
          }
 		},
@@ -179,11 +194,13 @@
 	
 	
 	btnSaveOrder.addEventListener("click", function(){
-		
-		if((grid.getValue(grid.getRowCount()-1, "rscCnt")) == ""){
-			alert("발주량을 입력해주세요")
-		}else if((grid.getValue(grid.getRowCount()-1, "rscCnt")) != null){
-		  grid.request('modifyData');
+		for(let i=0; i<grid.getRowCount(); i++){
+			console.log(grid.getValue(i, "rscCnt"));
+			if(grid.getValue(i, "rscCnt")) == ""){
+				alert("발주량을 입력해주세요")
+			}else if(grid.getValue(i, "rscCnt")) != null){
+			  grid.request('modifyData');
+			}	
 		}
 	}) 
 	

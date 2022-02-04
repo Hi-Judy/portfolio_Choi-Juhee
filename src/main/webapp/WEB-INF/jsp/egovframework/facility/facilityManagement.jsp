@@ -27,33 +27,35 @@
 <script src="https://uicdn.toast.com/grid/latest/tui-grid.js"></script>
 </head>
 <body>
-	<div id="help" align="right"><button type="button" id="helpBtn">도움말</button></div>
+	<div id="help" align="right" style="width : 1500px ;"><button type="button" id="helpBtn" style="border : none; background-color : white; color : #007b88; float : right ;"><i class="bi bi-question-circle"></i></button></div>
 	<br>
-	<div id="title" align="center"><h2>설비 관리</h2></div>
-	<br>
-	<div id="info">
-		<span>설비명 :  </span><input id="txtFacName" readonly>
-		<span>설비코드 : </span><input id="txtfacCode">&nbsp;<button type="button" id="btnSearch">설비코드검색</button>
+	<div id="title" style="margin-left : 10px;"><h3 style="color : #054148; font-weight : bold">설비 관리</h3></div>
+	
+	<div id="top" style="height : 165px; padding : 10px;">
+		<span style="margin : 20px;">설비명</span><input id="txtFacName" style="margin-top : 10px; margin-left : 23px;" readonly>
+		<span style="margin : 20px;">설비코드</span><input id="txtfacCode">&nbsp;<button type="button" id="btnSearch" class="btn">설비코드검색</button>
 		<br><br>
-		<span>설비상태 : </span>
+		<span style="margin : 20px;">설비상태</span>
 		<select id="selectStatus">
 			<option value="" selected>선택</option>
 			<option value="가동">가동</option>
 			<option value="비가동">비가동</option>
 		</select>
-		<span>점검일자 : </span><input id="checkDateStart" type="date"><span> ~ </span><input id="checkDateEnd" type="date">
+		<span style="margin : 20px;">점검일자</span><input id="checkDateStart" type="date"><span> ~ </span><input id="checkDateEnd" type="date">
 		<br>
-		<div align="right">
-			<button type="button" id="listBtn">조회</button>
-			<button type="button" id="addBtn">추가</button>
-			<button type="button" id="deleteBtn">삭제</button>
-			<button type="button" id="btnInsert">저장</button>
-			<button type="button" id="clearBtn">초기화</button>
-		</div>
+		<button type="button" id="clearBtn" class="btn" style="float : right; margin : 5px;">초기화</button>
+		<button type="button" id="btnInsert" class="btn" style="float : right; margin : 5px;">저장</button>
+		<button type="button" id="deleteBtn" class="btn" style="float : right; margin : 5px;">삭제</button>
+		<button type="button" id="addBtn" class="btn" style="float : right; margin : 5px;">추가</button>
+		<button type="button" id="listBtn" class="btn" style="float : right; margin : 5px;">조회</button>
 	</div>
 	
+	<div id="OverallSize" style="margin-left : 10px;">
+		<div id="info"></div>
+	</div>	
+	
 	<div id="findFacility" title="설비검색">
-		<input id="facName"><button id="btnfacSearch">검색</button>
+		<input id="facName">&nbsp;<button id="btnfacSearch" class="btn" >검색</button>
 		<div id="facResult"></div>
 	</div>
 	
