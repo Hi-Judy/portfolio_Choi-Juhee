@@ -38,4 +38,14 @@ public class DefectiveServiceImpl implements DefectiveService {
 	public List<DefectiveVO> selectChart2(DefectiveVO defective) {
 		return mapper.selectChart2(defective) ;
 	}
+
+	@Override
+	public List<DefectiveVO> checkProductList(DefectiveVO defective) {
+		return mapper.checkProductList(defective) ;
+	}
+
+	@Override
+	public List<DefectiveVO> defList(DefectiveVO defective) {
+		return mapper.defList(defective) ;
+	}
 }

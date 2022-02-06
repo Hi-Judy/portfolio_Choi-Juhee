@@ -27,12 +27,12 @@
 <script src="https://uicdn.toast.com/grid/latest/tui-grid.js"></script>
 </head>
 <body>
-	<div id="help" align="right" style="width : 1500px ;"><button type="button" id="helpBtn" style="border : none; background-color : white; color : #007b88; float : right ;"><i class="bi bi-question-circle"></i></button></div>
+	<div id="help" align="right" style="width : 1500px ;"><button type="button" id="helpBtn" style="border : none; background-color : #f2f7ff; color : #007b88; float : right ;"><i class="bi bi-question-circle"></i></button></div>
 	<br>
 	<div id="title" style="margin-left : 10px;"><h3 style="color : #054148; font-weight : bold">설비 관리</h3></div>
 	
 	<div id="top" style="height : 165px; padding : 10px;">
-		<span style="margin : 20px;">설비명</span><input id="txtFacName" style="margin-top : 10px; margin-left : 23px;" readonly>
+		<span style="margin : 20px;">설비명</span><input id="txtFacName" style="margin-top : 10px; margin-left : 23px; background-color: #d2e5eb;" readonly>
 		<span style="margin : 20px;">설비코드</span><input id="txtfacCode">&nbsp;<button type="button" id="btnSearch" class="btn">설비코드검색</button>
 		<br><br>
 		<span style="margin : 20px;">설비상태</span>
@@ -168,9 +168,6 @@
 			name : 'facOutput' , 
 			editor : 'text' ,
 			align: 'center' ,
-			formatter(value) {
-				return value.value.toString().replace(/\B(?<!\.\d*)(?=(\d{3})+(?!\d))/g, ",") ;
-			} ,
 			width : 50
 		} ,
 		{

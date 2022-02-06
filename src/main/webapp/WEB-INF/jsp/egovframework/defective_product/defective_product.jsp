@@ -30,7 +30,7 @@
 <script src="https://uicdn.toast.com/grid/latest/tui-grid.js"></script>
 </head>
 <body>
-	<div id="help" align="right" style="width : 1500px ;"><button type="button" id="helpBtn" style="border : none; background-color : white; color : #007b88; float : right ;"><i class="bi bi-question-circle"></i></button></div>
+	<div id="help" align="right" style="width : 1500px ;"><button type="button" id="helpBtn" style="border : none; background-color : #f2f7ff; color : #007b88; float : right ;"><i class="bi bi-question-circle"></i></button></div>
 	<br>
 	<div id="title" style="margin-left : 10px;"><h3 style="color : #054148; font-weight : bold">불량 조회</h3></div>
 	
@@ -50,20 +50,20 @@
 	<div id="OverallSize" style="margin-left : 10px;">
 		<div id = "gridMain"></div>
 		<br>
-		<div align="center"><h5>공정목록</h5></div>
+		<div><h5 style="color : #007b88;">공정목록</h5></div>
 		<div id = "process"></div>
 	</div>
 
 	<div>
 		<!-- 제품코드 모달 -->
 		<div id = "dialog-form-defective" title="작업일자별 조회">
-			<div align="center"><h5>작업일자별 불량발생 제품코드</h5></div>
+			<div align="center"><h5 style="color : #007b88;">작업일자별 불량발생 제품코드</h5></div>
 			<div id="gridProductResult"></div>
 		</div>
 	</div>	
 	
 	<div id="defChart" title="불량 수량 그래프" style="text-align: center;">
-		<div align="center"><h5 id="defTitle">불량 수량 그래프 조회</h5></div>
+		<div align="center"><h5 id="defTitle" style="color : #007b88;">불량 수량 그래프 조회</h5></div>
 		<div id="chart"></div>
 	</div>
 	

@@ -22,54 +22,50 @@
 
 </head>
 <body>
-	<h2>생산 현황</h2>
-	<br>
+	<div id="title" style="margin-left : 10px;"><h3 style="color : #054148; font-weight : bold">생산 현황</h3></div>
 
-	<!-- 생산지시서 조회 -->
-	<div class="manToday">
-		<p style="display: inline-block;">작업일</p>
-
-		<input id="txtManDate" type="date" name="manDate"
-			style="display: inline-block;">
-		<button type="button" id="btnSearchCommand"
-			style="display: inline-block;">조회</button>
-
-		<button type="button" id="btnStart" style="display: inline-block;">시작</button>
-
-		<button type="button" id="btnEnd" style="display: inline-block;">종료</button>
-
-	</div>
-	<br>
-
-	<div>
-		<p style="display: inline-block;">작업일</p>
-		<p id="manDate" style="display: inline-block;"></p>
-		<br>
-
-		<p style="display: inline-block;">제품코드</p>
-		<p id="podtCode" style="display: inline-block;"></p>
-		<br>
-
-		<p style="display: inline-block;">제품명</p>
-		<p id="podtName" style="display: inline-block;"></p>
-		<br>
-
-	</div>
+	<div id="top" style="height : 280px; padding : 10px;">
+		<!-- 생산지시서 조회 -->
+		<div class="manToday">
+			<p style="display: inline-block; margin-left : 20px; margin-top : 10px;">작업일</p>
 	
-	<div >
-		<p style="display: inline-block;">생산지시번호</p>
-		<p id="comCode" style="display: inline-block;"></p>
-		<br>
+			<input id="txtManDate" type="date" name="manDate"
+				style="display: inline-block; margin-left : 10px;">
+			<button type="button" id="btnSearchCommand" class="btn"
+				style="display: inline-block;">조회</button>
+			
+			<div>
+				<p style="display: inline-block; margin-left : 20px;">작업일</p>
+				<p id="manDate" style="display: inline-block;"></p>
+				<br>
+		
+				<p style="display: inline-block; margin-left : 20px;">제품코드</p>
+				<p id="podtCode" style="display: inline-block;"></p>
+				<br>
+		
+				<p style="display: inline-block; margin-left : 20px;">제품명</p>
+				<p id="podtName" style="display: inline-block;"></p>
+				<br>
+				
+				<p style="display: inline-block; margin-left : 20px;">생산지시번호</p>
+				<p id="comCode" style="display: inline-block;"></p>
+			</div>
+			
+			<button type="button" id="btnEnd" class="btn" style="display: inline-block; float : right; margin : 5px;">종료</button>
+			<button type="button" id="btnStart" class="btn" style="display: inline-block; float : right; margin : 5px;">시작</button>
+		</div>
 	</div>
-	<br>
 
 	<!-- 생산지시서 조회 모달 -->
 	<div id="dialog-form-manCommand" title="생산지시 조회">
 		<div id="gridManCommand"></div>
 	</div>
 
-	<!-- 공정현황 그리드 -->
-	<div id="gridProcess" class="col-sm-11" style="float: left;"></div>
+	<div id="OverallSize" style="margin-left : 10px;">
+		<!-- 공정현황 그리드 -->
+		<div id="gridProcess"></div>
+	</div>
+
 
 
 	<script>

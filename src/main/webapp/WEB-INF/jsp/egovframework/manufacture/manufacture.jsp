@@ -18,19 +18,19 @@
 <body>
 	<div id="title" style="margin-left : 10px;"><h3 style="color : #054148; font-weight : bold">생산계획서 작성</h3></div>
 	
-	<div id="top" style="height : 195px; padding : 10px;">
+	<div id="top" style="height : 200px; padding : 10px;">
 		<!-- 계획일자, 계획명 입력 -->
 		<div class = "planDate">
-			<p style="display:inline-block; margin-left : 20px;">계획일자</p>
+			<p style="display:inline-block; margin-left : 20px; margin-top : 10px;">계획일자</p>
 			
-			<input id = "txtFromDate" type="date" name="from" style="display:inline-block; margin-left : 17px;">
+			<input id = "txtFromDate" type="date" name="from" style="display:inline-block; margin-left : 27px;">
 			<p style="display:inline-block;"> ~ </p>
 			<input id = "txtToDate" type="date" name="to" style="display:inline-block;">
 		</div>
 	
 		<div class="planName">
 			<p style="display:inline-block; margin-left : 20px;">생산계획명</p>
-			<input id = "txtPlanName" style="display:inline-block;">
+			<input id = "txtPlanName" style="display:inline-block; margin-left : 10px;">
 			
 			<button type="button" id="btnSearchManPlan" class="btn" >생산계획 조회</button>
 			<button type="button" id="btnSearchPlan" class="btn" >미계획 조회</button><br>
@@ -44,7 +44,7 @@
 		<!-- 자재조회 -->
 		<div> 
 			<p style="display: inline-block; margin-left : 20px;">제품코드</p>
-			<input id="txtPodt" style="margin-left : 15px;"> 
+			<input id="txtPodt" style="margin-left : 25px;"> 
 			<button type="button" id="btnSearchRes" class="btn" >자재 조회</button>
 			
 			<!-- 자재조회 모달 -->

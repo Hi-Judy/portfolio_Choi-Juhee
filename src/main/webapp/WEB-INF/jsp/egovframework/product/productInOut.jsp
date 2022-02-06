@@ -27,12 +27,12 @@
 <script src="https://uicdn.toast.com/grid/latest/tui-grid.js"></script>
 </head>
 <body>
-	<div id="help" align="right" style="width : 1500px ;"><button type="button" id="helpBtn" style="border : none; background-color : white; color : #007b88; float : right ;"><i class="bi bi-question-circle"></i></button></div>
+	<div id="help" align="right" style="width : 1500px ;"><button type="button" id="helpBtn" style="border : none; background-color : #f2f7ff; color : #007b88; float : right ;"><i class="bi bi-question-circle"></i></button></div>
 	<br>
 	<div id="title" style="margin-left : 10px;"><h3 style="color : #054148; font-weight : bold">제품 입/출고 관리</h3></div>
 	
 	<div id="top" style="height : 160px; padding : 10px;">
-		<span style="margin : 20px;">제품명</span><input id="txtPodtName" style="margin-top : 10px; margin-left : 20px;" readonly>
+		<span style="margin : 20px;">제품명</span><input id="txtPodtName" style="margin-top : 10px; margin-left : 20px; background-color: #d2e5eb;" readonly>
 		<span style="margin : 20px;">제품코드</span><input id="txtPodtCode">&nbsp;<button type="button" id="btnSearch" class="btn">제품코드검색</button>
 		<br><br>
 		<span style="margin : 20px;">작업일자</span><input id="manDatestart" type="date"><span> ~ </span><input id="manDateend" type="date">

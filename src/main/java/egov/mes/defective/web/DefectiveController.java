@@ -79,4 +79,35 @@ public class DefectiveController {
 		jsonView.addObject("chartData2" , list) ;
 		return jsonView ;
 	}
+	
+	@RequestMapping("checkProduct")
+	public String checkProduct() {
+		return "defective_product/check_product.tiles" ;
+	}
+	
+	@RequestMapping("checkProductList")
+	public ModelAndView checkProductList(DefectiveVO defective) {
+		if (defective.getFromDate().equals("1910-12-25")) {
+			defective.setFromDate(null) ;
+		}
+		if (defective.getToDate().equals("1910-12-25")) {
+			defective.setToDate(null) ;
+		}
+		
+		List<DefectiveVO> list = service.checkProductList(defective) ;
+		
+		ModelAndView jsonView = new ModelAndView("jsonView") ;
+		jsonView.addObject("checklist" , list) ;
+		return jsonView ;
+	}
+	
+	@RequestMapping("defList")
+	public ModelAndView defList(DefectiveVO defective) {
+		
+		List<DefectiveVO> list = service.defList(defective) ;
+		
+		ModelAndView jsonView = new ModelAndView("jsonView") ;
+		jsonView.addObject("deflist" , list) ;
+		return jsonView ;		
+	}
 }
