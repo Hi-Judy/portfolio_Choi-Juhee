@@ -24,7 +24,7 @@ public class MainController {
 	@RequestMapping("/login.do")
 	public String init() throws Exception {
 
-		return "egovframework/com/uat/uia/EgovLoginUsr.tiles";
+		return "egovframework/com/uat/uia/EgovLoginUsr";
 	}
 	@RequestMapping("/reqsidebar")
 	public String reqside(Model model) {

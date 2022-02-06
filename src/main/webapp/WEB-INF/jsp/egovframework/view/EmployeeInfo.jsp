@@ -43,33 +43,6 @@
 
 
 <style>
-div#top {
-   margin-left: 10px;
-   width: 1500px;
-   height: 50px;
-   margin-top: 30px;
-   border-top: 1px solid black;
-   border-bottom: 1px solid black;
-   background-color: ghostwhite;
-}
-
-
-div#AA {
-   width: 1500px;
-   height: 600px;
-   margin-left: 10px;
- /*  margin-top: 5px; /*위에서 부터 벌어질 크기*/
-}
-
-
-
-div.right {
-   float: right;
-   width: 1500px;
-  /* padding: 5px; */
-   box-sizing: border-box;
-}
-
 
 
 .Test{
@@ -101,7 +74,7 @@ div.right {
    <br>
    <div id="OverallSize">
 
-      <div class="right">
+      <div style="margin-left: 10px; width: 1500px;">
          <span> 등록된사원수 : <input id="NUM"style="border:none;margin-left:5px; background-color:#f2f7ff; width:30px" disabled="true" > </span>
          <br>
          <br>
@@ -164,6 +137,14 @@ toastr.options = {
         "hideMethod": "fadeOut",
         "tapToDismiss": false
       }
+      
+//옵션세팅
+themesOptions = { 
+           	row: {    
+                hover: {    background: '#ccc'  }// <-마우스 올라갔을떄 한row 에 색상넣기
+            }
+           
+};
       
       
 //-------- 사원입력 설정 ----------
@@ -371,23 +352,6 @@ btnSave.addEventListener('click' , (ev) => {
 	}
 })
 
-
-//그리드 자체에서 입력하거나 수정 하는거 할떄는 별로 인것 같다 그냥 그리드보여주고 클릭했을떄 디자인 보여주는 부븐에서 해주는게 좋을듯함
-themesOptions = { 
-            selection: {    background: 'blue',     border: '#004082'  },
-            scrollbar: {    background: '#f5f5f5',  thumb: '#d9d9d9',  active: '#c1c1c1'    },
-            row: {    
-                hover: {    background: '#ccc'  }
-            },
-             /* cell: {  
-                normal: {   background: '#fbfbfb',  border: '#e0e0e0',  showVerticalBorder: true    },
-                header: {   background: '#eee',     border: '#ccc',     showVerticalBorder: true    },
-                rowHeader: {    border: '#eee',     showVerticalBorder: true    }, 
-                editable: { background: '#fbfbfb' },
-                selectedHeader: { background: '#eee' }, 
-   //             disabled: { text: 'red' }
-            }  */
-};
 
 //그리드 색상 옵션세팅
 tui.Grid.applyTheme('default', themesOptions);

@@ -26,7 +26,14 @@ div.right {
 
 </head>
 <body>
-
+	<div style="width : 1500px ;">
+		<span style="float: right;">
+			<button type="button" id="helpBtn" style="border : none; background-color : #f2f7ff; color : #007b88; float : right ;">
+			<i class="bi bi-question-circle"></i>
+			</button>
+		</span>
+		<h4 style="margin-left: 10px">제품BOM 관리</h4>
+	</div>
 
    <div id="top" style="height: 103px;">
       <div style="height: 40px; margin-top: 12px;">
@@ -90,6 +97,23 @@ div.right {
          <div id="ProGrid"></div>
       </div>
    </div>
+   
+   <div id="helpModal" title="도움말">
+		<hr>
+		돋보기 버튼을 눌러서 제품코드를 조회 후 클릭하면 선택이 됩니다.<br><br>
+		관리단위 : 제품이 공정전체를 돌아서 한번 나오는양 <br><br>
+		공정흐름관리 : 왼쪽끝 점들을 클릭드로우 하여 위치를이동할수있고<br>
+		&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+		위치가 이동되면 공정들의 순서를 변경할수 있습니다.<br><br>
+		BOM삭제 : 선택된 제품코드 를 기준으로 등록된 "사용자재" , "공정흐름"<br>
+		&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+		들의 데이터들을 초기화 할수있습니다.<br><br>
+		<!-- 추가 : 
+		&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;업체코드 : 구매고객/판매고객을 선택하면 저장시 자동으로 입력됩니다.<br>
+		&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;고객구분 : 업체코드를 선택 시 자동으로 입력됩니다.<br>
+		&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;모든 값을 다 입력해야 저장이 가능합니다.<hr>
+		초기화 : 입력한 조회 조건을 초기화합니다. -->
+	</div>
 </body>
 
 <script>
@@ -112,6 +136,19 @@ toastr.options = {
         "hideMethod": "fadeOut",
         "tapToDismiss": false
       }
+      
+	  //-------- 도움말 모달 ----------
+	  var helpModal = $( "#helpModal" ).dialog({
+	    autoOpen : false ,
+	    modal : true ,
+	    width:600, //너비
+	    height:400, //높이
+	    buttons: {
+	   		"닫기" : function() {
+	  			helpModal.dialog("close") ;
+	  		}
+	  	 }
+	  });
 
       //-------- 모달 설정 ----------
       var dialog = $( "#dialog-form" ).dialog({
@@ -962,6 +999,11 @@ toastr.options = {
 			}
 	    	
 		}
+  	  
+ 	//------------------ 도움말 버튼 이벤트 -----------------------
+ 	 helpBtn.addEventListener('mouseover' , () => {
+ 	 	helpModal.dialog("open") ;
+ 	 })
       
       
     

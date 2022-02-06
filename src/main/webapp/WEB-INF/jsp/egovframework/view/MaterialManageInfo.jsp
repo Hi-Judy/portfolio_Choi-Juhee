@@ -50,7 +50,7 @@ span.ui-dialog-title {
 <body>
 	<div style="width : 1500px ;">
 		<span style="float: right;">
-			<button type="button" id="helpBtn" style="border : none; background-color : white; color : #007b88; float : right ;">
+			<button type="button" id="helpBtn" style="border : none; background-color : #f2f7ff; color : #007b88; float : right ;">
 			<i class="bi bi-question-circle"></i>
 			</button>
 		</span>
@@ -72,7 +72,6 @@ span.ui-dialog-title {
 
 	<div id="OverallSize" style="margin-left: 10px;">
 		<div class="left">
-			<span color="blue"> 코드 </span>
 			<br>
 			
 			<div id="grid" style="border-top: 3px solid #168; width: 450px;"></div>
@@ -100,7 +99,7 @@ span.ui-dialog-title {
 			         <span>
 			         입고업체 <input id="suplcomCodeInp" type="text" readonly>
 			          <button type="button" id="suplcomCode" style="border : none; background-color : #f2f7ff; color : #007b88;">
-				         	<i class="bi bi-search"></i>
+				         	<i class="bi bi-search bi-2x"></i> 
 				       </button>
 			         </span> &nbsp;&nbsp; 
 			         <span>업체명 &nbsp;&nbsp; <input id="suplcomName" class="inpBC" type="text" readonly> </span> &nbsp;&nbsp; 
@@ -135,6 +134,17 @@ span.ui-dialog-title {
 		<div id="MatInvenGrid"></div>
 		<hr>
 		<input id="MatInvenModalCheck" style=" float: right;" class="btn" type="button" value="확인">
+	</div>
+	
+	<div id="helpModal" title="도움말">
+		<hr>
+		새자료 : 화면에 보여지고있는 자재정보를 없에고 등록모드 로 바뀝니다.<br><br>
+		자재재고조회 : 선택된 자재의 전년도 이월량 밑 올해 내역들을 볼수있습니다.<br><br>
+		저장 : "담당관리자" , "입고업체" , "입고단가" 들을 <br>
+		&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+		새롭게 수정해서 저장할수있습니다.<br><br>
+		LOT정보가 없는 자재들은 자재재고조회 밑 LOT정보 조회가 불가능합니다.<br><br>
+		LOT추가 밑 더 자세한 자재관리는 자재관리 탭에서 진행해주세요.
 	</div>
 </body>
 
@@ -175,6 +185,19 @@ themesOptions = {
             }
 };
 
+
+//-------- 도움말 모달 ----------
+var helpModal = $( "#helpModal" ).dialog({
+ autoOpen : false ,
+ modal : true ,
+ width:600, //너비
+ height:400, //높이
+ buttons: {
+		"닫기" : function() {
+			helpModal.dialog("close") ;
+		}
+	}
+});
 
 //-------- 관리자선택 모달 설정 ----------
 var dialog = $( "#dialog-form" ).dialog({
@@ -617,6 +640,11 @@ function AddData() {
 	}
 	return Check;
 }
+
+//------------------ 도움말 버튼 이벤트 -----------------------
+helpBtn.addEventListener('mouseover' , () => {
+	helpModal.dialog("open") ;
+})
       
       
 tui.Grid.applyTheme('default', themesOptions);

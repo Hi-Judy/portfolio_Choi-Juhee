@@ -12,16 +12,14 @@
 
 
 div.left {
-	margin-left: 8px;
 	float: left;
 	box-sizing: border-box;
-	padding: 5px;
 }
 
 div.right {
 	float: right;
 	width: 53%;
-	padding: 5px; 
+	margin-right: 5px;
 	box-sizing: border-box;
 }
 
@@ -39,7 +37,7 @@ div.right {
 <body>
 	<div style="width : 1500px ;">
 		<span style="float: right;">
-			<button type="button" id="helpBtn" style="border : none; background-color : white; color : #007b88; float : right ;">
+			<button type="button" id="helpBtn" style="border : none; background-color : #f2f7ff; color : #007b88; float : right ;">
 			<i class="bi bi-question-circle"></i>
 			</button>
 		</span>
@@ -75,6 +73,15 @@ div.right {
 
 		</div>
 	</div>
+	
+	<div id="helpModal" title="도움말">
+		<hr>
+		그룹코드 추가 와 삭제를 원하신다면 담당자를 호출해 주세요.<br><br>
+		
+		자료추가 버튼을 누른후 반드시 "코드ID" , "코드명" 들을기입후<br>
+		저장버튼을 눌려주셔야 합니다.
+	</div>
+	
 </body>
 
 <script>
@@ -96,6 +103,21 @@ themesOptions = {
 };
 
 tui.Grid.applyTheme('default', themesOptions);
+
+
+
+//-------- 도움말 모달 ----------
+var helpModal = $( "#helpModal" ).dialog({
+ autoOpen : false ,
+ modal : true ,
+ width:600, //너비
+ height:400, //높이
+ buttons: {
+		"닫기" : function() {
+			helpModal.dialog("close") ;
+		}
+	}
+});
   	
    
     var Grid = tui.Grid; //그리드 선언
@@ -455,6 +477,10 @@ tui.Grid.applyTheme('default', themesOptions);
         	}
 	    
 	    });
+    
+    helpBtn.addEventListener('mouseover' , () => {
+    	helpModal.dialog("open") ;
+    })
   
    
     
