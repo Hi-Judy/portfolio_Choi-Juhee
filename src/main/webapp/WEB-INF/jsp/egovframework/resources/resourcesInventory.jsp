@@ -22,8 +22,8 @@
 	<div>
 		<hr>
 		<button id="btnSelectInventory">조회</button>
-		<button id="btnSaveInventory">저장</button>
 		<button id="btnDel">삭제</button>
+		<button id="btnSaveInventory">저장</button>
 		<hr>
 	</div>
 	<div id="dialog-form-inventory" title="자재 LOT 검색"></div>
