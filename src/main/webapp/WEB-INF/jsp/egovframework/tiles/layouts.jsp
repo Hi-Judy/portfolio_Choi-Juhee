@@ -19,6 +19,9 @@
    href="https://uicdn.toast.com/tui.date-picker/latest/tui-date-picker.css" />
 <script
    src="https://uicdn.toast.com/tui.date-picker/latest/tui-date-picker.js"></script>
+ <!-- 토스트그리드 페이지네이션 -->
+<link rel="stylesheet" href="https://uicdn.toast.com/tui.pagination/latest/tui-pagination.css" />
+<script type="text/javascript" src="https://uicdn.toast.com/tui.pagination/v3.4.0/tui-pagination.js"></script> 
    
 <!-- 토스트 그래프 -->
 <link rel="stylesheet" href="https://uicdn.toast.com/chart/latest/toastui-chart.min.css" />

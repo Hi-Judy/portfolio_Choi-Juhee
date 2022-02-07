@@ -63,7 +63,6 @@ span.ui-dialog-title {
 			</span> 
 			<span style="float: right; margin-top: 4.5px;">
 				<button id="ResetBtn" type="button" class="btn" >새자료</button> &nbsp;&nbsp;
-				<button id="" type="button" class="btn" >삭제</button> &nbsp;&nbsp;
 				<button id="SaveBtn" type="button" class="btn" >저장</button> &nbsp;&nbsp;
 			</span>
 

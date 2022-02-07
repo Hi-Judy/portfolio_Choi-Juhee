@@ -49,7 +49,7 @@ select * from (
     select to_char(store_date , 'MM') AS month
           ,nvl(lag(sum(case when store_flag='입고' then ist_cnt else 0 end) - nvl((select SUM(rtngd_cnt) from resource_rtngd where rsc_code= #{rscCode} and to_char(rtngd_date,'MM') = to_char(store_date , 'MM') ),0) - sum(case when store_flag='출고' then ost_cnt else 0 end) + sum(case when store_flag='정산입고' then ist_cnt else 0 end) - sum(case when store_flag='정산출고' then ost_cnt else 0 end)) over (order by to_char(store_date , 'MM')),0) AS carryOver
           ,sum(case when store_flag='입고' then ist_cnt else 0 end) AS matInto
-          ,sum(case when store_flag='출고' then ost_cnt else 0 end) AS matOut
+          ,round (sum(case when store_flag='출고' then ost_cnt else 0 end) ) AS matOut
           ,sum(case when store_flag='정산입고' then ist_cnt else 0 end) AS checkInto
           ,sum(case when store_flag='정산출고' then ost_cnt else 0 end) AS checkOut
           ,nvl((select SUM(rtngd_cnt) from resource_rtngd where rsc_code= #{rscCode} and to_char(rtngd_date,'MM') = to_char(store_date , 'MM') ),0) AS matReturn
@@ -68,9 +68,34 @@ group by to_char(store_date , 'MM')
           ,0 
     from dual d 
     where level not in 
-      <foreach collection="list" item="vo" open="(" close=")" separator=",">
-       ${vo.pmonth}
-    </foreach>
+    <foreach collection="list" item="vo" open="(" close=")" separator=",">
+	      	${vo.pmonth}
+	</foreach>
+    
+    <!-- <if test="pmonth == null and pmonth == '' ">
+    	(0)
+    </if>
+    
+    <if test="pmonth != null and pmonth != '' ">
+    	<foreach collection="list" item="vo" open="(" close=")" separator=",">
+	      	${vo.pmonth}
+	      </foreach>
+	</if>
+	
+     <choose>
+    
+    	<when test="pmonth == null and pmonth == '' ">
+    		(0)
+    	</when>
+    	
+    	<otherwise>
+	     
+	      <foreach collection="list" item="vo" open="(" close=")" separator=",">
+	      	${vo.pmonth}
+	      </foreach>
+    		
+    	</otherwise>
+    </choose>  -->
 <![CDATA[
     CONNECT BY LEVEL <=13
 ]]>
