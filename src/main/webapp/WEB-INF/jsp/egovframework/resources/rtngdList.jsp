@@ -275,7 +275,6 @@ var helpModal = $( "#helpModal" ).dialog({
 	
 	//조회버튼 클릭시 값 가지고 오는 거
 	$("#btnSelect").on("click", function(){
-		console.log("@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@")
 			var rscCode = $("#txtRsc1").val();
 			var sucCode = $("#txtSuc1").val();
 			var ordeDate = $("#txtOrde1").val();
