@@ -48,10 +48,11 @@
 	</div>
 
 	<div id="OverallSize" style="margin-left : 10px;">
-		<div id = "gridMain"></div>
+	<br>
+		<div id = "gridMain" style="border-top: 3px solid #168;"></div>
 		<br>
 		<div><h5 style="color : #007b88;">공정목록</h5></div>
-		<div id = "process"></div>
+		<div id = "process" style="border-top: 3px solid #168;"></div>
 	</div>
 
 	<div>
@@ -79,6 +80,22 @@
 <script>	
 		var Grid = tui.Grid; //그리드 객체 생성
 		const Chart = toastui.Chart;
+		
+		themesOptions = { 
+	            selection: {    background: '#007b88',     border: '#004082'  },//  <- 클릭한 셀 색상변경 border(테두리색) , background (백그라운드)
+	            scrollbar: {    background: '#f5f5f5',  thumb: '#d9d9d9',  active: '#c1c1c1'    }, //<- 그리드 스크롤바 옵션
+	            row: {    
+	                hover: {    background: '#ccc'  }// <-마우스 올라갔을떄 한row 에 색상넣기
+	            },
+	            cell: {   // <- 셀클릭했을떄 조건들 주는것이다.
+	                normal: {   background: '#fbfbfb',  border: '#e0e0e0',  showVerticalBorder: true    },// <- showVerticalBorder : 세로(아래,위) 테두리가 보이는지 여부
+	                header: {   background: '#eee',     border: '#ccc',     showVerticalBorder: true    },// <- showVerticalBorder : 가로(양옆) 테두리가 보이는지 여부
+	                rowHeader: {    border: '#eee',     showVerticalBorder: true    },// <- 행의헤더 색상영역
+	                editable: { background: '#fbfbfb' },//  <-편집가능한 셀들의 색상을 주는영역
+	                selectedHeader: { background: '#eee' },//  <- 선택한 셀의 백그라룬드   
+	                disabled: { text: '#b0b0b0' }// <- 편집할수없는(비활성화된) 셀들에 대한 스타일 조절
+	            }
+		};
 		
 		//제품코드찾기 모달 설정해주기
 		let dialogProduct = $("#dialog-form-defective").dialog({
@@ -147,7 +164,7 @@
 			data.categories = [] ;
 			data.series[0].data = [] ;
 			dialogDefProc.dialog("open") ;
-			$("#defTitle").text('공정별 불량 수량 조회') ;
+			$("#defTitle").text('공정별 불량 수량 조회(누적)') ;
 			$.ajax({
 				url : 'chartData' ,
 				dataType : "json" ,
@@ -172,7 +189,7 @@
 			data.categories = [] ;
 			data.series[0].data = [] ;
 			dialogDefDate.dialog("open") ;
-			$("#defTitle").text('월별 불량 수량 조회') ;
+			$("#defTitle").text('월별 불량 수량 조회(현재연도)') ;
 			$.ajax({
 				url : 'chartData2' ,
 				dataType : "json" ,
@@ -434,6 +451,8 @@
 		$("#helpBtn").on("mouseover" , function() {
 			dialog3.dialog("open") ;
 		}) ;
+ 		
+		tui.Grid.applyTheme('default', themesOptions);
 	</script>
 </body>
 </html>
