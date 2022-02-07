@@ -26,14 +26,21 @@
 	<br>
 	
 	<!-- 생산지시서 조회 -->
-	<div class="podtToday">
-		<p style="display: inline-block;">제품코드</p>
+	<form id = "findCommand">
+		<p style="display: inline-block;">작업일자</p>
 
-		<input id="txtPodtCode" type="text" name="manDate" style="display: inline-block;">
+		<input id="txtManStartDate" type="date" name="manDate" style="display: inline-block;">
 			
+		<label for="ing">생산중</label> 	
+		<input type="radio" id="ing" name="comEtc" value="procIng" >
+		
+		<label for="done">생산완료</label> 	
+		<input type="radio" id="done" name="comEtc" value="procDone" >
+		
 		<button type="button" id="btnSearchCommand"
 			style="display: inline-block;">조회</button>
-	</div>
+	
+	</form>
 	<br>
 	
 	<!-- 생산지시서 조회 모달 -->
@@ -41,9 +48,16 @@
 		<div id="gridManCommand"></div>
 	</div>
 	
+	<div style="margin-bottom: 180px;">
+		<!-- 선택된 지시 그리드 -->
+		<div id="gridSelCommand" class="col-sm-5" style="float: left; margin-right: 10px;"></div>
+		
+		<!-- 자재 LOT 조회 그리드 -->
+		<div id="gridResLot"  class="col-sm-5" style="float: left;"></div>
+	</div>
+	<br>
 	<!-- 공정이동 그리드 -->
-	<div id="gridMovement" class="col-sm-11" style="float: left;"></div>
-	
+	<div id="gridMovement" class="col-sm-9" style="float: left;"></div>
 	
 	<script>
 		var Grid = tui.Grid; //그리드 객체 생성
@@ -75,22 +89,39 @@
 				"확인" : function() {
 					console.log("확인 테스트");
 					
-					fetch("${pageContext.request.contextPath}/selectMovement/"+checkedCommand[0].comCode)
+					//공정이동표
+				 	fetch("${pageContext.request.contextPath}/selectMovement/"+checkedCommand[0].comCode)
 					.then((response) => response.json())
 					.then((data)=> {
 						console.log(data.data.contents);
-						//console.log(data.data.contents[0].podtCode);
-						gridProcess.resetData(data.data.contents) //파싱한 결과 = data
-						gridProcess.refreshLayout();
 						
-						let mandate = document.querySelector("#txtManDate").value; //작업일 인풋태그 입력값
-						//console.log(mandate);
-						
-						document.getElementById("manDate").innerHTML = mandate
-						document.getElementById("podtCode").innerHTML = data.data.contents[0].podtCode
-						document.getElementById("podtName").innerHTML = data.data.contents[0].podtName
-						document.getElementById("comCode").innerHTML = data.data.contents[0].comCode
+						gridMovement.resetData(data.data.contents);
+						gridMovement.refreshLayout();
+					}) 
+					
+					//공정이동표에서 자재 조회
+					$.ajax({
+						url: '${pageContext.request.contextPath}/selectResLot/'+checkedCommand[0].comCode,
+						method : 'GET',
+						dataType : 'JSON',
+						success : function(datas){
+							console.log(datas)
+							gridResLot.resetData(datas.data.contents); //파싱한 결과 = data
+							gridResLot.refreshLayout();
+						}
 					})
+					
+					//선택된 지시 정보 
+					fetch("${pageContext.request.contextPath}/selectComInfo/"+checkedCommand[0].comCode)
+					.then((response) => response.json())
+					.then((data)=> {
+						console.log(data.data.contents);
+
+						gridSelCommand.resetData(data.data.contents); //파싱한 결과 = data
+						gridSelCommand.refreshLayout();
+
+					}) 
+					
 					
 					dialogCommand.dialog("close");
 				},
@@ -117,7 +148,7 @@
 			}, 
 			{
 				header : '작업일',
-				name : 'manStartDate'
+				name : 'manStartdate'
 			}, 
 			{
 				header : '상태',
@@ -128,16 +159,16 @@
 		//******************************생산지시조회 그리드******************************
 		//생산지시조회 버튼 클릭
 		$("#btnSearchCommand").click(function(){
-			let podtCode = document.querySelector("#txtPodtCode").value; //작업일 인풋태그 입력값
-			console.log(podtCode);
+			let manStartDate = document.querySelector("#txtManStartDate").value; //작업일 인풋태그 입력값
+			console.log(manStartDate);
+			
+			let findCommand = document.querySelector("#findCommand").value;
 			
 			dialogCommand.dialog("open");
 			$.ajax({
 				url : '${pageContext.request.contextPath}/findCommand',
 				method : 'POST',
-				data : {
-					'podtCode' : podtCode
-				},
+				data : $('#findCommand').serialize(), //직렬화된 방식으로(바이트 단위로 끊어서) 데이터를 보낸다.
 				dataType : 'JSON',
 				success : function(datas) {
 					data = datas;
@@ -168,7 +199,99 @@
 		})
 		
 		
+		
+		//******************************선택된 지시 그리드******************************
+		//선택된 지시 그리드 컬럼
+		const columnsSelCommand = [
+			{
+				header : '제품코드',
+				name : 'podtCode'
+			},
+			{
+				header : '제품명',
+				name : 'podtName'
+			},
+			{
+				header : '작업일',
+				name : 'manStartdate'
+			},
+			{
+				header : '지시수량',
+				name : 'manGoalperday'
+			}
+		]
+		
+		//선택된 지시 그리드 내용
+		let gridSelCommand = new Grid({
+			el: document.getElementById('gridSelCommand'),
+			data: null,
+			columns: columnsSelCommand,
+			rowHeaders : [ 'rowNum' ]
+		})
+		
+		
+		
+		//******************************자재 LOT 그리드******************************
+		//자재 LOT 그리드 컬럼
+		const columnsResLot = [
+			{
+				header : '자재코드',
+				name : 'rscCode'
+			},
+			{
+				header : '자재명',
+				name : 'rscName'
+			},
+			{
+				header : '자재로트',
+				name : 'rscLot'
+			}
+		]
+		
+		//자재 LOT 그리드 내용
+		let gridResLot = new Grid({
+			el: document.getElementById('gridResLot'),
+			data: null,
+			columns: columnsResLot,
+			rowHeaders : [ 'rowNum' ]
+		})
+		
+		
 	
+		//******************************공정이동표 그리드******************************
+		//공정이동표 그리드 컬럼
+		const columnsMovement = [
+			{
+				header : '공정코드',
+				name : 'podtCode'
+			}, 
+			{
+				header : '공정명',
+				name : 'procName'
+			}, 
+			{
+				header : '관리자',
+				name : 'empId'
+			},
+			{
+				header : '관리자명',
+				name : 'empName'
+			},
+			{
+				header : '작업완료량',
+				name : 'manQnt'
+			} 
+		]
+		
+		//공정이동표 그리드 내용
+		let gridMovement = new Grid({
+			el: document.getElementById('gridMovement'),
+			data: null,
+			columns: columnsMovement,
+			rowHeaders: ['rowNum'],
+		})
+		
+		
 	</script>
 	
 

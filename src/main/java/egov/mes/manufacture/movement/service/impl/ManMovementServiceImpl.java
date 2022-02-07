@@ -20,6 +20,26 @@ public class ManMovementServiceImpl implements ManMovementService {
 	public List<ManMovementVO> selectCommand(ManMovementVO movementVO) {
 		return mapper.selectCommand(movementVO);
 	}
+
+	//공정이동표
+	@Override
+	public List<ManMovementVO> selectMovement(ManMovementVO movementVO) {
+		return mapper.selectMovement(movementVO);
+	}
+
+	//공정이동표에서 자재 조회
+	@Override
+	public List<ManMovementVO> selectResLot(ManMovementVO movementVO) {
+		return mapper.selectResLot(movementVO);
+	}
+
+	//선택된 지시 정보 
+	@Override
+	public List<ManMovementVO> selectComInfo(ManMovementVO movementVO) {
+		return mapper.selectComInfo(movementVO);
+	}
+	
+	
 	
 	
 }

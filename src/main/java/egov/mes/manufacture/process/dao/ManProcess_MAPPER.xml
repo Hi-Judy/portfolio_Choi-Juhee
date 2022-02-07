@@ -17,10 +17,10 @@
                                            where podt_Code = #{podtCode}                                       
                                            and proc_code = #{procCode}                  
                                           ) -1
-                                          and podt_code= #{podtCode}                                                   
+                        and podt_code= #{podtCode}                                                   
                                                                  
                         )                                                                                     
-    and com_code =  (                                                                                             
+    and p.com_code =  (                                                                                             
                      select COM_CODE                                                                                        
                      from manufacture_command_d                                                                           
                      where podt_code =#{podtCode}                                                                               
@@ -138,18 +138,31 @@
 	select c.man_startTime as manStarttime, c.man_endTime as manEndtime, c.man_qnt,
            d.fac_code, prod_detail(d.fac_code) as facName, 
            d.proc_code, prod_detail(d.proc_code) as procName,
-           e.man_goalperday as manGoalPerday
+           e.man_goalperday as manGoalPerday,
+           f.emp_id, f.emp_name
 	from manufacture_process c join (select a.fac_no, a.fac_code,
                                             b.proc_code
 	                                 from facility_status a join facility_process b
 	                                 on a.fac_no = b.fac_no
 	                                 where a.fac_status='Y') d
 	on c.proc_code = d.proc_code
+	
 	join manufacture_command_d e
-	on c.podt_Code = e.podt_code
+	on c.com_code = e.com_code
+	
+	join (select a.proc_code, prod_detail(a.proc_code),
+          		 b.emp_id, b.emp_name
+		  from process a join employee_info b
+		  on a.proc_emp_id = b.emp_id
+		  where a.proc_code between 'PROC001' and 'PROC011'
+		  order by a.proc_code) f
+	on c.proc_Code = f.proc_Code
+	
 	where c.com_Code = #{comCode}
 	
-	group by c.man_startTime, c.man_endTime, c.man_qnt, d.fac_code, d.proc_code, e.man_goalperday
+	group by c.man_startTime, c.man_endTime, c.man_qnt, 
+			 d.fac_code, d.proc_code, e.man_goalperday,
+			 f.emp_id, f.emp_name
 	order by d.proc_Code
 </select>
 
@@ -179,10 +192,10 @@
                                           and podt_code=#{podtCode}                                                      
                          <!-- and proc_code = substr(#{procCode},1,4)||lpad(substr(#{procCode},5,3)-1,3,'0') -->                                                                        
                         )                                                                                     
-    and com_code =  (                                                                                             
+    and p.com_code =  (                                                                                             
                      select COM_CODE                                                                                        
                      from manufacture_command_d                                                                           
-                     where podt_code = #{podtCode}                                                                                       
+                     where com_code = #{comCode}                                                                                       
                     )                                                                                          
                                                               
 </select>
@@ -199,21 +212,28 @@
 									 MAN_QNT , 
 									 PODT_CODE , 
 									 EMP_NO, 
-									 MAN_DATE)
+									 MAN_DATE,
+									 DEF_QNT)
 	values ( (select 'PR'||
           	  to_Char(Sysdate, 'yyMMdd') || 
           	  (lpad( (select SUBSTR( nvl (max(man_no),'PR' || to_char(sysdate, 'yyMMdd') || '000'),9,3) 
           	  		  from manufacture_process) +1,3,'0')) 
           	  as manNo from dual),
 			#{procCode},
-			(select com_code from manufacture_command_d where podt_code = #{podtCode}),
+			(select com_code from manufacture_command_d where com_code = (select com_code from manufacture_command_d where com_code = #{comCode})),
 			null,
 			null,
-			(select man_goalperday from manufacture_command_d where podt_code = #{podtCode}),
+			(select man_goalperday from manufacture_command_d where com_code = (select com_code from manufacture_command_d where com_code = #{comCode})),
 			null,
-			#{podtCode},
-			null,
-			(select man_startdate from manufacture_command_d where com_code = (select com_code from manufacture_command_d where podt_code = #{podtCode}))
+			(select podt_code from manufacture_command_d where com_code = (select com_code from manufacture_command_d where com_code = #{comCode})),
+			(
+			   select proc_emp_id as empId
+   			   from process
+    		   where proc_code = #{procCode}
+			),
+			(select man_startdate from manufacture_command_d where com_code = (select com_code from manufacture_command_d where com_code = #{comCode})),
+			null
+			
 	)
 	
 </insert>
@@ -230,11 +250,18 @@
 
 <!-- 해당 공정의 10초당 생산량 -->
 <select id="selectSecondQnt" resultType="egov.mes.manufacture.process.dao.ManProcessVO">
-	select  DISTINCT trunc(((a.fac_output/a.fac_runtime)/60)/6) as qntPer10Second
+<!-- 	select  DISTINCT trunc(((a.fac_output/a.fac_runtime)/60)/6) as qntPer10Second
     from facility_status a join facility_process b
     on a.fac_no = b.fac_no
     where a.fac_status='Y'
-    and b.proc_code = #{procCode}
+    and b.proc_code = #{procCode} -->
+    
+    select DISTINCT trunc(a.fac_output/a.fac_runtime) as qntPer10Second, 
+           b.proc_code
+	from facility_status a join facility_process b
+	on a.fac_no = b.fac_no
+	where a.fac_status='Y'
+	and b.proc_code = #{procCode}
 </select>
 
 
@@ -274,6 +301,7 @@
 	from process_flowInfo a join manufacture_command_d b
     on a.podt_code = b.podt_code
 	where a.podt_code = #{podtCode}
+	and com_code= #{comCode}
 	order by a.proc_index
 </select>
 
@@ -283,17 +311,32 @@
 	select c.podt_code, prod_detail(c.podt_code) as podtName, c.proc_index,
            d.fac_code, prod_detail(d.fac_code) as facName, 
            d.proc_code, prod_detail(d.proc_code) as procName,
-           e.com_code, e.man_goalperday as manGoalPerday
+           e.com_code, e.man_goalperday as manGoalPerday,
+           f.emp_id, f.emp_name
 	from process_flowInfo c join ( select a.fac_no, a.fac_code,
-	                                      b.proc_code
+                                          b.proc_code                  
                                    from facility_status a join facility_process b
                                    on a.fac_no = b.fac_no
                                    where a.fac_status='Y') d
 	on c.proc_code = d.proc_code
+    
     join manufacture_command_d e
     on c.podt_Code = e.podt_code
-	where c.podt_code = #{podtCode}
-	group by c.podt_code, d.fac_code,  d.proc_code, e.man_goalperday, c.proc_index, e.com_code
+    
+    join (select a.proc_code, prod_detail(a.proc_code),
+          		 b.emp_id, b.emp_name
+		  from process a join employee_info b
+		  on a.proc_emp_id = b.emp_id
+		  where a.proc_code between 'PROC001' and 'PROC011'
+		  order by a.proc_code) f
+	on c.proc_Code = f.proc_Code
+    
+	where e.podt_code = #{podtCode}
+	and e.com_code = #{comCode}
+	group by c.podt_code, c.proc_index,
+             d.fac_code,  d.proc_code, 
+             e.man_goalperday, e.com_code,
+             f.emp_id, f.emp_name
 	order by c.proc_index
 </select>
 

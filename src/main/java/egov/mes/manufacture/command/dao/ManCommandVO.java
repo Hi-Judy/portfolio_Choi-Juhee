@@ -14,6 +14,7 @@ public class ManCommandVO {
 	String manPlanNo; //계획번호
 	String manPlanDate; //계획일자
 	String manPlanName; //계획명
+	String planStartdate; //예상작업일
 	String planFromDate; //계획일자
 	String planToDate;   //계획일자
 	String planNoDetail; //계획 디테일 번호

@@ -12,6 +12,7 @@ public class ManProcessVO {
 	String manGoalPerday; //작업량(지시량)
 	String comCode; //지시번호
 	
+	
 	//공정
 	String procCode; //공정코드 
 	String procName; //공정명
@@ -23,8 +24,12 @@ public class ManProcessVO {
 	String qntPer10Second; //10초당 생산량
 	String manGoalqnt; //지시량
 	String procIndex; //작업순서
+	String empId; //관리자 사번
+	String empName; //관리자명
+	
 	
 	//설비
 	String facCode; //설비코드
 	String facName; //설비명
+	
 }
