@@ -17,7 +17,7 @@ div.left {
 
 div.right {
    float: right;
-   width: 30%;
+   width: 35%;
    padding: 5px;
    box-sizing: border-box;
 }
@@ -38,7 +38,7 @@ div.right {
    <div id="top" style="height: 103px;">
       <div style="height: 40px; margin-top: 12px;">
 		 <span style="float: right; ">
-            <button id="" type="button" class="btn"
+            <button id="resetBtn" type="button" class="btn"
                style="padding: 5px 30px;">리셋</button> &nbsp;&nbsp;
             <button id="BomSave" type="button" class="btn"
                style="padding: 5px 30px;">저장</button> &nbsp;&nbsp;
@@ -66,7 +66,7 @@ div.right {
 	   </div>
    </div>
 
-   <br>
+   
    <div id=OverallSize style="width: 1515px;">
       <div class="left">
          <span style="font-size: 1.5em; color: blue"> 사용자재 관리 </span>
@@ -77,7 +77,7 @@ div.right {
 
          <!-- style="overflow:scroll; width:504px; height:500px; " -->
          <div id="MatGrid"
-            style="border-top: 3px solid #168; width: 800px; "></div>
+            style="border-top: 3px solid #168; width: 835px; "></div>
       </div>
 
       <div class="right">
@@ -92,9 +92,9 @@ div.right {
          <div id="ProcGrid" style="border-top: 3px solid #168;"></div>
 
       </div>
-
+		
       <div id="dialog-form" title="모달">
-         <div id="ProGrid"></div>
+         <div id="ProGrid" ></div>
       </div>
    </div>
    
@@ -155,7 +155,7 @@ toastr.options = {
          autoOpen : false ,
          modal : true ,
          width:600, //너비
-         height:400 //높이
+         height:500 //높이
       });
       
       //------제품선택 모달 --------
@@ -185,7 +185,8 @@ toastr.options = {
             { header : '제품코드'   , name : 'podtCode'   , align : 'center' },
             { header : '제품명'   , name : 'codeName'   , align : 'center' },
             { header : '제품분류'   , name : 'podtFlag'   , align : 'center' }
-         ]
+         ],
+         bodyHeight: 350
       });
       
       //------클릭한 제품 코드 선택 --------
@@ -1000,9 +1001,29 @@ toastr.options = {
 	    	
 		}
   	  
- 	//------------------ 도움말 버튼 이벤트 -----------------------
+ 	 //------------ 도움말 버튼 이벤트 ---------------
  	 helpBtn.addEventListener('mouseover' , () => {
  	 	helpModal.dialog("open") ;
+ 	 })
+ 	 
+ 	 //------------ 리셋버튼 이벤트 ---------------
+ 	 resetBtn.addEventListener('click' , () => {
+ 		var reDatas = []
+ 		var proIdInp = document.getElementById('proIdInp') ;
+ 		var proName  = document.getElementById('proName') ;
+ 		var proFlag  = document.getElementById('proFlag') ;
+ 		var manFlag  = document.getElementById('manFlag') ;
+ 		var proUnit  = document.getElementById('proUnit') ;
+ 		
+ 		proIdInp.value = "" ;
+ 		proName.value  = "" ;
+ 		proFlag.value  = "" ;
+ 		manFlag.value  = "" ;
+ 		proUnit.value  = "" ;
+ 		
+ 		MatGrid.resetData(reDatas) ;
+ 		ProcGrid.resetData(reDatas) ;
+		//Grid2.resetOriginData();
  	 })
       
       

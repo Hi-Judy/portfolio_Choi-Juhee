@@ -47,12 +47,19 @@ div.Gridright {
 
 </head>
 <body>
-
+	<div style="width : 1500px ;">
+		<span style="float: right;">
+			<button type="button" id="helpBtn" style="border : none; background-color : #f2f7ff; color : #007b88; float : right ;">
+			<i class="bi bi-question-circle"></i>
+			</button>
+		</span>
+		<h4 style="margin-left: 10px">공정관리</h4>
+	</div>
 
    <div id="top">
       <div>
-      		<span style="margin-top: 13px; float: left;"> &nbsp;&nbsp;공정관리</span>
-            <span style="float: right; margin-top: 3.5px;">
+      		<span style="margin-top: 13px; float: left;"> </span>
+            <span style="float: right; margin-top: 5.5px;">
             <button id="AddData" type="button" class="btn"
                style="padding: 5px 30px;">추가</button> &nbsp;&nbsp;
             <button id="btnDelete" type="button" class="btn"
@@ -64,8 +71,7 @@ div.Gridright {
       </div>
    </div>
    
-  
-   <br>
+ 
    <div id="OverallSize">
       <div style="margin-left: 10px; width: 1500px;">
          <span> 등록된 공정수 : <input id="NUM"style="border:none;margin-left:5px; background-color:#f2f7ff; width:30px" disabled="true" > </span>
@@ -81,7 +87,7 @@ div.Gridright {
 	</div>
 	
 	<div id="ModalDal" title="설비등록">
-		<div>선택된 공정코드: &nbsp;<input id="ProcSelected" readonly> </div>
+		<div>선택된 공정코드 : <input id="ProcSelected" readonly style="border:none;margin-left:5px; background-color:#ffffff; width:90px" disabled="true" > </div>
 		 <button id="FacSave" type="button" class="btn" style="float: right; ">설비저장</button>
 		<br><br>
            
@@ -89,7 +95,7 @@ div.Gridright {
 	</div>
 	
 	<div id="ChangeModal" title="등록된 설비 변경">
-		<div> 선택된 공정코드: &nbsp;<input id="ProcSelected2" readonly>
+		<div> 선택된 공정코드 : <input id="ProcSelected2" readonly style="border:none;margin-left:5px; background-color:#ffffff; width:90px" disabled="true" >
 			  <button id="DataSeve" type="button" class="btn" style="float: right; ">변경저장</button>
 		</div>
 		<br><br>
@@ -106,12 +112,23 @@ div.Gridright {
 	        <div> <span> 비가동(가동준비) 설비 </span>
 	        	<button id="dataflowBtn" type="button" class="btn" style="float: right; margin-bottom: 5px;">추가</button>
 	        </div> 
-			<div id="FacGrid2"></div> <!-- style="border-top: 3px solid #168;" -->
+			<div id="FacGrid2" ></div> <!-- style="border-top: 3px solid #168;" -->
 		</div>
 	</div>
      
       
    </div>
+   
+	<div id="helpModal" title="도움말">
+		<hr>
+		새자료 : 화면에 보여지고있는 자재정보를 없에고 등록모드 로 바뀝니다.<br><br>
+		자재재고조회 : 선택된 자재의 전년도 이월량 밑 올해 내역들을 볼수있습니다.<br><br>
+		저장 : "담당관리자" , "입고업체" , "입고단가" 들을 <br>
+		&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+		새롭게 수정해서 저장할수있습니다.<br><br>
+		LOT정보가 없는 자재들은 자재재고조회 밑 LOT정보 조회가 불가능합니다.<br><br>
+		LOT추가 밑 더 자세한 자재관리는 자재관리 탭에서 진행해주세요.
+	</div>
    
 </body>
 
@@ -135,24 +152,21 @@ toastr.options = {
         "hideMethod": "fadeOut",
         "tapToDismiss": false
       }
-      
-//옵션세팅
-/* themesOptions = { 
-            selection: {    background: '#007b88',     border: '#004082'  },//  <- 클릭한 셀 색상변경 border(테두리색) , background (백그라운드)
-            scrollbar: {    background: '#f5f5f5',  thumb: '#d9d9d9',  active: '#c1c1c1'    }, //<- 그리드 스크롤바 옵션
-            row: {    
-                hover: {    background: '#ccc'  }// <-마우스 올라갔을떄 한row 에 색상넣기
-            },
-             cell: {   // <- 셀클릭했을떄 조건들 주는것이다.
-                normal: {   background: '#fbfbfb',  border: '#e0e0e0',  showVerticalBorder: true    },// <- showVerticalBorder : 세로(아래,위) 테두리가 보이는지 여부
-                header: {   background: '#eee',     border: '#ccc',     showVerticalBorder: true    },// <- showVerticalBorder : 가로(양옆) 테두리가 보이는지 여부
-                rowHeader: {    border: '#eee',     showVerticalBorder: true    },// <- 행의헤더 색상영역
-                editable: { background: '#fbfbfb' },//  <-편집가능한 셀들의 색상을 주는영역
-                selectedHeader: { background: '#eee' },//  <- 선택한 셀의 백그라룬드	
-                disabled: { text: '#b0b0b0' }// <- 편집할수없는(비활성화된) 셀들에 대한 스타일 조절
-            } 
-}; */
 
+
+	  //-------- 도움말 모달 ----------
+	  var helpModal = $( "#helpModal" ).dialog({
+	     autoOpen : false ,
+	     modal : true ,
+	 	 width:600, //너비
+	 	 height:400, //높이
+		 buttons: {
+				"닫기" : function() {
+					helpModal.dialog("close") ;
+					}
+		 }
+	  });
+	  	
       //-------- 관리자선택 모달 설정 ----------
       var dialog = $( "#dialog-form" ).dialog({
          autoOpen : false ,
@@ -835,6 +849,12 @@ const FacGrid = new tui.Grid({
 		    	}
 	   	 return Check; 
 	}
+	
+	
+	//------------------ 도움말 버튼 이벤트 -----------------------
+	helpBtn.addEventListener('mouseover' , () => {
+		helpModal.dialog("open") ;
+	})
 	
 tui.Grid.applyTheme('default', themesOptions);
 </script>
