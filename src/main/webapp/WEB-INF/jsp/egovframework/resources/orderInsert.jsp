@@ -21,9 +21,9 @@
 	<div id="top">
 		<div>
 		<button id="btnSelectOrder" class="btn">미검사 조회</button>
-		<button id="btnSaveOrder" class="btn">저장</button>
-		<button id="btnAdd" class="btn">추가</button>
+		<button id="btnAdd" class="btn">추가</button>	
 		<button id="btnDel" class="btn">삭제</button>
+		<button id="btnSaveOrder" class="btn">저장</button>
 		</div>
 	</div>
 	
