@@ -69,6 +69,7 @@ function actionLogin() {
         alert("<spring:message code="comUatUia.validate.passCheck" />"); <%-- 비밀번호를 입력하세요 --%>
     } else {
         document.loginForm.action="<c:url value='/uat/uia/actionLogin.do'/>";
+        console.log("asdsad");
         //document.loginForm.j_username.value = document.loginForm.userSe.value + document.loginForm.username.value;
         //document.loginForm.action="<c:url value='/j_spring_security_check'/>";
         document.loginForm.submit();
@@ -188,13 +189,7 @@ function fnInit() {
 }
 
 function fnLoginTypeSelect(objName){
-
-		document.getElementById("typeGnr").className = "";
-		document.getElementById("typeEnt").className = "";
-		document.getElementById("typeUsr").className = "";
-		
-		document.getElementById(objName).className = "on";
-		
+		objName="typeGnr";
 		if(objName == "typeGnr"){ //일반회원
 			document.loginForm.userSe.value = "GNR";
 		}else if(objName == "typeEnt"){	//기업회원
