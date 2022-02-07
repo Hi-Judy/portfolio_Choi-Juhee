@@ -20,4 +20,8 @@ public class DefectiveVO {
 	String procName ;
 	String podtName ;
 	String defName ;
+	
+	String podtInput ;
+	String comCode ;
+	String manQnt ;
 }

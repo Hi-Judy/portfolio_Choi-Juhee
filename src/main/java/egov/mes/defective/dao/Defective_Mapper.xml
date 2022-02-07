@@ -50,4 +50,29 @@
 		order by to_char(man_date,'MM') 
 	</select>
 	
+	<select id="checkProductList" resultType="egov.mes.defective.dao.DefectiveVO">
+		select com_code , man_date , man_qnt , 
+			(select max(def_qnt) from manufacture_process where com_code = com_code) as defQnt , 
+			(man_qnt-(select max(def_qnt) from manufacture_process where com_code = com_code)) as podtInput 
+		from manufacture_process 
+		where def_qnt is not null
+		
+		<if test="fromDate != null">
+			<![CDATA[
+				and to_char(man_date , 'yyyy-MM-dd') >= #{fromDate}
+			]]>
+		</if>
+		
+		<if test="toDate != null">
+			<![CDATA[
+				and to_char(man_date , 'yyyy-MM-dd') <= #{fromDate}
+			]]>
+		</if>
+	</select>
+	
+	<select id="defList" resultType="egov.mes.defective.dao.DefectiveVO">
+		select proc_code , fn_get_code_name(proc_code) as procName , def_code , fn_get_code_name(def_code) as defName , def_qnt
+		from defective_product_info
+		where com_code = #{comCode}
+	</select>
 </mapper>

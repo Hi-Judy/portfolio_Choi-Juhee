@@ -16,20 +16,45 @@
 </head>
 
 <body>
-	<h2>생산계획서 조회</h2><br>
+	<div id="title" style="margin-left : 10px;"><h3 style="color : #054148; font-weight : bold">생산계획서 조회</h3></div>
 	
-	<!-- 계획일자, 계획명 입력 -->
-	<div class = "planDate">
-		<p style="display:inline-block;">계획일자</p>
+	<div id="top" style="height : 160px; padding : 10px;">
+		<!-- 계획일자, 계획명 입력 -->
+		<div class = "planDate">
+			<p style="display:inline-block; margin-left : 20px; margin-top : 10px;">계획일자</p>
+			
+			<input id = "txtFromDate" type="date" name="from" style="display:inline-block;">
+			<p style="display:inline-block;"> ~ </p>
+			<input id = "txtToDate" type="date" name="to" style="display:inline-block;">
+	
+			<button type="button" id="btnSearchManPlan" class="btn">생산계획 조회</button>
+			<button type="button" id="btnSearchPlan" class="btn">미계획 조회</button><br>
+		</div>
 		
-		<input id = "txtFromDate" type="date" name="from" style="display:inline-block;">
-		<p style="display:inline-block;"> ~ </p>
-		<input id = "txtToDate" type="date" name="to" style="display:inline-block;">
-
-		<button type="button" id="btnSearchManPlan">생산계획 조회</button>
-		<button type="button" id="btnSearchPlan">미계획 조회</button><br>
+		<!-- 자재조회 -->
+		<div> 
+			<p style="display: inline-block; margin-left : 20px; magin-top : 20px;">제품코드</p>
+			<input id="txtPodt"> 
+			<button type="button" id="btnSearchRes" class="btn">자재 조회</button>
+			
+			<!-- 자재조회 모달 -->
+			<!-- <div id = "dialog-form-resource" title="자재 조회"></div> -->
+		</div>
+		
+		<button type="button" id="btnInit" class="btn" style="float : right; margin : 5px;">초기화</button>
+		<button type="button" id="btnSavePlan" class="btn" style="float : right; margin : 5px;">저장</button>
+		<button type="button" id="btnDeletePlan" class="btn" style="float : right; margin : 5px;">삭제</button>
 	</div>
-
+	
+	<div id="OverallSize" style="margin-left : 10px;">
+		<!-- 메인화면 그리드 -->
+		<div id = "gridMain"></div>
+		<br>
+		
+		<!-- 자재조회 그리드 -->
+		<div>자재조회</div>
+		<div id="gridResource"></div>
+	</div>	
 	
 	<!-- 미계획 모달 -->
 	<div>
@@ -37,38 +62,10 @@
 			<div id="gridPlan"></div>
 		</div>
 	</div>
-	<br>
-
-	
-	<!-- 자재조회 -->
-	<div> 
-		<p style="display: inline-block;">제품코드</p>
-		<input id="txtPodt"> 
-		<button type="button" id="btnSearchRes">자재 조회</button>
-		
-		<!-- 자재조회 모달 -->
-		<!-- <div id = "dialog-form-resource" title="자재 조회"></div> -->
-	</div>
-
 
 	<!-- 작성된 생산계획 조회 모달 -->
 	<div id="dialog-form-manPlan" title="생산계획 조회">
 		<div id="gridManPlan"></div>
-	</div>
-	<br>
-
-	<!-- 메인화면 그리드 -->
-	<div id = "gridMain"></div>
-	<br>
-	
-	<!-- 자재조회 그리드 -->
-	<div>자재조회</div>
-	<div id="gridResource"></div>
-	
-	<div style="float:right;">
-		<button type="button" id="btnSavePlan">저장</button>
-		<button type="button" id="btnDeletePlan">삭제</button>
-		<button type="button" id="btnInit">초기화</button>
 	</div>
 	
 	<script> 

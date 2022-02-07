@@ -16,28 +16,28 @@
 
 </head>
 <body>
-	<h2>생산지시서 조회</h2><br>
+	<div id="title" style="margin-left : 10px;"><h3 style="color : #054148; font-weight : bold">생산지시서 조회</h3></div>
 	
-	<div class = "selectCommand">
-		<!-- 작업일자별로 조회 -->
-		<p style="display:inline-block;">작업일자</p>
-		<input id = "txtManDate" type="date" name="manDate" style="display:inline-block;">
-		<br>
-		
-		<!-- 제품코드별로 조회 -->
-		<p style="display: inline-block;">제품코드</p>
-		<input id="txtPodtCode" style="display: inline-block;">
-		<button type="button" id="searchCommand">생산지시조회</button>
-		
-		<button type="button" id="btnInit">초기화</button>
+	<div id="top" style="height : 160px; padding : 10px;">
+		<div class = "selectCommand">
+			<!-- 작업일자별로 조회 -->
+			<p style="display:inline-block; margin-left : 20px; margin-top : 10px;">작업일자</p>
+			<input id = "txtManDate" type="date" name="manDate" style="display:inline-block; margin-left : 10px;">
+			<br>
+			
+			<!-- 제품코드별로 조회 -->
+			<p style="display: inline-block; margin-left : 20px;">제품코드</p>
+			<input id="txtPodtCode" style="display: inline-block; margin-left : 10px;">
+			<br>
+			<button type="button" id="btnInit" class="btn" style="float : right; margin : 5px;">초기화</button>
+			<button type="button" id="searchCommand" class="btn" style="float : right; margin : 5px;">생산지시조회</button>
+		</div>
 	</div>
-
-	<br>
 	
-	<!-- 생산지시 조회 그리드 -->
-	<div id="gridCommand"></div>
-	<br>
-	
+	<div id="OverallSize" style="margin-left : 10px;">
+		<!-- 생산지시 조회 그리드 -->
+		<div id="gridCommand"></div>
+	</div>
 	
 	
 	<script>

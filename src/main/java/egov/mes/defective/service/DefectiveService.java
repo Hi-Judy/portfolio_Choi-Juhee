@@ -10,4 +10,6 @@ public interface DefectiveService {
 	List<DefectiveVO> selectProcess(DefectiveVO defective) ;
 	List<DefectiveVO> selectChart(DefectiveVO defective) ;
 	List<DefectiveVO> selectChart2(DefectiveVO defective) ;
+	List<DefectiveVO> checkProductList(DefectiveVO defective) ;
+	List<DefectiveVO> defList(DefectiveVO defective) ;
 }

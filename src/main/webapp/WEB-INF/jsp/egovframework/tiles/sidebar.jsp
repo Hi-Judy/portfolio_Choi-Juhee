@@ -68,9 +68,9 @@
 
 						<li class="submenu-item "><a href="manProcess">생산 현황 조회</a></li>
 						<li class="submenu-item "><a href="manMovement">공정이동표</a></li>
-						<li class="submenu-item "><a href="manPerformance">생산실적관리_주희</a></li>
-						<li class="submenu-item "><a href="DefectiveProduct">생산
-								실적 조회_재철</a></li>
+						<li class="submenu-item "><a href="checkProduct">불량 검사</a></li>
+						<li class="submenu-item "><a href="DefectiveProduct">불량 조회</a></li>
+						<li class="submenu-item "><a href="manPerformance">생산실적관리</a></li>
 								
 
 					</ul></li>

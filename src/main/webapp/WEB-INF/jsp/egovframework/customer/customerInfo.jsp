@@ -27,11 +27,11 @@
 <script src="https://uicdn.toast.com/grid/latest/tui-grid.js"></script>
 </head>
 <body>
-	<div id="help" align="right" style="width : 1500px ;"><button type="button" id="helpBtn" style="border : none; background-color : white; color : #007b88; float : right ;"><i class="bi bi-question-circle"></i></button></div>
+	<div id="help" align="right" style="width : 1500px ;"><button type="button" id="helpBtn" style="border : none; background-color : #f2f7ff; color : #007b88; float : right ;"><i class="bi bi-question-circle"></i></button></div>
 	<br>
 	<div id="title" style="margin-left : 10px;"><h3 style="color : #054148; font-weight : bold">고객 관리</h3></div>	
 	<div id="top" style="height : 110px; padding : 10px;">
-		<span style="margin : 20px;">고객명</span><input id="txtCusName" style="margin-top : 10px;" readonly> 
+		<span style="margin : 20px;">고객명</span><input id="txtCusName" style="margin-top : 10px; background-color: #d2e5eb;" readonly> 
 		<span style="margin : 20px;">고객코드</span><input id="txtCusCode">&nbsp;<button type="button" id="btnSearch" style="border : none; background-color : #f8f8ff; color : #007b88;"><i class="bi bi-search"></i></button>		
 		<br>
 		<button type="button" id="clearBtn" class="btn" style="float : right; margin : 5px;">초기화</button>
@@ -385,7 +385,7 @@
 		autoOpen : false ,
 		modal : true ,
 		width : 600 ,
-		height : 600 ,
+		height : 660 ,
 		buttons : {
 			"저장" : function() {
 				grid4.blur() ;
@@ -547,7 +547,11 @@
 		] ,
 		data : data3 ,
 		columns : columns3 ,
-		bodyHeight : 200 
+		bodyHeight : 220 ,
+ 		pageOptions: {
+		    useClient: true,
+		    perPage: 5
+		} 
 	})
 	
 	const grid4 = new Grid({
