@@ -16,22 +16,28 @@
 <script src="https://code.jquery.com/ui/1.13.0/jquery-ui.js"></script>
 </head>
 <body>
-	<h3 style="color : #054148; font-weight : bold">자재 발주 관리</h3>
+	<h4 style="margin-left: 10px">자재 발주 관리</h4>
 
 	<div id="top">
 		<div>
-		<button id="btnSelectOrder" class="btn">미검사 조회</button>
-		<button id="btnAdd" class="btn">추가</button>	
-		<button id="btnDel" class="btn">삭제</button>
-		<button id="btnSaveOrder" class="btn">저장</button>
+			<span style="margin-top: 13px; float: left;">
+			</span>
+			<span style="float: right; margin-top: 4.5px;">
+				<button id="btnSelectOrder" class="btn">미검사 조회</button> &nbsp;&nbsp;
+				<button id="btnAdd" class="btn">추가</button>	 &nbsp;&nbsp;
+				<button id="btnDel" class="btn">삭제</button> &nbsp;&nbsp;
+				<button id="btnSaveOrder" class="btn">저장</button> &nbsp;&nbsp;
+			</span>
 		</div>
 	</div>
 	
 	<div id="dialog-form-rsc" title="자재 검색"></div>
 	<div id="dialog-form-order" title="미입고 검색"></div>
 	
-	<div id="OverallSize">
-	<div id="grid" ></div>
+	
+	<div id="OverallSize" style="margin-left: 10px;">
+			<br>
+	<div id="grid" style="border-top: 3px solid #168; width: 1500px;"></div>
 	</div>
 
 	<script type="text/javascript">
@@ -49,6 +55,7 @@
 				}
 			},
 		});
+	
 	var poNoList=[];
 	//모달창 설정(조회 클릭시 미입고 품목 조회)
 	let dialog4 = $( "#dialog-form-order" ).dialog({
@@ -58,21 +65,22 @@
 			width : 900,
 			buttons: {
 				"확인" : function (){
-					$.ajax({
-						url: 'resourcesCheckList',
-						method :'GET',
-						dataType : 'JSON',
-						success : function(datas){
-							for(let a = 0; a < datas.data.contents.length; a++){
-								for(let b = 0; b<ordrNo.length; b++) {
-									if(datas.data.contents[a].ordrNo == ordrNo[b]){
-										poNoList.push(datas.data.contents[a]);
-									}
-								}
-							}
-							grid.resetData(poNoList);
+					//여기서는 getCheckedRows에 있는 값을 
+					for(i=0; i <gridOrder.getCheckedRows().length; i++ ){
+						//중복체크하고 값이 없는 경우에만 appendRow 해주는 거 
+						if(grid.findRows({ordrNo : gridOrder.getValue(i,'ordrNo')}).length == 0) {
+							grid.appendRow({'ordrNo':gridOrder.getValue(i,'ordrNo'),
+											'rscCode':gridOrder.getValue(i,'rscCode'),
+											'rscName':gridOrder.getValue(i,'rscName'),
+											'rscUnit':gridOrder.getValue(i,'rscUnit'),
+											'rscCnt':gridOrder.getValue(i,'rscCnt'),
+											'rscPrc':gridOrder.getValue(i,'rscPrc'),
+											'rscTotal':gridOrder.getValue(i,'rscTotal'),
+											'sucName':gridOrder.getValue(i,'sucName'),
+											'istReqDate':gridOrder.getValue(i,'istReqDate')
+							});
 						}
-					})
+					}
 					dialog4.dialog("close");
 				},
 				"닫기" : function() {
@@ -98,51 +106,55 @@
 	Grid.applyTheme('default');
 	
 	const columns = [
-		
-	  {
-	    header: '자재코드',
-	    name: 'rscCode'
-	  },
-	  {
-		header: '자재명',
-		name: 'rscName'
-	  },
-	  {
-		header: '단위',
-		name: 'rscUnit'
-	   },
-	  {
-		header: '발주량',
-		name: 'rscCnt',
-		editor: 'text',
-		 formatter(value) {
-            return value.value.toString().replace(/\B(?<!\.\d*)(?=(\d{3})+(?!\d))/g, ",");
-        }
-	   },
-	   {
-		header: '단가',
-		name: 'rscPrc',
-		 formatter(value) {
-            return value.value.toString().replace(/\B(?<!\.\d*)(?=(\d{3})+(?!\d))/g, ",");
-        }
-		},
-	   {
-		 header: '합계',
-		 name: 'rscTotal',
-		 formatter(value) {
-             return value.value.toString().replace(/\B(?<!\.\d*)(?=(\d{3})+(?!\d))/g, ",");
-         }
-		},
-		{
-		  header: '업체',
-		  name: 'sucName'
-		},
-		{
-		  header: '입고요청일',
-		  name: 'istReqDate',
-		  editor: 'datePicker'
-		}	
-	];
+			 {
+			    header: '발주번호',
+			    name: 'ordrNo',
+			    //hidden : true
+			  },
+			  {
+			    header: '자재코드',
+			    name: 'rscCode'
+			  },
+			  {
+				header: '자재명',
+				name: 'rscName'
+			  },
+			  {
+				header: '단위',
+				name: 'rscUnit'
+			   },
+			  {
+				header: '발주량',
+				name: 'rscCnt',
+				editor: 'text',
+				 formatter(value) {
+		            return value.value.toString().replace(/\B(?<!\.\d*)(?=(\d{3})+(?!\d))/g, ",");
+		        }
+			   },
+			   {
+				header: '단가',
+				name: 'rscPrc',
+				 formatter(value) {
+		            return value.value.toString().replace(/\B(?<!\.\d*)(?=(\d{3})+(?!\d))/g, ",");
+		        }
+				},
+			   {
+				 header: '합계',
+				 name: 'rscTotal',
+				 formatter(value) {
+		             return value.value.toString().replace(/\B(?<!\.\d*)(?=(\d{3})+(?!\d))/g, ",");
+		         }
+				},
+				{
+				  header: '업체',
+				  name: 'sucName'
+				},
+				{
+				  header: '입고요청일',
+				  name: 'istReqDate',
+				  editor: 'datePicker'
+				}	
+			];
 	
 	const dataSource = {
 		  api: {
@@ -190,16 +202,18 @@
 
 	btnDel.addEventListener("click", function(){
 		grid.removeCheckedRows(true);
+		grid.request('modifyData');
 	}) 
 	
 	
 	btnSaveOrder.addEventListener("click", function(){
 		for(let i=0; i<grid.getRowCount(); i++){
-			console.log(grid.getValue(i, "rscCnt"));
-			if(grid.getValue(i, "rscCnt")) == ""){
-				alert("발주량을 입력해주세요")
-			}else if(grid.getValue(i, "rscCnt")) != null){
-			  grid.request('modifyData');
+			if(grid.getValue(i, "rscCnt") != null && grid.getValue(i, "rscCnt") != ""){
+				 grid.request('modifyData');
+				 break;
+			}else if(grid.getValue(i, "rscCnt") == null){
+				 alert("발주량을 입력해주세요")
+			  	 break;
 			}	
 		}
 	}) 

@@ -42,7 +42,8 @@
 	</div>
 	
 	<div id="OverallSize" style="margin-left : 10px;">
-		<div id="info"></div>
+	<br>
+		<div id="info" style="border-top: 3px solid #168;"></div>
 	</div>
 	
 	<div id="findCustomer" title="고객검색"">
@@ -59,6 +60,22 @@
 	</div>
 <script>
 	var Grid = tui.Grid ;
+	
+	themesOptions = { 
+            selection: {    background: '#007b88',     border: '#004082'  },//  <- 클릭한 셀 색상변경 border(테두리색) , background (백그라운드)
+            scrollbar: {    background: '#f5f5f5',  thumb: '#d9d9d9',  active: '#c1c1c1'    }, //<- 그리드 스크롤바 옵션
+            row: {    
+                hover: {    background: '#ccc'  }// <-마우스 올라갔을떄 한row 에 색상넣기
+            },
+            cell: {   // <- 셀클릭했을떄 조건들 주는것이다.
+                normal: {   background: '#fbfbfb',  border: '#e0e0e0',  showVerticalBorder: true    },// <- showVerticalBorder : 세로(아래,위) 테두리가 보이는지 여부
+                header: {   background: '#eee',     border: '#ccc',     showVerticalBorder: true    },// <- showVerticalBorder : 가로(양옆) 테두리가 보이는지 여부
+                rowHeader: {    border: '#eee',     showVerticalBorder: true    },// <- 행의헤더 색상영역
+                editable: { background: '#fbfbfb' },//  <-편집가능한 셀들의 색상을 주는영역
+                selectedHeader: { background: '#eee' },//  <- 선택한 셀의 백그라룬드   
+                disabled: { text: '#b0b0b0' }// <- 편집할수없는(비활성화된) 셀들에 대한 스타일 조절
+            }
+	};
 	
 	//---------- ↓페이지 ----------
 	const columns = [
@@ -273,6 +290,8 @@
 		dialog3.dialog("open") ;
 	}) ;
 	//---------- ↑업체찾기 ----------
+	
+	tui.Grid.applyTheme('default', themesOptions);
 </script>
 </body>
 </html>

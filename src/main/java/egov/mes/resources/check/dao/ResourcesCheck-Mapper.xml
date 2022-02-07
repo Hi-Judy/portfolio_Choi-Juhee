@@ -4,22 +4,25 @@
 	
 	<!-- 자재입고검사(자재상태가 발주인 것을 뿌려준다) -->
 	<select id="findResourcesCheck" resultType="egov.mes.resources.check.dao.ResourcesCheckVO">
-		SELECT ORDR_NO,
-			   RSC_CODE,
-			   FN_GET_CODE_NAME(RSC_CODE) AS RSC_NAME,
-			   FN_GET_RSC_PRC(RSC_CODE) AS RSC_PRC,
-			   RSC_CNT,
-			   ORDE_DATE,
-			   IST_REQ_DATE,
-			   RSC_TOTAL,
+		SELECT O.ORDR_NO,
+			   O.RSC_CODE,
+			   FN_GET_CODE_NAME(O.RSC_CODE) AS RSC_NAME,
+			   FN_GET_RSC_PRC(O.RSC_CODE) AS RSC_PRC,
+			   O.RSC_CNT,
+			   O.ORDE_DATE,
+			   O.IST_REQ_DATE,
+			   O.RSC_TOTAL,
 			   '' DEF_CODE,
-			   FN_GET_RSC_UNIT(RSC_CODE) AS RSC_UNIT
-		FROM RESOURCE_ORDER
-		WHERE RSC_ST = '발주'
+			   FN_GET_RSC_UNIT(O.RSC_CODE) AS RSC_UNIT,
+               FN_GET_CODE_NAME(R.SUPLCOM_CODE) AS SUC_NAME
+        FROM RESOURCE_ORDER O
+        LEFT JOIN RESOURCES R
+        ON O.RSC_CODE = R.RSC_CODE
+		WHERE O.RSC_ST = '발주'
 		<if test="ordrNo != null and ordrNo != ''">
-			and ORDR_NO = #{ordrNo}		
+			and O.ORDR_NO = #{ordrNo}		
 		</if>
-		ORDER BY ORDR_NO
+		ORDER BY O.ORDR_NO
 	</select>
 	
 	<!-- 자재입고 검사 후-> 입고검사관리테이블에 insert -->

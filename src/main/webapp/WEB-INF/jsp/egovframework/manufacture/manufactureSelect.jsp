@@ -119,19 +119,20 @@
 				"확인" : function(){
 
 					console.log('확인완료');
-
+					console.log(checkedManPlan[0].podtCode);
 					console.log(checkedManPlan[0].manPlanNo);
-					$.ajax({
-						url: '${pageContext.request.contextPath}/manufacture/manPlanDetail/'+checkedManPlan[0].manPlanNo,
-						method:'GET', 
-						dataType: 'JSON',
-						success: function(datas){
-							//data2 = datas
-							console.log(datas);
-							//확인 버튼 눌렀을 때 체크된 값에 해당하는 데이터를 gridMain에 뿌려준다.
-							gridMain.resetData(datas.data.contents);
-						}
+					
+					fetch("${pageContext.request.contextPath}/manufacture/manPlanDetail/"
+							+checkedManPlan[0].manPlanNo+"/"+checkedManPlan[0].podtCode)
+					.then((response) => response.json())
+					.then((data)=>{
+						console.log(data.data.contents);
+						
+						//확인 버튼 눌렀을 때 체크된 값에 해당하는 데이터를 gridMain에 뿌려준다.
+						gridMain.resetData(data.data.contents);
+					
 					})
+					
 					dialogManPlan.dialog("close");
 				},
 				"취소" : function(){
@@ -194,6 +195,7 @@
 				name: 'rscCnt'
 			}
 		]
+		
 		//생산계획조회 컬럼
 		const columnsManPlan = [
 			{
@@ -207,6 +209,14 @@
 			{
 				header:'계획일자',
 				name: 'manPlanDate'
+			},
+			{
+				header:'제품코드',
+				name: 'podtCode'
+			},
+			{
+				header:'제품명',
+				name: 'podtName'
 			}
 		] 
 		

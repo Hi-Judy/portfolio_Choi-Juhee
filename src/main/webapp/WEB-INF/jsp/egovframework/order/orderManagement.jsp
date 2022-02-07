@@ -39,8 +39,8 @@
 			<option value="완료">완료</option>
 			<option value="미생산완료">미생산완료</option>
 		</select>
-		<span style="margin : 20px;">고객명</span><input id="txtCusName" style="background-color: #d2e5eb;" readonly>
-		<span style="margin : 20px;">고객코드</span><input id="txtCusCode" style="margin-left : 20px;">&nbsp;<button type="button" id="btnSearch" class="btn">고객코드검색</button>
+		<span style="margin : 20px;">업체명</span><input id="txtCusName" style="background-color: #d2e5eb;" readonly>
+		<span style="margin : 20px;">업체코드</span><input id="txtCusCode" style="margin-left : 20px;">&nbsp;<button type="button" id="btnSearch" class="btn">업체코드검색</button>
 		<br>	
 		<span style="margin : 20px;">접수일자</span>&nbsp;&nbsp;&nbsp;&nbsp;<input id="ordDateStart" type="date"><span> ~ </span><input id="ordDateEnd" type="date" style="margin-right : 60px;">
 		<span style="margin : 20px;">납기일자</span>&nbsp;&nbsp;&nbsp;<input id="dueDateStart" type="date"><span> ~ </span><input id="dueDateEnd" type="date">
@@ -51,11 +51,12 @@
 	</div>
 	
 	<div id="OverallSize" style="margin-left : 10px;">
-		<div id="info"></div>
+	<br>
+		<div id="info" style="border-top: 3px solid #168;"></div>
 		<br>
 		<div><h5 style="color : #007b88;">거래상세정보</h5></div>
 		<div id="tradeDetail" title="주문상세정보" align="center">
-			<div id="selectInfo"></div>
+			<div id="selectInfo" style="border-top: 3px solid #168;"></div>
 		</div>
 	</div>
 	
@@ -77,6 +78,22 @@
 <script>
 
 	var Grid = tui.Grid ;
+	
+	themesOptions = { 
+            selection: {    background: '#007b88',     border: '#004082'  },//  <- 클릭한 셀 색상변경 border(테두리색) , background (백그라운드)
+            scrollbar: {    background: '#f5f5f5',  thumb: '#d9d9d9',  active: '#c1c1c1'    }, //<- 그리드 스크롤바 옵션
+            row: {    
+                hover: {    background: '#ccc'  }// <-마우스 올라갔을떄 한row 에 색상넣기
+            },
+            cell: {   // <- 셀클릭했을떄 조건들 주는것이다.
+                normal: {   background: '#fbfbfb',  border: '#e0e0e0',  showVerticalBorder: true    },// <- showVerticalBorder : 세로(아래,위) 테두리가 보이는지 여부
+                header: {   background: '#eee',     border: '#ccc',     showVerticalBorder: true    },// <- showVerticalBorder : 가로(양옆) 테두리가 보이는지 여부
+                rowHeader: {    border: '#eee',     showVerticalBorder: true    },// <- 행의헤더 색상영역
+                editable: { background: '#fbfbfb' },//  <-편집가능한 셀들의 색상을 주는영역
+                selectedHeader: { background: '#eee' },//  <- 선택한 셀의 백그라룬드   
+                disabled: { text: '#b0b0b0' }// <- 편집할수없는(비활성화된) 셀들에 대한 스타일 조절
+            }
+	};
 	
 	//---------- ↓업체찾기 ----------
 	let dialog = $("#findCustomer").dialog({
@@ -186,12 +203,12 @@
 			align: 'center'
 		} ,
 		{
-			header : '고객코드' ,
+			header : '업체코드' ,
 			name : 'cusCode' ,
 			align: 'center'
 		} ,
 		{
-			header : '고객명' ,
+			header : '업체명' ,
 			name : 'codeName' ,
 			align: 'center'
 		} ,
@@ -307,10 +324,7 @@
 	var rowCodes = new Array() ;
 	var rowStatus = new Array() ;
 	
-	$("#releaseBtn").on("click" , function() {
-		console.log(rowCodes) ;
-		console.log(rowStatus) ;
-		
+	$("#releaseBtn").on("click" , function() {		
 		grid2.uncheckAll() ;
 		
 		let no = 1 ;
@@ -525,6 +539,8 @@
 		dialog3.dialog("open") ;
 	}) ;
 	//---------- ↑상세조회 ----------
+	
+	tui.Grid.applyTheme('default', themesOptions);
 </script>
 </body>
 </html>

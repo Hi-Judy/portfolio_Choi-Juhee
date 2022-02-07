@@ -147,7 +147,7 @@ function makesidebar(){
 			
 		}else{
 			var innerli = $('<li class="submenu-item "></li>');
-			var innerlia = $('<a href="'+item.chkUrl+'"></a>')
+			var innerlia = $('<a href="/'+item.chkUrl+'"></a>')
 			innerlia.href=item.chkUrl;
 			innerlia.text(item.menuNm);
 			innerli.append(innerlia[0]);

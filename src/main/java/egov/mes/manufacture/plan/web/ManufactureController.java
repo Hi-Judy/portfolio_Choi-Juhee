@@ -41,8 +41,9 @@ public class ManufactureController {
 	}
 
 	// 생산계획 디테일 조회(생산계획조회)
-	@GetMapping("/manufacture/manPlanDetail/{manPlanNo}")
+	@GetMapping("/manufacture/manPlanDetail/{manPlanNo}/{podtCode}")
 	public String selectManPlanDetail(@PathVariable String manPlanNo, 
+									  @PathVariable String podtCode,
 									  ManufacturePlanVO planVO, 
 									  Model model) {
 		//System.out.println(planVO);

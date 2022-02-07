@@ -31,8 +31,8 @@
 	<br>
 	<div id="title" style="margin-left : 10px;"><h3 style="color : #054148; font-weight : bold">고객 관리</h3></div>	
 	<div id="top" style="height : 110px; padding : 10px;">
-		<span style="margin : 20px;">고객명</span><input id="txtCusName" style="margin-top : 10px; background-color: #d2e5eb;" readonly> 
-		<span style="margin : 20px;">고객코드</span><input id="txtCusCode">&nbsp;<button type="button" id="btnSearch" style="border : none; background-color : #f8f8ff; color : #007b88;"><i class="bi bi-search"></i></button>		
+		<span style="margin : 20px;">업체명</span><input id="txtCusName" style="margin-top : 10px; background-color: #d2e5eb;" readonly> 
+		<span style="margin : 20px;">업체코드</span><input id="txtCusCode">&nbsp;<button type="button" id="btnSearch" style="border : none; background-color : #f8f8ff; color : #007b88;"><i class="bi bi-search"></i></button>		
 		<br>
 		<button type="button" id="clearBtn" class="btn" style="float : right; margin : 5px;">초기화</button>
 		<button type="button" id="btnInsert" class="btn" style="float : right; margin : 5px;">저장</button>
@@ -42,7 +42,8 @@
 	</div>
 	
 	<div id="OverallSize" style="margin-left : 10px;">
-		<div id="info"></div>
+	<br>
+		<div id="info" style="border-top: 3px solid #168;"></div>
 	</div>
 	
 	<div id="findCustomer" title="고객검색"">
@@ -73,6 +74,22 @@
 <script>
 	//---------- ↓페이지 ----------
 	var Grid = tui.Grid ;
+	
+	themesOptions = { 
+            selection: {    background: '#007b88',     border: '#004082'  },//  <- 클릭한 셀 색상변경 border(테두리색) , background (백그라운드)
+            scrollbar: {    background: '#f5f5f5',  thumb: '#d9d9d9',  active: '#c1c1c1'    }, //<- 그리드 스크롤바 옵션
+            row: {    
+                hover: {    background: '#ccc'  }// <-마우스 올라갔을떄 한row 에 색상넣기
+            },
+            cell: {   // <- 셀클릭했을떄 조건들 주는것이다.
+                normal: {   background: '#fbfbfb',  border: '#e0e0e0',  showVerticalBorder: true    },// <- showVerticalBorder : 세로(아래,위) 테두리가 보이는지 여부
+                header: {   background: '#eee',     border: '#ccc',     showVerticalBorder: true    },// <- showVerticalBorder : 가로(양옆) 테두리가 보이는지 여부
+                rowHeader: {    border: '#eee',     showVerticalBorder: true    },// <- 행의헤더 색상영역
+                editable: { background: '#fbfbfb' },//  <-편집가능한 셀들의 색상을 주는영역
+                selectedHeader: { background: '#eee' },//  <- 선택한 셀의 백그라룬드   
+                disabled: { text: '#b0b0b0' }// <- 편집할수없는(비활성화된) 셀들에 대한 스타일 조절
+            }
+	};
 	
 	const columns = [
 		{
@@ -396,6 +413,16 @@
 				let codeName = data[0].codeName ;
 				let cusPhone = data[0].cusPhone ;
 				
+				if (codeName == '') {
+					alert('입력값을 확인하세요') ;
+					return ;
+				}
+				
+				if (cusPhone == '') {
+					alert('입력값을 확인하세요') ;
+					return ;
+				}
+				
 				$.ajax({
 					url : 'updateCustomer' ,
 					data : {
@@ -581,6 +608,8 @@
 		dialog3.dialog("open") ;
 	}) ;
 	//---------- ↑상세정보 ----------
+	
+	tui.Grid.applyTheme('default', themesOptions);
 </script>
 </body>
 </html>

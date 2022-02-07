@@ -12,6 +12,7 @@
 	from man_plan_view a join order_management b
 	on a.ord_code = b.ord_code
 	where a.man_plan_no = #{manPlanNo}
+	and a.podt_code = #{podtCode}
 </select>
 
 
@@ -81,8 +82,9 @@
 
 <!-- 생산계획 조회 -->
 <select id = "selectManPlan" resultType="egov.mes.manufacture.plan.dao.ManufacturePlanVO">
-	select a.man_plan_no, a.man_plan_name, a.man_plan_date
-	from manufacture_plan a join order_management b
+	select a.man_plan_no, a.man_plan_name, a.man_plan_date, 
+		   a.podt_code, prod_detail(a.podt_code) podtName
+	from man_plan_view a join order_management b
     on a.ord_code = b.ord_code
 	where b.ord_status = '진행중'
 		<if test = "startDate != null"> 
@@ -97,20 +99,22 @@
 
 <!-- 생산계획 디테일 조회 -->
 <select id="selectManPlanDetail" resultType="egov.mes.manufacture.plan.dao.ManufacturePlanVO">
-	select a.man_plan_no, a.podt_code, prod_detail(a.podt_code) podtName, 
+	select a.man_plan_no, a.podt_code, prod_detail(a.podt_code) podtName, a.man_plan_date,
 		   a.plan_startdate, a.plan_period, a.plan_etc, a.plan_complete, 
 		   (select min(d.output_of_day)
-		     from process_flowInfo c join ( select a.fac_no, a.fac_code, a.fac_output/a.fac_runtime*24 as output_of_day,
-                                                        b.proc_code
-                                              from facility_status a join facility_process b
-                                              on a.fac_no = b.fac_no
-                                              where a.fac_status='Y') d
-			 on c.proc_code = d.proc_code
-			 where podt_code = a.podt_code) as manPerday,
-           b.ord_code, b.ord_status, b.ord_duedate, b.ord_qnt
+		    from process_flowInfo c join ( select a.fac_no, a.fac_code, a.fac_output/a.fac_runtime*24 as output_of_day,
+                                                                        b.proc_code
+                                           from facility_status a join facility_process b
+                                           on a.fac_no = b.fac_no
+                                           where a.fac_status='Y') d
+			on c.proc_code = d.proc_code
+			where podt_code = a.podt_code) as manPerday,
+          b.ord_code, b.ord_status, b.ord_duedate, b.ord_qnt
 	from man_plan_view a left join ord_detail_view b
 	on a.podt_code = b.podt_code
 	where a.man_plan_no = #{manPlanNo}
+    and a.ord_code = b.ord_code
+    and a.podt_code = #{podtCode}
 	order by a.man_plan_no
 </select>
 

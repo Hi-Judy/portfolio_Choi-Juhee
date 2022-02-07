@@ -47,11 +47,13 @@
     <li><a href="#tabs-2">LOT별 재고</a></li>
   </ul>
   
+
   <div id="tabs-1" style="margin-left:10px; padding-top: 0px; padding-left: 0px; padding-right: 0px; padding-bottom: 0px;">	
 	<div id="top" style="width: 1450px; height: 90px;">
 	<div style="margin-top : 5px;  margin-left: 8px;">
 		자재코드 <input id="txtRsc1">  <button id="btnFindRsc"style="border : none; background-color :#f8f8ff; color : #007b88;" ><i class="bi bi-search"></i></button>&nbsp;&nbsp;&nbsp; 자재명 <input id="txtRsc2" class="inpBC" readonly><br>
 	</div>
+
 	<div id="dialog-form-rsc" title="자재 검색"></div>
 	<div  style="float:right;margin-bottom: 0px;margin-top: 7px;margin-right: 10px;">
 		<button id="btnSelect" class="btn">조회</button>
@@ -63,12 +65,14 @@
 	<div id="gridRsc1" style="border-top: 3px solid #168; height: 600px; width: 1450px; margin-left: 10px;"></div>
 	</div>
 	
+
 	
 	<div id="tabs-2"  style="margin-left:10px; padding-top: 0px; padding-left: 0px; padding-right: 0px; padding-bottom: 0px;">
 	<div id="top" style="width: 1450px; height: 90px;">
 	<div style="margin-top : 5px;  margin-left: 8px;">
 		자재코드 <input id="txtRscLot1">  <button id="btnFindRscLot" style="border : none; background-color :#f8f8ff; color : #007b88;" ><i class="bi bi-search"></i></button>&nbsp;&nbsp;&nbsp; 자재명 <input id="txtRscLot2" class="inpBC" readonly><br>
 	</div>
+
 	<div id="dialog-form-rsc-Lot" title="자재 검색"></div>
 	<div style="float:right;margin-bottom: 0px;margin-top: 7px;margin-right: 10px;">
 		<button id="btnSelectLot" class="btn">조회</button>

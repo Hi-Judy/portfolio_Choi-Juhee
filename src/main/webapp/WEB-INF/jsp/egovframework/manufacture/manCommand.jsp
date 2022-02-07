@@ -149,21 +149,23 @@
 			width : 900,
 			buttons : {
 				"확인" : function() { //확인 버튼 눌렀을 때 체크된 값에 해당하는 데이터를 gridMain에 뿌려준다.
-					//console.log("확인 테스트");
-					//console.log(checkedPlanDetail[0].planNoDetail);
-					$
-							.ajax({
-								url : '${pageContext.request.contextPath}/selectManPlanDetail/'
-										+ checkedPlanDetail[0].planNoDetail,
-								method : 'GET',
-								dataType : 'JSON',
-								success : function(datas) {
-									//console.log(datas);
-									gridMain.resetData(datas.data.contents);
-									gridInsertCommand.resetData(datas.data.contents);
-									girdUpdatePlanStatus.resetData(datas.data.contents);
-								}
-							})
+							
+					console.log('확인완료');
+					console.log(checkedPlanDetail[0].podtCode);
+					console.log(checkedPlanDetail[0].planNoDetail);
+					
+					fetch("${pageContext.request.contextPath}/selectManPlanDetail/"
+							+checkedPlanDetail[0].planNoDetail+"/"+checkedPlanDetail[0].podtCode)
+					.then((response) => response.json())
+					.then((data)=>{
+						console.log(data.data.contents);
+						
+						//확인 버튼 눌렀을 때 체크된 값에 해당하는 데이터를 gridMain에 뿌려준다.
+						gridMain.resetData(data.data.contents);
+						gridInsertCommand.resetData(data.data.contents);
+						girdUpdatePlanStatus.resetData(data.data.contents);
+					
+					})
 					dialogManPlan.dialog("close");
 				},
 

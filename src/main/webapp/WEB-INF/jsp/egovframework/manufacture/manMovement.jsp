@@ -253,7 +253,10 @@
 			el: document.getElementById('gridResLot'),
 			data: null,
 			columns: columnsResLot,
-			rowHeaders : [ 'rowNum' ]
+			rowHeaders : [ 'rowNum' ],
+			scrollY:true,
+		      minBodyHeight : 230,
+		      bodyHeight : 230,
 		})
 		
 		
@@ -280,6 +283,10 @@
 			{
 				header : '작업완료량',
 				name : 'manQnt'
+			},
+			{
+				header : '불량량',
+				name : 'defQnt'
 			} 
 		]
 		
@@ -288,7 +295,8 @@
 			el: document.getElementById('gridMovement'),
 			data: null,
 			columns: columnsMovement,
-			rowHeaders: ['rowNum'],
+			rowHeaders: ['rowNum']
+			
 		})
 		
 		

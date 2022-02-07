@@ -5,7 +5,7 @@
 	<!-- 일자별 제품찾기 -->
 	<select id="findPodtCode" resultType="egov.mes.defective.dao.DefectiveVO">
 		select to_char(man_date,'yyyy-MM-dd') as manDate , podt_code , proc_code , fn_get_code_name(proc_code) as procName , fn_get_code_name(podt_code) as podtName 
-		from manufacture_process
+		from defective_product_info
 		where 1=1
 		
 		<if test="fromDate != null">
@@ -46,12 +46,13 @@
 	<select id="selectChart2" resultType="egov.mes.defective.dao.DefectiveVO">
 		select to_char(man_date,'MM') as manDate , sum(def_qnt) as defQnt
 		from defective_product_info
+		where to_char(man_date,'yyyy') = to_char(sysdate,'yyyy')
 		group by to_char(man_date,'MM')
 		order by to_char(man_date,'MM') 
 	</select>
 	
 	<select id="checkProductList" resultType="egov.mes.defective.dao.DefectiveVO">
-		select com_code , man_date , man_qnt , 
+		select distinct com_code , man_date , man_qnt , 
 			(select max(def_qnt) from manufacture_process where com_code = com_code) as defQnt , 
 			(man_qnt-(select max(def_qnt) from manufacture_process where com_code = com_code)) as podtInput 
 		from manufacture_process 
@@ -74,5 +75,6 @@
 		select proc_code , fn_get_code_name(proc_code) as procName , def_code , fn_get_code_name(def_code) as defName , def_qnt
 		from defective_product_info
 		where com_code = #{comCode}
+		order by proc_code ASC
 	</select>
 </mapper>

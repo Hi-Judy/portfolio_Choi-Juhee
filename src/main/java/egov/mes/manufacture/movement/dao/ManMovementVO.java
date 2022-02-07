@@ -20,6 +20,7 @@ public class ManMovementVO {
 	String procName; //공정명
 	String empId; //사번
 	String empName; //사원명
+	String defQnt; //불량량
 	
 	
 	//자재

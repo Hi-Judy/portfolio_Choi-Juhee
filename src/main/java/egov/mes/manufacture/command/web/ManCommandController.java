@@ -104,8 +104,9 @@ public class ManCommandController {
 	}
 	
 	//생산계획 디테일 상세 조회
-	@GetMapping("/selectManPlanDetail/{planNoDetail}")
+	@GetMapping("/selectManPlanDetail/{planNoDetail}/{podtCode}")
 	public String selectManPlanDetail(@PathVariable String planNoDetail, 
+									  @PathVariable String podtCode,
 									  ManCommandVO commandVO, 
 									  Model model) {
 		Map<String, List<ManCommandVO>> maps = new HashMap<>();
@@ -117,7 +118,7 @@ public class ManCommandController {
 		model.addAttribute("result", true);
 		model.addAttribute("data", maps);
 		
-		//System.out.println("생산계획 디테일 상세조회: "+ service.selectManPlanDetail(commandVO));
+		System.out.println("생산계획 디테일 상세조회: "+ service.selectManPlanDetail(commandVO));
 		return "jsonView";
 	}
 } 

@@ -167,7 +167,7 @@ public class EgovLoginController {
 			request.getSession().setAttribute("accessUser", resultVO.getUserSe().concat(resultVO.getId()));
 			request.getSession().setAttribute("uid", resultVO.getId());
 			System.out.println(resultVO.getId());
-			return "redirect:/uat/uia/actionMain.do";
+			return "main/main.tiles";
 
 		} else {
 			model.addAttribute("loginMessage", egovMessageSource.getMessage("fail.common.login",request.getLocale()));
@@ -292,11 +292,7 @@ public class EgovLoginController {
 		LOGGER.debug("Globals.MAIN_PAGE > " + Globals.MAIN_PAGE);
 		LOGGER.debug("main_page > {}", main_page);
 
-		if (main_page.startsWith("/")) {
-			return "forward:" + main_page;
-		} else {
-			return main_page;
-		}
+		return "/main.do";
 
 		/*
 		if (main_page != null && !main_page.equals("")) {
