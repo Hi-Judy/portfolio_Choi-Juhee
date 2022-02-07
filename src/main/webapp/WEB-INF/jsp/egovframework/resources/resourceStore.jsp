@@ -8,9 +8,7 @@
 <link rel="stylesheet" href="https://uicdn.toast.com/tui-grid/latest/tui-grid.css" />
 <link rel="stylesheet" href="https://uicdn.toast.com/tui.date-picker/latest/tui-date-picker.css" />
 <link rel="stylesheet" href="//code.jquery.com/ui/1.13.0/themes/base/jquery-ui.css">
-<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">
 
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p" crossorigin="anonymous"></script>
 <script src="https://uicdn.toast.com/tui.date-picker/latest/tui-date-picker.js"></script>
 <script src="https://uicdn.toast.com/tui-grid/latest/tui-grid.js"></script>
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
@@ -18,13 +16,22 @@
 <script src="https://code.jquery.com/ui/1.13.0/jquery-ui.js"></script>
 </head>
 <body>
-	<h3 style="color : #054148; font-weight : bold">자재 입고 관리</h3>
-	<hr>
-		<button id="findResourcesStore">조회</button>
-		<button id="saveResourcesStore">저장</button>
-	<hr>
-	<div id="grid"></div>
-	
+	<h4 style="margin-left: 10px">자재 입고 관리</h4>
+	<div id="top">
+		<div>
+			<span style="margin-top: 13px; float: left;">
+			</span>
+			<span style="float: right; margin-top: 4.5px;">
+				<button id="findResourcesStore" class="btn">미입고 조회</button> &nbsp;&nbsp;
+				<button id="DeleteRscStore" class="btn">삭제</button> &nbsp;&nbsp;
+				<button id="saveResourcesStore" class="btn">저장</button> &nbsp;&nbsp;
+			</span>
+		</div>
+	</div>
+	<div id="OverallSize" style="margin-left: 10px;">
+	<br>
+	<div id="grid" style="border-top: 3px solid #168; width: 1500px;"></div>
+	</div>
 <script type="text/javascript">
 
 	var Grid = tui.Grid;
@@ -88,6 +95,7 @@
 		//저장버튼 클릭시 modify
 		saveResourcesStore.addEventListener("click", function(){
 			grid.request('modifyData'); 
+			console.log("자재입고 저장완료~~~~")
 	}) 
 		
 		//저장시 데이터 다시 읽어서 수정한 품목은 사라지게
@@ -98,6 +106,10 @@
 			} 
 		})
 	
+	
+	DeleteRscStore.addEventListener("click", function(){
+		grid.removeCheckedRows(true);
+	}) 	
 </script>
 </body>
 </html>

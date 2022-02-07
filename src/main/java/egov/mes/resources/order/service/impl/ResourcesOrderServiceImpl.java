@@ -40,7 +40,12 @@ public class ResourcesOrderServiceImpl implements ResourcesOrderService {
 	public void modifyOrder(ModifyVO<ResourcesOrderVO> mvo) {
 		if (mvo.getCreatedRows() != null) {
 			for (ResourcesOrderVO vo : mvo.getCreatedRows()) {
-				mapper.insertResourcesOrder(vo);
+				if(!vo.getOrdrNo().equals(null)) {
+					mapper.updateResourcesOrder(vo);
+				}else {
+					mapper.insertResourcesOrder(vo);
+				}
+					
 			}
 		}
 		if (mvo.getUpdatedRows() != null) {

@@ -50,6 +50,10 @@
 			 name: 'ordeDate'
 			},
 			{
+		      header: '업체',
+		      name: 'sucName'
+		     },
+			{
 			 header: '입고요청일',
 			 name: 'istReqDate'
 			}
