@@ -136,6 +136,7 @@ order by b.rsc_code
     from ord_detail_view a join common_code b
     on a.podt_code = b.code
     where a.ord_status = '미진행'
+    AND substr(ord_date,0,5) = '22/01'
     order by a.ord_code
 </select>
 
@@ -153,7 +154,7 @@ order by b.rsc_code
 			 where c.podt_code = #{podtCode}) as manPerday
 	from ord_detail_view 
 	where ord_status = '미진행'
-	and podt_code = #{podtCode}
+	and ord_code = #{ordCode}
 </select>
 
 

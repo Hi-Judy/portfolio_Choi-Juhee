@@ -13,6 +13,15 @@
 <script src="https://code.jquery.com/jquery-3.6.0.js"> </script>
 <script src="https://code.jquery.com/ui/1.13.0/jquery-ui.js"></script>
 
+<style>
+.'tui-datepicker'{
+		document.getElementsByClassName('tui-datepicker')[0].style="right:100px";
+		document.getElementsByClassName('tui-datepicker')[0].style="bottom:100px";
+		document.getElementsByClassName('tui-datepicker')[0].style = "position: relative";
+		document.getElementsByClassName('tui-datepicker')[0].style = " z-index:100000"; 
+
+}
+</style>
 </head>
 
 <body>
@@ -440,6 +449,16 @@
 			rowHeaders : ['checkbox']
 		});
 		
+	/* 	//메인 그리드 datePicker 클릭이벤트
+		gridMain.on('click', ev=>{
+			if(ev.columnName == "planStartDate"){
+				console.log("hi");
+				document.getElementsByClassName('tui-datepicker')[0].style="right:100px";
+				document.getElementsByClassName('tui-datepicker')[0].style="bottom:100px";
+ 				document.getElementsByClassName('tui-datepicker')[0].style = "position: relative";
+				document.getElementsByClassName('tui-datepicker')[0].style = " z-index:100000"; 
+			}
+		}) */
 		
 		//저장 버튼 이벤트
 		btnSavePlan.addEventListener("click", function(){
