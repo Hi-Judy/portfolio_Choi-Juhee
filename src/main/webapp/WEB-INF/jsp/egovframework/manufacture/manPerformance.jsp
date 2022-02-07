@@ -25,6 +25,21 @@
 	<h2>생산실적관리_주희</h2>
 	<br>
 	
+	<!-- 생산실적관리 조회 기준 -->
+	<form id = "performanceSort">
+			
+		<label for="podtCode">제품별</label> 	
+		<input type="radio" id="podt" name="performanceSort" value="podtCode" >
+		
+		<label for="month">월별</label> 	
+		<input type="radio" id="month" name="performanceSort" value="monthCode" >
+		
+		<button type="button" id="btnPerformance"
+			style="display: inline-block;">조회</button>
+	
+	</form>
+	<br>
+	
 	<!-- 월별 생산 실적 그리드 -->
 	<div id="gridPerformance"  class="col-sm-9" style="float: left;"></div>
 	
@@ -50,7 +65,10 @@
 		//******************************월별 생산 실적 그리드******************************
 		//월별 생산 실적 그리드 컬럼
 		const columnsPerformance = [
-			
+			{
+				header : '월',
+				name : 'month'
+			},
 			{
 				header : '제품코드',
 				name : 'podtCode'
@@ -58,10 +76,6 @@
 			{
 				header : '제품명',
 				name : 'podtName'
-			},
-			{
-				header : '작업일',
-				name : 'manStartdate'
 			},
 			{
 				header : '지시수량',

@@ -26,11 +26,11 @@
 </insert>
 
 
-<!-- 제품코드별로 생산지시서 조회(지시서 조회 페이지) -->
+<!-- 생산지시서 조회(지시서 조회 페이지) -->
 <select id="selectCommand" resultType="egov.mes.manufacture.command.dao.ManCommandVO">
-	select COM_CODE, MAN_STARTDATE, COM_NAME, PODT_CODE,
-	       prod_detail(podt_code) podtName, MAN_GOALPERDAY, 
-	       ORD_QNT, MAN_ETC
+	select COM_CODE, MAN_STARTDATE, COM_NAME,
+		   PODT_CODE, prod_detail(podt_code) podtName, 
+		   MAN_GOALPERDAY, ORD_QNT, COM_ETC
 	from man_command_view
 	where 1=1
 	
@@ -44,6 +44,7 @@
 	
 	order by com_code
 </select>
+
 
 <!-- 자재에서 생산지시디테일 번호 넣기 -->
 <select id="selectResSeq" resultType="string">
@@ -218,6 +219,7 @@
     where a.podt_code = b.podt_code
     and a.ord_qnt = b.ord_qnt
 	and b.plan_no_detail = #{planNoDetail}
+	and a.podt_code = #{podtCode}
 </select>
 
 
