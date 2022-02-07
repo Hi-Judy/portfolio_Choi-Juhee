@@ -39,6 +39,7 @@ where group_code = 'cus' AND code_desct = '구매처'
 
 <select id="selectpmonth" resultType="egov.mes.materialmanage.dao.MaterialManageVO">
 select to_number(to_char(store_date , 'MM'))+1 pmonth from resource_store where rsc_code =#{rscCode} group by to_number(to_char(store_date , 'MM'))+1 
+
 </select>
 
 <!-- 월별자재 재고조회 -->

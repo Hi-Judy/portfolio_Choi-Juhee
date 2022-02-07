@@ -34,9 +34,12 @@
 <meta http-equiv="content-type" content="text/html; charset=utf-8">
 <link type="text/css" rel="stylesheet" href="<c:url value='/css/egovframework/com/com.css' />">
 <link type="text/css" rel="stylesheet" href="<c:url value='/css/egovframework/com/uat/uia/login.css' />">
+<!-- 부트스트랩 cdn 링크 -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.7.1/font/bootstrap-icons.css" />
 <script type="text/javascript" src="<c:url value='/js/egovframework/com/cmm/showModalDialog.js'/>" ></script>
 <script type="text/javascript" src="<c:url value='/js/egovframework/com/cmm/jquery.js'/>" ></script>
 <script type="text/javaScript" language="javascript">
+
 function checkLogin(userSe) {
     // 일반회원
     if (userSe == "GNR") {
@@ -214,90 +217,169 @@ function fnShowLogin(stat) {
 }
 
 </script>
+<style type="text/css">
+.bi-person{
+   font-size : 30px ;
+   width : 43px ;
+   height : 44px ;
+   padding-top:10px;
+   padding-left:3px;
+   color:	#ffffff ;
+   background-color: #0c4ca4;;
+}
+.bi-person::before {
+    content: "\f4e1";
+    margin-left: 5px;
+}
+
+.bi-lock{
+   font-size : 30px ;
+   width : 43px ;
+   height : 44px ;
+   padding-top:10px;
+   padding-left:3px;
+   color:	#ffffff ;
+   background-color: #0c4ca4;;
+}
+
+.bi-lock::before {
+    content: "\f47b";
+    margin-left: 5px;
+}
+
+.loginbox_bg {
+    width: 1102px;
+    height: 494px;
+    margin: 0 auto;
+    margin-top: 200px ;
+    display: -webkit-box;
+    display: -ms-flexbox;
+    -ms-flex-wrap: wrap;
+    flex-wrap: nowrap;
+    box-shadow: 0 5px 20px rgb(0 0 0 / 8%);
+    
+}
+
+.loginbox_img {
+    display: block;
+    overflow: hidden;
+    width: 502px;
+    height: 494px;
+    background: url(/yedamfinal2/images/egovframework/com/Logo/A05.jpg)no-repeat 0 0;
+}
+
+.loginbox {
+    width: 540px;
+    padding: 70px 30px;
+    background-color: #fff;
+}
+
+.logininpBOX{
+	display: flex;
+    margin-right: -1px;
+
+}
+
+</style>
 </head>
-<body onLoad="fnInit();">
+<body onLoad="fnInit();" bgcolor="#f2f7ff">
 
 <!-- javascript warning tag  -->
 <noscript class="noScriptTitle"><spring:message code="common.noScriptTitle.msg" /></noscript>
 
+<!-- 로그인 구성 div -->
+<div class="loginbox_bg">
+	<!-- 이미지 -->
+	<div class="loginbox_img"></div> 
+	
+	<!-- 일반로그인 -->
+	<div class="login_form loginbox" style="margin-left: 0px; margin-top: 0px; ">
+	
+		<form name="loginForm" id="loginForm" action="<c:url value='/uat/uia/actionLogin.do'/>" method="post">
+		<input type="hidden" id="message" name="message" value="<c:out value='${message}'/>">
 
-<!-- 일반로그인 -->
-<div class="login_form">
-	<form name="loginForm" id="loginForm" action="<c:url value='/uat/uia/actionLogin.do'/>" method="post">
-	<input type="hidden" id="message" name="message" value="<c:out value='${message}'/>">
-	
-	<fieldset>
-		<img src="<c:url value='/images/egovframework/com/uat/uia/login_tit.png'/>" style="margin:30px 0 0px 60px" alt="login title image"  title="login title image">
-		<div class="login_type">
-			<ul id="ulLoginType">
-				<li><a href="javascript:fnLoginTypeSelect('typeGnr');" id="typeGnr" title=""><spring:message code="comUatUia.loginForm.GNR"/></a></li> <!-- 일반 -->
-				<li><a href="javascript:fnLoginTypeSelect('typeEnt');" id="typeEnt" title=""><spring:message code="comUatUia.loginForm.ENT"/></a></li> <!-- 기업 -->
-				<li><a href="javascript:fnLoginTypeSelect('typeUsr');" id="typeUsr" title=""><spring:message code="comUatUia.loginForm.USR"/></a></li> <!-- 업무 -->
-			</ul>
-		</div>
-	
-		<div class="login_input">
-			<ul>
-				<!-- 아이디 -->
-				<c:set var="title"><spring:message code="comUatUia.loginForm.id"/></c:set>
-				<li>
-					<label for="id">${title}</label>
-					<input type="text" name="id" id="id" maxlength="20" title="${title} ${inputTxt}" placeholder="${title} ${inputTxt}">
-				</li>
-				<!-- 비밀번호 -->
-				<c:set var="title"><spring:message code="comUatUia.loginForm.pw"/></c:set>
-				<li>
-					<label for="password">${title}</label>
-					<input type="password" name="password" id="password" maxlength="20" title="${title} ${inputTxt}" placeholder="${title} ${inputTxt}">
-				</li>
-				<!-- 아이디 저장 -->
-				<c:set var="title"><spring:message code="comUatUia.loginForm.idSave"/></c:set>
-				<li class="chk">
-					<input type="checkbox" name="checkId" class="check2" onclick="javascript:saveid(document.loginForm);" id="checkId">${title}
-				</li>
-				<li>
-					<input type="button" class="btn_login" value="<spring:message code="comUatUia.loginForm.login"/>" onclick="actionLogin()"> <!-- 로그인  -->
-				</li>
-				<li>
-					<ul class="btn_idpw" >
-						<li><a href="#" onclick="goRegiUsr(); return false;"><spring:message code="comUatUia.loginForm.regist"/></a></li> <!-- 회원가입  -->
-					</ul>
-				</li>
-				<li>
-					<ul class="btn_idpw" >
-						<li><a href="#" onclick="fnShowLogin(1);"><spring:message code="comUatUia.loginForm.login.gpki"/></a></li><!-- 인증서로그인 -->
-						<li><a href="<c:url value='/uat/uia/egovGpkiIssu.do'/>"><spring:message code="comUatUia.loginForm.gpki.info"/></a></li><!-- 인증서안내 -->
-					</ul>
-				</li>
-				
-			</ul>
-		</div>
 		
-		<div class="login_input" style="display: none">
-			<ul>
-				<li>
-					<label for="password"><spring:message code="comUatUia.loginForm.pw"/></label><!-- 비밀번호 -->
-					<input type="password" name="pwd" id="" maxlength="20" title="${title} ${inputTxt}" placeholder="<spring:message code="comUatUia.loginForm.pw"/>"><!-- 비밀번호 -->
-				</li>
-				<li>
-					<input type="button" class="btn_login" value="<spring:message code="comUatUia.loginForm.login.gpki"/>" onclick="actionLogin()"><!-- 인증서로그인 -->
-				</li>
-				<li>
-					<ul class="btn_idpw" >
-						<li><a href="#" onclick="fnShowLogin(0);"><spring:message code="comUatUia.loginForm.login.normal"/></a></li><!-- 일반로그인 -->
-					</ul>
-					<ul class="btn_idpw" >
-						<li>※ <spring:message code="comUatUia.loginForm.gpki.descrption"/></li>
-					</ul>
-				</li>
-			</ul>
+		<fieldset style="width:450px; height:350px;  top:200px; left: 1030px;">
+			<img src="<c:url value='/images/egovframework/com/Logo/logo.png'/>" style="width:350px; height:80px;" alt="예담"  title="예담 1강 2조">
+			<br>
+			<br>
+			<!-- 일반 , 기업 , 업무 버튼들 -->
+			<%-- <div class="login_type">
+				<ul id="ulLoginType">
+					<li><a href="javascript:fnLoginTypeSelect('typeGnr');" id="typeGnr" title=""><spring:message code="comUatUia.loginForm.GNR"/></a></li> <!-- 일반 -->
+					<li><a href="javascript:fnLoginTypeSelect('typeEnt');" id="typeEnt" title=""><spring:message code="comUatUia.loginForm.ENT"/></a></li> <!-- 기업 -->
+					<li><a href="javascript:fnLoginTypeSelect('typeUsr');" id="typeUsr" title=""><spring:message code="comUatUia.loginForm.USR"/></a></li> <!-- 업무 -->
+				</ul>
+			</div> --%>
+		
+			<div class="login_input" style=" margin-top: 10px; margin-left: 50px;">
+				
+				<ul>
+					<!-- 아이디 -->
+					<c:set var="title"><spring:message code="comUatUia.loginForm.id"/></c:set>
+					
+					<div class = "logininpBOX" style="margin-bottom: 20px;">
+						<%-- <label for="id">${title}</label> --%>
+						<i class="bi bi-person"  style="  top: 108px; left: 42px;"></i>
+						<input style="width:433px; height: 52px; "	type="text" name="id" id="id" maxlength="20" title="${title} ${inputTxt}" placeholder="    ${title} ${inputTxt}">
+					</div>
+					
+					<!-- 비밀번호 -->
+					<c:set var="title"><spring:message code="comUatUia.loginForm.pw"/></c:set>
+					<div class = "logininpBOX" style="margin-bottom: 10px;">
+						<%-- <label for="password">${title}</label> --%>
+						<i class="bi bi-lock" style=" top: 158px; left: 42px;"></i>
+						<input style="width:433px; height: 52px;"	type="password" name="password" id="password" maxlength="20" title="${title} ${inputTxt}" placeholder="    ${title} ${inputTxt}">
+					</div>
+					<!-- 아이디 저장 -->
+					<c:set var="title"><spring:message code="comUatUia.loginForm.idSave"/></c:set>
+					<li class="chk">
+						<input type="checkbox" name="checkId" class="check2" onclick="javascript:saveid(document.loginForm);" id="checkId">${title}
+					</li>
+					<li>
+						<input style="width:480px"	type="button" class="btn_login" value="<spring:message code="comUatUia.loginForm.login"/>" onclick="actionLogin()"> <!-- 로그인  -->
+					</li>
+					<li>
+						<ul class="btn_idpw" >
+							<li><a href="#" onclick="goRegiUsr(); return false;"><spring:message code="comUatUia.loginForm.regist"/></a></li> <!-- 회원가입  -->
+						</ul>
+					</li>
+					<li>
+						<ul class="btn_idpw" >
+							<li><a href="#" onclick="fnShowLogin(1);"><spring:message code="comUatUia.loginForm.login.gpki"/></a></li><!-- 인증서로그인 -->
+							<li><a href="<c:url value='/uat/uia/egovGpkiIssu.do'/>"><spring:message code="comUatUia.loginForm.gpki.info"/></a></li><!-- 인증서안내 -->
+						</ul>
+					</li>
+					
+				</ul>
+			</div>
 			
-		</div>
-	</fieldset>
-	
-	<input name="userSe" type="hidden" value="GNR"/>
-	<input name="j_username" type="hidden"/>
-	</form>
+			<div class="login_input" style="display: none">
+				<ul>
+					<li>
+						<label for="password"><spring:message code="comUatUia.loginForm.pw"/></label><!-- 비밀번호 -->
+						<input type="password" name="pwd" id="" maxlength="20" title="${title} ${inputTxt}" placeholder="<spring:message code="comUatUia.loginForm.pw"/>"><!-- 비밀번호 -->
+					</li>
+					<li>
+						<input type="button" class="btn_login" value="<spring:message code="comUatUia.loginForm.login.gpki"/>" onclick="actionLogin()"><!-- 인증서로그인 -->
+					</li>
+					<li>
+						<ul class="btn_idpw" >
+							<li><a href="#" onclick="fnShowLogin(0);"><spring:message code="comUatUia.loginForm.login.normal"/></a></li><!-- 일반로그인 -->
+						</ul>
+						<ul class="btn_idpw" >
+							<li>※ <spring:message code="comUatUia.loginForm.gpki.descrption"/></li>
+						</ul>
+					</li>
+				</ul>
+				
+			</div>
+		</fieldset>
+		
+		<input name="userSe" type="hidden" value="GNR"/>
+		<input name="j_username" type="hidden"/>
+		</form>
+	</div>
 </div>
 
 <!-- 팝업 폼 -->
