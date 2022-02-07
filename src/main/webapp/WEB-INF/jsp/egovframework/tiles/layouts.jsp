@@ -48,7 +48,7 @@
 <!-- <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous"> -->
 
 <!-- 부트스트랩 cdn 링크 -->
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.7.1/font/bootstrap-icons.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.7.1/font/bootstrap-icons.css" />
 <style>
 	.tui-is-selected {
 		background : #007b88 !important;
@@ -88,6 +88,7 @@ div#OverallSize {
 	font-size : 25px ;
 	width : 25px ;
 	height : 25px ;
+}
   
 /* 재철이형 돋보기 버튼 스타일 */
 .bi-search {

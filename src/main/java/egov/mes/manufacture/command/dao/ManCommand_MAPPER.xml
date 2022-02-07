@@ -16,10 +16,12 @@
 <insert id="insertLot" parameterType="egov.mes.manufacture.command.dao.ManCommandMapper">
 	insert into materials_LOT (MAT_NO, 
 							   MAT_LOTNO, 
-							   COM_CODE)
+							   COM_CODE,
+							   RSC_CODE)
 	values ( (select nvl(max(MAT_NO),0)+1 from materials_LOT),
 			 #{rscLot}, 
-			 #{comCode}
+			 #{comCode},
+			 #{resCode}
 	)
 </insert>
 
@@ -118,7 +120,7 @@
 	values ( 
 			 (select SUBSTR(max(com_code),0,7) || LPAD(SUBSTR(max(com_code),8,10), 3, 0) from manufacture_command),
 			 #{podtCode},
-			 #{manStartDate},
+			 to_date(#{planStartdate},'YYYY-MM-DD HH24:MI:SS'),
 			 #{manGoalPerday},
 			 #{ordQnt},
 			 to_date(#{ordDuedate},'YYYY-MM-DD HH24:MI:SS'),
@@ -144,19 +146,19 @@
 <!-- 자재코드에 해당하는 자재LOT 조회 -->
 <select id="selectResLot" resultType="egov.mes.manufacture.command.dao.ManCommandVO">
 	select a.podt_code, 
-          b.RSC_LOT, 
-          SUM(b.IST_CNT) AS istCnt,
-        
-         (SUM(b.IST_CNT)-SUM(b.OST_CNT)) AS rscCnt, 
-          b.RSC_CODE as resCode,
-          FN_GET_CODE_NAME(b.RSC_CODE) AS rscName,
-          FN_GET_RSC_UNIT(b.RSC_CODE) AS RSC_UNIT
-from prdt_bom_res a join RESOURCE_STORE b
-on a.res_code = b.rsc_code
-where a.podt_code= #{podtCode}
-GROUP BY a.podt_code, b.RSC_LOT , b.RSC_CODE 
-having SUM(b.IST_CNT)-SUM(b.OST_CNT)>0
-order by b.rsc_code
+	          b.RSC_LOT, 
+	          SUM(b.IST_CNT) AS istCnt,
+	         (SUM(b.IST_CNT)-SUM(b.OST_CNT)) AS rscCnt, 
+	          b.RSC_CODE as resCode,
+	          FN_GET_CODE_NAME(b.RSC_CODE) AS rscName,
+	          FN_GET_RSC_UNIT(b.RSC_CODE) AS RSC_UNIT
+          
+	from prdt_bom_res a join RESOURCE_STORE b
+	on a.res_code = b.rsc_code
+	where a.podt_code= #{podtCode}
+	GROUP BY a.podt_code, b.RSC_LOT , b.RSC_CODE 
+	having SUM(b.IST_CNT)-SUM(b.OST_CNT)>0
+	order by b.rsc_code
 </select>
 
 
@@ -180,28 +182,27 @@ order by b.rsc_code
 		   proc_code, prod_detail(proc_code) ProcName
 	from prdt_bom_res
 	where podt_code= #{podtCode}
-	order by proc_code
+	order by res_code
 </select>
 
 
 <!-- 지시가 없는 생산계획 디테일 조회 (생산지시서 관리 페이지) -->
 <select id="selectManPlan" resultType="egov.mes.manufacture.command.dao.ManCommandVO">
 	select a.podt_code, prod_detail(a.podt_code) podtName, a.man_plan_name, 
-		   a.man_plan_date, a.plan_no_detail as planNoDetail, a.man_plan_no, a.plan_etc
+		   a.man_plan_date, a.plan_no_detail, a.man_plan_no, a.plan_etc
 	from man_plan_view a left outer join manufacture_command b
 	on a.man_plan_no = b.man_plan_no
-	where b.com_name is null
-	and a.plan_etc ='계획완료'
-	or a.plan_etc = '생산지시중'
-	
+	where a.plan_etc ='계획완료'
+
+
 		<if test = "planFromDate != null"> 
-			and to_char(a.man_plan_date, 'rrrr-MM-dd') >= #{planFromDate}
+			and to_char(a.man_plan_date, 'yyyy-MM-dd') >= #{planFromDate}
 		</if>
 		
 		<if test= "planToDate != null">
-			and #{planToDate} >=  to_char(a.man_plan_date, 'rrrr-MM-dd')
+			and #{planToDate} >=  to_char(a.man_plan_date, 'yyyy-MM-dd')
 		</if>
-
+	
 	order by a.man_plan_no
 </select>
 
@@ -210,11 +211,13 @@ order by b.rsc_code
 <select id="selectManPlanDetail" resultType="egov.mes.manufacture.command.dao.ManCommandVO">
 	select a.podt_code,  a.ord_duedate,
 	       b.plan_no_detail, b.podt_code, prod_detail(b.podt_code) podtName, 
-	       b.ord_qnt, b.plan_period, b.man_plan_no,
-	       (select man_perday from manufacture_plan_d where podt_code = b.podt_code) as manPerday
-	from ord_detail_view a join manufacture_plan_d b
-	on a.podt_code = b.podt_code
-	where b.plan_no_detail = #{planNoDetail}
+	       b.ord_qnt, b.plan_period, b.man_plan_no, b.plan_startdate,
+	       (select DISTINCT man_perday from manufacture_plan_d where podt_code = b.podt_code) as manPerday
+	from ord_detail_view a join man_plan_view b
+	on a.ord_code = b.ord_code
+    where a.podt_code = b.podt_code
+    and a.ord_qnt = b.ord_qnt
+	and b.plan_no_detail = #{planNoDetail}
 </select>
 
 

@@ -5,10 +5,61 @@
 
 <!-- 생산지시조회 -->
 <select id="selectCommand" resultType="egov.mes.manufacture.movement.dao.ManMovementVO">
-	select COM_CODE, PODT_CODE, prod_detail(PODT_CODE) as podtName, MAN_STARTDATE, COM_ETC
+	select COM_CODE, PODT_CODE, prod_detail(PODT_CODE) as podtName, 
+		   MAN_STARTDATE, COM_ETC
 	from manufacture_command_d
-	where podt_code = #{podtCode}
-	and com_etc='지시완료'
+	where 1=1
+	
+	<if test = ' manStartdate != null and manStartdate != "" '>
+		and man_startdate = #{manStartdate}
+	</if>
+	
+	<if test = ' comEtc == "procIng" '>
+		and com_etc = '생산중'
+	</if>
+	
+	<if test = ' comEtc == "procDone" '>
+		and com_etc = '생산완료'
+	</if>
+</select>
+
+
+<!-- 공정이동표 -->
+<select id="selectMovement" resultType="egov.mes.manufacture.movement.dao.ManMovementVO">
+	select c.proc_code, prod_detail(c.proc_Code) as procName, c.man_startTime as manStartdate, c.man_qnt,
+           d.emp_id, d.emp_name,
+           e.podt_code, prod_detail(e.podt_code)as podtName, e.man_goalperday
+	from manufacture_process c join (select a.proc_code, prod_detail(a.proc_code),
+	                                        b.emp_id, b.emp_name
+	                                 from process a join employee_info b
+	                                 on a.proc_emp_id = b.emp_id
+	                                 where a.proc_code between 'PROC001' and 'PROC011'
+	                                 order by a.proc_code) d
+	on c.proc_code = d.proc_code
+	
+	join manufacture_command_d e
+	on c.com_code = e.com_code
+
+	where c.com_Code= #{comCode}                                       
+</select>
+
+
+<!-- 공정이동표에서 자재 조회 -->
+<select id="selectResLot" resultType="egov.mes.manufacture.movement.dao.ManMovementVO">
+	select a.com_Code,
+	       b.mat_lotno as rscLot, b.rsc_Code, prod_detail(b.rsc_Code) as rscName 
+	from manufacture_command_d a join materials_LOT b 
+	on a.com_code = b.com_Code
+	where b.com_Code= #{comCode}
+</select>
+
+
+<!-- 선택된 지시 정보  -->
+<select id="selectComInfo" resultType="egov.mes.manufacture.movement.dao.ManMovementVO">
+	select podt_code, prod_detail(podt_code)as podtName, man_startdate, man_goalperday
+	from manufacture_command_d
+	where com_code=#{comCode}
+	
 </select>
 
 

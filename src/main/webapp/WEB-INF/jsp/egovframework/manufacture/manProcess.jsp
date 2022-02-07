@@ -97,7 +97,8 @@
 				"확인" : function() {
 					console.log("확인 테스트");
 					
-					fetch("${pageContext.request.contextPath}/selectProcess/"+checkedCommand[0].podtCode)
+					fetch("${pageContext.request.contextPath}/selectProcess/"+checkedCommand[0].podtCode
+											+ "/"+checkedCommand[0].comCode)
 					.then((response) => response.json())
 					.then((data)=> {
 						console.log(data.data.contents);
@@ -209,7 +210,11 @@
 			}, 
 			{
 				header : '관리자',
-				name : 'procCode'
+				name : 'empId'
+			},
+			{
+				header : '관리자명',
+				name : 'empName'
 			},
 			{
 				header : '지시량',

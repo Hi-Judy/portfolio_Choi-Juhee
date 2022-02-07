@@ -107,19 +107,19 @@
 	
 	
 	<!-- 생산 지시 히든 그리드 -->
-	<div id="gridInsertCommand"></div>
+	<div id="gridInsertCommand" style="display: none;"></div>
 	
 	<!-- 생산 지시 히든 그리드 -->
-	<div id="gridInsertCommandDetail"></div>
+	<div id="gridInsertCommandDetail" ></div>
 
 	<!-- 계획디테일 테이블에 '생산지시중'으로 변경 히든 그리드 -->
-	<div id="girdUpdatePlanStatus"></div>
+	<div id="girdUpdatePlanStatus" style="display: none;"></div>
 	
 	<!-- 자재 테이블에 출고량, 생산지시디테일 번호 추가 히든 그리드 -->
-	<div id="gridUpdateRes"></div>
+	<div id="gridUpdateRes" style="display: none;"></div>
 	
 	<!-- 생산 자재 LOT 테이블에 값 추가 히든 그리드 -->
-	<div id="gridInsertLot"></div>
+	<div id="gridInsertLot" style="display: none;"></div>
 
 	<script>
 		var Grid = tui.Grid; //그리드 객체 생성
@@ -210,8 +210,8 @@
 			let planFromDate = document.querySelector('#planFromDate').value;
 			let planToDate = document.querySelector('#planToDate').value;
 
-			//console.log(planFromDate);
-			//console.log(planToDate);
+			console.log(planFromDate);
+			console.log(planToDate);
 
 			dialogManPlan.dialog("open");
 			$.ajax({
@@ -286,7 +286,7 @@
 			}, 
 			{
 				header : '작업일',
-				name : 'manStartDate',
+				name : 'planStartdate',
 				editor : 'datePicker'
 			}, 
 			{
@@ -627,7 +627,10 @@
 			el : document.getElementById('gridResLOT'),
 			data : resLotData,
 			columns : columnsResLOT,
-			rowHeaders : [ 'rowNum' ]
+			rowHeaders : [ 'rowNum' ],
+			scrollY:true,
+		      minBodyHeight : 230,
+		      bodyHeight : 230,
 		})
 		
 		gridResLOT.on('editingFinish', (ev) => { 
@@ -775,7 +778,7 @@
 			}, 
 			{
 				header : '작업일',
-				name : 'manStartDate'
+				name : 'planStartdate'
 			},
 			{
 				header : '일 목표 생산량',
@@ -869,9 +872,14 @@
 				name : 'comCode'
 			},
 			{
-				header : '자재 LOT',
+				header : '자재코드',
 				name : 'rscLot'
+			},
+			{
+				header : '자재 LOT',
+				name : 'resCode'
 			}
+			
 		]
 		
 		//자재LOT 테이블 값추가 히든그리드 내용

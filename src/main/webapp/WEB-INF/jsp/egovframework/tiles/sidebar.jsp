@@ -70,6 +70,7 @@
 						<li class="submenu-item "><a href="manMovement">공정이동표</a></li>
 						<li class="submenu-item "><a href="checkProduct">불량 검사</a></li>
 						<li class="submenu-item "><a href="DefectiveProduct">불량 조회</a></li>
+						<li class="submenu-item "><a href="manPerformance">생산실적관리</a></li>
 								
 
 					</ul></li>

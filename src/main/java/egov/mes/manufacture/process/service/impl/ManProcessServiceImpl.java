@@ -74,7 +74,7 @@ public class ManProcessServiceImpl implements ManProcessService {
 		for(ManProcessVO processVO : pList) {
 			if(!processVO.getProcCode().equals("PROC011")) { //마지막 공정이 아니면
 				
-				if( (mapper.selectNextProc(processVO)).getManStarttime().equals("0") ) { //다음 공정의 시작 시간이 0이면
+				if( (mapper.selectNextProc(processVO)).getManStarttime().equals("0") ) {//다음 공정의 시작 시간이 0이면
 				
 					mapper.updateNowProc(mapper.selectNextProc(processVO));
 				}	
@@ -89,7 +89,15 @@ public class ManProcessServiceImpl implements ManProcessService {
 						+ Integer.parseInt(processVO.getManQnt()) ) ) ); 
 				
 				if(processVO.getProcCode().equals("PROC001")) { 
-					mapper.updateSecondQnt(processVO);
+
+					if(Integer.parseInt(processVO.getManGoalqnt()) <= 
+							Integer.parseInt(processVO.getManQnt())) {
+						mapper.updateManQnt(processVO);
+					} else {
+						mapper.updateSecondQnt(processVO);
+						
+					}
+					
 				}else if(mapper.selectPreManQnt(processVO) != null 
 						&& 
 						Integer.parseInt((mapper.selectPreManQnt(processVO)).getManQnt()) >= 
@@ -106,7 +114,7 @@ public class ManProcessServiceImpl implements ManProcessService {
 //			   //앞전 공정의 종료시간에 값이 들어오면
 //			   mapper.selectPreEndTime(processVO).getManEndtime() != null
 			   ) {
-
+				//System.out.println("앞전공정의 종료시간: "+processVO.getProcCode() +mapper.selectPreEndTime(processVO).getManEndtime());
 				mapper.updateEndTime(processVO);
 				mapper.updateManQnt(processVO);
 			}
