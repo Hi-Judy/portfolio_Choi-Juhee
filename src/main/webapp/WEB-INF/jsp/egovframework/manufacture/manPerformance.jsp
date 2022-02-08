@@ -26,12 +26,12 @@
 	<br>
 	
 	<!-- 생산실적관리 조회 기준 -->
-	<form id = "performanceSort">
+	<form id = "findPerformance">
 			
 		<label for="podtCode">제품별</label> 	
 		<input type="radio" id="podt" name="performanceSort" value="podtCode" >
 		
-		<label for="month">월별</label> 	
+		<label for="manMonth">월별</label> 	
 		<input type="radio" id="month" name="performanceSort" value="monthCode" >
 		
 		<button type="button" id="btnPerformance"
@@ -63,11 +63,35 @@
 		
 		
 		//******************************월별 생산 실적 그리드******************************
-		//월별 생산 실적 그리드 컬럼
+		//생산실적조회 버튼 클릭
+		$("#btnPerformance").click(function(){
+			console.log("실적조회 클릭테스트");
+			
+			$.ajax({
+				url: '${pageContext.request.contextPath}/findPerformance',
+				method: 'POST',
+				data: $("#findPerformance").serialize(),
+				success: function(datas){
+					data = JSON.parse(datas);
+					console.log(data);
+					console.log(data.result);
+					gridPerformance.resetData(data.result);
+					gridPerformance.refreshLayout();
+				},
+				error: function(reject){
+					console.log('reject: '+ reject);
+				}
+				
+			})
+			
+		
+		})
+		
+		//생산 실적 그리드 컬럼
 		const columnsPerformance = [
 			{
 				header : '월',
-				name : 'month'
+				name : 'monthCode'
 			},
 			{
 				header : '제품코드',
@@ -79,7 +103,7 @@
 			},
 			{
 				header : '지시수량',
-				name : 'manGoalperday'
+				name : 'manGoalqnt'
 			},
 			{
 				header : '작업완료량',
@@ -96,7 +120,7 @@
 			
 		]
 		
-		//월별 생산 실적 그리드 내용
+		//생산 실적 그리드 내용
 		let gridPerformance = new Grid({
 			el: document.getElementById('gridPerformance'),
 			data: null,
