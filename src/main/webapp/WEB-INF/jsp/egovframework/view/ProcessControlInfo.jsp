@@ -1,5 +1,5 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
-   pageEncoding="UTF-8"%>
+	pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <!DOCTYPE html>
 <html lang="ko" dir="ltr">
@@ -8,128 +8,147 @@
 <title>공정관리</title>
 
 <style>
-
-
-
-
 div.right {
-   float: right;
-   width: 1500px;
-  margin-left: 10px;
-   box-sizing: border-box;
+	float: right;
+	width: 1500px;
+	margin-left: 10px;
+	box-sizing: border-box;
 }
 
 div.Gridleft {
-   float: left;
-   width: 40%;
- /*  padding: 5px; */
- /*  box-sizing: border-box; */
+	float: left;
+	width: 40%;
+	/*  padding: 5px; */
+	/*  box-sizing: border-box; */
 }
 
 div.Gridright {
-   float: right;
-   width: 55%;
- /*  padding: 5px; */
- /*  box-sizing: border-box; */
+	float: right;
+	width: 55%;
+	/*  padding: 5px; */
+	/*  box-sizing: border-box; */
 }
 
 .test {
 	background-color: darksalmon;
 }
 
-.FacYes{
+.FacYes {
 	background-color: #59d959;
 }
-.FacNo{
+
+.FacNo {
 	background-color: rgb(204, 70, 70);
 }
 </style>
 
 </head>
 <body>
-	<div style="width : 1500px ;">
+	<div style="width: 1500px;">
 		<span style="float: right;">
-			<button type="button" id="helpBtn" style="border : none; background-color : #f2f7ff; color : #007b88; float : right ;">
-			<i class="bi bi-question-circle"></i>
+			<button type="button" id="helpBtn"
+				style="border: none; background-color: #f2f7ff; color: #007b88; float: right;">
+				<i class="bi bi-question-circle"></i>
 			</button>
 		</span>
 		<h4 style="margin-left: 10px">공정관리</h4>
 	</div>
 
-   <div id="top">
-      <div>
-      		<span style="margin-top: 13px; float: left;"> </span>
-            <span style="float: right; margin-top: 5.5px;">
-            <button id="AddData" type="button" class="btn"
-               style="padding: 5px 30px;">추가</button> &nbsp;&nbsp;
-            <button id="btnDelete" type="button" class="btn"
-               style="padding: 5px 30px;">삭제</button> &nbsp;&nbsp;
-            <button id="btnSave" type="button" class="btn"
-               style="padding: 5px 30px;">저장</button> &nbsp;&nbsp;
-         </span>
+	<div id="top">
+		<div>
+			<span style="margin-top: 13px; float: left;"> </span> <span
+				style="float: right; margin-top: 5.5px;">
+				<button id="AddData" type="button" class="btn"
+					style="padding: 5px 30px;">추가</button> &nbsp;&nbsp;
+				<button id="btnDelete" type="button" class="btn"
+					style="padding: 5px 30px;">삭제</button> &nbsp;&nbsp;
+				<button id="btnSave" type="button" class="btn"
+					style="padding: 5px 30px;">저장</button> &nbsp;&nbsp;
+			</span>
 
-      </div>
-   </div>
-   
- 
-   <div id="OverallSize">
-      <div style="margin-left: 10px; width: 1500px;">
-         <span> 등록된 공정수 : <input id="NUM"style="border:none;margin-left:5px; background-color:#f2f7ff; width:30px" disabled="true" > </span>
-         <br>
-         <br>
-         <div id="Grid" style="border-top: 3px solid #168;"></div>
-      </div>
-	
-	<div id="dialog-form" title="작업반장 조회">
-		<span>10111~ 영업팀  10211~ 자재팀  10311~ 생상팀 <br>
-			  10411~ QC팀   10511~ 포장팀</span>
-		<div id="EmpGrid"></div>
-	</div>
-	
-	<div id="ModalDal" title="설비등록">
-		<div>선택된 공정코드 : <input id="ProcSelected" readonly style="border:none;margin-left:5px; background-color:#ffffff; width:90px" disabled="true" > </div>
-		 <button id="FacSave" type="button" class="btn" style="float: right; ">설비저장</button>
-		<br><br>
-           
-		<div id="FacGrid" style="border-top: 3px solid #168;"></div>
-	</div>
-	
-	<div id="ChangeModal" title="등록된 설비 변경">
-		<div> 선택된 공정코드 : <input id="ProcSelected2" readonly style="border:none;margin-left:5px; background-color:#ffffff; width:90px" disabled="true" >
-			  <button id="DataSeve" type="button" class="btn" style="float: right; ">변경저장</button>
-		</div>
-		<br><br>
-		
-		<div class="Gridleft">
-			<div> <span> 가동중인 설비 </span>
-	        	<button id="FacDataDelete" type="button" class="btn" style="float: right; margin-bottom: 5px;">삭제</button>
-	        </div> 
-			<div id="FacGrid3" ></div> <!-- style="border-top: 3px solid #168;" -->
-		</div>
-		
-		<div class="Gridright" >
-			
-	        <div> <span> 비가동(가동준비) 설비 </span>
-	        	<button id="dataflowBtn" type="button" class="btn" style="float: right; margin-bottom: 5px;">추가</button>
-	        </div> 
-			<div id="FacGrid2" ></div> <!-- style="border-top: 3px solid #168;" -->
 		</div>
 	</div>
-     
-      
-   </div>
-   
+
+
+	<div id="OverallSize">
+		<div style="margin-left: 10px; width: 1500px;">
+			<span> 등록된 공정수 : <input id="NUM"
+				style="border: none; margin-left: 5px; background-color: #f2f7ff; width: 30px"
+				disabled="true">
+			</span> <br> <br>
+			<div id="Grid" style="border-top: 3px solid #168;"></div>
+		</div>
+
+		<div id="dialog-form" title="작업반장 조회">
+			<span>10111~ 영업팀 &nbsp;&nbsp;|&nbsp;&nbsp; 10211~ 자재팀 &nbsp;&nbsp;|&nbsp;&nbsp; 10311~ 생상팀 <br>
+			 	  10411~ QC팀  &nbsp;&nbsp;&nbsp;|&nbsp;&nbsp; 10511~ 포장팀
+			</span>
+			<div id="EmpGrid" style="border-top: 3px solid #168; margin-top: 20px;"></div>
+		</div>
+
+		<div id="ModalDal" title="설비등록">
+			<div>
+				선택된 공정코드 : <input id="ProcSelected" readonly
+					style="border: none; margin-left: 5px; background-color: #ffffff; width: 90px"
+					disabled="true">
+			</div>
+			<button id="FacSave" type="button" class="btn" style="float: right;">설비저장</button>
+			<br>
+			<br>
+
+			<div id="FacGrid" style="border-top: 3px solid #168;"></div>
+		</div>
+
+		<div id="ChangeModal" title="등록된 설비 변경">
+			<div>
+				선택된 공정코드 : <input id="ProcSelected2" readonly
+					style="border: none; margin-left: 5px; background-color: #ffffff; width: 90px"
+					disabled="true">
+				<button id="DataSeve" type="button" class="btn"
+					style="float: right;">변경저장</button>
+			</div>
+			<br>
+			<br>
+
+			<div class="Gridleft">
+				<div>
+					<span> 가동중인 설비 </span>
+					<button id="FacDataDelete" type="button" class="btn"
+						style="float: right; margin-bottom: 5px;">삭제</button>
+				</div>
+				<div id="FacGrid3"></div>
+				<!-- style="border-top: 3px solid #168;" -->
+			</div>
+
+			<div class="Gridright">
+
+				<div>
+					<span> 비가동(가동준비) 설비 </span>
+					<button id="dataflowBtn" type="button" class="btn"
+						style="float: right; margin-bottom: 5px;">추가</button>
+				</div>
+				<div id="FacGrid2"></div>
+				<!-- style="border-top: 3px solid #168;" -->
+			</div>
+		</div>
+
+
+	</div>
+
 	<div id="helpModal" title="도움말">
 		<hr>
-		새자료 : 화면에 보여지고있는 자재정보를 없에고 등록모드 로 바뀝니다.<br><br>
-		자재재고조회 : 선택된 자재의 전년도 이월량 밑 올해 내역들을 볼수있습니다.<br><br>
-		저장 : "담당관리자" , "입고업체" , "입고단가" 들을 <br>
-		&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-		새롭게 수정해서 저장할수있습니다.<br><br>
-		LOT정보가 없는 자재들은 자재재고조회 밑 LOT정보 조회가 불가능합니다.<br><br>
-		LOT추가 밑 더 자세한 자재관리는 자재관리 탭에서 진행해주세요.
+		추가 : 공정코드는 자동으로 입력되고 맨밑에 새로운 행이 생깁니다.<br><br>
+		삭제 : 체크된 데이터들을 DB 와 화면에서 삭제합니다(설비 없어야함)<br><br>
+		저장 : 수정된 데이터들을 DB에 업데이트 합니다.<br><br>
+		설비등록여부 -<br>
+		미등록 : 설비등록이 되지않은 공정인 상태 , <br>
+		클릭해서 설비를 등록 할수 있다.<br><br>
+		등록완료 : 설비가 등록된상태 이상태에선 공정삭제 를 할수 없고 설비들을<br>
+		모두 삭제를 시켜야 공정삭제가 가능하다 , <br> 
+		클릭해서 등록중인 설비변경 또는 설비삭제 가 가능하다
+		저장할수있습니다.<br>
 	</div>
-   
+
 </body>
 
 <script>
@@ -153,7 +172,7 @@ toastr.options = {
         "tapToDismiss": false
       }
 
-
+//tui.Grid.setLanguage('ko');
 	  //-------- 도움말 모달 ----------
 	  var helpModal = $( "#helpModal" ).dialog({
 	     autoOpen : false ,
@@ -341,6 +360,7 @@ FacilityCheck(ProcAllData);
 	//Grid 그리드 데이터 변경처리
 	EmpGrid.on('click' , (ev) => {
 		Grid.setValue(GridrowKey , 'procEmpId' , EmpDatas[ev.rowKey].empId);
+		Grid.addCellClassName(GridrowKey , 'procCode' , 'updateCheck')
 		 dialog.dialog( "close" ) ;
 	})
 	
@@ -362,7 +382,13 @@ FacilityCheck(ProcAllData);
 	//------체크해제된 데이터 배열에 삭제 --------
 	Grid.on('uncheck' , (ev) => {
 		delete DeleCheck[ev.rowKey] 
-	})
+	});
+	
+	
+	//-------- 데이터 편집이 종료 되면 실행 --------
+	Grid.on('editingFinish' , (ev) => {
+		Grid.addCellClassName(ev.rowKey , 'procCode' , 'updateCheck')
+	});
 	
 	
 	
@@ -393,18 +419,35 @@ FacilityCheck(ProcAllData);
 	//---------- 저장버튼 이벤트 -------------
 	btnSave.addEventListener('click' , (ev) => {
 		var GridModiRow = Grid.getModifiedRows() 	;
+		var OK = false ;
 		//데이터 추가
 		var InputData 	= GridModiRow.createdRows  	;
 		if(InputData.length > 0){
-			InpData(InputData)
+			OK = InpData(InputData)
+		}
+		
+		//업데이트 된 행들만 찾아서 배열에 넣는식
+		var UpdateData = new Array();
+		var UpdateClass = document.getElementsByClassName("updateCheck") ;
+		for(let c = 0 ; c <UpdateClass.length ; c++ ) {
+			var UpdateClassIn = UpdateClass[c] ;
+			UpdateData.push (Grid.getRow( UpdateClassIn.dataset.rowKey ) );
 		}
 		
 		//업데이트
-		var UpdateData 	= GridModiRow.updatedRows 	;
 		if(UpdateData.length > 0){
-			ChangeData(UpdateData)
+			OK = ChangeData(UpdateData)
 		}
     	
+		
+		if(OK){
+			toastr["success"]("저장완료");
+          	setTimeout(() => {
+        		 location.reload();
+        		 },1500 );
+		}else{
+			toastr["warning"]("변경된 정보가 없습니다.");
+		}
 
 	});
 	
@@ -442,6 +485,9 @@ FacilityCheck(ProcAllData);
 	   	             async : false, 
 	   	             success: (datas) => {
 	   	            	 toastr["success"]("삭제 완료"); 
+	   	            	 setTimeout(() => {
+		            		 location.reload();
+		            		 },1500 );
 	   	             },
 	   	             error: (err) => {
 	   	                alert("삭제 ajax 오류 " + err);
@@ -453,6 +499,7 @@ FacilityCheck(ProcAllData);
 	function InpData(InputData) {
 		var num = 0 ;
 		var DI ;
+		var OK2 = false ;
 		var InpDataArr = new Array();
 			try
 			{
@@ -488,18 +535,20 @@ FacilityCheck(ProcAllData);
 	   	    		 contentType : 'application/json;',
 	   	             async : false, 
 	   	             success: (datas) => {
-	   	            	 toastr["success"]("데이터 추가 완료"); 
+	   	            	OK2 = true ;
 	   	             },
 	   	             error: (err) => {
 	   	                alert("데이터추가 ajax에러 " + err);
 	   	             }
 	   	          });
 			}
+		return OK2 ;
 	}
 	//---------- 공정건별 업데이트 -------------
 	function ChangeData(UpdateData) {
 		var num = 0 ;
 		var DU ;
+		var OK2 = false ;
 		var UpDataArr = new Array();
 			try
 			{
@@ -534,13 +583,14 @@ FacilityCheck(ProcAllData);
 	   	    		 contentType : 'application/json;',
 	   	             async : false, 
 	   	             success: (datas) => {
-	   	            	 toastr["success"]("데이터 수정 완료"); 
+	   	            	OK2 = true ; 
 	   	             },
 	   	             error: (err) => {
 	   	                alert("데이터수정 ajax에러 " + err);
 	   	             }
 	   	          });
 			}
+		return OK2
 	}
 	
 	
