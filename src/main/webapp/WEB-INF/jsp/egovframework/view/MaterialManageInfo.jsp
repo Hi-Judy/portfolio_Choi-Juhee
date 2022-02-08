@@ -94,7 +94,7 @@ span.ui-dialog-title {
 					 <!-- <span>안전재고량 &nbsp;<input id="" type="text" > </span>  -->
 			    </div>
 			    
-			    <div style="height: 40px; border-bottom: 1px solid black; margin-top: 5px; margin-bottom: 5px;">
+			    <div style="height: 40px; border-bottom: 2px solid black; margin-top: 5px; margin-bottom: 5px;">
 			         <span>
 			         입고업체 <input id="suplcomCodeInp" type="text" readonly>
 			          <button type="button" id="suplcomCode" style="border : none; background-color : #f2f7ff; color : #007b88;">
@@ -105,11 +105,11 @@ span.ui-dialog-title {
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span>입고단가 &nbsp;&nbsp; <input id="rscPrc"  type="text" > </span> 
 			    </div>
 			    
-			    <div style="width: 100%;">
+			    <div style="width: 100%; margin-top: 15px;">
 				    <div style=" float: right;" >
-						<input id="MatInvenBtn" class="btn" type="button" value="자재재고 조회">
+						<input id="MatInvenBtn" class="btn" type="button" value="월별 자재고 조회">
 					</div>	
-					<div id="grid2" style="border-top: 3px solid #168; width: 550px; height: 500px; float: left;"></div>
+					<div id="grid2" style="border-top: 3px solid #168; width: 700px; height: 500px; float: left;"></div>
 				</div>
 			
 			</div>
@@ -323,12 +323,16 @@ $.ajax({
 		  el : document.getElementById('grid2'),
 		  data : FindData ,
 		  columns : [
-		     { header : '자재LOT'			, name : 'rscLot'    , align : 'center' },
-		     { header : '자재 입고/출고 번호'	, name : 'storeNo'   , align : 'center' },
-		     { header : '재고량'			, name : 'istCnt'    , align : 'center' },
-		     { header : '비고'			, name : 'storeEtc'  , align : 'center' } 
+		     { header : '자재LOT'			, name : 'rscLot'    , align : 'center' , width: 200 },
+		     { header : '자재 입고/출고 번호'	, name : 'storeNo'   , align : 'center' , width: 200 },
+		     { header : '재고량'			, name : 'istCnt'    , align : 'center' ,
+		    	 formatter(value) {               
+		    						 return value.value.toString().replace(/\B(?<!\.\d*)(?=(\d{3})+(?!\d))/g, ",") ;
+		     					  }
+		     },
+		     { header : '비고'			, name : 'storeEtc'  , align : 'center' , width: 150} 
 		  ],
-		  bodyHeight: 360
+		  bodyHeight: 345
 	  })
 		
 	  //---------- 월별자재 재고 조회 -----------
@@ -336,14 +340,14 @@ $.ajax({
 		el : document.getElementById('MatInvenGrid'),
 		  data : MatInvenData ,
 		  columns : [
-			 { header : '월'			, name : 'month'   		, align : 'center' 	},
-			 { header : '이월량'		, name : 'carryOver'   	, align : 'center' 	},
-		     { header : '입고'		, name : 'matInto'   	, align : 'center' 	},
-		     { header : '출고'		, name : 'matOut'   	, align : 'center' 	},
-		     { header : '정산입고'		, name : 'checkInto'   	, align : 'center' 	},
-		     { header : '정산출고'		, name : 'checkOut'   	, align : 'center' 	},
-		     { header : '반품'		, name : 'matReturn'   	, align : 'center' 	},
-		     { header : '현재수량'		, name : 'matSum'   	, align : 'center' 	} 
+			 { header : '월'			, name : 'month'   		, align : 'center' 	, formatter(value) { return value.value.toString().replace(/\B(?<!\.\d*)(?=(\d{3})+(?!\d))/g, ",") ;} },
+			 { header : '이월량'		, name : 'carryOver'   	, align : 'center' 	, formatter(value) { return value.value.toString().replace(/\B(?<!\.\d*)(?=(\d{3})+(?!\d))/g, ",") ;} },
+		     { header : '입고'		, name : 'matInto'   	, align : 'center' 	, formatter(value) { return value.value.toString().replace(/\B(?<!\.\d*)(?=(\d{3})+(?!\d))/g, ",") ;} },
+		     { header : '출고'		, name : 'matOut'   	, align : 'center' 	, formatter(value) { return value.value.toString().replace(/\B(?<!\.\d*)(?=(\d{3})+(?!\d))/g, ",") ;} },
+		     { header : '정산입고'		, name : 'checkInto'   	, align : 'center' 	, formatter(value) { return value.value.toString().replace(/\B(?<!\.\d*)(?=(\d{3})+(?!\d))/g, ",") ;} },
+		     { header : '정산출고'		, name : 'checkOut'   	, align : 'center' 	, formatter(value) { return value.value.toString().replace(/\B(?<!\.\d*)(?=(\d{3})+(?!\d))/g, ",") ;} },
+		     { header : '반품'		, name : 'matReturn'   	, align : 'center' 	, formatter(value) { return value.value.toString().replace(/\B(?<!\.\d*)(?=(\d{3})+(?!\d))/g, ",") ;} },
+		     { header : '현재수량'		, name : 'matSum'   	, align : 'center' 	, formatter(value) { return value.value.toString().replace(/\B(?<!\.\d*)(?=(\d{3})+(?!\d))/g, ",") ;} } 
 		  ]
 	})	
 		
@@ -503,6 +507,9 @@ MatInvenBtn.addEventListener('click' , () => {
 	if(Getclass == "inpBC"){
 		MatInvenGrid.resetData(MatInvenData);
 		MatInvenGrid.resetOriginData();
+		
+		MatInvenGrid.setValue(0 , "month" , "전년도" ) ;
+		
 		MatInvenModal.dialog( "open" )
 		MatInvenGrid.refreshLayout() ;
 	}else{
@@ -521,44 +528,47 @@ SaveBtn.addEventListener('click' , () => {
 	if(rcCode.value == '' || rcCode.value == null){
 		toastr["warning"]("자재코드 를 입력해주세요"); 
 	}else{
-		
-		var Check;
-		var Getclass = document.getElementById("rscCode").classList.item(0);
-		if(Getclass == "inpBC"){ //수정이면 클래스에 inpBC 가 있을것이기 때문에 그걸로 판단한다
-			//수정 ajax 넣는곳
-			Check = UpdataFn();
+		if(rscPrc.value == '' || rscPrc.value == null) {
+			toastr["warning"]("입고단가 를 입력해주세요"); 
 		}else{
-			//신규등록 ajax 넣는곳
-			Check = AddData()
-		}
-		if(Check){
-			toastr["success"]("저장완료");
-			
-			rcCode.value = "" ;	
-			document.getElementById("rscCode").readOnly = false ;
-			document.getElementById("rscCode").classList.remove("inpBC")
-			rcName.value = "" ;
-			document.getElementById("rscName").readOnly = false ;
-			document.getElementById("rscName").classList.remove("inpBC")
-			rcUnit.value = "";
-			document.getElementById("rscUnit").readOnly = false ;
-			document.getElementById("rscUnit").classList.remove("inpBC")
-			rcPrc.value = "";
-			rcManCode.value = "";
-			spcCode.value = "";
-			spcName.value = "";
-			
-			var resetdata;
-			$.ajax({
-			   url : './MaterialListAllFind',
-			   dataType : 'json',
-			   async : false,
-			}).done( (rsts) => {
-				resetdata = rsts.datas
-			})
-
-			Grid.resetData(resetdata);
-			Grid.resetOriginData();
+			var Check;
+			var Getclass = document.getElementById("rscCode").classList.item(0);
+			if(Getclass == "inpBC"){ //수정이면 클래스에 inpBC 가 있을것이기 때문에 그걸로 판단한다
+				//수정 ajax 넣는곳
+				Check = UpdataFn();
+			}else{
+				//신규등록 ajax 넣는곳
+				Check = AddData()
+			}
+			if(Check){
+				toastr["success"]("저장완료");
+				
+				rcCode.value = "" ;	
+				document.getElementById("rscCode").readOnly = false ;
+				document.getElementById("rscCode").classList.remove("inpBC")
+				rcName.value = "" ;
+				document.getElementById("rscName").readOnly = false ;
+				document.getElementById("rscName").classList.remove("inpBC")
+				rcUnit.value = "";
+				document.getElementById("rscUnit").readOnly = false ;
+				document.getElementById("rscUnit").classList.remove("inpBC")
+				rcPrc.value = "";
+				rcManCode.value = "";
+				spcCode.value = "";
+				spcName.value = "";
+				
+				var resetdata;
+				$.ajax({
+				   url : './MaterialListAllFind',
+				   dataType : 'json',
+				   async : false,
+				}).done( (rsts) => {
+					resetdata = rsts.datas
+				})
+	
+				Grid.resetData(resetdata);
+				Grid.resetOriginData();
+			}
 		}
 		
 	}

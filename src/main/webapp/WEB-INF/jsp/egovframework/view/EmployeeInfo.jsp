@@ -54,15 +54,21 @@
 </head>
 <body>
 
+	<div style="width : 1500px ;">
+		<span style="float: right;">
+			<button type="button" id="helpBtn" style="border : none; background-color : #f2f7ff; color : #007b88; float : right ;">
+			<i class="bi bi-question-circle"></i>
+			</button>
+		</span>
+		<h4 style="margin-left: 10px">사원정보 관리</h4>
+	</div>
+
 
    <div id="top">
       <div>
-      		<span style="margin-top: 13px; float: left;"> &nbsp;&nbsp;사원정보관리</span>
             <span style="float: right; margin-top: 3.5px;">
             <button id="AddData" type="button" class="btn"
                style="padding: 5px 30px;">추가</button> &nbsp;&nbsp;
-<!--             <button id="btnDelete" type="button" class="btn"
-               style="padding: 5px 30px;">삭제</button> &nbsp;&nbsp; -->
             <button id="btnSave" type="button" class="btn"
                style="padding: 5px 30px;">저장</button> &nbsp;&nbsp;
          </span>
@@ -71,13 +77,11 @@
    </div>
    
   
-   <br>
    <div id="OverallSize">
 
       <div style="margin-left: 10px; width: 1500px;">
          <span> 등록된사원수 : <input id="NUM"style="border:none;margin-left:5px; background-color:#f2f7ff; width:30px" disabled="true" > </span>
-         <br>
-         <br>
+         <br><br>
          <div id="EmpGrid" style="border-top: 3px solid #168; height: 600px;"></div>
       </div>
 	
@@ -85,35 +89,51 @@
 	</div>
      
      <div id="dialog-form" title="사원 데이터 입력">
-     	<button id="ModalSave" type="button" style=" float:right">저장</button> 
-     	<span style="color: red; font-size:12px;">* 초기비밀번호는 사번 입니다</span> 
-     	<br>
-     	<div style=" width:100%; ">
-	     	이름 : <input id="empName" type="text" font-size=10px; placeholder="필수입력입니다"> <!-- <span>* 비밀번호는 생년월일 입니다.</span> -->
-	     	<hr>
-	     	<div style=" width:50%; float:left ">
-		     	부서선택 : 
-		     	<select id="dept" style="width: 100px; text-align: center;">
-		     		<option value="D001">영업</option>
-		     		<option value="D002">자재</option>
-		     		<option value="D003">생산</option>
-		     		<option value="D004">품질</option>
-		     	</select>
+     	<div style="height: 200px;">
+	     	<span style="color: red; font-size:12px;">* 초기비밀번호는 사번 입니다</span> 
+	     	<br>
+	     	<div style=" width:100%; ">
+		     	이름 : <input id="empName" type="text" font-size=10px; placeholder="필수입력입니다"> <!-- <span>* 비밀번호는 생년월일 입니다.</span> -->
 		     	<hr>
-		     	직책선택 : 
-		     	<select id="position" style="width: 100px; text-align: center;">
-		     		<option value="W004">사원</option>
-		     		<option value="W003">반장</option>
-		     		<option value="W002">공장장</option>
-		     	</select>
-		     	<hr>
-	     	</div>
-	     	<div style=" width:49%; float:right ">
-	     		비고: <br>
-	     		<input id="empEtc" type="text" placeholder="비고 입력 공간" style="width:300px; height: 75px; font-size:15px;">
+		     	<div style=" width:50%; float:left ">
+			     	부서선택 : 
+			     	<select id="dept" style="width: 100px; text-align: center;">
+			     		<option value="D001">영업</option>
+			     		<option value="D002">자재</option>
+			     		<option value="D003">생산</option>
+			     		<option value="D004">품질</option>
+			     	</select>
+			     	<hr>
+			     	직책선택 : 
+			     	<select id="position" style="width: 100px; text-align: center;">
+			     		<option value="W004">사원</option>
+			     		<option value="W003">반장</option>
+			     		<option value="W002">공장장</option>
+			     	</select>
+			     	<hr>
+		     	</div>
+		     	<div style=" width:49%; float:right ">
+		     		비고: <br>
+		     		<input id="empEtc" type="text" placeholder="비고 입력 공간" style="width:300px; height: 75px; font-size:15px;">
+		     	</div>
 	     	</div>
      	</div>
+     	<br>
+     	<hr>
+     	
+     	<button id="ModalSave" type="button" style=" float:right" class="btn">저장</button> 
       </div> 
+      
+     <div id="helpModal" title="도움말">
+		<hr>
+		새자료 : 화면에 보여지고있는 자재정보를 없에고 등록모드 로 바뀝니다.<br><br>
+		자재재고조회 : 선택된 자재의 전년도 이월량 밑 올해 내역들을 볼수있습니다.<br><br>
+		저장 : "담당관리자" , "입고업체" , "입고단가" 들을 <br>
+		&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+		새롭게 수정해서 저장할수있습니다.<br><br>
+		LOT정보가 없는 자재들은 자재재고조회 밑 LOT정보 조회가 불가능합니다.<br><br>
+		LOT추가 밑 더 자세한 자재관리는 자재관리 탭에서 진행해주세요.
+	</div>
    
 </body>
 
@@ -145,6 +165,20 @@ themesOptions = {
             }
            
 };
+
+
+//-------- 도움말 모달 ----------
+var helpModal = $( "#helpModal" ).dialog({
+ autoOpen : false ,
+ modal : true ,
+ width:600, //너비
+ height:400, //높이
+ buttons: {
+		"닫기" : function() {
+			helpModal.dialog("close") ;
+		}
+	}
+});
       
       
 //-------- 사원입력 설정 ----------
@@ -152,7 +186,7 @@ var dialog = $( "#dialog-form" ).dialog({
    autoOpen : false ,
    modal : true ,
    width:700, //너비
-   height:300 //높이
+   height:400 //높이
 });      
       
       
@@ -175,8 +209,8 @@ const EmpGrid = new tui.Grid({
    el : document.getElementById('EmpGrid'),
    data : EmpAllDatas ,
    columns : [
-      { header : '사원번호 / ID'	, name : 'empId'   		, align : 'center' , filter: 'text' },
-      { header : '이름'			, name : 'empName'		, align : 'center' , filter: 'text' },
+      { header : '사원번호 / ID'	, name : 'empId'   		, align : 'center' },
+      { header : '이름'			, name : 'empName'		, align : 'center' },
       { header : '부서명'		, name : 'deptCode'   	, align : 'center' ,
     	  	formatter: 'listItemText',
 		    editor: {
@@ -350,6 +384,11 @@ btnSave.addEventListener('click' , (ev) => {
 	}else{
 		toastr["warning"]("변경된 정보가 없습니다"); 
 	}
+})
+
+//------------------ 도움말 버튼 이벤트 -----------------------
+helpBtn.addEventListener('mouseover' , () => {
+	helpModal.dialog("open") ;
 })
 
 
