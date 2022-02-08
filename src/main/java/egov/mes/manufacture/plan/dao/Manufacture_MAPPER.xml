@@ -22,7 +22,17 @@
 			b.ord_code, b.man_plan_no, b.man_plan_name, b.man_plan_date
 	from trade_info a join manufacture_plan b
 	on a.ord_code = b.ord_code
-	where a.podt_code = #{podtCode}
+	where 1=1
+	
+	<if test = ' podtCode != null and podtCode != "" '>
+		and a.podt_code = #{podtCode}
+	</if>
+	
+	<if test = ' manPlanDate != null and manPlanDate != "" '>
+		and b.man_plan_date = #{manPlanDate}
+	</if>
+	
+	order by a.podt_code
 </select>
 
 
