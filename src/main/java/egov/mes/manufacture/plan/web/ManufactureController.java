@@ -84,8 +84,10 @@ public class ManufactureController {
 	}
 		
 	// 자재 조회 모달에서 매핑
-	@PostMapping("/manufacture/resource")
-	public String selectRes(ManufacturePlanVO planVO, Model model) {
+	@GetMapping("/manufacture/resource/{podtCode}")
+	public String selectRes(@PathVariable String podtCode,
+							ManufacturePlanVO planVO, 
+							Model model) {
 
 		// System.out.println("@@@@@@@@"+planVO.getPodtCode());
 

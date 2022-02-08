@@ -59,7 +59,7 @@
 		
 		
 		//******************************생산지시 조회 그리드******************************
-		//작업 일자별 생산지시 조회 모달 컬럼
+		//생산지시 조회 모달 컬럼
 		const columnsCommand = [
 			{
 				header: '지시번호',
@@ -108,9 +108,9 @@
 		//#
 		let commandData;
 		
-		//작업일자별로 생산지시 조회 버튼 클릭 이벤트
+		//생산지시 조회 버튼 클릭 이벤트
 		$('#searchCommand').click(function(){
-			console.log('작업일자별로 생산지시 조회');
+			console.log('생산지시 조회');
 			
 			let manDate = document.querySelector('#txtManDate').value;
 			let podtCode = document.querySelector('#txtPodtCode').value;
@@ -125,7 +125,7 @@
 				url: '${pageContext.request.contextPath}/selectCommand',
 				method: 'POST',
 				data: {'manStartDate' : manDate, 'podtCode': podtCode },
-				dateType: 'JSON',
+				dataType: 'JSON',
 				success: function(datas){
 					//commandData = datas;
 					
