@@ -113,7 +113,7 @@ window.addEventListener('load',function(){
 		makesidebar();
 	}else{
 		$.ajax({
-			url : '${pageContext.request.contextPath}/reqsidebar',
+			url : '${pageContext.request.contextPath}/reqsidebar?uid='+'${uid}',
 			method : 'GET',
 			dataType : 'JSON',
 			success : function(sidebardatas) {
@@ -125,7 +125,22 @@ window.addEventListener('load',function(){
 			}
 		})
 	}
+	var menulist = JSON.parse(sessionStorage.getItem("MenuList"));
+	const SelectedMenu = menulist.find(Selected);
+	console.log(SelectedMenu);
+	var b = 'a[href=\\/'+SelectedMenu.chkUrl+']';
+	var a = document.querySelector(b).parentElement.parentElement;
+	a.style="display:block;";
 });
+
+
+function Selected(element)  {
+	var link = document.location.href.split("/");
+	  if(element.chkUrl === link[link.length-1])  {
+	    return true;
+	  }
+}
+
 function makesidebar(){	
 	list = JSON.parse(sessionStorage.getItem("MenuList"));
 	var menu = document.querySelector('.menu');

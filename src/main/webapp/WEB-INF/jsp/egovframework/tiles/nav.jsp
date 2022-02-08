@@ -6,7 +6,7 @@
 				<a href="#" class="burger-btn d-block"> <i
 					class="bi bi-justify fs-3"></i>
 				</a>
-<a href="/yedamfinal2/uat/uia/actionLogout.do">
+<a href="/uat/uia/actionLogout.do">
               로그아웃</a>
 				<button class="navbar-toggler" type="button"
 					data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent"

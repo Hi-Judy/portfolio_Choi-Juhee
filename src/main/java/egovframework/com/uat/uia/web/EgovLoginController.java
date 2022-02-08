@@ -10,6 +10,7 @@ import javax.servlet.http.HttpServletResponse;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -133,7 +134,7 @@ public class EgovLoginController {
 	 * @exception Exception
 	 */
 	@RequestMapping(value = "/uat/uia/actionLogin.do")
-	public String actionLogin(@ModelAttribute("loginVO") LoginVO loginVO, HttpServletRequest request, ModelMap model) throws Exception {
+	public String actionLogin(@ModelAttribute("loginVO") LoginVO loginVO, HttpServletRequest request, ModelMap model,Model modela) throws Exception {
 
 		// 1. 로그인인증제한 활성화시 
 		if( egovLoginConfig.isLock()){
@@ -166,6 +167,7 @@ public class EgovLoginController {
 			// 2019.10.01 로그인 인증세션 추가
 			request.getSession().setAttribute("accessUser", resultVO.getUserSe().concat(resultVO.getId()));
 			request.getSession().setAttribute("uid", resultVO.getId());
+			modela.addAttribute("uid",resultVO.getId());
 			System.out.println(resultVO.getId());
 			return "main/main.tiles";
 
@@ -329,7 +331,7 @@ public class EgovLoginController {
 		// 세션모드인경우 Authority 초기화
 		// List<String> authList = (List<String>)EgovUserDetailsHelper.getAuthorities();
 		request.getSession().setAttribute("accessUser", null);
-
+		request.getSession().invalidate();
 		//return "redirect:/egovDevIndex.jsp";
 		return "redirect:/EgovContent.do";
 	}

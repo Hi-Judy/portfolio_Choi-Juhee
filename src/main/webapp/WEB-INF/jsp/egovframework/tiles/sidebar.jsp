@@ -18,27 +18,27 @@
 			</div>
 		</div>
 		<div class="sidebar-menu">
-			<ul class="menu">
+			<ul class="menu"><!-- 
 				<li class="sidebar-title">Menu</li>
 				<li class="sidebar-item  has-sub"><a href="#"
 					class='sidebar-link'> <i class="bi bi-collection-fill"></i> <span>egov test</span>
 				</a>
 					<ul class="submenu ">
-						<li class="submenu-item "><a href="/yedamfinal2/sec/ram/EgovAuthorList.do">권한 관리</a></li>
-						<li class="submenu-item "><a href="/yedamfinal2/sec/rgm/EgovAuthorGroupList.do">권한 그룹 관리</a></li>
-						<li class="submenu-item "><a href="/yedamfinal2/sec/gmt/EgovGroupList.do">그룹 관리</a></li>
-						<li class="submenu-item "><a href="/yedamfinal2/sec/rmt/EgovRoleList.do">롤 관리</a></li>
-						<li class="submenu-item "><a href="/yedamfinal2/sym/mnu/mpm/EgovMenuListSelect.do">메뉴리스트관리</a></li>
-						<li class="submenu-item "><a href="/yedamfinal2/sym/mnu/mpm/EgovMenuManageSelect.do">메뉴관리리스트</a></li>
-						<li class="submenu-item "><a href="/yedamfinal2/sym/mnu/mcm/EgovMenuCreatManageSelect.do">메뉴생성관리</a></li>
-						<li class="submenu-item "><a href="/yedamfinal2/sym/mnu/stm/EgovSiteMapng.do">사이트맵</a></li>
+						<li class="submenu-item "><a href="/sec/ram/EgovAuthorList.do">권한 관리</a></li>
+						<li class="submenu-item "><a href="/sec/rgm/EgovAuthorGroupList.do">권한 그룹 관리</a></li>
+						<li class="submenu-item "><a href="/sec/gmt/EgovGroupList.do">그룹 관리</a></li>
+						<li class="submenu-item "><a href="/sec/rmt/EgovRoleList.do">롤 관리</a></li>
+						<li class="submenu-item "><a href="/sym/mnu/mpm/EgovMenuListSelect.do">메뉴리스트관리</a></li>
+						<li class="submenu-item "><a href="/sym/mnu/mpm/EgovMenuManageSelect.do">메뉴관리리스트</a></li>
+						<li class="submenu-item "><a href="/sym/mnu/mcm/EgovMenuCreatManageSelect.do">메뉴생성관리</a></li>
+						<li class="submenu-item "><a href="/sym/mnu/stm/EgovSiteMapng.do">사이트맵</a></li>
 					</ul></li>
 				<li class="sidebar-item  has-sub"><a href="#"
 					class='sidebar-link'> <i class="bi bi-stack"></i> <span>기준정보
 							관리</span>
 				</a>
 					<ul class="submenu ">
-						<li class="submenu-item "><a href="CommonGroup">공통 자료 관리</a></li>
+						<li class="submenu-item "><a href="../CommonGroup">공통 자료 관리</a></li>
 						<li class="submenu-item "><a href="MaterialManagement">자재정보 관리</a></li>
 						<li class="submenu-item "><a href="ProductBom">제품 BOM 관리</a></li>
 						<li class="submenu-item "><a href="ProcessControl">공정 관리</a></li>
@@ -102,7 +102,7 @@
 								LOT재고 조정 조회</a></li>
 						<li class="submenu-item "><a href="resourcesInvenList">자재
 								재고 조회</a></li>
-					</ul></li>
+					</ul></li> -->
 			</ul>
 		</div>
 		<button class="sidebar-toggler btn x">

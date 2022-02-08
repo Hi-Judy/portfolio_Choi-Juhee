@@ -27,12 +27,10 @@ public class MainController {
 		return "egovframework/com/uat/uia/EgovLoginUsr";
 	}
 	@RequestMapping("/reqsidebar")
-	public String reqside(Model model) {
-		
+	public String reqside(Model model,String uid) {
 		List<SidebarMenuVO> list = new ArrayList<>();
-		list = sidebarS.selectsideList();
+		list = sidebarS.selectsideList(uid);
 		model.addAttribute("resultsidebar", list);
-		System.out.println("작업일자별 지시조회: "+ list);
 		
 		return "jsonView";
 		
