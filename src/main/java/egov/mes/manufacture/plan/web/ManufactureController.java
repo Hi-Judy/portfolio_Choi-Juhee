@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.servlet.ModelAndView;
 
 import egov.mes.manufacture.plan.dao.ManufacturePlanVO;
 import egov.mes.manufacture.plan.dao.ModifyVO;
@@ -135,4 +136,15 @@ public class ManufactureController {
 		return "jsonView";
 	}
 
+	// 달력용
+	@RequestMapping("selectCal")
+	public ModelAndView selectCal(ManufacturePlanVO planVo) {
+		
+		List<ManufacturePlanVO> list = manService.selectCal(planVo) ;
+		
+		ModelAndView jsonView = new ModelAndView("jsonView") ;
+		jsonView.addObject("calList" , list) ;
+		return jsonView ;
+	}
+	
 }

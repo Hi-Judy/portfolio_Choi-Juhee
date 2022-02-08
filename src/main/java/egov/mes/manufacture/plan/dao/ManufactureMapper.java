@@ -42,5 +42,6 @@ public interface ManufactureMapper {
 	//생산계획 삭제
 	int deletePlan(ManufacturePlanVO palnVO);
 	
-	
+	//달력용
+	List<ManufacturePlanVO> selectCal(ManufacturePlanVO planVo) ;
 }

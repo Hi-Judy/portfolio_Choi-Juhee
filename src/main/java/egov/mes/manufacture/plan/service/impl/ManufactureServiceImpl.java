@@ -115,6 +115,11 @@ public class ManufactureServiceImpl implements ManufactureService {
 		
 		return b;
 	}
+
+	@Override
+	public List<ManufacturePlanVO> selectCal(ManufacturePlanVO planVo) {
+		return manMapper.selectCal(planVo) ;
+	}
 	
 	
 

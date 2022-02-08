@@ -33,6 +33,7 @@ public interface ManufactureService {
 	//생산계획 추가
 	int insertPlan(ModifyVO<ManufacturePlanVO> list);
 	
-
+	//달력용
+	List<ManufacturePlanVO> selectCal(ManufacturePlanVO planVo) ;
 
 }

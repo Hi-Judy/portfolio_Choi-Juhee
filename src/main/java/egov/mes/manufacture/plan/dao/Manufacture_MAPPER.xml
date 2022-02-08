@@ -171,5 +171,8 @@ order by b.rsc_code
 	and ord_code = #{ordCode}
 </select>
 
-
+<!-- 달력용 -->
+<select id="selectCal" resultType="egov.mes.manufacture.plan.dao.ManufacturePlanVO">
+	select com_code , to_char(man_startdate,'yyyy-MM-dd') as manStartdate , to_char(ord_duedate,'yyyy-MM-dd') as ordDuedate from manufacture_command_d 
+</select>
 </mapper>
