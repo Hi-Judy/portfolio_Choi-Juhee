@@ -3,4 +3,41 @@
 
 <mapper namespace="egov.mes.manufacture.perfomance.dao.ManPerformanceMapper">
 
+<!-- 제품별 불량율 조회 -->
+<select id="selectPodtDef" resultType="egov.mes.manufacture.perfomance.dao.ManPerformanceVO">
+	select podt_code, 
+           podtName,  
+           manGoalqnt,  
+           manQnt, 
+           defQnt,
+           trunc( (defQnt/manQnt)*100,1) as defPercentage --제품별 불량율
+	from (select podt_code, 
+          prod_detail(podt_code) as podtName, 
+          sum(man_goalqnt) as manGoalqnt, 
+          sum( ( man_goalqnt - nvl(def_qnt,0) ) ) as manQnt, 
+          sum( nvl(def_qnt,0) ) defQnt    
+         from manufacture_process
+         group by podt_code,  prod_detail(podt_code))
+
+	order by podt_code
+</select>
+
+
+<!-- 월별 불량율 조회 -->
+<select id="selectMonthDef" resultType="egov.mes.manufacture.perfomance.dao.ManPerformanceVO">
+	select monthCode,
+           manGoalqnt,
+           manQnt, 
+           defQnt, 
+           trunc( (defQnt/manQnt)*100,1) as defPercentage --월별 불량율
+	from (select substr(man_date, 0,5) as monthCode,
+          sum(man_goalqnt) as manGoalqnt, 
+          sum( ( man_goalqnt - nvl(def_qnt,0) ) ) as manQnt, 
+          sum( nvl(def_qnt,0) ) defQnt
+         from manufacture_process
+         group by substr(man_date, 0,5))
+	order by monthCode
+</select>
+
+
 </mapper>

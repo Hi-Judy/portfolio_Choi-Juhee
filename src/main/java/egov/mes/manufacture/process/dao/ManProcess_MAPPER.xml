@@ -290,6 +290,7 @@
 	from manufacture_process 
 	where man_starttime is not null 
 	and MAN_ENDTIME is null
+	and com_code = #{comCode}
 	order by proc_Code
 	
 </select>
