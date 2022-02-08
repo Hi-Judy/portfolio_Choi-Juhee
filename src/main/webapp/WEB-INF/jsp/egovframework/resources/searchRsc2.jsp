@@ -105,12 +105,7 @@ div#OverallSize {
 </head>
 <body>
 
-<div id="gridRsc">
-	&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-	<input id=""><button>검색</button>
-	<br>
-	&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-</div>
+<div id="gridRsc"></div>
 <script type="text/javascript">
 
 	//자재 발주 페이지에서 사용

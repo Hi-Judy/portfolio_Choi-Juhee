@@ -5,15 +5,15 @@
 <head>
 <meta charset="UTF-8">
 <title>Insert title here</title>
-<link rel="stylesheet" href="https://uicdn.toast.com/tui-grid/latest/tui-grid.css" />
-<link rel="stylesheet" href="https://uicdn.toast.com/tui.date-picker/latest/tui-date-picker.css" />
-<link rel="stylesheet" href="//code.jquery.com/ui/1.13.0/themes/base/jquery-ui.css">
+<!-- <link rel="stylesheet" href="https://uicdn.toast.com/tui-grid/latest/tui-grid.css" /> -->
+<!-- <link rel="stylesheet" href="https://uicdn.toast.com/tui.date-picker/latest/tui-date-picker.css" /> -->
+<!-- <link rel="stylesheet" href="//code.jquery.com/ui/1.13.0/themes/base/jquery-ui.css"> -->
 
-<script src="https://uicdn.toast.com/tui.date-picker/latest/tui-date-picker.js"></script>
-<script src="https://uicdn.toast.com/tui-grid/latest/tui-grid.js"></script>
-<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
-<script src="https://code.jquery.com/jquery-3.6.0.js"></script>
-<script src="https://code.jquery.com/ui/1.13.0/jquery-ui.js"></script>
+<!-- <script src="https://uicdn.toast.com/tui.date-picker/latest/tui-date-picker.js"></script> -->
+<!-- <script src="https://uicdn.toast.com/tui-grid/latest/tui-grid.js"></script> -->
+<!-- <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script> -->
+<!-- <script src="https://code.jquery.com/jquery-3.6.0.js"></script> -->
+<!-- <script src="https://code.jquery.com/ui/1.13.0/jquery-ui.js"></script> -->
 </head>
 <body>
 	<h4 style="margin-left: 10px">재고 조정 관리</h4>
@@ -23,18 +23,43 @@
 			</span>
 			<span style="float: right; margin-top: 4.5px;">
 		<button id="btnSelectInventory" class="btn">조회</button> &nbsp;&nbsp;
+		<button id="btnAdd" class="btn">추가</button>	 &nbsp;&nbsp;
 		<button id="btnDel" class="btn">삭제</button> &nbsp;&nbsp;
 		<button id="btnSaveInventory" class="btn">저장</button> &nbsp;&nbsp;
 		</span>
 		</div>
 	</div>
+	<!-- 자재별 LOT 검색 모달   -->
 	<div id="dialog-form-inventory" title="자재 LOT 검색"></div>
-	<div id="OverallSize" style="margin-left: 10px;">
-			<br>
+	
+	<!-- 자재 검색 모달   -->
+	<div id="dialog-form-rsc" title="자재 검색"></div>
+
+</div>
+	<div id="OverallSize" style="margin-left: 10px;"><br>
 	<div id="grid" style="border-top: 3px solid #168; width: 1500px;"></div>
 	</div>
 
 <script type="text/javascript">
+
+	//모달창 설정(자재 조회)
+	let dialogRsc = $( "#dialog-form-rsc" ).dialog({
+			autoOpen: false,
+			modal: true,
+			heigth : 500,
+			width : 900,
+			buttons: {
+				"닫기" : function() {
+					dialogRsc.dialog("close") ;
+				}
+			},
+		});
+	
+	//모달창(자재조회)
+	function clickRsc(rscCode, rscName){
+			
+		dialog1.dialog("close");
+	};
 
 	//모달창(조회 클릭시 LOT별 입고)
 	let dialoginventory = $( "#dialog-form-inventory" ).dialog({
@@ -43,13 +68,6 @@
 			heigth : 500,
 			width : 900,
 		});
-	
-	$("#btnSelectInventory").on("click", function(){
-		dialoginventory.dialog("open");
-	$("#dialog-form-inventory").load("resourcesInventoryIn",
-			function(){console.log("로드됨")})
-	});
-	
 	
 	
 	//발주 insert 그리드 
@@ -120,6 +138,22 @@
 		  columns
 		});
 	
+	//그리드 클릭시 columnName = rscCode 
+	grid.on("click", function(ev){
+		if(ev["columnName"]=="rscCode"){
+			rscRowKey=ev["rowKey"];
+				dialogRsc.dialog("open");
+		
+	$("#dialog-form-rsc").load("recList",
+			function(){console.log("로드됨")})}
+		
+	});
+	
+	
+	
+	btnAdd.addEventListener("click", function(){
+		grid.appendRow({});
+	})
 	
 	btnDel.addEventListener("click", function(){
 		grid.removeCheckedRows(true);

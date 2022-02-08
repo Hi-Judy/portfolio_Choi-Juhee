@@ -70,7 +70,6 @@ public class ManProcessServiceImpl implements ManProcessService {
 		
 		List<ManProcessVO> pList = new ArrayList<>(); 
 		pList = mapper.selectProcTable(); 
-		
 		for(ManProcessVO processVO : pList) {
 			if(!processVO.getProcCode().equals("PROC011")) { //마지막 공정이 아니면
 				
