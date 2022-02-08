@@ -26,8 +26,8 @@ public class ResourcesCheckServiceImpl implements ResourcesCheckService{
 	
 	@Override
 	public void modifyCheck(ModifyVO<ResourcesCheckVO> mvo) {
-		if(mvo.getUpdatedRows() != null) {
-			for(ResourcesCheckVO vo :mvo.getUpdatedRows()) {
+		if(mvo.getCreatedRows() != null) {
+			for(ResourcesCheckVO vo :mvo.getCreatedRows()) {
 					mapper.insertResourcesCheck(vo);
 					mapper.updateResourcesCheck(vo);
 				if(!vo.getRscDefCnt().equals("0")) {

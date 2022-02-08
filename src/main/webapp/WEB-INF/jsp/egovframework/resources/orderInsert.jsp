@@ -5,15 +5,15 @@
 <head>
 <meta charset="UTF-8">
 <title>Insert title here</title>
-<link rel="stylesheet" href="https://uicdn.toast.com/tui-grid/latest/tui-grid.css" />
-<link rel="stylesheet" href="https://uicdn.toast.com/tui.date-picker/latest/tui-date-picker.css" />
-<link rel="stylesheet" href="//code.jquery.com/ui/1.13.0/themes/base/jquery-ui.css">
+<!-- <link rel="stylesheet" href="https://uicdn.toast.com/tui-grid/latest/tui-grid.css" /> -->
+<!-- <link rel="stylesheet" href="https://uicdn.toast.com/tui.date-picker/latest/tui-date-picker.css" /> -->
+<!-- <link rel="stylesheet" href="//code.jquery.com/ui/1.13.0/themes/base/jquery-ui.css"> -->
 
-<script src="https://uicdn.toast.com/tui.date-picker/latest/tui-date-picker.js"></script>
-<script src="https://uicdn.toast.com/tui-grid/latest/tui-grid.js"></script>
-<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
-<script src="https://code.jquery.com/jquery-3.6.0.js"></script>
-<script src="https://code.jquery.com/ui/1.13.0/jquery-ui.js"></script>
+<!-- <script src="https://uicdn.toast.com/tui.date-picker/latest/tui-date-picker.js"></script> -->
+<!-- <script src="https://uicdn.toast.com/tui-grid/latest/tui-grid.js"></script> -->
+<!-- <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script> -->
+<!-- <script src="https://code.jquery.com/jquery-3.6.0.js"></script> -->
+<!-- <script src="https://code.jquery.com/ui/1.13.0/jquery-ui.js"></script> -->
 </head>
 <body>
 	<h4 style="margin-left: 10px">자재 발주 관리</h4>
@@ -30,13 +30,9 @@
 			</span>
 		</div>
 	</div>
-	
 	<div id="dialog-form-rsc" title="자재 검색"></div>
 	<div id="dialog-form-order" title="미입고 검색"></div>
-	
-	
-	<div id="OverallSize" style="margin-left: 10px;">
-			<br>
+	<div id="OverallSize" style="margin-left: 10px;"><br>
 	<div id="grid" style="border-top: 3px solid #168; width: 1500px;"></div>
 	</div>
 
@@ -68,17 +64,18 @@
 					//여기서는 getCheckedRows에 있는 값을 
 					for(i=0; i <gridOrder.getCheckedRows().length; i++ ){
 						//중복체크하고 값이 없는 경우에만 appendRow 해주는 거 
-						if(grid.findRows({ordrNo : gridOrder.getValue(i,'ordrNo')}).length == 0) {
-							grid.appendRow({'ordrNo':gridOrder.getValue(i,'ordrNo'),
-											'rscCode':gridOrder.getValue(i,'rscCode'),
-											'rscName':gridOrder.getValue(i,'rscName'),
-											'rscUnit':gridOrder.getValue(i,'rscUnit'),
-											'rscCnt':gridOrder.getValue(i,'rscCnt'),
-											'rscPrc':gridOrder.getValue(i,'rscPrc'),
-											'rscTotal':gridOrder.getValue(i,'rscTotal'),
-											'sucName':gridOrder.getValue(i,'sucName'),
-											'istReqDate':gridOrder.getValue(i,'istReqDate')
-							});
+						if(grid.findRows({ordrNo : gridOrder.getCheckedRows()[i].ordrNo}).length == 0) {
+// 							grid.appendRow({'ordrNo':gridOrder.getCheckedRows()[i].ordrNo,
+// 											'rscCode':gridOrder.getCheckedRows()[i].rscCode,
+// 											'rscName':gridOrder.getCheckedRows()[i].rscName,
+// 											'rscUnit':gridOrder.getCheckedRows()[i].rscUnit,
+// 											'rscCnt':gridOrder.getCheckedRows()[i].rscCnt,
+// 											'rscPrc':gridOrder.getCheckedRows()[i].rscPrc,
+// 											'rscTotal':gridOrder.getCheckedRows()[i].rscTotal,
+// 											'sucName':gridOrder.getCheckedRows()[i].sucName,
+// 											'istReqDate':gridOrder.getCheckedRows()[i].istReqDate
+// 							});
+							grid.appendRow(gridOrder.getCheckedRows()[i]);
 						}
 					}
 					dialog4.dialog("close");
@@ -97,10 +94,7 @@
 					console.log("로드됨")
 			})
 		});
-	
 
-
-	
 	//발주 insert 그리드 
 	var Grid = tui.Grid;
 	Grid.applyTheme('default');
@@ -126,24 +120,16 @@
 			  {
 				header: '발주량',
 				name: 'rscCnt',
-				editor: 'text',
-				 formatter(value) {
-		            return value.value.toString().replace(/\B(?<!\.\d*)(?=(\d{3})+(?!\d))/g, ",");
-		        }
+				editor: 'text'
 			   },
 			   {
 				header: '단가',
 				name: 'rscPrc',
-				 formatter(value) {
-		            return value.value.toString().replace(/\B(?<!\.\d*)(?=(\d{3})+(?!\d))/g, ",");
-		        }
 				},
 			   {
 				 header: '합계',
 				 name: 'rscTotal',
-				 formatter(value) {
-		             return value.value.toString().replace(/\B(?<!\.\d*)(?=(\d{3})+(?!\d))/g, ",");
-		         }
+				
 				},
 				{
 				  header: '업체',
@@ -185,24 +171,22 @@
 	
 	//그리드 클릭시 columnName = rscCode 
 	grid.on("click", function(ev){
-		if(ev["columnName"]=="rscCode" && grid.getValue(ev["rowKey"], ev["columnName"])!=null){
+		if(ev["columnName"]=="rscCode"){
 			rscRowKey=ev["rowKey"];
-		dialog3.dialog("open");
+				dialog3.dialog("open");
 		
 	$("#dialog-form-rsc").load("recList",
 			function(){console.log("로드됨")})}
 		
 	});
-	
-	
 
 	btnAdd.addEventListener("click", function(){
 		grid.appendRow({});
 	})
 
 	btnDel.addEventListener("click", function(){
+		grid.request('modifyData',{checkedOnly:true,modifiedOnly:false});
 		grid.removeCheckedRows(true);
-		grid.request('modifyData');
 	}) 
 	
 	

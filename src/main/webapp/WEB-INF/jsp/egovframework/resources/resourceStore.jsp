@@ -95,7 +95,6 @@
 		//저장버튼 클릭시 modify
 		saveResourcesStore.addEventListener("click", function(){
 			grid.request('modifyData'); 
-			console.log("자재입고 저장완료~~~~")
 	}) 
 		
 		//저장시 데이터 다시 읽어서 수정한 품목은 사라지게
