@@ -73,15 +73,19 @@ public class ProcessControlServiceImpl implements ProcessControlService {
 	//process 테이블데이터 수정
 	@Override
 	public void ProcChangeData(List<ProcessControlVO> ProcVO) {
-		for(ProcessControlVO procVO : ProcVO)
-			mapper.ProcChangeData(procVO);
+			for(ProcessControlVO procVO : ProcVO) {
+				mapper.ProcChangeData(procVO) ;
+				System.out.println("process 테이블 수정");
+			}
 		}
 	
 	//common_code 테이블 데이터 수정
 	@Override
 	public void CommonChangeData(List<ProcessControlVO> ProcVO) {
-		for(ProcessControlVO procVO : ProcVO)
-			mapper.CommonChangeData(procVO);
+			for(ProcessControlVO procVO : ProcVO) {
+				mapper.CommonChangeData(procVO);
+				System.out.println("common_code 테이블 수정");
+			}
 		}
 
 	
