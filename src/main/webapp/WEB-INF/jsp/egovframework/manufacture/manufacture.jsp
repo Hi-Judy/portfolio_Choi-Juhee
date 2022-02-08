@@ -8,6 +8,11 @@
 <link rel="stylesheet" href="https://uicdn.toast.com/tui-grid/latest/tui-grid.css" />
 <link rel="stylesheet" href="//code.jquery.com/ui/1.13.0/themes/base/jquery-ui.css">
 
+<!--  --------------- 달력 --------------- -->
+<script src="https://cdn.jsdelivr.net/combine/npm/fullcalendar@5.10.1/main.min.js,npm/fullcalendar@5.10.1,npm/fullcalendar@5.10.1/locales-all.min.js,npm/fullcalendar@5.10.1/locales-all.min.js"></script>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/combine/npm/fullcalendar@5.10.1/main.min.css,npm/fullcalendar@5.10.1/main.min.css">
+<!--  --------------- 달력 --------------- -->
+
 <script src="https://uicdn.toast.com/tui.date-picker/latest/tui-date-picker.js"></script>
 <script src="https://uicdn.toast.com/tui-grid/latest/tui-grid.js"></script>
 <script src="https://code.jquery.com/jquery-3.6.0.js"> </script>
@@ -19,7 +24,6 @@
 		document.getElementsByClassName('tui-datepicker')[0].style="bottom:100px";
 		document.getElementsByClassName('tui-datepicker')[0].style = "position: relative";
 		document.getElementsByClassName('tui-datepicker')[0].style = " z-index:100000"; 
-
 }
 </style>
 </head>
@@ -64,6 +68,7 @@
 		<button type="button" id="btnInit" class="btn" style="float : right; margin : 5px;">초기화</button>
 		<button type="button" id="btnDeletePlan" class="btn" style="float : right; margin : 5px;">삭제</button>
 		<button type="button" id="btnSavePlan" class="btn" style="float : right; margin : 5px;">저장</button>
+		<button type="button" id="btnCal" class="btn" style="float : right; margin : 5px;">달력테스트</button>
 	</div>
 
 	<!-- 작성된 생산계획 조회 모달 -->
@@ -81,9 +86,63 @@
 		<h5 style="color : #007b88;">자재조회</h5>
 		<div id="gridResource"></div>
 	</div>
+	
+	<!--  --------------- 달력 --------------- -->
+	<div id="cal">
+		<div id='calendar'></div>
+	</div>
+	<!--  --------------- 달력 --------------- -->
+	
 	<script> 
 	
 		var Grid = tui.Grid; //그리드 객체 생성
+		
+		// --------------- 달력 ---------------		
+		let dialogCal = $("#cal").dialog({
+			autoOpen : false ,
+			modal : true ,
+			height : 910,
+			width : 1000,
+			buttons : {
+				"닫기" : function() {
+					dialogCal.dialog("close") ;
+				} 
+			}
+		})
+		
+		$("#btnCal").on('click' , function() {
+			dialogCal.dialog("open") ;
+			var calendarEl = document.getElementById('calendar');
+	        var calendar = new FullCalendar.Calendar(calendarEl, {
+	          initialView: 'dayGridMonth'
+	        });
+	        calendar.render();
+	        $.ajax({
+      		  url : 'selectCal' ,
+      		  dataType : 'json' ,
+      		  async : false ,
+      		  success : function(datas) {
+      			  let list = datas ; 
+      			  
+      			  let calendarEl = document.getElementById('calendar') ;
+      			  
+      			  let events = list.map(function(item) {
+      				  return {
+      					  title : item.comCode ,
+      					  start : item.manStartdate ,
+      					  end : item.ordDuedate
+      				  }
+      			  }) ;	
+      			  
+   				calendar.render() ;
+      		  } , 
+      		  error : function(reject) {
+      			  console.log(reject) ;
+      		  }
+      		  
+      	  })
+		})
+		// --------------- 달력 ---------------
 		
 		Grid.applyTheme('striped', { //그리드 객체에 전체 옵션 주기
 				  cell: {

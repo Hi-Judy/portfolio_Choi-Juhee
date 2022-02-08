@@ -36,5 +36,7 @@ public class ManufacturePlanVO {
 	String facOutput; //설비당 생산량
 	String facRuntime; //설비당 소요시간
 	String outputDay; //일 생산량
-	
+
+	String comCode ; //달력용
+	String manStartdate ; //달력용
 }

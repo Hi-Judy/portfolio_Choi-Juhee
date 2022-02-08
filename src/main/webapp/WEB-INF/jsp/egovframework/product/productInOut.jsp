@@ -73,6 +73,7 @@
 		&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;제품명 : 제품코드를 선택 시 자동으로 입력됩니다.<br>
 		&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;출고량 : 선택한 Lot의 재고량보다 큰 값을 입력하면 저장할 수 없습니다.<br>
 		&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;완제품Lot : 해당 Lot에 재고가 남아있는 번호만 선택가능합니다.<br>
+		&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;조회 버튼을 먼저 눌러야 선택 가능한 Lot번호가 조회됩니다.<br>
 		&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;모든 값을 다 입력해야 저장이 가능합니다.<br><br>
 		초기화 : 입력한 조회 조건을 초기화합니다.<br><br>
 		Lot 번호 : 부여된 Lot번호를 클릭하면 상세정보를 조회합니다.<br><br>		

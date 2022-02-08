@@ -1,4 +1,4 @@
-<%@ page language="java" contentType="text/html; charset=UTF-8"
+	<%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
 <!DOCTYPE html>
 <html>
@@ -32,7 +32,7 @@
 	<div id="title" style="margin-left : 10px;"><h3 style="color : #054148; font-weight : bold">주문 관리</h3></div>
 	<div id="top" style="height : 160px; padding : 10px;">
 		<span style="margin : 20px;">진행상태</span>
-		<select id="selectStatus" style="margin : 20px;">
+		<select id="selectStatus" style="margin : 19px;">
 			<option value="" selected>선택</option>
 			<option value="미진행">미진행</option>
 			<option value="진행중">진행중</option>
