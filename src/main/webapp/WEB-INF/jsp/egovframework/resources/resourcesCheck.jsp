@@ -5,15 +5,15 @@
 <head>
 <meta charset="UTF-8">
 <title>resourcesCheck</title>
-<link rel="stylesheet" href="https://uicdn.toast.com/tui-grid/latest/tui-grid.css" />
-<link rel="stylesheet" href="https://uicdn.toast.com/tui.date-picker/latest/tui-date-picker.css" />
-<link rel="stylesheet" href="//code.jquery.com/ui/1.13.0/themes/base/jquery-ui.css">
+<!-- <link rel="stylesheet" href="https://uicdn.toast.com/tui-grid/latest/tui-grid.css" /> -->
+<!-- <link rel="stylesheet" href="https://uicdn.toast.com/tui.date-picker/latest/tui-date-picker.css" /> -->
+<!-- <link rel="stylesheet" href="//code.jquery.com/ui/1.13.0/themes/base/jquery-ui.css"> -->
 
-<script src="https://uicdn.toast.com/tui.date-picker/latest/tui-date-picker.js"></script>
-<script src="https://uicdn.toast.com/tui-grid/latest/tui-grid.js"></script>
-<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
-<script src="https://code.jquery.com/jquery-3.6.0.js"></script>
-<script src="https://code.jquery.com/ui/1.13.0/jquery-ui.js"></script>
+<!-- <script src="https://uicdn.toast.com/tui.date-picker/latest/tui-date-picker.js"></script> -->
+<!-- <script src="https://uicdn.toast.com/tui-grid/latest/tui-grid.js"></script> -->
+<!-- <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script> -->
+<!-- <script src="https://code.jquery.com/jquery-3.6.0.js"></script> -->
+<!-- <script src="https://code.jquery.com/ui/1.13.0/jquery-ui.js"></script> -->
 </head>
 <body>
 	<h4 style="margin-left: 10px">자재입고검사관리</h4>
@@ -39,7 +39,6 @@
 <script type="text/javascript">
 	let defRowKey;
 	
-	var poNoList=[];
 	//모달창 설정(조회 클릭시 미입고 품목 조회)
 	let dialog5 = $( "#dialog-form-check" ).dialog({
 			autoOpen: false,
@@ -48,24 +47,23 @@
 			width : 900,
 			buttons: {
 				"확인" : function (){
-						//여기서는 getCheckedRows에 있는 값을 
-						for(i=0; i <gridOrder.getCheckedRows().length; i++ ){
-							//중복체크하고 값이 없는 경우에만 appendRow 해주는 거 
-							if(grid.findRows({ordrNo : gridOrder.getValue(i,'ordrNo')}).length == 0) {
-								grid.appendRow({'ordeDate':gridOrder.getValue(i,'ordeDate'),
-												'ordrNo':gridOrder.getValue(i,'ordrNo'),
-												'rscCode':gridOrder.getValue(i,'rscCode'),
-												'rscName':gridOrder.getValue(i,'rscName'),
-												'rscUnit':gridOrder.getValue(i,'rscUnit'),
-												'rscCnt':gridOrder.getValue(i,'rscCnt'),
-												'rscPrc':gridOrder.getValue(i,'rscPrc'),
-												'sucName':gridOrder.getValue(i,'sucName'),
-												'istReqDate':gridOrder.getValue(i,'istReqDate')
-								});
-								
-							}
+					//여기서는 getCheckedRows에 있는 값을 
+					for(i=0; i <gridOrder.getCheckedRows().length; i++ ){
+						//중복체크하고 값이 없는 경우에만 appendRow 해주는 거 
+						if(grid.findRows({ordrNo : gridOrder.getCheckedRows()[i].ordrNo}).length == 0) {
+							grid.appendRow({'ordeDate':gridOrder.getCheckedRows()[i].ordeDate,
+											'ordrNo':gridOrder.getCheckedRows()[i].ordrNo,
+											'rscCode':gridOrder.getCheckedRows()[i].rscCode,
+											'rscName':gridOrder.getCheckedRows()[i].rscName,
+											'rscUnit':gridOrder.getCheckedRows()[i].rscUnit,
+											'rscCnt':gridOrder.getCheckedRows()[i].rscCnt,
+											'rscPrc':gridOrder.getCheckedRows()[i].rscPrc,
+											'rscTotal':gridOrder.getCheckedRows()[i].rscTotal,
+											'sucName':gridOrder.getCheckedRows()[i].sucName,
+											'istReqDate':gridOrder.getCheckedRows()[i].istReqDate
+							});
 						}
-
+					}
 					dialog5.dialog("close");
 				},
 				"닫기" : function() {
@@ -144,7 +142,7 @@
 	let dataSource = {
 		  api: {
 		    readData: { 
-		    	url: '', 
+		    	url: 'resourcesOrder', 
 		    	method: 'GET'
 		    	},
 		    	modifyData: { url: 'resourcesCheckModify', method: 'POST' }
@@ -160,7 +158,7 @@
 		  columns
 		});
 	
-	grid.readData();
+	//grid.readData();
 	
 	//모달창(불량코드 조회)
 	let dialogRtn = $( "#dialog-form-def" ).dialog({
@@ -198,12 +196,9 @@
 	}) 
 
 	//저장시 데이터 다시 읽어서 수정한 품목(입고 완료한) 사라지게
-// 	grid.on("response",function(ev){
-// 		let a =JSON.parse(ev.xhr.response)
-// 		 if(a.mod=="upd"){
-// 			grid.readData();
-// 		} 
-// 	})
+		grid.on("response",function(){
+		grid.clear();
+	})
 	
 	delRscCheck.addEventListener("click", function(){
 		grid.removeCheckedRows(true);

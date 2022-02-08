@@ -40,7 +40,7 @@ public class ResourcesOrderServiceImpl implements ResourcesOrderService {
 	public void modifyOrder(ModifyVO<ResourcesOrderVO> mvo) {
 		if (mvo.getCreatedRows() != null) {
 			for (ResourcesOrderVO vo : mvo.getCreatedRows()) {
-				if(!vo.getOrdrNo().equals(null)) {
+				if(vo.getOrdrNo()!=null) {
 					mapper.updateResourcesOrder(vo);
 				}else {
 					mapper.insertResourcesOrder(vo);
@@ -55,6 +55,11 @@ public class ResourcesOrderServiceImpl implements ResourcesOrderService {
 		}
 		if (mvo.getDeletedRows() != null) {
 			for (ResourcesOrderVO vo : mvo.getDeletedRows()) {
+				mapper.deleteResourcesOrder(vo);
+			}
+		}
+		if (mvo.getRows() != null) {
+			for (ResourcesOrderVO vo : mvo.getRows()) {
 				mapper.deleteResourcesOrder(vo);
 			}
 		}

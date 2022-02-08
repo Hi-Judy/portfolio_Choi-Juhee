@@ -36,8 +36,8 @@
 			<if test="ordrNo !=null and ordrNo != '' ">
 				and O.ORDR_NO = #{ordrNo}
 			</if>
-				ORDER BY O.ORDR_NO
 		</where>
+				ORDER BY O.ORDR_NO
 	</select>
 	
 	<!-- 자재 발주 페이지 모달창에서 미입고 발주 리스트 select -> 수정, 삭제 -->
