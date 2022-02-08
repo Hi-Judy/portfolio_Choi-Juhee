@@ -260,7 +260,7 @@ function fnShowLogin(stat) {
     overflow: hidden;
     width: 502px;
     height: 494px;
-    background: url(/yedamfinal2/images/egovframework/com/Logo/A05.jpg)no-repeat 0 0;
+    background: url(/images/egovframework/com/Logo/A05.jpg)no-repeat 0 0;
 }
 
 .loginbox {

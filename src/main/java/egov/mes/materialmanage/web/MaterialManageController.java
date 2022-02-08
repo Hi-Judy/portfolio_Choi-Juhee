@@ -19,7 +19,8 @@ public class MaterialManageController {
 	@Autowired MaterialManageService service;
 	
 	//페이지 이동
-	@RequestMapping("MaterialManagement")
+	@RequestMapping("MeterialManagement")
+
 	public String PageView() {
 		return "view/MaterialManageInfo.tiles";
 	}

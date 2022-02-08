@@ -5,5 +5,5 @@ import java.util.List;
 import egov.mes.main.dao.SidebarMenuVO;
 
 public interface SidebarService {
-	List<SidebarMenuVO> selectsideList();
+	List<SidebarMenuVO> selectsideList(String uid);
 }

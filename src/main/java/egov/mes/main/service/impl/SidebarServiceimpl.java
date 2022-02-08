@@ -16,8 +16,8 @@ public class SidebarServiceimpl implements SidebarService {
 	private SidebarMenuMapper mapper;
 	
 	@Override
-	public List<SidebarMenuVO> selectsideList() {
-		return mapper.selectsideList();
+	public List<SidebarMenuVO> selectsideList(String uid) {
+		return mapper.selectsideList(uid);
 	}
 
 }
