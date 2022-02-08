@@ -116,9 +116,13 @@
       		  dataType : 'json' ,
       		  async : false ,
       		  success : function(datas) {
-      			  let list = datas ; 
+      			  let list = [] ;
+      			  list = datas.calList ; 
       			  
       			  let calendarEl = document.getElementById('calendar') ;
+      			  
+      			  console.log(list) ;
+      			  console.log(typeof list) ;
       			  
       			  let events = list.map(function(item) {
       				  return {
@@ -127,6 +131,10 @@
       					  end : item.ordDuedate
       				  }
       			  }) ;	
+      			  
+      			  let calendar = new FullCalendar.Calendar(calendarEl, {
+      				  events : events
+      			  })
       			  
    				calendar.render() ;
       		  } , 
