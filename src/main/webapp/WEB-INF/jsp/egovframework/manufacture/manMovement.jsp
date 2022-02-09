@@ -386,6 +386,10 @@
 	         bodyHeight: 290
 			
 		})
+		//------------ 도움말 버튼 이벤트 ---------------
+	 	 helpBtn.addEventListener('mouseover' , () => {
+	 	 	helpModal.dialog("open") ;
+	 	 })
 		
 		
 	tui.Grid.applyTheme('default', themesOptions);			
