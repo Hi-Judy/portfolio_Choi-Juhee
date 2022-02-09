@@ -92,7 +92,6 @@ div.Gridright {
 					style="border: none; margin-left: 5px; background-color: #ffffff; width: 90px"
 					disabled="true">
 			</div>
-			<button id="FacSave" type="button" class="btn" style="float: right;">설비저장</button>
 			<br>
 			<br>
 
@@ -104,15 +103,13 @@ div.Gridright {
 				선택된 공정코드 : <input id="ProcSelected2" readonly
 					style="border: none; margin-left: 5px; background-color: #ffffff; width: 90px"
 					disabled="true">
-				<button id="DataSeve" type="button" class="btn"
-					style="float: right;">변경저장</button>
 			</div>
 			<br>
 			<br>
 
 			<div class="Gridleft">
 				<div>
-					<span> 가동중인 설비 </span>
+					<span> 현 공정에서 가동중인 설비 </span>
 					<button id="FacDataDelete" type="button" class="btn"
 						style="float: right; margin-bottom: 5px;">삭제</button>
 				</div>
@@ -172,7 +169,7 @@ toastr.options = {
         "tapToDismiss": false
       }
 
-//tui.Grid.setLanguage('ko');
+      tui.Grid.setLanguage('ko');
 	  //-------- 도움말 모달 ----------
 	  var helpModal = $( "#helpModal" ).dialog({
 	     autoOpen : false ,
@@ -200,7 +197,9 @@ toastr.options = {
 	     modal : true ,
 	     width:1000, //너비
 	     height:700 ,//높이
-	     buttons : {"취소" : function() {
+	     buttons : {"저장" : () => {
+	    	 	FacSave();
+			},"취소" : function() {
 	     		ModalDal.dialog( "close" ) ;
 			}
 	    }
@@ -212,9 +211,12 @@ toastr.options = {
 	     modal : true ,
 	     width:1000, //너비
 	     height:705 ,//높이
-	     buttons : {"취소" : function() {
-	    	 ChangeModal.dialog( "close" ) ;
+	     buttons : {"저장" : () => {
+	    	 	DataSeve();
+			},"취소" :() => {
+	    	 	ChangeModal.dialog( "close" ) ;
 			}
+			
 	    }
 	  });
       
@@ -285,7 +287,14 @@ const Grid = new tui.Grid({
                  }
                }
         },
-        { header : '기준생산량(개)'		, name : 'facOutput' 	, align : 'center'	},
+        { header : '기준생산량(개)'		, name : 'facOutput' 	, align : 'center' 	, formatter(value) { 
+	        	if(value.value != null && value.value != '' && value.value != "null"){
+	        		return value.value.toString().replace(/\B(?<!\.\d*)(?=(\d{3})+(?!\d))/g, ",") ;
+	        	}else{
+	        		return value.value ;
+	        	}
+        	} 
+        },
         { header : '기준시간'			, name : 'facRuntime' 	, align : 'center'	},
 		{ header : '공정관리자ID'		, name : 'procEmpId' 	, align : 'center'	, editor : 'text' },
         { header : '설비등록여부'		, name : 'FacCheck' 	, align : 'center'	, editor : 'text' }
@@ -446,7 +455,7 @@ FacilityCheck(ProcAllData);
         		 location.reload();
         		 },1500 );
 		}else{
-			toastr["warning"]("변경된 정보가 없습니다.");
+			alert("변경된 정보가 없습니다");
 		}
 
 	});
@@ -632,7 +641,7 @@ const FacGrid = new tui.Grid({
 	   columns : [
 	      { header : '설비번호'		, name : 'facNo'   		, align : 'center' },
 	      { header : '설비명'			, name : 'facName'		, align : 'center' },
-	      { header : '기준생산량(개)'	, name : 'facOutput'   	, align : 'center' },
+	      { header : '기준생산량(개)'	, name : 'facOutput'   	, align : 'center' 	, formatter(value) { return value.value.toString().replace(/\B(?<!\.\d*)(?=(\d{3})+(?!\d))/g, ",") ;} },
 	      { header : '기준시간'		, name : 'facRuntime'   , align : 'center' }
 	   ],
 	   rowHeaders: ['checkbox'],
@@ -650,12 +659,13 @@ const FacGrid = new tui.Grid({
 		delete CheckDatas[ev.rowKey] 
 	})
 	
-	FacSave.addEventListener('click' , (ev) => {
+	
+	//------미등록 모달 저장버튼 이벤트 --------
+	function FacSave() {
+		
 		var FacArray = new Array();
 		for(let i = 0 ; i<CheckDatas.length ; i++){
-			if(CheckDatas[i] == undefined){
-				delete CheckDatas[ev.rowKey] 
-			}else{
+			if(CheckDatas[i] != undefined){
 				var FacProcData = {
 						procCode : document.getElementById("ProcSelected").value ,
 						facNo : CheckDatas[i]
@@ -674,13 +684,13 @@ const FacGrid = new tui.Grid({
 	            	 setTimeout(() => {
 	            		 ModalDal.dialog( "close" ) ;
 	            		 location.reload();
-	            		 },1500 );		
+	            		 },1000 );		
 	             },
 	             error: (err) => {
 	                alert("설비등록 ajax에러 " + err);
 	             }
 	          });
-		})
+		};
 		
 		
 		// <설비변경용> 등록된 설비 그리드 헤드
@@ -690,7 +700,7 @@ const FacGrid = new tui.Grid({
 	   columns : [
 	      { header : '설비번호'		, name : 'facNo'   		, align : 'center' },
 	      { header : '설비명'			, name : 'facName'		, align : 'center' },
-	      { header : '기준생산량(개)'	, name : 'facOutput'   	, align : 'center' },
+	      { header : '기준생산량(개)'	, name : 'facOutput'   	, align : 'center' 	, formatter(value) { return value.value.toString().replace(/\B(?<!\.\d*)(?=(\d{3})+(?!\d))/g, ",") ;} },
 	      { header : '기준시간'		, name : 'facRuntime'   , align : 'center' }
 	   ],
 	   rowHeaders: ['checkbox'],
@@ -784,8 +794,10 @@ const FacGrid = new tui.Grid({
 	});
 	
 	
+	
 	//---------- 저장버튼 눌렀을떄 데이터추가 -> 삭제 순으로 처리 ---------------
-	DataSeve.addEventListener('click' , (ev) =>{
+	function DataSeve() {
+	
 		var Check ;
 		var FacGrid3ModiRow = 	FacGrid3.getModifiedRows()  ;
 		var FacInput 		= 	FacGrid3ModiRow.createdRows ;
@@ -806,7 +818,7 @@ const FacGrid = new tui.Grid({
 		}else{
 			toastr["warning"]("저장할 정보가 없습니다"); 
 		}
-	});
+	};
 	
 	//데이터 추가ajax 처리
 	function FacInputFn(FacInput) {

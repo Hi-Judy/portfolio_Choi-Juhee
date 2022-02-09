@@ -102,6 +102,7 @@ themesOptions = {
             }
 };
 
+tui.Grid.setLanguage('ko');
 tui.Grid.applyTheme('default', themesOptions);
 
 
@@ -120,19 +121,7 @@ var helpModal = $( "#helpModal" ).dialog({
 });
   	
    
-    var Grid = tui.Grid; //그리드 선언
-    
-    /* Grid.applyTheme('clean' ,{
-    	cell : {
-    		header : {
-    			background: '#f0f6f9'
-    		}
-    	},row: { 
-    		    hover: { 
-    		      background: '#dfeff7' 
-    		    }
-    		  }
-    }); */
+    var Grid = tui.Grid;
     
 	//공통그룹tr 영역
     const columns = [
@@ -151,7 +140,8 @@ var helpModal = $( "#helpModal" ).dialog({
 		}
 	]
 	
-  //공통코드 -> 코드구분상세보기 tr 영역
+	
+  	//공통코드 -> 코드구분상세보기 tr 영역
     const columns2 = [
 		{
 			header: '코드ID',
@@ -316,7 +306,7 @@ var helpModal = $( "#helpModal" ).dialog({
     			if ( CRUD != null && CRUD != ''){ //crud
     			
     				//success: 성공(초록) , info:정보(하늘색) , warning:경고(주황) , error:에러(빨강)
-    				toastr["warning"]("변경할수없는 코드 입니다.", "경고합니다.")
+    				alert('변경할수없는 코드 입니다.')
     				
     				//현재 펑션을 멈춤
                     ev.stop();
@@ -344,7 +334,7 @@ var helpModal = $( "#helpModal" ).dialog({
 						{
 						    if(grid2.getValue(ev.rowKey ,'code' ) == rst.code)
 							{
-								toastr["warning"]("이미 입력한 코드입니다.", rst.code);
+						    	alert('이미 등록된 코드입니다')
 								chkCodeId = false;
 								grid2.setValue(ev.rowKey,'code','' );
 								return false;
@@ -383,7 +373,7 @@ var helpModal = $( "#helpModal" ).dialog({
     		if(dataInput.length > 0) { //입력된값이 있으면 length 가 +1 될태니깐 무조건 체크가를 할수있다
     			dataInput.forEach(function (rst) { //입력된 목록을 forEach 로 하나하나 rst 에 넣어준다
     				if( rst.code == null || rst.code == '' ||rst.codeName == null || rst.codeName == ''){ //code 가 빈값일 경우
-						toastr["error"]("필수입력코드 미입력");  //토스터 알림 호출
+    					alert("필수입력코드 가 입력되지 않았습니다");  //토스터 알림 호출
 						return false;
 					}
     				else
@@ -471,8 +461,6 @@ var helpModal = $( "#helpModal" ).dialog({
     	}
         else
         	{
-        	console.log("저장예외완료")
- //       	toastr["info"]("저장할 정보가 없습니다");  //error 에러랑 같이꺼서 일단 주석처리
         	return false;
         	}
 	    
