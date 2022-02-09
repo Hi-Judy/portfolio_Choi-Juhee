@@ -61,6 +61,7 @@
 	</div>
 	
 <script type="text/javascript">
+tui.Grid.setLanguage('ko');
 //옵션세팅
 themesOptions = { 
             selection: {    background: '#007b88',     border: '#004082'  },//  <- 클릭한 셀 색상변경 border(테두리색) , background (백그라운드)
@@ -159,11 +160,25 @@ var helpModal = $( "#helpModal" ).dialog({
 			   },
 			   {
 				 header: '입고량',
-				 name: 'istCnt'
+				 name: 'istCnt',
+					formatter(value) {
+						if(value.value != null && value.value != '' ){
+							  return value.value.toString().replace(/\B(?<!\.\d*)(?=(\d{3})+(?!\d))/g, ",");
+						}else{
+							return value.value ;
+						}
+		            }
 				},
 				{
 				  header: '출고량',
-				  name: 'ostCnt'
+				  name: 'ostCnt',
+					formatter(value) {
+						if(value.value != null && value.value != '' ){
+							  return value.value.toString().replace(/\B(?<!\.\d*)(?=(\d{3})+(?!\d))/g, ",");
+						}else{
+							return value.value ;
+						}
+		            }
 				},
 				{
 				  header: '자재LOT',
@@ -214,6 +229,7 @@ var helpModal = $( "#helpModal" ).dialog({
 				      },
 			    	}
 			  },
+			  bodyHeight: 450
 		});
 	
 	grid.on('click' , (ev) => {

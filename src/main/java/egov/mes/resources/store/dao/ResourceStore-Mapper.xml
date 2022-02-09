@@ -98,7 +98,7 @@
 		ON S.RSC_CODE = R.RSC_CODE
 		WHERE STORE_FLAG = '출고' 			
 			<if test="rscCode != null and rscCode != '' ">
-				AND O.RSC_CODE = #{rscCode} 
+				AND S.RSC_CODE = #{rscCode} 
 			</if>
 			<if test="sucCode != null and sucCode != '' ">
 				AND R.SUPLCOM_CODE = #{sucCode} 
@@ -114,11 +114,14 @@
 	<!-- 자재 입고 조회(모달창) -->
 	<select id="searchResourcesStoreIn" resultType="egov.mes.resources.store.dao.ResourcesStoreVO">
 		SELECT  RSC_CODE,
-        FN_GET_CODE_NAME(RSC_CODE) AS RSC_NAME,
-        RSC_LOT,
-        FN_GET_RSC_UNIT(RSC_CODE) AS RSC_UNIT,
-        IST_CNT
+		        FN_GET_CODE_NAME(RSC_CODE) AS RSC_NAME,
+		        RSC_LOT,
+		        FN_GET_RSC_UNIT(RSC_CODE) AS RSC_UNIT,
+		        IST_CNT,
+		        OST_CNT
 		FROM RESOURCE_STORE
+		WHERE RSC_CODE = #{rscCode}
+		ORDER BY RSC_CODE, RSC_LOT
 	</select>
 	
 	<!-- 자재 출고 조회(모달창) -->

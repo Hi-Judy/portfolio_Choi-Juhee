@@ -37,6 +37,7 @@
 	</div>
 
 	<script type="text/javascript">
+	tui.Grid.setLanguage('ko');
 	let rscRowKey;
 	
 	//모달창 설정(자재 조회)
@@ -61,9 +62,9 @@
 			width : 900,
 			buttons: {
 				"확인" : function (){
-					//여기서는 getCheckedRows에 있는 값을 
+					//getCheckedRows에 있는 값을 
 					for(i=0; i <gridOrder.getCheckedRows().length; i++ ){
-						//중복체크하고 값이 없는 경우에만 appendRow 해주는 거 
+						//중복체크하고 값이 없는 경우에만 appendRow 
 						if(grid.findRows({ordrNo : gridOrder.getCheckedRows()[i].ordrNo}).length == 0) {
 // 							grid.appendRow({'ordrNo':gridOrder.getCheckedRows()[i].ordrNo,
 // 											'rscCode':gridOrder.getCheckedRows()[i].rscCode,
@@ -120,16 +121,36 @@
 			  {
 				header: '발주량',
 				name: 'rscCnt',
-				editor: 'text'
+				editor: 'text',
+				formatter(value) {
+					if(value.value != null && value.value != '' ){
+						  return value.value.toString().replace(/\B(?<!\.\d*)(?=(\d{3})+(?!\d))/g, ",");
+					}else{
+						return value.value ;
+					}
+	            }
 			   },
 			   {
 				header: '단가',
 				name: 'rscPrc',
+				formatter(value) {
+					if(value.value != null && value.value != '' ){
+						  return value.value.toString().replace(/\B(?<!\.\d*)(?=(\d{3})+(?!\d))/g, ",");
+					}else{
+						return value.value ;
+					}
+	            }
 				},
 			   {
 				 header: '합계',
 				 name: 'rscTotal',
-				
+					formatter(value) {
+						if(value.value != null && value.value != '' ){
+							  return value.value.toString().replace(/\B(?<!\.\d*)(?=(\d{3})+(?!\d))/g, ",");
+						}else{
+							return value.value ;
+						}
+		            }
 				},
 				{
 				  header: '업체',
@@ -189,15 +210,19 @@
 		grid.removeCheckedRows(true);
 	}) 
 	
-	
 	btnSaveOrder.addEventListener("click", function(){
+		console.log("@@@@@@@@@@@@@@@@@@@@")
 		for(let i=0; i<grid.getRowCount(); i++){
-			if(grid.getValue(i, "rscCnt") != null && grid.getValue(i, "rscCnt") != ""){
+			if(grid.getValue(i, "rscTotal") != null){
+				 console.log("IF");
+				 console.log(grid.getValue(i, "rscTotal"));
 				 grid.request('modifyData');
 				 break;
-			}else if(grid.getValue(i, "rscCnt") == null){
+			}else if(grid.getValue(i, "rscTotal") == null && grid.getValue(i, "rscTotal") == 0){
+				 console.log("else if");
+				 console.log(grid.getValue(i, "rscTotal"));
 				 alert("발주량을 입력해주세요")
-			  	 break;
+				 break;
 			}	
 		}
 	}) 
@@ -205,7 +230,7 @@
 	grid.on("response",function(){
 		grid.clear();
 	})
-	
+
 	</script>
 </body>
 </html>

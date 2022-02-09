@@ -41,7 +41,7 @@
 	</div>
 
 
-<div id="tabs" style="margin-left: 10px; width : 1500px ; height: 600px;">
+<div id="tabs" style="margin-left: 10px; width : 1500px ; height: 800px;">
   <ul>
     <li><a href="#tabs-1">입고</a></li>
     <li><a href="#tabs-2">출고</a></li>
@@ -102,6 +102,7 @@
 	</div>
 	
 <script type="text/javascript">
+tui.Grid.setLanguage('ko');
 
 //옵션세팅
 themesOptions = { 
@@ -228,8 +229,12 @@ $(function() {
 			  {
 				header: '단가',
 				name: 'rscPrc',
-				 formatter(value) {
-	                return value.value.toString().replace(/\B(?<!\.\d*)(?=(\d{3})+(?!\d))/g, ",");
+				formatter(value) {
+					if(value.value != null && value.value != '' ){
+						  return value.value.toString().replace(/\B(?<!\.\d*)(?=(\d{3})+(?!\d))/g, ",");
+					}else{
+						return value.value ;
+					}
 	            }
 				},
 			   {
@@ -238,7 +243,14 @@ $(function() {
 				},
 			   {
 				 header: '입고량',
-				 name: 'istCnt'
+				 name: 'istCnt',
+					formatter(value) {
+						if(value.value != null && value.value != '' ){
+							  return value.value.toString().replace(/\B(?<!\.\d*)(?=(\d{3})+(?!\d))/g, ",");
+						}else{
+							return value.value ;
+						}
+		            }
 				},
 				{
 				  header: '자재 LOT NO',
@@ -277,8 +289,9 @@ $(function() {
 			  },
 		 		pageOptions: {
 				    useClient: true,
-				    perPage: 15
-				} 
+				    perPage: 10
+				},
+				  bodyHeight: 380
 		});
 	
 	//조회버튼 클릭시 값 가지고 오는 거
@@ -441,7 +454,8 @@ $(function() {
 	 		pageOptions: {
 			    useClient: true,
 			    perPage: 15
-			} 
+			},
+			bodyHeight: 380
 		});
 	
 	//조회버튼 클릭시 값 가지고 오는 거
@@ -469,7 +483,7 @@ helpBtn.addEventListener('mouseover' , () => {
 	helpModal.dialog("open") ;
 })		
 	
-tui.Grid.applyTheme('default', themesOptions);	
+tui.Grid.applyTheme('default', themesOptions);
 	
 </script>
 </body>

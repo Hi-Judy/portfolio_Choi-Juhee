@@ -25,15 +25,21 @@ public class ResourceStoreController {
 		return "resources/resourceStore.tiles";
 	}
 	
+	//모달창(미입고 조회) 이동
+	@RequestMapping("searchResourceStore")
+	public String searchResStore() {
+		System.out.println("=================모달창(미입고 조회) 이동================");
+		return "resources/searchResourceStore";
+	}
+	
 	//입고검사 미완료 조회
 	@RequestMapping("resourcesStoreList")
 	public String resourcesStoreList(Model model, ResourcesStoreVO vo) {
 	  model.addAttribute("result",true);
       Map<String,Object> map = new HashMap<String,Object>();
       map.put("contents", service.findResourcesStore(vo));
-      System.out.println(service.findResourcesStore(vo));
       model.addAttribute("data", map);
-	  System.out.println("================입/출고 테이블 select================");
+	  System.out.println("================입고검사 미완료 조회 select================");
       return "jsonView";
 	}
 	

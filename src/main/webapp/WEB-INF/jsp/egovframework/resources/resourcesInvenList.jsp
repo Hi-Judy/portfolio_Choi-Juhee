@@ -41,7 +41,7 @@
 		<h4 style="margin-left: 10px; margin-bottom: 25px;">자재재고 조회</h4>
 	</div>
 	
-<div id="tabs" style="margin-left: 10px; width : 1500px ; height: 600px;">
+<div id="tabs" style="margin-left: 10px; width : 1500px ; height: 810px;">
   <ul>
     <li><a href="#tabs-1">안전 재고</a></li>
     <li><a href="#tabs-2">LOT별 재고</a></li>
@@ -67,7 +67,7 @@
 	</div>
 	</div>	
 	<br>
-	<div id="gridRsc1" style="border-top: 3px solid #168; height: 600px; width: 1450px; margin-left: 10px;"></div>
+	<div id="gridRsc1" style="border-top: 3px solid #168; height: 800px; width: 1450px; margin-left: 10px;"></div>
 	</div>
 	
 
@@ -96,6 +96,7 @@
 </div>	
 
 <script type="text/javascript">
+tui.Grid.setLanguage('ko');
 
 //옵션세팅
 themesOptions = { 
@@ -174,20 +175,35 @@ $( function() {
 			   {
 			     header: '안전재고',
 				 name: 'rscSfinvc',
-				 formatter(value) {
-		                return value.value.toString().replace(/\B(?<!\.\d*)(?=(\d{3})+(?!\d))/g, ",");
+					formatter(value) {
+						if(value.value != null && value.value != '' ){
+							  return value.value.toString().replace(/\B(?<!\.\d*)(?=(\d{3})+(?!\d))/g, ",");
+						}else{
+							return value.value ;
+						}
 		            }
 				},
 				{
 				  header: '재고',
 				  name: 'rscCnt',
-					 formatter(value) {
-		                return value.value.toString().replace(/\B(?<!\.\d*)(?=(\d{3})+(?!\d))/g, ",");
+					formatter(value) {
+						if(value.value != null && value.value != '' ){
+							  return value.value.toString().replace(/\B(?<!\.\d*)(?=(\d{3})+(?!\d))/g, ",");
+						}else{
+							return value.value ;
+						}
 		            }
 				},
 				{
 				  header: '미달량',
-				  name: 'shortage'
+				  name: 'shortage',
+					formatter(value) {
+						if(value.value != null && value.value != '' ){
+							  return value.value.toString().replace(/\B(?<!\.\d*)(?=(\d{3})+(?!\d))/g, ",");
+						}else{
+							return value.value ;
+						}
+		            }
 				}
 			];
 	
@@ -211,7 +227,7 @@ $( function() {
 				useClient: true,
 				perPage: 15
 			},
-			  bodyHeight: 298
+			  bodyHeight: 490
 		});
 	
 	//조회버튼 클릭시 값 가지고 오는 거
@@ -329,7 +345,7 @@ $( function() {
 				useClient: true,
 				perPage: 15
 			},
-			  bodyHeight: 298
+			  bodyHeight: 490
 		});
 	
 	//조회버튼 클릭시 값 가지고 오는 거

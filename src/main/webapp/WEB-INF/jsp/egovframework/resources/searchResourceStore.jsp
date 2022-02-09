@@ -101,67 +101,76 @@ div#OverallSize {
 	text-align:center;
 	background-color: #d2e5eb; 
 }
-
 </style>
 </head>
 <body>
+<!-- 미입고 검색 그리드 -->
+<div id="gridIn"></div>
 
-<div id="gridRsc"></div>
 <script type="text/javascript">
-
-	//자재 발주 페이지에서 사용
-	var columnsRsc = [
+	var columnsIn = [
+		{
+	    header: '발주번호',
+	    name: 'ordrNo'
+	  	},
 			{
-			  header: '자재코드',
-			  name: 'rscCode'
-			},
-			{
-			  header: '자재명',
-			  name: 'rscName'
-			 }
-			];
-				
+	    header: '자재코드',
+	    name: 'rscCode'
+	  },
+	  {
+	    header: '자재명',
+	    name: 'rscName',
+	  },
+	  {
+	    header: '단위',
+	    name: 'rscUnit'
+	  },
+	  {
+		header: '입고량',
+		name: 'rscPassCnt',
+		formatter(value) {
+			if(value.value != null && value.value != '' ){
+				  return value.value.toString().replace(/\B(?<!\.\d*)(?=(\d{3})+(?!\d))/g, ",");
+			}else{
+				return value.value ;
+			}
+	    }
+	  },
+	  {
+		header: '단가',
+		name: 'rscPrc',
+		formatter(value) {
+			if(value.value != null && value.value != '' ){
+				  return value.value.toString().replace(/\B(?<!\.\d*)(?=(\d{3})+(?!\d))/g, ",");
+			}else{
+				return value.value ;
+			}
+	    }
+	   }
+	];
+	
 	//ajax(api)로 값 받아오는 거 
-	var dataSourceRsc = {
+	var dataSourceIn = {
 		  api: {
 		    readData: { 
-		    	url: 'searchRsc', 
+		    	url: 'resourcesStoreList', 
 		    	method: 'GET'
 		    	}
 		  },
 		  contentType: 'application/json'
 		};
 	
-
-	var gridRsc = new Grid({
-		  el: document.getElementById('gridRsc'),
-		  data:dataSourceRsc,
-		  columns:columnsRsc
+	//그리드 속성
+	var gridIn = new Grid({
+		  el: document.getElementById('gridIn'),
+		  data: dataSourceIn,
+		  columns: columnsIn,
+		  rowHeaders: ['checkbox'],
 		});
 	
-	
-	//리스트에서 선택한 값 가지고 오기...$(여기 어떻게 쓰지? )
-	gridRsc.on("dblclick", (ev) => {
-		console.log(gridRsc.getValue(ev["rowKey"],'rscCode'));
-		console.log(gridRsc.getValue(ev["rowKey"],'rscName'));
-		//var rsc = gridRsc.getValue(ev["rowKey"],ev["columnName"]);
-		
-		var rscCode = gridRsc.getValue(ev["rowKey"],'rscCode');
-		var rscName = gridRsc.getValue(ev["rowKey"],'rscName');
-		clickRsc(rscCode, rscName)
-		clickRsc2(rscCode, rscName)
-	});
-	
-	/* gridRsc.on('click' , (ev) => {
-		//selection 옵션을 주고 얘들을 세팅해야 클릭했을떄 색상이 바뀌고 색상이 사라지고 한다.
-		gridRsc.setSelectionRange({
-	    	start: [ev.rowKey, 0],
-	    	end: [ev.rowKey, gridRsc.getColumns().length-1]
-	    }); 
-	    
-	}) */
-
-
 </script>
+
+
+
 </body>
 </html>

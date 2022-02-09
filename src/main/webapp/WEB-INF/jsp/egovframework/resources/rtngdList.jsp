@@ -63,6 +63,7 @@
 		LOT추가 밑 더 자세한 자재관리는 자재관리 탭에서 진행해주세요.
 	</div>
 <script type="text/javascript">
+tui.Grid.setLanguage('ko');
 
 //옵션세팅
 themesOptions = { 
@@ -193,18 +194,36 @@ var helpModal = $( "#helpModal" ).dialog({
 			   },
 			   {
 				 header: '단가',
-				 name: 'rscPrc'
+				 name: 'rscPrc',
+					formatter(value) {
+						if(value.value != null && value.value != '' ){
+							  return value.value.toString().replace(/\B(?<!\.\d*)(?=(\d{3})+(?!\d))/g, ",");
+						}else{
+							return value.value ;
+						}
+		            }
 				},
 				{
 				 header: '반품량',
 				 name: 'rtngdCnt',
-				 formatter(value) {
-		                return value.value.toString().replace(/\B(?<!\.\d*)(?=(\d{3})+(?!\d))/g, ",");
+					formatter(value) {
+						if(value.value != null && value.value != '' ){
+							  return value.value.toString().replace(/\B(?<!\.\d*)(?=(\d{3})+(?!\d))/g, ",");
+						}else{
+							return value.value ;
+						}
 		            }
 				},
 				{
 				 header: '합계',
-				 name: 'rscTotal'
+				 name: 'rscTotal',
+					formatter(value) {
+						if(value.value != null && value.value != '' ){
+							  return value.value.toString().replace(/\B(?<!\.\d*)(?=(\d{3})+(?!\d))/g, ",");
+						}else{
+							return value.value ;
+						}
+		            }
 				},
 				{
 				  header: '불량코드',
@@ -247,7 +266,8 @@ var helpModal = $( "#helpModal" ).dialog({
 			  pageOptions: {
 				    useClient: true,
 				    perPage: 15
-				}
+				},
+				 bodyHeight: 410
 		});
 	
 	
