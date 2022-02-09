@@ -185,7 +185,14 @@
 			name : 'facOutput' , 
 			editor : 'text' ,
 			align: 'center' ,
-			width : 50
+			width : 50 ,
+ 			formatter(value) {
+				if (value.value != null && value.value != '') {
+					return value.value.toString().replace(/\B(?<!\.\d*)(?=(\d{3})+(?!\d))/g, ",") ;	
+				} else {
+					return value.value ;
+				}				
+			} 
 		} ,
 		{
 			header : '가동시간' ,

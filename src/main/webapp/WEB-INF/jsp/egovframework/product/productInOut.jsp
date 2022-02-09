@@ -36,6 +36,13 @@
 		<span style="margin : 20px;">제품코드</span><input id="txtPodtCode">&nbsp;<button type="button" id="btnSearch" class="btn">제품코드검색</button>
 		<br><br>
 		<span style="margin : 20px;">작업일자</span><input id="manDatestart" type="date"><span> ~ </span><input id="manDateend" type="date">
+		<span style="margin-left : 20px;">진행상태</span>
+		<select id="selectStatus" style="margin-left : 10px;">
+			<option value="" selected>선택</option>
+			<option value="생산완료">생산완료</option>
+			<option value="출하완료">출하완료</option>
+			<option value="미생산출하">미생산출하</option>
+		</select>
 		<br>
 		<button type="button" id="clearBtn" class="btn" style="float : right; margin : 5px;">초기화</button>
 		<button type="button" id="btnInsert" class="btn" style="float : right; margin : 5px;">저장</button>
@@ -140,18 +147,26 @@
 			name : 'podtInput' ,
 			editor: 'text' ,
 			align: 'center',
-/* 			formatter(value) {
-				return value.value.toString().replace(/\B(?<!\.\d*)(?=(\d{3})+(?!\d))/g, ",") ;
-			} */
+ 			formatter(value) {
+				if (value.value != null && value.value != '') {
+					return value.value.toString().replace(/\B(?<!\.\d*)(?=(\d{3})+(?!\d))/g, ",") ;	
+				} else {
+					return value.value ;
+				}				
+			} 
 		} ,
 		{
 			header: '출고량' ,
 			name : 'podtOutput' ,
 			editor: 'text' ,
 			align: 'center',
-/* 			formatter(value) {
-				return value.value.toString().replace(/\B(?<!\.\d*)(?=(\d{3})+(?!\d))/g, ",") ;
-			} */
+ 			formatter(value) {
+				if (value.value != null && value.value != '') {
+					return value.value.toString().replace(/\B(?<!\.\d*)(?=(\d{3})+(?!\d))/g, ",") ;	
+				} else {
+					return value.value ;
+				}	
+			} 
 		} ,
 		{
 			header: '비고	' ,
@@ -223,6 +238,7 @@
 		let podtCode = $("#txtPodtCode").val() ;
 		let manDatestart = $("#manDatestart").val() ;
 		let manDateend = $("#manDateend").val() ;
+		let status = $("#selectStatus").val() ;
 		
 		if (podtCode == '') {
 			podtCode = 'null' ;
@@ -236,13 +252,18 @@
 			manDateend = '1910-12-25' ;
 		}
 		
+		if (status == '') {
+			status = 'null' ;
+		}
+		
 		$.ajax({
 			url : 'productList' ,
 			dataType : 'json' ,
 			data : {
 				podtCode : podtCode ,
 				manDatestart : manDatestart ,
-				manDateend : manDateend
+				manDateend : manDateend ,
+				status : status
 			} ,
 			async : false ,
 			success : function(datas) {

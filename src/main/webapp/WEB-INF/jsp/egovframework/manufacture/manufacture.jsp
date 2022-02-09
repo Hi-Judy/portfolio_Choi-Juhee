@@ -23,6 +23,19 @@
 	document.getElementsByClassName('tui-datepicker')[0].style = "position: relative";
 	document.getElementsByClassName('tui-datepicker')[0].style = " z-index:100000"; 
 }
+
+.fc-event-main-frame {
+	text-align: center ;
+}
+
+.fc-toolbar-title {
+	color : #007b88 ;
+}
+
+.fc-button {
+	background-color : #007b88 !important;
+}
+   
 </style>
 </head>
 
@@ -61,8 +74,8 @@
 		<button type="button" id="btnSearchManPlan" class="btn" style="float : left; margin : 5px;">생산계획 조회</button>
 		<button type="button" id="btnInit" class="btn" style="float : right; margin : 5px;">초기화</button>
 		<!-- <button type="button" id="btnDeletePlan" class="btn" style="float : right; margin : 5px;">삭제</button> -->
+		<button type="button" id="btnCal" class="btn" style="float : right; margin : 5px;">월별 계획 조회</button>
 		<button type="button" id="btnSavePlan" class="btn" style="float : right; margin : 5px;">저장</button>
-		<button type="button" id="btnCal" class="btn" style="float : right; margin : 5px;">달력테스트</button>
 	</div>
 
 	<!-- 작성된 생산계획 조회 모달 -->
@@ -178,10 +191,27 @@
       			  console.log(typeof list) ;
       			  
       			  let events = list.map(function(item) {
-      				  return {
-      					  title : item.comCode ,
-      					  start : item.manStartdate ,
-      					  end : item.ordDuedate
+      				  if (item.comCode.substr(1,9)%3 == 0) {
+      					return {
+        					  title : '지시번호 ' + item.comCode ,
+        					  start : item.manStartdate ,
+        					  end : item.ordDuedate ,
+        					  color : '#007b88' 
+       				  	}
+      				  } else if (item.comCode.substr(1,9)%3 == 1) {
+      					return {
+        					  title : '지시번호 ' + item.comCode ,
+        					  start : item.manStartdate ,
+        					  end : item.ordDuedate ,
+        					  color : '#007b88c7' 
+      				  	}
+      				  } else {
+      					return {
+        					  title : '지시번호 ' + item.comCode ,
+        					  start : item.manStartdate ,
+        					  end : item.ordDuedate ,
+        					  color : '#007b8887' 
+       				  	}
       				  }
       			  }) ;	
       			  
