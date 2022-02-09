@@ -4,24 +4,13 @@
 <html>
 <head>
 <meta charset="UTF-8">
-<title>Insert title here</title>
-<!-- <link rel="stylesheet" href="https://uicdn.toast.com/tui-grid/latest/tui-grid.css" /> -->
-<!-- <link rel="stylesheet" href="https://uicdn.toast.com/tui.date-picker/latest/tui-date-picker.css" /> -->
-<!-- <link rel="stylesheet" href="//code.jquery.com/ui/1.13.0/themes/base/jquery-ui.css"> -->
-
-<!-- <script src="https://uicdn.toast.com/tui.date-picker/latest/tui-date-picker.js"></script> -->
-<!-- <script src="https://uicdn.toast.com/tui-grid/latest/tui-grid.js"></script> -->
-<!-- <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script> -->
-<!-- <script src="https://code.jquery.com/jquery-3.6.0.js"></script> -->
-<!-- <script src="https://code.jquery.com/ui/1.13.0/jquery-ui.js"></script> -->
+<title>자재 발주 관리</title>
 </head>
 <body>
 	<h4 style="margin-left: 10px">자재 발주 관리</h4>
-
 	<div id="top">
 		<div>
-			<span style="margin-top: 13px; float: left;">
-			</span>
+			<span style="margin-top: 13px; float: left;"></span>
 			<span style="float: right; margin-top: 4.5px;">
 				<button id="btnSelectOrder" class="btn">미검사 조회</button> &nbsp;&nbsp;
 				<button id="btnAdd" class="btn">추가</button>	 &nbsp;&nbsp;
@@ -30,145 +19,160 @@
 			</span>
 		</div>
 	</div>
-	<div id="dialog-form-rsc" title="자재 검색"></div>
-	<div id="dialog-form-order" title="미입고 검색"></div>
-	<div id="OverallSize" style="margin-left: 10px;"><br>
-	<div id="grid" style="border-top: 3px solid #168; width: 1500px;"></div>
+		<div id="dialog-form-rsc" title="자재 검색"></div>
+		<div id="dialog-form-order" title="미입고 검색"></div>
+		<div id="OverallSize" style="margin-left: 10px;"><br>
+			<div id="grid" style="border-top: 3px solid #168; width: 1500px;"></div>
+		</div>
+		
+	<!-- 도움말 모달입니다. -->
+	<div id="helpModal" title="도움말">
+		<hr>
+		새자료 : 화면에 보여지고있는 자재정보를 없에고 등록모드 로 바뀝니다.<br><br>
+		자재재고조회 : 선택된 자재의 전년도 이월량 밑 올해 내역들을 볼수있습니다.<br><br>
+		저장 : "담당관리자" , "입고업체" , "입고단가" 들을 <br>
+		&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+		새롭게 수정해서 저장할수있습니다.<br><br>
+		LOT정보가 없는 자재들은 자재재고조회 밑 LOT정보 조회가 불가능합니다.<br><br>
+		LOT추가 밑 더 자세한 자재관리는 자재관리 탭에서 진행해주세요.
 	</div>
 
-	<script type="text/javascript">
+<script type="text/javascript">
+
+	//그리드 한글로 변환
 	tui.Grid.setLanguage('ko');
-	let rscRowKey;
 	
-	//모달창 설정(자재 조회)
-	let dialog3 = $( "#dialog-form-rsc" ).dialog({
+	let rscRowKey;
+
+	//-------- 도움말 모달 ----------
+	var helpModal = $( "#helpModal" ).dialog({
+	 autoOpen : false ,
+	 modal : true ,
+	 width:600, //너비
+	 height:400, //높이
+	 buttons: {
+			"닫기" : function() {
+				helpModal.dialog("close") ;
+			}
+		}
+	});	
+	
+	//-------- 자재조회 모달 ----------
+	let dialogRsc = $( "#dialog-form-rsc" ).dialog({
 			autoOpen: false,
 			modal: true,
 			heigth : 500,
 			width : 900,
 			buttons: {
 				"닫기" : function() {
-					dialog3.dialog("close") ;
+					dialogRsc.dialog("close") ;
 				}
 			},
 		});
 	
-	var poNoList=[];
-	//모달창 설정(조회 클릭시 미입고 품목 조회)
-	let dialog4 = $( "#dialog-form-order" ).dialog({
+	//-------- 미검사조회 모달 ----------
+	let dialogOrder = $( "#dialog-form-order" ).dialog({
 			autoOpen: false,
 			modal: true,
 			heigth : 500,
 			width : 900,
 			buttons: {
 				"확인" : function (){
-					//getCheckedRows에 있는 값을 
 					for(i=0; i <gridOrder.getCheckedRows().length; i++ ){
-						//중복체크하고 값이 없는 경우에만 appendRow 
 						if(grid.findRows({ordrNo : gridOrder.getCheckedRows()[i].ordrNo}).length == 0) {
-// 							grid.appendRow({'ordrNo':gridOrder.getCheckedRows()[i].ordrNo,
-// 											'rscCode':gridOrder.getCheckedRows()[i].rscCode,
-// 											'rscName':gridOrder.getCheckedRows()[i].rscName,
-// 											'rscUnit':gridOrder.getCheckedRows()[i].rscUnit,
-// 											'rscCnt':gridOrder.getCheckedRows()[i].rscCnt,
-// 											'rscPrc':gridOrder.getCheckedRows()[i].rscPrc,
-// 											'rscTotal':gridOrder.getCheckedRows()[i].rscTotal,
-// 											'sucName':gridOrder.getCheckedRows()[i].sucName,
-// 											'istReqDate':gridOrder.getCheckedRows()[i].istReqDate
-// 							});
 							grid.appendRow(gridOrder.getCheckedRows()[i]);
 						}
 					}
-					dialog4.dialog("close");
+					dialogOrder.dialog("close");
 				},
 				"닫기" : function() {
-					dialog4.dialog("close");
+					dialogOrder.dialog("close");
 				}
 			},
 		});
 	
-	//모달창 오픈
+	//미검사조회 모달 오픈
 	$("#btnSelectOrder").on("click", function(){
-			dialog4.dialog("open");
+		dialogOrder.dialog("open");
 		$("#dialog-form-order").load("searchOrderList",
 				function(){
-					console.log("로드됨")
-			})
+					console.log("미검사조회 모달 로드됨")
+				})
 		});
 
-	//발주 insert 그리드 
+	
+	//-------- 메인그리드 ----------
 	var Grid = tui.Grid;
 	Grid.applyTheme('default');
 	
-	const columns = [
-			 {
-			    header: '발주번호',
-			    name: 'ordrNo',
-			    //hidden : true
-			  },
-			  {
-			    header: '자재코드',
-			    name: 'rscCode'
-			  },
-			  {
-				header: '자재명',
-				name: 'rscName'
-			  },
-			  {
-				header: '단위',
-				name: 'rscUnit'
-			   },
-			  {
-				header: '발주량',
-				name: 'rscCnt',
-				editor: 'text',
-				formatter(value) {
-					if(value.value != null && value.value != '' ){
-						  return value.value.toString().replace(/\B(?<!\.\d*)(?=(\d{3})+(?!\d))/g, ",");
-					}else{
-						return value.value ;
-					}
-	            }
-			   },
-			   {
-				header: '단가',
-				name: 'rscPrc',
-				formatter(value) {
-					if(value.value != null && value.value != '' ){
-						  return value.value.toString().replace(/\B(?<!\.\d*)(?=(\d{3})+(?!\d))/g, ",");
-					}else{
-						return value.value ;
-					}
-	            }
-				},
-			   {
-				 header: '합계',
-				 name: 'rscTotal',
-					formatter(value) {
-						if(value.value != null && value.value != '' ){
-							  return value.value.toString().replace(/\B(?<!\.\d*)(?=(\d{3})+(?!\d))/g, ",");
-						}else{
-							return value.value ;
-						}
-		            }
-				},
-				{
-				  header: '업체',
-				  name: 'sucName'
-				},
-				{
-				  header: '입고요청일',
-				  name: 'istReqDate',
-				  editor: 'datePicker'
-				}	
-			];
-	
-	const dataSource = {
+	var columns = [
+					 {
+					    header: '발주번호',
+					    name: 'ordrNo',
+					    //hidden : true
+					  },
+					  {
+					    header: '자재코드',
+					    name: 'rscCode'
+					  },
+					  {
+						header: '자재명',
+						name: 'rscName'
+					  },
+					  {
+						header: '단위',
+						name: 'rscUnit'
+					   },
+					  {
+						header: '발주량',
+						name: 'rscCnt',
+						editor: 'text',
+						formatter(value) {
+							if(value.value != null && value.value != '' ){
+								  return value.value.toString().replace(/\B(?<!\.\d*)(?=(\d{3})+(?!\d))/g, ",");
+							}else{
+								return value.value ;
+							}
+			            }
+					   },
+					   {
+						header: '단가',
+						name: 'rscPrc',
+						formatter(value) {
+							if(value.value != null && value.value != '' ){
+								  return value.value.toString().replace(/\B(?<!\.\d*)(?=(\d{3})+(?!\d))/g, ",");
+							}else{
+								return value.value ;
+							}
+			            }
+						},
+					   {
+						 header: '합계',
+						 name: 'rscTotal',
+							formatter(value) {
+								if(value.value != null && value.value != '' ){
+									  return value.value.toString().replace(/\B(?<!\.\d*)(?=(\d{3})+(?!\d))/g, ",");
+								}else{
+									return value.value ;
+								}
+				            }
+						},
+						{
+						  header: '업체',
+						  name: 'sucName'
+						},
+						{
+						  header: '입고요청일',
+						  name: 'istReqDate',
+						  editor: 'datePicker'
+						}	
+					];
+	//메인 그리드 api
+	var dataSource = {
 		  api: {
 			  readData: { 
 			    	url: 'resourcesOrder', 
 			    	method: 'GET'
-			    	//initParams: { ordrNo: 'param' }
 			    	},
 		    	modifyData: { url: 'resourcesOrderModify', method: 'POST' }
 		  },
@@ -176,44 +180,51 @@
 		  contentType: 'application/json'
 		};
 	
-	const grid = new Grid({
+	//메인 그리드 설정
+	var grid = new Grid({
 		  el: document.getElementById('grid'),
 		  data: dataSource,
 		  rowHeaders: ['checkbox'],
 		  columns
 		});
 	
-	//발주량 입력-> 발주량 * 단가 = 합계 구해준다
+	//발주량 입력 -> 발주량 * 단가 = 합계 구해준다
 	grid.on("editingFinish",function(ev){
 		if(grid.getValue(ev["rowKey"], "rscPrc")!=null && grid.getValue(ev["rowKey"], "rscCnt")!=null){
 			grid.setValue(ev["rowKey"],"rscTotal",grid.getValue(ev["rowKey"], "rscPrc")*grid.getValue(ev["rowKey"], "rscCnt"));
 		}
 	});
 	
-	//그리드 클릭시 columnName = rscCode 
+	//그리드 columnName = rscCode 클릭시 자재조회 모달 오픈
 	grid.on("click", function(ev){
 		if(ev["columnName"]=="rscCode"){
 			rscRowKey=ev["rowKey"];
-				dialog3.dialog("open");
+				dialogRsc.dialog("open");
 		
-	$("#dialog-form-rsc").load("recList",
-			function(){console.log("로드됨")})}
-		
+		$("#dialog-form-rsc").load("recList",
+				function(){
+					console.log("자재 조회 모달 로드됨")
+			}
+		)}	
 	});
 
+	//추가 버튼 클릭
 	btnAdd.addEventListener("click", function(){
 		grid.appendRow({});
-	})
+	});
 
+	//삭제 버튼 클릭
 	btnDel.addEventListener("click", function(){
 		grid.request('modifyData',{checkedOnly:true,modifiedOnly:false});
 		grid.removeCheckedRows(true);
-	}) 
+	});
 	
+	//저장 버튼 클릭 -> 유효성 검사 
+	//발주량 미입력 -> alert 창으로 경고
+	//발주량 입력 -> 저장
 	btnSaveOrder.addEventListener("click", function(){
-		console.log("@@@@@@@@@@@@@@@@@@@@")
 		for(let i=0; i<grid.getRowCount(); i++){
-			if(grid.getValue(i, "rscTotal") != null){
+			if(grid.getValue(i, "rscTotal") != null && grid.getValue(i, "rscTotal") != 0){
 				 console.log("IF");
 				 console.log(grid.getValue(i, "rscTotal"));
 				 grid.request('modifyData');
@@ -225,12 +236,13 @@
 				 break;
 			}	
 		}
-	}) 
+	});
 	
+	//저장시 데이터 다시 읽어서 수정한 품목(입고 완료한) 사라지게
 	grid.on("response",function(){
 		grid.clear();
 	})
 
-	</script>
+</script>
 </body>
 </html>
