@@ -130,9 +130,9 @@ span.ui-dialog-title {
 	</div>
 	
 	<div id="MatInvenModal" title="월별 자재재고 조회">
-		<div id="MatInvenGrid"></div>
+		<div id="MatInvenGrid" style="margin-top: 15px;"></div>
 		<hr>
-		<input id="MatInvenModalCheck" style=" float: right;" class="btn" type="button" value="확인">
+		<input id="MatInvenModalCheck" style=" float: right;" class="btn" type="button" value="닫기">
 	</div>
 	
 	<div id="helpModal" title="도움말">
@@ -167,6 +167,8 @@ toastr.options = {
         "hideMethod": "fadeOut",
         "tapToDismiss": false
       }
+tui.Grid.setLanguage('ko');      
+      
 //옵션세팅
 themesOptions = { 
             selection: {    background: '#007b88',     border: '#004082'  },//  <- 클릭한 셀 색상변경 border(테두리색) , background (백그라운드)
@@ -214,12 +216,12 @@ var ClientModal = $( "#ClientModal" ).dialog({
    height:530 //높이
 });
 
-//-------- 관리자선택 모달 설정 ----------
+//-------- 월별자재재고 조회 모달 설정 ----------
 var MatInvenModal = $( "#MatInvenModal" ).dialog({
    autoOpen : false ,
    modal : true ,
    width:1000, //너비
-   height:800 //높이
+   height:750 //높이
 });
 
 
@@ -312,7 +314,7 @@ $.ajax({
     			console.log(MatInvenData);
 
     			if(FindData.length == 0){
-    				toastr["warning"]("LOT 미할당 자재입니다"); 
+    				toastr["info"]("LOT 미할당 자재입니다"); 
     			}
     		})
       })
@@ -325,10 +327,13 @@ $.ajax({
 		  columns : [
 		     { header : '자재LOT'			, name : 'rscLot'    , align : 'center' , width: 200 },
 		     { header : '자재 입고/출고 번호'	, name : 'storeNo'   , align : 'center' , width: 200 },
-		     { header : '재고량'			, name : 'istCnt'    , align : 'center' ,
-		    	 formatter(value) {               
-		    						 return value.value.toString().replace(/\B(?<!\.\d*)(?=(\d{3})+(?!\d))/g, ",") ;
-		     					  }
+		     { header : '재고량'			, name : 'istCnt'    , align : 'center' , formatter(value) { 
+		        	if(value.value != null && value.value != '' && value.value != "null"){
+		        		return value.value.toString().replace(/\B(?<!\.\d*)(?=(\d{3})+(?!\d))/g, ",") ;
+		        	}else{
+		        		return value.value ;  
+		        	}
+	        	} 
 		     },
 		     { header : '비고'			, name : 'storeEtc'  , align : 'center' , width: 150} 
 		  ],
@@ -513,7 +518,7 @@ MatInvenBtn.addEventListener('click' , () => {
 		MatInvenModal.dialog( "open" )
 		MatInvenGrid.refreshLayout() ;
 	}else{
-		toastr["warning"]("선택된 자재가 없습니다"); 
+		alert("선택된 자재가 없습니다"); 
 	}
 	
 })
@@ -523,13 +528,13 @@ MatInvenModalCheck.addEventListener('click' , () => {
 })
 
       
-//--------- 데이터 입력 & ------------
+//--------- 데이터 입력 ------------
 SaveBtn.addEventListener('click' , () => {
 	if(rcCode.value == '' || rcCode.value == null){
-		toastr["warning"]("자재코드 를 입력해주세요"); 
+		alert("자재코드 를 입력해주세요"); 
 	}else{
 		if(rscPrc.value == '' || rscPrc.value == null) {
-			toastr["warning"]("입고단가 를 입력해주세요"); 
+			alert("입고단가 를 입력해주세요"); 
 		}else{
 			var Check;
 			var Getclass = document.getElementById("rscCode").classList.item(0);
@@ -614,7 +619,7 @@ function AddData() {
 	if(rcCode.value != '' || rcCode.value != null){
 		for(let i = 0 ; i<MaterialList.length ; i++ ){
 			if(MaterialList[i].rscCode == rcCode.value){
-				toastr["warning"]("자재코드가 중복됩니다");
+				alert("자재코드가 중복됩니다");
 				OK = false ;
 				break;
 			}else{

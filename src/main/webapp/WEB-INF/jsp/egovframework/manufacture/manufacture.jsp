@@ -3,7 +3,7 @@
 <html>
 <head>
 <meta charset="UTF-8">
-<title>Insert title here</title>
+<title>생산계획서 조회</title>
 <link rel="stylesheet" href="https://uicdn.toast.com/tui.date-picker/latest/tui-date-picker.css" />
 <link rel="stylesheet" href="https://uicdn.toast.com/tui-grid/latest/tui-grid.css" />
 <link rel="stylesheet" href="//code.jquery.com/ui/1.13.0/themes/base/jquery-ui.css">
@@ -27,25 +27,33 @@
 </head>
 
 <body>
-	<div id="title" style="margin-left : 10px;"><h3 style="color : #054148; font-weight : bold">생산계획서 작성</h3></div>
+
+	<div style="width : 1500px ;">
+		<span style="float: right;">
+			<button type="button" id="helpBtn" style="border : none; background-color : #f2f7ff; color : #007b88; float : right ;">
+			<i class="bi bi-question-circle"></i>
+			</button>
+		</span>
+		<h4 style="margin-left: 10px">생산계획서 작성</h4>
+	</div>
 	
-	<div id="top" style="height : 200px; padding : 10px;">
+	<div id="top" style="height : 160px; padding : 10px;">
 	
 		<!-- 계획일자 입력 -->
 		<div class = "planDate">
-			<p style="display:inline-block; margin-left : 20px; margin-top : 10px;">계획일자</p>
+			<p style="display:inline-block; margin-left : 5px; margin-top : 10px;">계획일자</p>
 			<input id = "txtManDate" type="date" name="from" style="display:inline-block; margin-left : 27px;">
 		</div>
 	
 		<!-- 계획명 입력 -->
 		<div class="planName">
-			<p style="display:inline-block; margin-left : 20px;">생산계획명</p>
+			<p style="display:inline-block; margin-left : 5px;">생산계획명</p>
 			<input id = "txtPlanName" style="display:inline-block; margin-left : 10px;">
 		</div>	
 			
 		<!-- 미계획 모달 -->
 		<div id = "dialog-form-plan" title="미계획 내역 조회" > 
-			<div id="gridPlan"></div>
+			<div id="gridPlan" style="border-top: 3px solid #168; margin-top: 20px;"></div>
 		</div>
 
 		<!-- 버튼 모음 -->
@@ -61,13 +69,14 @@
 	<div id="dialog-form-manPlan" title="생산계획 조회">
 		
 		<!-- 조회할 계획 기간 입력 -->
-		<input id = "txtFromDate" type="date" name="from" style="display:inline-block; margin-left : 27px;">
-		<p style="display:inline-block;"> ~ </p>
-		<input id = "txtToDate" type="date" name="to" style="display:inline-block;">
-
-		<button type="button" id="btnFindManPlan" class="btn" >생산계획 조회</button>
-		<div id="gridManPlan" class="col-sm-12" ></div>
+		<div style="margin-top: 20px;">
+			<input id = "txtFromDate" type="date" name="from" style="display:inline-block; ">
+			<p style="display:inline-block;"> ~ </p>
+			<input id = "txtToDate" type="date" name="to" style="display:inline-block;">
 	
+			<button type="button" id="btnFindManPlan" class="btn" style="float: right;">생산계획 조회</button>
+			<div id="gridManPlan" class="col-sm-12" style="margin-top: 8px;"></div>
+		</div>
 	</div>
 	<br>
 	
@@ -77,7 +86,7 @@
 		<br>
 		
 		<!-- 자재조회 그리드 -->
-		<h5 style="color : #007b88;">자재조회</h5>
+		<h5 style="color: #25396f;">자재조회</h5>
 		<div id="gridResource" style = " z-index:1; position: relative"></div>
 	</div>
 	
@@ -87,9 +96,53 @@
 	</div>
 	<!--  --------------- 달력 --------------- -->
 	
+	
+	<!--  --------------- 도움말 --------------- -->
+	<div id="helpModal" title="도움말">
+		<hr>
+		돋보기 버튼을 눌러서 제품코드를 조회 후 클릭하면 선택이 됩니다.<br><br>
+		관리단위 : 제품이 공정전체를 돌아서 한번 나오는양 <br><br>
+		공정흐름관리 : 왼쪽끝 점들을 클릭드로우 하여 위치를이동할수있고<br>
+		&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+		위치가 이동되면 공정들의 순서를 변경할수 있습니다.<br><br>
+		BOM삭제 : 선택된 제품코드 를 기준으로 등록된 "사용자재" , "공정흐름"<br>
+		&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+		들의 데이터들을 초기화 할수있습니다.<br>
+	</div>
 	<script> 
+	//옵션세팅
+	themesOptions = { 
+	            selection: {    background: '#007b88',     border: '#004082'  },//  <- 클릭한 셀 색상변경 border(테두리색) , background (백그라운드)
+	            scrollbar: {    background: '#f5f5f5',  thumb: '#d9d9d9',  active: '#c1c1c1'    }, //<- 그리드 스크롤바 옵션
+	            row: {    
+	                hover: {    background: '#ccc'  }// <-마우스 올라갔을떄 한row 에 색상넣기
+	            },
+	            cell: {   // <- 셀클릭했을떄 조건들 주는것이다.
+	                normal: {   background: '#fbfbfb',  border: '#e0e0e0',  showVerticalBorder: true    },// <- showVerticalBorder : 세로(아래,위) 테두리가 보이는지 여부
+	                header: {   background: '#eee',     border: '#ccc',     showVerticalBorder: true    },// <- showVerticalBorder : 가로(양옆) 테두리가 보이는지 여부
+	                rowHeader: {    border: '#eee',     showVerticalBorder: true    },// <- 행의헤더 색상영역
+	                editable: { background: '#ffffff' },//  <-편집가능한 셀들의 색상을 주는영역
+	                selectedHeader: { background: '#eee' },//  <- 선택한 셀의 백그라룬드	
+	                disabled: { text: '#b0b0b0' }// <- 편집할수없는(비활성화된) 셀들에 대한 스타일 조절
+	            }
+	};	
+	
+	
 		tui.Grid.setLanguage('ko'); 
 		var Grid = tui.Grid; //그리드 객체 생성
+		
+		  //-------- 도움말 모달 ----------
+		  var helpModal = $( "#helpModal" ).dialog({
+		    autoOpen : false ,
+		    modal : true ,
+		    width:600, //너비
+		    height:400, //높이
+		    buttons: {
+		   		"닫기" : function() {
+		  			helpModal.dialog("close") ;
+		  		}
+		  	 }
+		  });
 		
 		// --------------- 달력 ---------------		
 		let dialogCal = $("#cal").dialog({
@@ -181,28 +234,34 @@
 		const columnsPlan = [
 			{
 				header:'주문코드',
-				name: 'ordCode'
+				name: 'ordCode',
+				align : 'center'
 			},
 			{
 				header:'주문량',
-				name: 'ordQnt'
+				name: 'ordQnt',
+				align : 'center'
 			},
 			{
 				header:'고객코드',
 				name: 'cusCode',
-				hidden: true
+				hidden: true,
+				align : 'center'
 			},
 			{
 				header: '납기일자',
-				name: 'ordDuedate'
+				name: 'ordDuedate',
+				align : 'center'
 			},
 			{
 				header: '제품코드',
-				name: 'podtCode'
+				name: 'podtCode',
+				align : 'center'
 			},
 			{
 				header: '제품명',
-				name: 'podtName'
+				name: 'podtName',
+				align : 'center'
 			}
 		]
 		
@@ -233,7 +292,8 @@
 			el: document.getElementById('gridPlan'),
 			data: dataSourcePlan, //컨트롤러에서 리턴된 결과를 dataSource에 담아서 보여준다.
 			columns: columnsPlan,
-			rowHeaders: ['checkbox']
+			rowHeaders: ['checkbox'],
+	         bodyHeight: 280
 		})
 		
 		//미계획 모달에서 체크 박스 선택 후 확인 버튼 눌렀을 때 가는 function
@@ -280,7 +340,7 @@
 		let dialogManPlan = $("#dialog-form-manPlan").dialog({
 			autoOpen: false, 
 			modal: true,
-			height: 500,
+			height: 550,
 		    width: 900,
 		    buttons: {
 				"확인" : function(){
@@ -313,27 +373,33 @@
 		const columnsManPlan = [
 			{
 				header:'생산계획번호',
-				name: 'manPlanNo'
+				name: 'manPlanNo',
+				align : 'center'
 			},
 			{
 				header:'생산계획명',
-				name: 'manPlanName'
+				name: 'manPlanName',
+				align : 'center'
 			},
 			{
 				header:'계획일자',
-				name: 'manPlanDate'
+				name: 'manPlanDate',
+				align : 'center'
 			},
 			{
 				header:'제품코드',
-				name: 'podtCode'
+				name: 'podtCode',
+				align : 'center'
 			},
 			{
 				header:'제품명',
-				name: 'podtName'
+				name: 'podtName',
+				align : 'center'
 			},
 			{
 				header:'계획상태',
-				name: 'planEtc'
+				name: 'planEtc',
+				align : 'center'
 			}
 			
 		] 
@@ -388,7 +454,7 @@
 			rowHeaders: ['checkbox'],
 			scrollY:true,
 		      minBodyHeight : 250,
-		      bodyHeight : 250,
+		      bodyHeight : 280,
 		})
 		
 		//생산계획 그리드에서 체크된 계획
@@ -406,63 +472,81 @@
 		let columnsMain = [
 			{
 				header:'제품코드',
-				name: 'podtCode'
+				name: 'podtCode',
+				align : 'center' ,
+				width: 100
 			},
 			{
 				header: '제품명',
-				name: 'podtName'
+				name: 'podtName',
+				align : 'center' ,
+				width: 200
 			},
 			{
 				header:'주문코드',
-				name: 'ordCode'
+				name: 'ordCode',
+				align : 'center'
 			},
 			{
 				header:'주문상태',
 				name: 'ordStatus',
-				hidden: true
+				hidden: true,
+				align : 'center'
 			},
 			{
 				header:'고객코드',
 				name: 'cusCode',
-				hidden: true
+				hidden: true,
+				align : 'center'
 			},
 			{
 				header:'계획일자',
 				name: 'manPlanDate',
-				hidden: false
+				hidden: false,
+				align : 'center'
 			},
 			{
 				header:'주문량',
-				name: 'ordQnt'
+				name: 'ordQnt',
+				align : 'center',
+				width: 100
 			},
 			{
 				header: '납기일자',
-				name: 'ordDuedate'
+				name: 'ordDuedate',
+				align : 'center',
+				width: 150
 			},
 			{
 				header: '작업기간',
 				name: 'planPeriod',
-				editor: 'text'
+				editor: 'text',
+				align : 'center'
 			},
 			{
 				header: '작업시작일',
 				name: 'planStartDate',
-				editor: 'datePicker'
+				editor: 'datePicker',
+				align : 'center',
+				validation : { required : true }
 			},
 			{
 				header: '작업종료일',
 				name: 'planComplete',
-				editor: 'datePicker'
+				editor: 'datePicker',
+				align : 'center',
+				validation : { required : true }
 			},
 			{
 				header: '일생산량(UPH*12)',
 				name: 'manPerday',
-				editor: 'text'
+				align : 'center'
 			},
 			{
 				header: '비고',
 				name: 'planEtc',
-				editor: 'text'
+				editor: 'text',
+				align : 'center'
 			}
 		]
 		
@@ -485,7 +569,8 @@
 			el : document.getElementById('gridMain'),
 			data : dataSourceMain, //컨트롤러에서 리턴된 결과를 dataSource에 담아서 보여준다.
 			columns : columnsMain,
-			rowHeaders : ['checkbox']
+			rowHeaders : ['checkbox'],
+	         bodyHeight: 200
 		});
 		
 		//메인 그리드에서 체크된 계획
@@ -516,23 +601,28 @@
 		const columnsResource = [
 			{
 				header:'제품코드',
-				name: 'podtCode'
+				name: 'podtCode',
+				align : 'center'
 			},
 			{
 				header: '제품명',
-				name: 'podtName'
+				name: 'podtName',
+				align : 'center'
 			},
 			{
 				header:'자재코드',
-				name: 'rscCode'
+				name: 'rscCode',
+				align : 'center'
 			},
 			{
 				header:'소요량',
-				name: 'resUsage'
+				name: 'resUsage',
+				align : 'center'
 			},
 			{
 				header: '재고량',
-				name: 'rscCnt'
+				name: 'rscCnt',
+				align : 'center'
 			}
 		]
 
@@ -541,7 +631,8 @@
 			el: document.getElementById('gridResource'),
 			data: null,
 			columns: columnsResource,
-			rowHeaders: ['rowNum']
+			rowHeaders: ['rowNum'],
+	         bodyHeight: 230
 		})
 			
 	/* 	//자재 조회 버튼 눌렀을 때 모달창 띄우기
@@ -629,7 +720,12 @@
 			
 		})
 		
-	
+		//------------ 도움말 버튼 이벤트 ---------------
+ 	 helpBtn.addEventListener('mouseover' , () => {
+ 	 	helpModal.dialog("open") ;
+ 	 })
+		
+tui.Grid.applyTheme('default', themesOptions);	
 	</script>
 </body>
 </html>
