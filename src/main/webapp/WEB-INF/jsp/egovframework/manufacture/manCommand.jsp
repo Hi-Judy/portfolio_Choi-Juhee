@@ -110,7 +110,7 @@
 	<div id="gridInsertCommand" style="display: none;"></div>
 	
 	<!-- 생산 지시 히든 그리드 -->
-	<div id="gridInsertCommandDetail" ></div>
+	<div id="gridInsertCommandDetail" style="display: none;"></div>
 
 	<!-- 계획디테일 테이블에 '생산지시중'으로 변경 히든 그리드 -->
 	<div id="girdUpdatePlanStatus" style="display: none;"></div>
@@ -122,6 +122,7 @@
 	<div id="gridInsertLot" style="display: none;"></div>
 
 	<script>
+		tui.Grid.setLanguage('ko'); 
 		var Grid = tui.Grid; //그리드 객체 생성
 
 		Grid.applyTheme('striped', { //그리드 객체에 전체 옵션 주기
@@ -141,6 +142,8 @@
 		
 		
 		//******************************생산계획 모달******************************
+		let PreCommandData; //이전 생산 지시 데이터
+		
 		//생산계획 모달 설정
 		let dialogManPlan = $("#dialog-form-manPlan").dialog({
 			autoOpen : false,
@@ -148,12 +151,13 @@
 			height : 500,
 			width : 900,
 			buttons : {
-				"확인" : function() { //확인 버튼 눌렀을 때 체크된 값에 해당하는 데이터를 gridMain에 뿌려준다.
+				"확인" : function(ev) { //확인 버튼 눌렀을 때 체크된 값에 해당하는 데이터를 gridMain에 뿌려준다.
 							
 					console.log('확인완료');
 					console.log(checkedPlanDetail[0].podtCode);
 					console.log(checkedPlanDetail[0].planNoDetail);
 					
+					//메인그리드
 					fetch("${pageContext.request.contextPath}/selectManPlanDetail/"
 							+checkedPlanDetail[0].planNoDetail+"/"+checkedPlanDetail[0].podtCode)
 					.then((response) => response.json())
@@ -166,6 +170,28 @@
 						girdUpdatePlanStatus.resetData(data.data.contents);
 					
 					})
+					
+					
+					//이전 생산 지시 그리드
+					let podtCode = gridManPlan.getValue(ev.rowKey, 'podtCode');
+					console.log(gridManPlan.getValue(ev.rowKey, 'podtCode'));
+
+					$.ajax({
+						url : '${pageContext.request.contextPath}/selectPreCommand',
+						method : 'POST',
+						data : {'podtCode' : podtCode},
+						dataType : 'JSON',
+						success : function(datas) {
+							PreCommandData = datas;
+							console.log(PreCommandData);
+							gridPreCommand.resetData(PreCommandData.result);
+							gridPreCommand.resetOriginData();
+						},
+						error : function(reject) {
+							console.log(reject);
+						}
+					})
+					
 					dialogManPlan.dialog("close");
 				},
 
@@ -334,13 +360,57 @@
 				gridResource.setValue(i.rowKey, 'resUsage', (i.resUsage*1*a)/100);
 			}
 			
-			
 		})
 		
+		let resData; //자재데이터
+		let facData; //설비데이터
 		
-		//******************************사원조회 그리드******************************
-		//메인그리드의 사원 컬럼 클릭
+		//메인 그리드에서 한 행 클릭 이벤트
 		gridMain.on('click', function(ev){
+			
+			let podtCode = gridMain.getValue(ev.rowKey, 'podtCode');
+			console.log(gridMain.getValue(ev.rowKey, 'podtCode'));
+			
+			//자재조회
+			gridResource.refreshLayout();
+			$.ajax({
+				url : '${pageContext.request.contextPath}/selectRes',
+				method : 'POST',
+				data : {
+					'podtCode' : podtCode
+				},
+				dataType : 'JSON',
+				success : function(datas) {
+					resData = datas;
+					gridResource.resetData(resData.result);
+					gridResource.resetOriginData();
+				},
+				error : function(reject) {
+					console.log(reject);
+				}
+			})
+			
+			
+			//설비조회
+			$.ajax({
+				url : '${pageContext.request.contextPath}/selectFac',
+				method : 'POST',
+				data : {
+					'podtCode' : podtCode
+				},
+				dataType : 'JSON',
+				success : function(datas) {
+					facData = datas;
+					gridFacility.resetData(facData.result);
+					gridFacility.resetOriginData();
+				},
+				error : function(reject) {
+					console.log(reject);
+				}
+			})
+			
+			
+			//사원컬럼 클릭
 			console.log(gridMain.getValue(ev["rowKey"], "empId"));
 			
 			if(ev["columnName"] == "empId" && gridMain.getValue(ev["rowKey"], "empId") == null){
@@ -352,14 +422,12 @@
 			.then((data)=>{
 				console.log(data.data.contents);
 				
-				
 				gridEmp.resetData(data.data.contents)
 				gridEmp.refreshLayout();
-		
-			})
 			
-		})		
+			})
 		
+		})
 		
 		//******************************사원조회 모달******************************
 		//사원조회 모달 설정
@@ -454,35 +522,6 @@
 			}
 		]
 
-		let resData;
-
-		//자재조회 버튼 클릭 이벤트
-		$('#btnSelectRes').click(function() {
-			//console.log('자재조회 테스트');
-
-			let podtCode = document.querySelector('#txtPodt').value;
-
-			//console.log(podtCode);
-
-			//dialogResource.dialog("open");
-			gridResource.refreshLayout();
-			$.ajax({
-				url : '${pageContext.request.contextPath}/selectRes',
-				method : 'POST',
-				data : {
-					'podtCode' : podtCode
-				},
-				dataType : 'JSON',
-				success : function(datas) {
-					resData = datas;
-					gridResource.resetData(resData.result);
-					gridResource.resetOriginData();
-				},
-				error : function(reject) {
-					console.log(reject);
-				}
-			})
-		})
 
 		//자재조회 그리드 내용
 		let gridResource = new Grid({
@@ -526,32 +565,6 @@
 			} 
 		]
 
-		let facData;
-
-		//설비조회 버튼 클릭 이벤트
-		$('#btnSelectFac').click(function() {
-			console.log('설비조회 테스트');
-
-			let podtCode = document.querySelector('#txtPodt').value;
-			console.log(podtCode);
-
-			$.ajax({
-				url : '${pageContext.request.contextPath}/selectFac',
-				method : 'POST',
-				data : {
-					'podtCode' : podtCode
-				},
-				dataType : 'JSON',
-				success : function(datas) {
-					facData = datas;
-					gridFacility.resetData(facData.result);
-					gridFacility.resetOriginData();
-				},
-				error : function(reject) {
-					console.log(reject);
-				}
-			})
-		})
 
 		//설비조회 그리드 내용
 		let gridFacility = new Grid({
@@ -695,33 +708,8 @@
 			}
 			
 		]
-		
-		
-		let PreCommandData;
 
-		//이전 생산지시조회 버튼 클릭 이벤트
-		$('#btnPreCommand').click(function() {
-			console.log('이전 생산지시조회 테스트');
 
-			let podtCode = document.querySelector('#txtPodt').value;
-			console.log(podtCode);
-
-			$.ajax({
-				url : '${pageContext.request.contextPath}/selectPreCommand',
-				method : 'POST',
-				data : {'podtCode' : podtCode},
-				dataType : 'JSON',
-				success : function(datas) {
-					PreCommandData = datas;
-					console.log(PreCommandData);
-					gridPreCommand.resetData(PreCommandData.result);
-					gridPreCommand.resetOriginData();
-				},
-				error : function(reject) {
-					console.log(reject);
-				}
-			})
-		})
 
 		//이전 생산지시조회 그리드 내용
 		let gridPreCommand = new Grid({

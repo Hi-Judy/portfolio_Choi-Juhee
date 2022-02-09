@@ -66,7 +66,7 @@
 		<input id = "txtToDate" type="date" name="to" style="display:inline-block;">
 
 		<button type="button" id="btnFindManPlan" class="btn" >생산계획 조회</button>
-		<div id="gridManPlan"></div>
+		<div id="gridManPlan" class="col-sm-12" ></div>
 	
 	</div>
 	<br>
@@ -116,9 +116,13 @@
       		  dataType : 'json' ,
       		  async : false ,
       		  success : function(datas) {
-      			  let list = datas ; 
+      			  let list = [] ;
+      			  list = datas.calList ; 
       			  
       			  let calendarEl = document.getElementById('calendar') ;
+      			  
+      			  console.log(list) ;
+      			  console.log(typeof list) ;
       			  
       			  let events = list.map(function(item) {
       				  return {
@@ -127,6 +131,10 @@
       					  end : item.ordDuedate
       				  }
       			  }) ;	
+      			  
+      			  let calendar = new FullCalendar.Calendar(calendarEl, {
+      				  events : events
+      			  })
       			  
    				calendar.render() ;
       		  } , 
@@ -322,6 +330,10 @@
 			{
 				header:'제품명',
 				name: 'podtName'
+			},
+			{
+				header:'계획상태',
+				name: 'planEtc'
 			}
 			
 		] 
@@ -356,6 +368,10 @@
 						gridManPlan.resetData(data.result);
 						gridManPlan.resetOriginData();
 						gridManPlan.refreshLayout();
+						
+						if(data.result.length == 0) {
+							alert("계획기간에 상응하는 정보가 없습니다.");
+						}
 					},
 					error: function(reject){
 						console.log('reject: '+ reject);
@@ -369,7 +385,10 @@
 			el: document.getElementById('gridManPlan'),
 			data: data,
 			columns: columnsManPlan,
-			rowHeaders: ['checkbox']
+			rowHeaders: ['checkbox'],
+			scrollY:true,
+		      minBodyHeight : 250,
+		      bodyHeight : 250,
 		})
 		
 		//생산계획 그리드에서 체크된 계획
@@ -475,7 +494,7 @@
 		//메인 그리드에서 클릭된 계획의 행을 가져온다.
 		gridMain.on('click', function(ev){
 			checkedMain = gridMain.getCheckedRows();
-			console.log(checkedMain);
+			//console.log(checkedMain);
 			
 			fetch("${pageContext.request.contextPath}/manufacture/resource/"
 					+checkedMain[0].podtCode)

@@ -34,7 +34,6 @@ public class ManufactureController {
 	@PostMapping("/manufacture/manPlan")
 	public String selectManPlan(ManufacturePlanVO planVO, Model model) {
 
-		//System.out.println(planVO);
 		model.addAttribute("result", manService.selectManPlan(planVO));
 		//System.out.println("생산계획 조회: " + manService.selectManPlan(planVO));
 
@@ -47,7 +46,7 @@ public class ManufactureController {
 									  @PathVariable String podtCode,
 									  ManufacturePlanVO planVO, 
 									  Model model) {
-		//System.out.println(planVO);
+
 		Map<String, List<ManufacturePlanVO>> maps = new HashMap<>();
 		maps.put("contents", manService.selectManPlanDetail(planVO));
 		 
@@ -79,7 +78,7 @@ public class ManufactureController {
 		model.addAttribute("data", maps);
 
 		//model.addAttribute("result", manService.selectManPlanDetail(planVO));
-		System.out.println("미계획 조회: " + manService.selectPlanToMain(planVO));
+		//System.out.println("미계획 조회: " + manService.selectPlanToMain(planVO));
 
 		return "jsonView";
 	}
@@ -90,12 +89,10 @@ public class ManufactureController {
 							ManufacturePlanVO planVO, 
 							Model model) {
 
-		// System.out.println("@@@@@@@@"+planVO.getPodtCode());
-
 		Map<String, List<ManufacturePlanVO>> maps = new HashMap<>();
 		maps.put("contents", manService.selectRes(planVO));
-		System.out.println("planVO: "+ planVO);
-		System.out.println("자재조회"+maps);
+//		System.out.println("planVO: "+ planVO);
+//		System.out.println("자재조회"+maps);
 
 		Map<String, Object> map = new HashMap<>();
 		map.put("data", maps);
@@ -126,8 +123,8 @@ public class ManufactureController {
 	// 생산계획에서 한 건 추가
 	@PostMapping("/manufacture/main")
 	public String modifyDataInsert(@RequestBody ModifyVO<ManufacturePlanVO> list, Model model) {
-		System.out.println("!!!!생산계획추가^^!!!!!!!!!!!!!" + list);
-		System.out.println("!!!!생산계획 주문상태 수정^^!!!!!!!!!!!!!" + list);
+//		System.out.println("!!!!생산계획추가^^!!!!!!!!!!!!!" + list);
+//		System.out.println("!!!!생산계획 주문상태 수정^^!!!!!!!!!!!!!" + list);
 		manService.insertPlan(list);
 
 		// System.out.println("!!!!생산계획삭제^^!!!!!!!!!!!!!"+list);
