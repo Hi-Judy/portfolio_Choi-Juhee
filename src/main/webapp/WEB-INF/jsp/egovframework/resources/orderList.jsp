@@ -67,6 +67,7 @@
 	
 	
 <script type="text/javascript">
+tui.Grid.setLanguage('ko');
 //옵션세팅
 themesOptions = { 
             selection: {    background: '#007b88',     border: '#004082'  },//  <- 클릭한 셀 색상변경 border(테두리색) , background (백그라운드)
@@ -198,16 +199,34 @@ var helpModal = $( "#helpModal" ).dialog({
 				header: '발주량',
 				name: 'rscCnt',
 				formatter(value) {
-	                return value.value.toString().replace(/\B(?<!\.\d*)(?=(\d{3})+(?!\d))/g, ",");
+					if(value.value != null && value.value != '' ){
+						  return value.value.toString().replace(/\B(?<!\.\d*)(?=(\d{3})+(?!\d))/g, ",");
+					}else{
+						return value.value ;
+					}
 	            }
 			   },
 			   {
 				 header: '입고량',
-				 name: 'rscPassCnt'
+				 name: 'rscPassCnt',
+				 formatter(value) {
+					 if(value.value != null && value.value != '' ){
+						return value.value.toString().replace(/\B(?<!\.\d*)(?=(\d{3})+(?!\d))/g, ",");
+					}else{
+						return value.value ;
+						}
+		            }
 				},
 				{
 				  header: '불량량',
-				  name: 'rscDefCnt'
+				  name: 'rscDefCnt',
+					formatter(value) {
+						if(value.value != null && value.value != '' ){
+							  return value.value.toString().replace(/\B(?<!\.\d*)(?=(\d{3})+(?!\d))/g, ",");
+						}else{
+							return value.value ;
+						}
+		            }
 				},
 				{
 				  header: '업체',
@@ -263,7 +282,8 @@ var helpModal = $( "#helpModal" ).dialog({
 			  pageOptions: {
 				    useClient: true,
 				    perPage: 15
-				}
+				},
+				 bodyHeight: 410
 		});
 	
 	//엑셀버튼 클릭시 파일로 저장

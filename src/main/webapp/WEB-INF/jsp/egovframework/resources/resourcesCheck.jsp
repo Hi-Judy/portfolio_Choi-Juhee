@@ -37,6 +37,7 @@
 	</div>
 	
 <script type="text/javascript">
+tui.Grid.setLanguage('ko');
 	let defRowKey;
 	
 	//모달창 설정(조회 클릭시 미입고 품목 조회)
@@ -51,17 +52,7 @@
 					for(i=0; i <gridOrder.getCheckedRows().length; i++ ){
 						//중복체크하고 값이 없는 경우에만 appendRow 해주는 거 
 						if(grid.findRows({ordrNo : gridOrder.getCheckedRows()[i].ordrNo}).length == 0) {
-							grid.appendRow({'ordeDate':gridOrder.getCheckedRows()[i].ordeDate,
-											'ordrNo':gridOrder.getCheckedRows()[i].ordrNo,
-											'rscCode':gridOrder.getCheckedRows()[i].rscCode,
-											'rscName':gridOrder.getCheckedRows()[i].rscName,
-											'rscUnit':gridOrder.getCheckedRows()[i].rscUnit,
-											'rscCnt':gridOrder.getCheckedRows()[i].rscCnt,
-											'rscPrc':gridOrder.getCheckedRows()[i].rscPrc,
-											'rscTotal':gridOrder.getCheckedRows()[i].rscTotal,
-											'sucName':gridOrder.getCheckedRows()[i].sucName,
-											'istReqDate':gridOrder.getCheckedRows()[i].istReqDate
-							});
+							grid.appendRow(gridOrder.getCheckedRows()[i]);
 						}
 					}
 					dialog5.dialog("close");
@@ -76,9 +67,10 @@
 	$("#findResourcesCheck").on("click", function(){
 			dialog5.dialog("open");
 		$("#dialog-form-check").load("searchOrderList",
-				function(){console.log("로드됨")})
+				function(){
+					console.log("로드됨")
+				})
 		});
-
 	
 	//그리드 
 	var Grid = tui.Grid;
@@ -107,26 +99,61 @@
 			   },
 			  {
 				header: '발주량',
-				name: 'rscCnt'
+				name: 'rscCnt',
+				formatter(value) {
+					if(value.value != null && value.value != '' ){
+						  return value.value.toString().replace(/\B(?<!\.\d*)(?=(\d{3})+(?!\d))/g, ",");
+					}else{
+						return value.value ;
+					}
+	            }
 			   },
 			   {
 				 header: '입고량',
 				 name: 'rscIstCnt',
-				 editor: 'text'
+				 editor: 'text',
+				 formatter(value) {
+						if(value.value != null && value.value != '' ){
+							  return value.value.toString().replace(/\B(?<!\.\d*)(?=(\d{3})+(?!\d))/g, ",");
+						}else{
+							return value.value ;
+						}
+		            }
 				},
 				{
 				 header: '검사량',
 				 name: 'rscTstCnt',
-				 editor: 'text'
+				 editor: 'text',
+					formatter(value) {
+						if(value.value != null && value.value != '' ){
+							  return value.value.toString().replace(/\B(?<!\.\d*)(?=(\d{3})+(?!\d))/g, ",");
+						}else{
+							return value.value ;
+						}
+		            }
 				},
 				{
 				 header: '합격량',
 				 name: 'rscPassCnt',
-				 editor: 'text'
+				 editor: 'text',
+					formatter(value) {
+						if(value.value != null && value.value != '' ){
+							  return value.value.toString().replace(/\B(?<!\.\d*)(?=(\d{3})+(?!\d))/g, ",");
+						}else{
+							return value.value ;
+						}
+		            }
 				},
 				{
 				  header: '불량량',
-				  name: 'rscDefCnt'
+				  name: 'rscDefCnt',
+					formatter(value) {
+						if(value.value != null && value.value != '' ){
+							  return value.value.toString().replace(/\B(?<!\.\d*)(?=(\d{3})+(?!\d))/g, ",");
+						}else{
+							return value.value ;
+						}
+		            }
 				},
 				{
 				  header: '불량코드',

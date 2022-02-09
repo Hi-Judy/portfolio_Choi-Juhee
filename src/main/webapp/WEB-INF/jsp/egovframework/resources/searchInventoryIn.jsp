@@ -9,7 +9,12 @@
 <body>
 <div id="gridInvIn"></div>
 <script type="text/javascript">
-
+	var code2;
+	$(function(){
+		code2=code;
+		gridInvIn.readData(1,{'rscCode':code2},true);
+		console.log(code2);
+	})
 	//그리드(자재 발주 페이지에서 사용)
 	var columnsInvIn = [
 			{
@@ -30,7 +35,25 @@
 			},
 			 {
 			   header: '입고량',
-			   name: 'istCnt'
+			   name: 'istCnt',
+				formatter(value) {
+					if(value.value != null && value.value != '' ){
+						  return value.value.toString().replace(/\B(?<!\.\d*)(?=(\d{3})+(?!\d))/g, ",");
+					}else{
+						return value.value ;
+					}
+	            }
+			},
+			 {
+				header: '출고량',
+				name: 'ostCnt',
+				formatter(value) {
+					if(value.value != null && value.value != '' ){
+						  return value.value.toString().replace(/\B(?<!\.\d*)(?=(\d{3})+(?!\d))/g, ",");
+					}else{
+						return value.value ;
+					}
+	            }
 			}
 			];
 				
@@ -40,8 +63,10 @@
 		    readData: { 
 		    	url: 'resourcesInventoryInList', 
 		    	method: 'GET'
+		    	
 		    	}
 		  },
+		  initalRequest : false,
 		  contentType: 'application/json'
 		};
 	
@@ -49,17 +74,17 @@
 	var gridInvIn = new Grid({
 		  el: document.getElementById('gridInvIn'),
 		  data: dataSourceInvIn,
-		  columns: columnsInvIn
+		  columns: columnsInvIn,
+		  pageOptions: {
+			    useClient: true,
+			    perPage: 15
+			} 
 		});
 	
 	
 	//리스트에서 선택한 값 가지고 오기
 	gridInvIn.on("dblclick", (ev) => {
-			grid.appendRow({});
-			grid.setValue(grid.getRowCount()-1, "rscCode", gridInvIn.getValue(ev["rowKey"],'rscCode'), false)
-			grid.setValue(grid.getRowCount()-1, "rscName", gridInvIn.getValue(ev["rowKey"],'rscName'), false)
 			grid.setValue(grid.getRowCount()-1, "rscLot", gridInvIn.getValue(ev["rowKey"],'rscLot'), false)
-			grid.setValue(grid.getRowCount()-1, "rscUnit", gridInvIn.getValue(ev["rowKey"],'rscUnit'), false)
 			dialoginventory.dialog("close");
 	});
 

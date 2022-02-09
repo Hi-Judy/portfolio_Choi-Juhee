@@ -132,14 +132,22 @@ div#OverallSize {
 			  header: '발주량',
 			  name: 'rscCnt',
 				formatter(value) {
-	                return value.value.toString().replace(/\B(?<!\.\d*)(?=(\d{3})+(?!\d))/g, ",");
+					if(value.value != null && value.value != '' ){
+						  return value.value.toString().replace(/\B(?<!\.\d*)(?=(\d{3})+(?!\d))/g, ",");
+					}else{
+						return value.value ;
+					}
 	            }
 			},
 			{
 			 header: '합계',
 			 name: 'rscTotal',
 				formatter(value) {
-	                return value.value.toString().replace(/\B(?<!\.\d*)(?=(\d{3})+(?!\d))/g, ",");
+					if(value.value != null && value.value != '' ){
+						  return value.value.toString().replace(/\B(?<!\.\d*)(?=(\d{3})+(?!\d))/g, ",");
+					}else{
+						return value.value ;
+					}
 	            }
 			},
 			{

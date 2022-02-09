@@ -41,25 +41,21 @@
 	</div>
 
 <script type="text/javascript">
-
+tui.Grid.setLanguage('ko');
+var code;
 	//모달창 설정(자재 조회)
-	let dialogRsc = $( "#dialog-form-rsc" ).dialog({
+	let dialog3 = $( "#dialog-form-rsc" ).dialog({
 			autoOpen: false,
 			modal: true,
 			heigth : 500,
 			width : 900,
 			buttons: {
 				"닫기" : function() {
-					dialogRsc.dialog("close") ;
+					dialog3.dialog("close") ;
 				}
 			},
 		});
 	
-	//모달창(자재조회)
-	function clickRsc(rscCode, rscName){
-			
-		dialog1.dialog("close");
-	};
 
 	//모달창(조회 클릭시 LOT별 입고)
 	let dialoginventory = $( "#dialog-form-inventory" ).dialog({
@@ -67,6 +63,11 @@
 			modal: true,
 			heigth : 500,
 			width : 900,
+			buttons: {
+				"닫기" : function() {
+					dialoginventory.dialog("close") ;
+				}
+			},
 		});
 	
 	
@@ -91,12 +92,26 @@
 	   {
 		 header: '입고량',
 		 name: 'istCnt',
-		editor: 'text'
+		editor: 'text',
+		formatter(value) {
+			if(value.value != null && value.value != '' ){
+				  return value.value.toString().replace(/\B(?<!\.\d*)(?=(\d{3})+(?!\d))/g, ",");
+			}else{
+				return value.value ;
+			}
+        }
 		},
 		{
 		 header: '출고량',
 		 name: 'ostCnt',
-		editor: 'text'
+		editor: 'text',
+		formatter(value) {
+			if(value.value != null && value.value != '' ){
+				  return value.value.toString().replace(/\B(?<!\.\d*)(?=(\d{3})+(?!\d))/g, ",");
+			}else{
+				return value.value ;
+			}
+        }
 		},
 		{
 		 header: '자재LOT',
@@ -138,18 +153,30 @@
 		  columns
 		});
 	
-	//그리드 클릭시 columnName = rscCode 
+	//columnName = rscLot 그리드 클릭시 자재명에 있는 rscLot LOT 리스트 출력
 	grid.on("click", function(ev){
-		if(ev["columnName"]=="rscCode"){
-			rscRowKey=ev["rowKey"];
-				dialogRsc.dialog("open");
+		if(ev["columnName"]=="rscLot" && (grid.getValue(ev["rowKey"], 'rscCode')) != null){
+			rscLotRowKey=ev["rowKey"];
+			
+				dialoginventory.dialog("open");
 		
-	$("#dialog-form-rsc").load("recList",
-			function(){console.log("로드됨")})}
-		
+	$("#dialog-form-inventory").load("resourcesInventoryIn",
+		function(){console.log("로드됨");
+		code=grid.getValue(ev["rowKey"], 'rscCode');})
+		}
 	});
 	
 	
+	//columnName = rscCode 그리드 클릭시 자재리스트 출력
+	grid.on("click", function(ev){
+		if(ev["columnName"]=="rscCode"){
+			rscRowKey=ev["rowKey"];
+				dialog3.dialog("open");
+	
+	$("#dialog-form-rsc").load("recList",
+		function(){console.log("로드됨")})
+		}
+	});	
 	
 	btnAdd.addEventListener("click", function(){
 		grid.appendRow({});

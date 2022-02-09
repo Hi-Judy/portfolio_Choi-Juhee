@@ -28,11 +28,43 @@
 			</span>
 		</div>
 	</div>
+	<div id="dialog-form-store" title="미입고 검색"></div>
 	<div id="OverallSize" style="margin-left: 10px;">
 	<br>
 	<div id="grid" style="border-top: 3px solid #168; width: 1500px;"></div>
 	</div>
 <script type="text/javascript">
+tui.Grid.setLanguage('ko');
+	let dialogIn = $( "#dialog-form-store" ).dialog({
+		autoOpen: false,
+		modal: true,
+		heigth : 500,
+		width : 900,
+		buttons: {
+			"확인" : function (){
+				//여기서는 getCheckedRows에 있는 값을 
+				for(i=0; i <gridIn.getCheckedRows().length; i++ ){
+					//중복체크하고 값이 없는 경우에만 appendRow 해주는 거 
+					if(grid.findRows({ordrNo : gridIn.getCheckedRows()[i].ordrNo}).length == 0) {
+						grid.appendRow(gridIn.getCheckedRows()[i]);
+					}
+				}
+				dialogIn.dialog("close");
+			},
+			"닫기" : function() {
+				dialogIn.dialog("close");
+			}
+		},
+	});
+
+	//모달창 오픈
+	$("#findResourcesStore").on("click", function(){
+		dialogIn.dialog("open");
+		$("#dialog-form-store").load("searchResourceStore",
+				function(){
+					console.log("로드됨")
+					})
+			});
 
 	var Grid = tui.Grid;
 	Grid.applyTheme('default');
@@ -56,11 +88,25 @@
 			  },
 			  {
 				header: '입고량',
-				name: 'rscPassCnt'
+				name: 'rscPassCnt',
+				formatter(value) {
+					if(value.value != null && value.value != '' ){
+						  return value.value.toString().replace(/\B(?<!\.\d*)(?=(\d{3})+(?!\d))/g, ",");
+					}else{
+						return value.value ;
+					}
+	            }
 			  },
 			  {
 				header: '단가',
-				name: 'rscPrc'
+				name: 'rscPrc',
+				formatter(value) {
+					if(value.value != null && value.value != '' ){
+						  return value.value.toString().replace(/\B(?<!\.\d*)(?=(\d{3})+(?!\d))/g, ",");
+					}else{
+						return value.value ;
+					}
+	            }
 			   },
 			   {
 				 header: '자재LOTNO',
@@ -77,7 +123,7 @@
 		let dataSource = {
 				  api: {
 				    readData: { 
-				    	url: 'resourcesStoreList', 
+				    	url: 'resourcesStore', 
 				    	method: 'GET'
 				    	},
 				    	modifyData: { url: 'resourcesStoreModify', method: 'POST' }
@@ -97,13 +143,10 @@
 			grid.request('modifyData'); 
 	}) 
 		
-		//저장시 데이터 다시 읽어서 수정한 품목은 사라지게
-		grid.on("response",function(ev){
-			let a =JSON.parse(ev.xhr.response)
-			 if(a.mod=='upd'){
-				grid.readData();
-			} 
-		})
+	//저장시 데이터 다시 읽어서 수정한 품목(입고 완료한) 사라지게
+		grid.on("response",function(){
+		grid.clear();
+	})
 	
 	
 	DeleteRscStore.addEventListener("click", function(){
