@@ -327,10 +327,13 @@ $.ajax({
 		  columns : [
 		     { header : '자재LOT'			, name : 'rscLot'    , align : 'center' , width: 200 },
 		     { header : '자재 입고/출고 번호'	, name : 'storeNo'   , align : 'center' , width: 200 },
-		     { header : '재고량'			, name : 'istCnt'    , align : 'center' ,
-		    	 formatter(value) {               
-		    						 return value.value.toString().replace(/\B(?<!\.\d*)(?=(\d{3})+(?!\d))/g, ",") ;
-		     					  }
+		     { header : '재고량'			, name : 'istCnt'    , align : 'center' , formatter(value) { 
+		        	if(value.value != null && value.value != '' && value.value != "null"){
+		        		return value.value.toString().replace(/\B(?<!\.\d*)(?=(\d{3})+(?!\d))/g, ",") ;
+		        	}else{
+		        		return value.value ;
+		        	}
+	        	} 
 		     },
 		     { header : '비고'			, name : 'storeEtc'  , align : 'center' , width: 150} 
 		  ],
