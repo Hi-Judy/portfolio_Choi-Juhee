@@ -20,7 +20,6 @@ public class MaterialManageController {
 	
 	//페이지 이동
 	@RequestMapping("MeterialManagement")
-
 	public String PageView() {
 		return "view/MaterialManageInfo.tiles";
 	}

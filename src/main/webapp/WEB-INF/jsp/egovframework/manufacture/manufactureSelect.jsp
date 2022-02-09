@@ -1,4 +1,5 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <!DOCTYPE html>
 <html>
 <head>
@@ -16,6 +17,12 @@
 </head>
 
 <body>
+	<div id="div_load_image"
+		style="position: absolute; top: 50%; left: 50%; width: 0px; height: 0px; z-index: 9999; background: #f0f0f0; filter: alpha(opacity = 50); opacity: alpha*0.5; margin: auto; padding: 0; text-align: center; display:none;">
+		<img src=<c:url value='/images/egovframework/com/main/loding.gif' />
+			style="width: 100px; height: 100px;">
+	</div>
+
 	<div id="title" style="margin-left : 10px;"><h3 style="color : #054148; font-weight : bold">생산계획서 조회</h3></div>
 	
 	<div id="top" style="height : 160px; padding : 10px;">
@@ -136,7 +143,7 @@
 		//생산계획조회 버튼 클릭이벤트
 		$('#btnSearchManPlan').click(function(){
 			console.log('생산계획 조회');
-			
+			$("#div_load_image").show();
 			let manDate = document.querySelector('#txtManDate').value;
 			let podtCode = document.querySelector('#txtPdotCode').value;
 			
@@ -165,7 +172,6 @@
 				})
 				
 			}
-			
 		})
 		
 		
@@ -257,9 +263,7 @@
 			txtPlanTo.value = '';
 			txtPlanName.value ='';
 			
-		})
-		
-	
+		})	
 	</script>
 </body>
 </html>
