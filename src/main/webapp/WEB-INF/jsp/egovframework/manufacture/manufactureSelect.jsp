@@ -49,7 +49,7 @@
 	</div>	
 	
 	<script> 
-	
+		tui.Grid.setLanguage('ko'); 
 		var Grid = tui.Grid; //그리드 객체 생성
 		
 		Grid.applyTheme('striped', { //그리드 객체에 전체 옵션 주기
@@ -143,18 +143,29 @@
 			console.log(manDate);
 			console.log(podtCode);
 			
-			$.ajax({
-				url: '${pageContext.request.contextPath}/manufacture/selectManufacturePlan',
-				method: 'POST',
-				data: {'manPlanDate' : manDate, 'podtCode': podtCode },
-				dataType: 'JSON',
-				success: function(datas){
-					console.log(datas);
-					
-					gridMain.resetData(datas.result);
-					gridMain.refreshLayout();
-				}
-			})
+			if(manDate == "" && podtCode == "" ){
+				alert("계획일자나 제품코드를 입력해주세요.");
+			}
+			else{
+				$.ajax({
+					url: '${pageContext.request.contextPath}/manufacture/selectManufacturePlan',
+					method: 'POST',
+					data: {'manPlanDate' : manDate, 'podtCode': podtCode },
+					dataType: 'JSON',
+					success: function(datas){
+						console.log(datas);
+						
+						gridMain.resetData(datas.result);
+						gridMain.refreshLayout();
+						
+						if(datas.result.length == 0 ){
+							alert("데이터가 없습니다.");
+						}
+					}
+				})
+				
+			}
+			
 		})
 		
 		
