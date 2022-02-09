@@ -36,4 +36,6 @@ public class ProductVO {
 	String matNo ; 
 	String matLotno ;
 	String rscLot ;
+	
+	String status ;
 }
