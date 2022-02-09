@@ -41,6 +41,7 @@
 	
 	
 	<script>
+		tui.Grid.setLanguage('ko');
 		var Grid = tui.Grid; //그리드 객체 생성
 		
 		Grid.applyTheme('striped', { //그리드 객체에 전체 옵션 주기
@@ -125,17 +126,11 @@
 				url: '${pageContext.request.contextPath}/selectCommand',
 				method: 'POST',
 				data: {'manStartDate' : manDate, 'podtCode': podtCode },
-				dataType: 'JSON',
 				success: function(datas){
-					//commandData = datas;
-					
-					console.log((JSON.parse(datas)).result);
-					//console.log(commandData);
-					//console.log(manDateData.result);
-				/* 	console.log(commandData.result);
-					console.log(commandData.data);
-					console.log(commandData.data.contents); */
-					gridCommand.resetData((JSON.parse(datas)).result);
+					data = JSON.parse(datas);
+					console.log(data);
+					//console.log((JSON.parse(datas)).result);
+					gridCommand.resetData(data.result);
 					gridCommand.refreshLayout();
 				},
 				error: function(reject){
@@ -145,7 +140,7 @@
 		})
 		
 		
-		//작업 일자별 생산지시 조회 그리드 내용
+		//생산지시 조회 그리드 내용
 		let gridCommand = new Grid({
 			el: document.getElementById('gridCommand'),
 			data: null,

@@ -3,33 +3,23 @@
 
 <mapper namespace="egov.mes.manufacture.plan.dao.ManufactureMapper">
 
-<!-- 생산계획서 디테일 조회(생산계획서 조회 페이지) -->
-<select id="selectManufactureDetail" resultType="egov.mes.manufacture.plan.dao.ManufacturePlanVO">
-	select a.man_plan_no, a.man_plan_date, a.man_plan_name, 
-		   a.podt_code, prod_detail(a.podt_code) podtName,
-	       a.plan_period, a.man_perday, a.plan_startdate, a.plan_etc,
-	       b.ord_code, b.ord_duedate
-	from man_plan_view a join order_management b
-	on a.ord_code = b.ord_code
-	where a.man_plan_no = #{manPlanNo}
-	and a.podt_code = #{podtCode}
-</select>
-
-
 <!-- 생산계획서 조회(생산계획서 조회 페이지) -->
 <select id="selectManufacturePlan" resultType="egov.mes.manufacture.plan.dao.ManufacturePlanVO">
-	select  a.podt_code, prod_detail(a.podt_code) podtName, 
-			b.ord_code, b.man_plan_no, b.man_plan_name, b.man_plan_date
-	from trade_info a join manufacture_plan b
+	select a.podt_code, prod_detail(a.podt_code) podtName, 
+           a.man_plan_date, a.plan_period, a.plan_startdate, a.plan_complete,
+           a.man_perday, plan_etc,
+           b.ord_code, b.ord_qnt, b.ord_duedate
+	from man_plan_view a join ord_detail_view b
 	on a.ord_code = b.ord_code
 	where 1=1
 	
+	and a.podt_code = b.podt_code
 	<if test = ' podtCode != null and podtCode != "" '>
 		and a.podt_code = #{podtCode}
 	</if>
 	
 	<if test = ' manPlanDate != null and manPlanDate != "" '>
-		and b.man_plan_date = #{manPlanDate}
+		and a.man_plan_date = #{manPlanDate}
 	</if>
 	
 	order by a.podt_code
@@ -93,10 +83,10 @@
 <!-- 생산계획 조회 -->
 <select id = "selectManPlan" resultType="egov.mes.manufacture.plan.dao.ManufacturePlanVO">
 	select a.man_plan_no, a.man_plan_name, a.man_plan_date, 
-		   a.podt_code, prod_detail(a.podt_code) podtName
+		   a.podt_code, prod_detail(a.podt_code) podtName, a.plan_etc
 	from man_plan_view a join order_management b
     on a.ord_code = b.ord_code
-	where b.ord_status = '진행중'
+	
 		<if test = "startDate != null"> 
 			and to_char(a.man_plan_date, 'rrrr-MM-dd') >= #{startDate}
 		</if>
