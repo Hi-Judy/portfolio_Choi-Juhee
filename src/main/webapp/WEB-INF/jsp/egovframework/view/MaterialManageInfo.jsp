@@ -331,7 +331,7 @@ $.ajax({
 		        	if(value.value != null && value.value != '' && value.value != "null"){
 		        		return value.value.toString().replace(/\B(?<!\.\d*)(?=(\d{3})+(?!\d))/g, ",") ;
 		        	}else{
-		        		return value.value ;
+		        		return value.value ;  
 		        	}
 	        	} 
 		     },
