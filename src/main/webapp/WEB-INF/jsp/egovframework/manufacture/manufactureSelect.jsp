@@ -226,7 +226,7 @@
 						gridMain.refreshLayout();
 						
 						if(datas.result.length == 0 ){
-							alert("데이터가 없습니다.");
+							alert("상응하는 정보가 없습니다.");
 						}
 					}
 				})
@@ -317,13 +317,14 @@
 		
 		//******************************초기화 버튼 이벤트******************************
 		btnInit.addEventListener("click", function(){
-			let txtPlanDate = document.getElementById('txtFromDate');
-			let txtPlanTo = document.getElementById('txtToDate');
-			let txtPlanName = document.getElementById('txtPlanName');
+			let txtManDate = document.getElementById('txtManDate');
+			let txtPdotCode = document.getElementById('txtPdotCode');
 			
-			txtPlanDate.value = '';
-			txtPlanTo.value = '';
-			txtPlanName.value ='';
+			txtManDate.value = '';
+			txtPdotCode.value = '';
+			
+			gridMain.resetData([{}]);
+			gridResource.resetData([{}]);
 			
 		})
 				

@@ -51,7 +51,7 @@
 				<p id="comCode" style="display: inline-block;"></p>
 			</div>
 			
-			<button type="button" id="btnEnd" class="btn" style="display: inline-block; float : right; margin : 5px;">종료</button>
+			<button type="button" id="btnInit" class="btn" style="display: inline-block; float : right; margin : 5px;">초기화</button>
 			<button type="button" id="btnStart" class="btn" style="display: inline-block; float : right; margin : 5px;">시작</button>
 		</div>
 	</div>
@@ -114,6 +114,7 @@
 						document.getElementById("podtCode").innerHTML = data.data.contents[0].podtCode
 						document.getElementById("podtName").innerHTML = data.data.contents[0].podtName
 						document.getElementById("comCode").innerHTML = data.data.contents[0].comCode
+					
 					})
 					
 					dialogCommand.dialog("close");
@@ -155,21 +156,37 @@
 			let manDate = document.querySelector("#txtManDate").value; //작업일 인풋태그 입력값
 			//console.log(manDate);
 			
-			dialogCommand.dialog("open");
-			fetch("${pageContext.request.contextPath}/selCommand",{
-				method: "POST",
-				headers: {
-					"Content-Type": "application/json" //json으로 포맷설정.
-				},
-				body: JSON.stringify({
-					"manStartDate" : manDate //vo에 담긴 필드명 : 실제 들어갈 값
-				})
-			}).then((response) => response.json() )//컨트롤러에서 가져온 result를 json으로 파싱
-			.then((data)=> {
-				console.log(data.result);
-				gridManCommand.resetData(data.result) //파싱한 결과 = data
-				gridManCommand.refreshLayout();
-			}); 
+			if(manDate == null || manDate == ""){
+				alert("작업일을 입력해주세요.");
+			}else{
+				
+				fetch("${pageContext.request.contextPath}/selCommand",{
+					method: "POST",
+					headers: {
+						"Content-Type": "application/json" //json으로 포맷설정.
+					},
+					body: JSON.stringify({
+						"manStartDate" : manDate //vo에 담긴 필드명 : 실제 들어갈 값
+					})
+				}).then((response) => response.json() )//컨트롤러에서 가져온 result를 json으로 파싱
+				.then((data)=> {
+					console.log(data.result);
+					
+					if(data.result.length == 0){
+						alert("상응하는 정보가 없습니다.");
+						return;
+					}else{
+						dialogCommand.dialog("open");
+						
+						gridManCommand.resetData(data.result) //파싱한 결과 = data
+						gridManCommand.refreshLayout();
+						
+						
+					}
+					
+				}); 
+			}
+			
 		})
 		
 		//생산지시 그리드 내용
@@ -272,7 +289,6 @@
 				}
 			})
 			
-			
 		})
 		
 		
@@ -295,9 +311,21 @@
 				resetProcess(); //재귀함수
 			})
 			
-			
 		}
 		
+		
+		//******************************초기화 버튼******************************
+		btnInit.addEventListener("click", function(){
+			let txtManDate = document.getElementById('txtManDate');
+			txtManDate.value = '';
+			
+			$("#manDate").empty();
+			$("#podtCode").empty();
+			$("#podtName").empty();
+			$("#comCode").empty();
+			
+			gridProcess.resetData([{}]);
+		})
 		
 	</script>
 

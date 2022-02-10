@@ -31,7 +31,9 @@ public class ManCommandVO {
 	String comNoDetail;//지시 디테일번호
 	String manStartDate; //작업일
 	String manGoalPerday; //하루 목표 생산량
-	String manEtc; //비고
+	String comEtc; //비고
+	String pileQnt; //기지시량
+	String pendingQnt; //미지시량
 	
 	
 	//자재

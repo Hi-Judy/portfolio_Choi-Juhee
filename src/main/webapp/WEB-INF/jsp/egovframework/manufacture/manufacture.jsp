@@ -740,14 +740,14 @@
 		
 		//초기화 버튼 이벤트
 		btnInit.addEventListener("click", function(){
-			let txtPlanDate = document.getElementById('txtFromDate');
-			let txtPlanTo = document.getElementById('txtToDate');
+			let txtManDate = document.getElementById('txtManDate');
 			let txtPlanName = document.getElementById('txtPlanName');
 			
-			txtPlanDate.value = '';
-			txtPlanTo.value = '';
+			txtManDate.value = '';
 			txtPlanName.value ='';
 			
+			gridMain.resetData([{}]);
+			gridResource.resetData([{}]);
 		})
 		
 		//------------ 도움말 버튼 이벤트 ---------------
