@@ -238,4 +238,34 @@
 		GROUP BY C.CODE,C.CODE_NAME,FN_GET_RSC_PRC(C.CODE),FN_GET_RSC_UNIT(C.CODE),FN_GET_CODE_NAME(R.SUPLCOM_CODE)
 		ORDER BY C.CODE
 	</select>
+	
+	<!-- 자재 발주 페이지 생산계획 select -->
+	<select id="findResourcesPlan" resultType="egov.mes.resources.store.dao.ResourcesStoreVO">
+		select pbr.res_code as rsc_code, 
+		        c.code_name as rsc_name,
+		        FN_GET_RSC_PRC(C.CODE) AS RSC_PRC,
+		        FN_GET_RSC_UNIT(C.CODE) AS RSC_UNIT, 
+		        sum(pbr.res_usage*mpd.ord_qnt) AS sumofplan,
+		        rsc_SFINVC.SFINVC as rscSfinvc,
+		        rs.rsc_cnt
+		from manufacture_plan mp
+		right join manufacture_plan_d mpd
+		on mp.man_plan_no = mpd.man_plan_no
+		left join prdt_bom_res pbr
+		on mpd.podt_code = pbr.podt_code
+		left join common_code c
+		on pbr.res_code = c.code
+		LEFT JOIN (select pbr.res_code,sum(pqi.podt_output * pbr.res_usage) SFINVC
+		            from product_qnt_info pqi
+		            left join prdt_bom_res pbr
+		            on pqi.podt_code = pbr.podt_code
+		            where pqi.podt_etc='작년' 
+		            and man_date between sysdate-380 and sysdate-350
+		            group by pbr.res_code) rsc_SFINVC
+		ON rsc_SFINVC.res_code=pbr.res_code
+		left join (select s.rsc_code res_code,(sum(s.ist_cnt)-sum(s.ost_cnt)) as rsc_cnt from resource_store s group by s.rsc_code) rs
+		on pbr.res_code = rs.res_code
+		group by pbr.res_code,c.code_name,FN_GET_RSC_PRC(C.CODE),FN_GET_RSC_UNIT(C.CODE),rsc_SFINVC.SFINVC,rs.rsc_cnt
+		order by pbr.res_code
+	</select>
 </mapper>

@@ -109,47 +109,47 @@ div#OverallSize {
 
 <script type="text/javascript">
 	var columnsIn = [
-		{
-	    header: '발주번호',
-	    name: 'ordrNo'
-	  	},
-			{
-	    header: '자재코드',
-	    name: 'rscCode'
-	  },
-	  {
-	    header: '자재명',
-	    name: 'rscName',
-	  },
-	  {
-	    header: '단위',
-	    name: 'rscUnit'
-	  },
-	  {
-		header: '입고량',
-		name: 'rscPassCnt',
-		formatter(value) {
-			if(value.value != null && value.value != '' ){
-				  return value.value.toString().replace(/\B(?<!\.\d*)(?=(\d{3})+(?!\d))/g, ",");
-			}else{
-				return value.value ;
-			}
-	    }
-	  },
-	  {
-		header: '단가',
-		name: 'rscPrc',
-		formatter(value) {
-			if(value.value != null && value.value != '' ){
-				  return value.value.toString().replace(/\B(?<!\.\d*)(?=(\d{3})+(?!\d))/g, ",");
-			}else{
-				return value.value ;
-			}
-	    }
-	   }
-	];
+						{
+							header: '발주번호',
+							name: 'ordrNo'
+						},
+						{
+							header: '자재코드',
+							name: 'rscCode'
+						},
+						{
+							header: '자재명',
+							name: 'rscName',
+						},
+						{
+							header: '단위',
+							name: 'rscUnit'
+						},
+						{
+							header: '입고량',
+							name: 'rscPassCnt',
+							formatter(value) {
+								if(value.value != null && value.value != '' ){
+									return value.value.toString().replace(/\B(?<!\.\d*)(?=(\d{3})+(?!\d))/g, ",");
+								}else{
+									return value.value ;
+								}
+							}
+						},
+						{
+							header: '단가',
+							name: 'rscPrc',
+							formatter(value) {
+								if(value.value != null && value.value != '' ){
+									return value.value.toString().replace(/\B(?<!\.\d*)(?=(\d{3})+(?!\d))/g, ",");
+								}else{
+									return value.value ;
+								}
+							}
+						}
+					];
 	
-	//ajax(api)로 값 받아오는 거 
+	//메인 그리드 api
 	var dataSourceIn = {
 		  api: {
 		    readData: { 
@@ -169,8 +169,5 @@ div#OverallSize {
 		});
 	
 </script>
-
-
-
 </body>
 </html>

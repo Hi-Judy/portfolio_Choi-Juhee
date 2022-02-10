@@ -22,12 +22,12 @@
 				<i class="bi bi-question-circle"></i>
 			</button>
 		</span>
-	<h4 style="margin-left: 10px; margin-bottom: 25px;">자재재고 조회</h4>
+		<h4 style="margin-left: 10px; margin-bottom: 25px;">자재재고 조회</h4>
 	</div>
 	<div id="tabs" style="margin-left: 10px; width : 1500px ; height: 810px;">
 		<ul>
-		<li><a href="#tabs-1">안전 재고</a></li>
-		<li><a href="#tabs-2">LOT별 재고</a></li>
+			<li><a href="#tabs-1">안전 재고</a></li>
+			<li><a href="#tabs-2">LOT별 재고</a></li>
 		</ul>
 		
 		<!-- 안전재고 -->
@@ -299,8 +299,6 @@
 		dialogLot.dialog("close");
 	};
 	
-
-	
 	//-------- 메인그리드 ----------
 	var Grid = tui.Grid;
 	
@@ -376,6 +374,11 @@
 				gridRscLot.resetData(datalist["data"]["contents"]);
 			})			
 		});
+	
+	//------------------ 도움말 버튼 이벤트 -----------------------
+	helpBtn.addEventListener('mouseover' , () => {
+		helpModal.dialog("open") ;
+	})		
 	
 	tui.Grid.applyTheme('default', themesOptions);
 </script>
