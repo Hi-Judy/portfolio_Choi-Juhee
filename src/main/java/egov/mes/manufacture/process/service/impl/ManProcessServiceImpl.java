@@ -70,7 +70,10 @@ public class ManProcessServiceImpl implements ManProcessService {
 		
 		List<ManProcessVO> pList = new ArrayList<>(); 
 		pList = mapper.selectProcTable(); 
+		//System.out.println("스케쥴러 pList: "+ pList);
+		
 		for(ManProcessVO processVO : pList) {
+			//System.out.println("스케쥴러"+processVO);
 			if(!processVO.getProcCode().equals("PROC011")) { //마지막 공정이 아니면
 				
 				if( (mapper.selectNextProc(processVO)).getManStarttime().equals("0") ) {//다음 공정의 시작 시간이 0이면

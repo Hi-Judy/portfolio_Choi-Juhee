@@ -35,8 +35,8 @@
 	<div id="top" style="height: 55px;">
 		<form id = "findCommand">
 			<div style="margin-top: 8px; margin-left: 5px;">
+			
 				<p style="display: inline-block;">작업일자</p>
-		
 				<input id="txtManStartDate" type="date" name="manDate" style="display: inline-block;">
 					
 				<label for="ing" style=" margin-left: 10px;">생산중</label> 	
@@ -47,6 +47,9 @@
 				
 				<button class="btn" type="button" id="btnSearchCommand"
 					style="display: inline-block; margin-left: 10px;">조회</button>
+					
+				<button class="btn" type="button" id="btnInit"
+				style="display: inline-block; margin-left: 10px;">초기화</button>
 			</div>
 		</form>
 	</div>
@@ -390,6 +393,19 @@
 	 	 helpBtn.addEventListener('mouseover' , () => {
 	 	 	helpModal.dialog("open") ;
 	 	 })
+		
+		
+		//******************************초기화 버튼 이벤트******************************
+		btnInit.addEventListener("click", function(){
+			let txtManStartDate = document.getElementById('txtManStartDate');
+			
+			txtManStartDate.value = '';
+			
+			gridSelCommand.resetData([{}]);
+			gridResLot.resetData([{}]);
+			gridMovement.resetData([{}]);
+			
+		})
 		
 		
 	tui.Grid.applyTheme('default', themesOptions);			
