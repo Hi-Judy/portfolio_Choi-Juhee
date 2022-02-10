@@ -79,7 +79,7 @@
 							   STORE_DATE, --입출고 날짜
 							   STORE_FLAG, --입출고 구분
 							   STORE_ETC) --비고(생산지시번호)
-    values( ( to_char(SYSDATE,'"RO"YYMMDD""') || LPAD(RONUMBER.nextval,3,'0') ),
+    values( F_CODE_MAKER('RO') ,
             #{resCode},
             'N',
             #{rscLot},
@@ -101,7 +101,11 @@
 	values ( f_code_maker('C'),
 			 #{manPlanNo},
 			 #{comDate},
-			 #{comName}
+			(select SUBSTR(sysdate, 4, 7)||' '||'지시'|| 
+				(select count(com_date) +1
+			 	 from manufacture_command 
+             	 where com_date = to_char(sysdate,'yy/mm/dd') )
+           from dual)
 	)
 </insert>
 
@@ -230,13 +234,13 @@
 			on a.man_plan_no = b.man_plan_no
 			and b.plan_no_detail = #{planNoDetail}
 			group by b.ord_qnt) as pendingQnt
-			
+	
 	from ord_detail_view a join man_plan_view b
 	on a.ord_code = b.ord_code
     where a.podt_code = b.podt_code
-    and a.ord_qnt = b.ord_qnt
-	and b.plan_no_detail = #{planNoDetail}
-	and a.podt_code = #{podtCode}
+    and a.podt_code= #{podtCode}
+    and b.plan_no_detail = #{planNoDetail}
+    
 </select>
 
 

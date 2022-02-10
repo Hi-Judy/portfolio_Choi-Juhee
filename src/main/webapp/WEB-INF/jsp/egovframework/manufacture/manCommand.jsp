@@ -37,8 +37,6 @@
 		<input id="writeFromDate" type="date" name="from"
 			style="display: inline-block;">
 
-		<p style="display: inline-block; margin-left: 20px;">생산지시명</p>
-		<input id="txtCommandName" style="display: inline-block;">
 	</div>
 
 	<br>
@@ -988,12 +986,12 @@
 			}
 			
 			let writeFromDate = document.getElementById('writeFromDate').value;
-			let commandName = document.getElementById('txtCommandName').value;
+			//let commandName = document.getElementById('txtCommandName').value;
 			//console.log(writeFromDate);
 			//console.log(commandName);
 			
 			gridInsertCommand.setValue(0, 'comDate', writeFromDate);
-			gridInsertCommand.setValue(0, 'comName', commandName);
+			//gridInsertCommand.setValue(0, 'comName', commandName);
 			//console.log(gridInsertCommand.getValue(0, 'comDate'));
 			//console.log(gridInsertCommand.getValue(0, 'comName'));
 			
@@ -1047,33 +1045,30 @@
 			let facList = gridFacility.getData(); //설비 그리드 전체 데이터(배열형태)
 			console.log(facList);
 			let aaa = 0;
-			
+
 			for (i of facList){
-				//console.log(i);
-				
+				var j = i.rowKey*1+1;
+				if(i.rowKey == facList.length-1){
+					break;
+				}				
 				let facCode1 = gridFacility.getValue(i.rowKey,'facCode');
 				let facStatus1 = gridFacility.getValue(i.rowKey,'facStatus');
-				
-				if( ( gridFacility.getValue(i.rowKey,'facStatus') ) == 'N'){
-					gridFacility.setValue(i.rowKey, 'facStatus', null);
+				let facCode2 = gridFacility.getValue(j,'facCode');
+				let facStatus2 = gridFacility.getValue(j,'facStatus');
+				console.log('fcode1 : '+facCode1);
+				console.log('fcode2 : '+facCode2);
+				console.log('fstatus : '+facStatus1);
+				console.log('fstatus : '+facStatus2);
+				if( facCode1 == facCode2
+					&& 	
+					facStatus1 == facStatus2 
+					&& 
+					facStatus1 == null
+					&&
+					facStatus2 == null
+				){
+					aaa = 1;	
 				}
-				
-				for(j of facList){
-					let facCode2 = gridFacility.getValue(j.rowKey,'facCode');
-					let facStatus2 = gridFacility.getValue(j.rowKey,'facStatus');
-					
-					if( facCode1 == facCode2
-						&& 	
-						facStatus1 == facStatus2 
-						&& 
-						facStatus1 == null
-						&&
-						facStatus2 == null
-					){
-						aaa = 1;	
-					}
-				}
-					
 			}
 			if(aaa == 1){
 				alert ("지시를 못내립니다. 설비부족");

@@ -55,16 +55,17 @@ public class ManProcessController {
 								  ManProcessVO processVO,
 								  Model model) {
 		
+		System.out.println(processVO);
 		Map<String, List<ManProcessVO>> maps = new HashMap<>();
 		maps.put("contents", service.selectProcess(processVO));
 		
+		System.out.println("조회된 생산지시서 : "+ service.selectProcess(processVO));
 		Map<String, Object> map = new HashMap<>();
 		map.put("data", maps);
 		
 		model.addAttribute("result", true);
 		model.addAttribute("data", maps);
 		
-		//System.out.println("조회된 생산지시서 : "+ service.selectedCommand(processVO));
 		
 		return "jsonView";
 	}

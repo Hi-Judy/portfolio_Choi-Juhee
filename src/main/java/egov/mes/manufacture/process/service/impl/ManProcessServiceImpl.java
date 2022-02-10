@@ -43,6 +43,7 @@ public class ManProcessServiceImpl implements ManProcessService {
 	public ManProcessVO selectProc(ManProcessVO processVO) {
 		List<ManProcessVO> pList = new ArrayList<>();
 		pList = mapper.selectProc(processVO);
+		System.out.println("pList: "+pList);
 		
 		for(ManProcessVO pVO : pList) {
 			pVO.setPodtCode(processVO.getPodtCode());
