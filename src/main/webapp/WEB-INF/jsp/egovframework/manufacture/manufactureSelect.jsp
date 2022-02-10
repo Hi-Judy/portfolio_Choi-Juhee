@@ -308,6 +308,22 @@
 	         bodyHeight: 240
 		})
 		
+		gridResource.on('onGridUpdated', function(){
+			
+			//let resList = gridResource.getData(); //자재그리드 전체 데이터
+			//console.log(resList);
+			
+			console.log(checkedMain[0].ordQnt);
+			for(let i=0; i<gridResource.getRowCount(); i++ ){
+				//console.log(i)
+				let resUsage = gridResource.getValue(i,'resUsage');
+				//console.log(resUsage);
+				
+				gridResource.setValue(i, 'resUsage', (resUsage*1*checkedMain[0].ordQnt)/100);
+			}	
+			
+		});
+		
 		
 		//******************************초기화 버튼 이벤트******************************
 		btnInit.addEventListener("click", function(){

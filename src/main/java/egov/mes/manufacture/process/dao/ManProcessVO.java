@@ -11,6 +11,7 @@ public class ManProcessVO {
 	String manStartDate; //작업일
 	String manGoalPerday; //작업량(지시량)
 	String comCode; //지시번호
+	String comEtc; //지시 상태
 	
 	
 	//공정

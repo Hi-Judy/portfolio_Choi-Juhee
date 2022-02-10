@@ -43,7 +43,7 @@ public class ManProcessServiceImpl implements ManProcessService {
 	public ManProcessVO selectProc(ManProcessVO processVO) {
 		List<ManProcessVO> pList = new ArrayList<>();
 		pList = mapper.selectProc(processVO);
-		System.out.println("pList: "+pList);
+		//System.out.println("pList: "+pList);
 		
 		for(ManProcessVO pVO : pList) {
 			pVO.setPodtCode(processVO.getPodtCode());
@@ -129,14 +129,21 @@ public class ManProcessServiceImpl implements ManProcessService {
 	//생산지시서 조회
 	@Override
 	public List<ManProcessVO> selectCommand(ManProcessVO processVO) {
-	return mapper.selectCommand(processVO);
+		return mapper.selectCommand(processVO);
 	}
 
 	
 	//지시된 제품에 해당하는 공정 조회
 	@Override
 	public List<ManProcessVO> selectProcess(ManProcessVO processVO) {
-		return mapper.selectProcess(processVO);
+		System.out.println("지시된 제품에 해당하는 공정 VO: "+ processVO);
+		
+		if(processVO.getComEtc().equals("지시완료")) { //생산지시 전이면
+			return mapper.selectProcess(processVO);
+		}else { //생산중이나 생산완료이면
+			return mapper.findProcess(processVO);
+		}
+		
 	}
 
 

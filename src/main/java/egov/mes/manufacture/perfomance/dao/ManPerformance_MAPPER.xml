@@ -5,7 +5,8 @@
 
 <!-- 제품별 불량율 조회 -->
 <select id="selectPodtDef" resultType="egov.mes.manufacture.perfomance.dao.ManPerformanceVO">
-	select podt_code, 
+	select ( select substr(replace(sysdate, '/', ''), 3,2)||'월' as monthCode from dual ),
+		   podt_code, 
            podtName,  
            manGoalqnt,  
            manQnt, 
@@ -26,6 +27,8 @@
 <!-- 월별 불량율 조회 -->
 <select id="selectMonthDef" resultType="egov.mes.manufacture.perfomance.dao.ManPerformanceVO">
 	select monthCode,
+		   podt_code,
+		   prod_detail(podt_code) as podtName, 
            manGoalqnt,
            manQnt, 
            defQnt, 

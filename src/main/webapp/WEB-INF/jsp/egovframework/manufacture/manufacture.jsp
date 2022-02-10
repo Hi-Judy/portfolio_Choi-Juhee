@@ -496,7 +496,7 @@
 		})
 		
 		
-		
+	
 		//******************************메인 그리드******************************
 		//메인화면 컬럼
 		let columnsMain = [
@@ -615,14 +615,17 @@
 					+checkedMain[0].podtCode)
 			.then((response) => response.json())
 			.then((data)=> {
-				console.log(checkedMain);
-				console.log(checkedMain[0].podtCode);
+/* 				console.log(checkedMain);
+				console.log(checkedMain[0].podtCode); */
 				
 				console.log(data.data.contents);
 				gridResource.resetData(data.data.contents);
 				
 			})
+			
+			
 		})
+		
 		
 		
 		
@@ -673,7 +676,23 @@
 			gridResource.refreshLayout();
 		}) */
 		
-	
+		gridResource.on('onGridUpdated', function(){
+			
+			//let resList = gridResource.getData(); //자재그리드 전체 데이터
+			//console.log(resList);
+			
+			console.log(checkedMain[0].ordQnt);
+			for(let i=0; i<gridResource.getRowCount(); i++ ){
+				//console.log(i)
+				let resUsage = gridResource.getValue(i,'resUsage');
+				//console.log(resUsage);
+				
+				gridResource.setValue(i, 'resUsage', (resUsage*1*checkedMain[0].ordQnt)/100);
+			}	
+			
+		});
+		
+		
 		
 		//******************************버튼이벤트 모음******************************
 		//저장 버튼 이벤트

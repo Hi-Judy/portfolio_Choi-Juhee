@@ -49,9 +49,10 @@ public class ManProcessController {
 	
 	
 	//지시된 제품에 해당하는 공정 조회
-	@GetMapping("/selectProcess/{podtCode}/{comCode}")
+	@GetMapping("/selectProcess/{podtCode}/{comCode}/{comEtc}")
 	public String selectedCommand(@PathVariable String podtCode, 
 								  @PathVariable String comCode,
+								  @PathVariable String comEtc,
 								  ManProcessVO processVO,
 								  Model model) {
 		

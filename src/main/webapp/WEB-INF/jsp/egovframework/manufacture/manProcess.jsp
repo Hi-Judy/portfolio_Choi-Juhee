@@ -152,9 +152,9 @@
 			buttons : {
 				"확인" : function() {
 					console.log("확인 테스트");
-					
+					console.log(checkedCommand[0].comEtc);
 					fetch("${pageContext.request.contextPath}/selectProcess/"
-							+checkedCommand[0].podtCode+ "/" +checkedCommand[0].comCode)
+							+checkedCommand[0].podtCode+ "/" +checkedCommand[0].comCode + "/" +checkedCommand[0].comEtc )
 											
 					.then((response) => response.json())
 					.then((data)=> {
@@ -203,6 +203,10 @@
 			{
 				header : '작업량',
 				name : 'manGoalPerday'
+			}, 
+			{
+				header : '상태',
+				name : 'comEtc'
 			}
 		]
 		
@@ -315,6 +319,17 @@
 			columns : columnsProcess,
 			rowHeaders : [ 'rowNum' ],
 	         bodyHeight: 430
+		})
+		
+		let btnStart = document.getElementById("btnStart");
+		
+		gridProcess.on('onGridUpdated', function(){
+			for(let i=0; i<gridProcess.getRowCount(); i++){
+				if(gridProcess.getValue(i, 'manQnt') != 0){
+					btnStart.disabled = true;
+				}
+			}
+
 		})
 		 		
 		

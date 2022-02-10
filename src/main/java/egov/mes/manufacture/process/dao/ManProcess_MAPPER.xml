@@ -305,8 +305,8 @@
 </select>
 
 
-<!-- 지시된 제품에 해당하는 공정 조회 -->
-<select id="selectProcess" resultType="egov.mes.manufacture.process.dao.ManProcessVO">
+<!-- 생산중 & 생산완료 제품에 해당하는 공정 정보 -->
+<select id="findProcess" resultType="egov.mes.manufacture.process.dao.ManProcessVO">
 	select c.man_goalperday, c.podt_code, prod_detail(c.podt_code) as podtName, c.com_code, c.com_etc,
                d.fac_code, prod_detail(d.fac_code) as facName, 
                d.proc_code, prod_detail(d.proc_code) as procName,
@@ -342,14 +342,47 @@
 </select>
 
 
+<!-- 지시전 제품에 해당하는 공정 조회 -->
+<select id="selectProcess" resultType="egov.mes.manufacture.process.dao.ManProcessVO">
+	select c.podt_code, prod_detail(c.podt_code) as podtName, c.proc_index,
+           d.fac_code, prod_detail(d.fac_code) as facName, 
+           d.proc_code, prod_detail(d.proc_code) as procName,
+           e.com_code, e.man_goalperday as manGoalPerday,
+           f.emp_id, f.emp_name
+	from process_flowInfo c join ( select a.fac_no, a.fac_code,
+                                          b.proc_code                  
+                                   from facility_status a join facility_process b
+                                   on a.fac_no = b.fac_no
+                                   where a.fac_status='Y') d
+	on c.proc_code = d.proc_code
+    
+    join manufacture_command_d e
+    on c.podt_Code = e.podt_code
+    
+    join (select a.proc_code, prod_detail(a.proc_code),
+          		 b.emp_id, b.emp_name
+		  from process a join employee_info b
+		  on a.proc_emp_id = b.emp_id
+		  where a.proc_code between 'PROC001' and 'PROC011'
+		  order by a.proc_code) f
+	on c.proc_Code = f.proc_Code
+    
+	where e.podt_code = #{podtCode}
+	and e.com_code = #{comCode}
+	group by c.podt_code, c.proc_index,
+             d.fac_code,  d.proc_code, 
+             e.man_goalperday, e.com_code,
+             f.emp_id, f.emp_name
+	order by c.proc_index
+</select>
+
+
 <!-- 생산지시조회 -->
 <select id="selectCommand" resultType="egov.mes.manufacture.process.dao.ManProcessVO">
 	select podt_code, prod_detail(podt_code) podtName, 
-		   man_startdate, man_goalperday, com_code
+		   man_startdate, man_goalperday, com_code, com_etc
 	from man_command_view
 	where man_startdate = to_date(#{manStartDate}, 'rr/MM/dd')
-	or com_etc = '생산중'
-    or com_etc = '생산완료'
 </select>
 
 </mapper>
