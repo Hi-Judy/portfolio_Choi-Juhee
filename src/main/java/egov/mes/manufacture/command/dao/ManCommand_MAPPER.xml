@@ -134,7 +134,7 @@
 <!-- 이전 생산지시 조회 -->
 <select id="selectPreCommand" resultType="egov.mes.manufacture.command.dao.ManCommandVO">
 	select a.podt_code, prod_detail(a.podt_code) podtName, a.ord_qnt, 
-		   a.ord_duedate, a.man_goalperday, a.man_startdate, a.com_etc,
+		   a.ord_duedate, a.man_goalperday, a.man_startdate, a.com_etc, a.emp_id,
 	       b.plan_period, b.man_perday, b.plan_etc, b.plan_no_detail, b.man_plan_no    
 	from man_command_view a left join manufacture_plan_d b
 	on a.podt_code = b.podt_code
@@ -215,7 +215,22 @@
 	select a.podt_code,  a.ord_duedate,
 	       b.plan_no_detail, b.podt_code, prod_detail(b.podt_code) podtName, 
 	       b.ord_qnt, b.plan_period, b.man_plan_no, b.plan_startdate,
-	       (select DISTINCT man_perday from manufacture_plan_d where podt_code = b.podt_code) as manPerday
+	       
+	       (select DISTINCT man_perday 
+	        from manufacture_plan_d 
+	        where podt_code = b.podt_code) as manPerday,
+	        
+		   (select sum(a.man_goalperday)
+		   	from man_command_view a join man_plan_view b
+			on a.man_plan_no = b.man_plan_no
+			and b.plan_no_detail = #{planNoDetail}) as pileQnt ,
+			
+		   (select (b.ord_qnt - ( sum(a.man_goalperday) ) ) 
+			from  man_command_view a join man_plan_view b
+			on a.man_plan_no = b.man_plan_no
+			and b.plan_no_detail = #{planNoDetail}
+			group by b.ord_qnt) as pendingQnt
+			
 	from ord_detail_view a join man_plan_view b
 	on a.ord_code = b.ord_code
     where a.podt_code = b.podt_code

@@ -153,7 +153,7 @@ toastr.options = {
         "hideMethod": "fadeOut",
         "tapToDismiss": false
       }
-      
+tui.Grid.setLanguage('ko');      
 //옵션세팅
 themesOptions = { 
            	row: {    
@@ -245,9 +245,6 @@ const EmpGrid = new tui.Grid({
    bodyHeight: 500
 });
 
-/* window.addEventListener('DOMContentLoaded', function() {
-	console.log("@@@@@@@@@@@@@@@@@@@@@@@@@@@@");
-}) */
 
 //데이터수정 되면 색상변경 이벤트
 EmpGrid.on('afterChange' , (ev) => {
@@ -257,14 +254,7 @@ EmpGrid.on('afterChange' , (ev) => {
 	})
 	EmpGrid.addRowClassName(rowKey , "Test")
 })
-//그리드 클릭 이벤트 (테스트중)
-EmpGrid.on('click' , (ev) => {
-	//selection 옵션을 주고 얘들을 세팅해야 클릭했을떄 색상이 바뀌고 색상이 사라지고 한다.
-/* 	EmpGrid.setSelectionRange({
-        start: [ev.rowKey, 0],
-        end: [ev.rowKey, EmpGrid.getColumns().length-1]
-    }); */
-})
+
 
 //추가버튼 이벤트
 AddData.addEventListener("click" , () => {
@@ -284,7 +274,7 @@ ModalSave.addEventListener("click" , () => {
 	var empName = document.getElementById("empName").value
 	var empEtc = document.getElementById("empEtc").value
 	if(empName == '' || empName == null){
-		toastr["error"]("이름을 입력해주세요"); 
+		alert("이름을 입력해주세요"); 
 		return false; 
 	}else{
 		InpDatas = {
@@ -298,7 +288,6 @@ ModalSave.addEventListener("click" , () => {
 			$.ajax({
 		          url: './IdFind' ,
 		          type: 'post',
-//		          dataType: 'json',
 		          data: JSON.stringify(InpDatas),
 		          contentType: "application/json",
 		          async : false, 
@@ -349,9 +338,6 @@ ModalSave.addEventListener("click" , () => {
 	            }
 	         }); 
 		}
-	
-	
-	
 })
 
 //그리드 저장버튼 이벤트

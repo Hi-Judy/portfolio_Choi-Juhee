@@ -5,19 +5,6 @@
 <head>
 <meta charset="UTF-8">
 <title>Insert title here</title>
-<!-- <link rel="stylesheet" href="https://uicdn.toast.com/tui-grid/latest/tui-grid.css" /> -->
-<!-- <link rel="stylesheet" href="https://uicdn.toast.com/tui.date-picker/latest/tui-date-picker.css" /> -->
-<!-- <link rel="stylesheet" href="//code.jquery.com/ui/1.13.0/themes/base/jquery-ui.css"> -->
-<!-- <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous"> -->
-<!-- <link rel="stylesheet" href="https://uicdn.toast.com/tui.pagination/latest/tui-pagination.css" /> -->
-
-<!-- <script type="text/javascript" src="https://uicdn.toast.com/tui.pagination/v3.4.0/tui-pagination.js"></script> -->
-<!-- <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p" crossorigin="anonymous"></script> -->
-<!-- <script src="https://uicdn.toast.com/tui.date-picker/latest/tui-date-picker.js"></script> -->
-<!-- <script src="https://uicdn.toast.com/tui-grid/latest/tui-grid.js"></script> -->
-<!-- <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script> -->
-<!-- <script src="https://code.jquery.com/jquery-3.6.0.js"></script> -->
-<!-- <script src="https://code.jquery.com/ui/1.13.0/jquery-ui.js"></script> -->
 <style type="text/css">
 
 .ui-state-active, .ui-widget-content .ui-state-active, .ui-widget-header .ui-state-active, a.ui-button:active, .ui-button:active, .ui-button.ui-state-active:hover {
@@ -41,7 +28,7 @@
 	</div>
 
 
-<div id="tabs" style="margin-left: 10px; width : 1500px ; height: 600px;">
+<div id="tabs" style="margin-left: 10px; width : 1500px ; height: 800px;">
   <ul>
     <li><a href="#tabs-1">입고</a></li>
     <li><a href="#tabs-2">출고</a></li>
@@ -102,6 +89,7 @@
 	</div>
 	
 <script type="text/javascript">
+tui.Grid.setLanguage('ko');
 
 //옵션세팅
 themesOptions = { 
@@ -228,8 +216,12 @@ $(function() {
 			  {
 				header: '단가',
 				name: 'rscPrc',
-				 formatter(value) {
-	                return value.value.toString().replace(/\B(?<!\.\d*)(?=(\d{3})+(?!\d))/g, ",");
+				formatter(value) {
+					if(value.value != null && value.value != '' ){
+						  return value.value.toString().replace(/\B(?<!\.\d*)(?=(\d{3})+(?!\d))/g, ",");
+					}else{
+						return value.value ;
+					}
 	            }
 				},
 			   {
@@ -238,7 +230,14 @@ $(function() {
 				},
 			   {
 				 header: '입고량',
-				 name: 'istCnt'
+				 name: 'istCnt',
+					formatter(value) {
+						if(value.value != null && value.value != '' ){
+							  return value.value.toString().replace(/\B(?<!\.\d*)(?=(\d{3})+(?!\d))/g, ",");
+						}else{
+							return value.value ;
+						}
+		            }
 				},
 				{
 				  header: '자재 LOT NO',
@@ -277,8 +276,9 @@ $(function() {
 			  },
 		 		pageOptions: {
 				    useClient: true,
-				    perPage: 15
-				} 
+				    perPage: 10
+				},
+				  bodyHeight: 380
 		});
 	
 	//조회버튼 클릭시 값 가지고 오는 거
@@ -441,7 +441,8 @@ $(function() {
 	 		pageOptions: {
 			    useClient: true,
 			    perPage: 15
-			} 
+			},
+			bodyHeight: 380
 		});
 	
 	//조회버튼 클릭시 값 가지고 오는 거
@@ -469,7 +470,7 @@ helpBtn.addEventListener('mouseover' , () => {
 	helpModal.dialog("open") ;
 })		
 	
-tui.Grid.applyTheme('default', themesOptions);	
+tui.Grid.applyTheme('default', themesOptions);
 	
 </script>
 </body>

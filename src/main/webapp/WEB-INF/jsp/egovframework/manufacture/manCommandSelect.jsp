@@ -119,24 +119,35 @@
 			console.log(manDate);
 			console.log(podtCode);
 			
-			//gridCommand.readData(1, {'manStartDate': manDate, 'podtCode': podtCode}, true );
-			gridCommand.refreshLayout();
+				
+			if(manDate != "" || podtCode != ""){
+				//gridCommand.readData(1, {'manStartDate': manDate, 'podtCode': podtCode}, true );
+				gridCommand.refreshLayout();
+				
+				$.ajax({
+					url: '${pageContext.request.contextPath}/selectCommand',
+					method: 'POST',
+					data: {'manStartDate' : manDate, 'podtCode': podtCode },
+					success: function(datas){
+						data = JSON.parse(datas);
+						console.log(data);
+						//console.log((JSON.parse(datas)).result);
+						gridCommand.resetData(data.result);
+						gridCommand.refreshLayout();
+						
+						if(data.result.length == 0 ){
+							alert("상응하는 정보가 없습니다.");
+						}
+					},
+					error: function(reject){
+						console.log('reject: '+ reject);
+					}
+				})
+			}else{
+				alert("작업일자를 입력하세요.")
+			}
 			
-			$.ajax({
-				url: '${pageContext.request.contextPath}/selectCommand',
-				method: 'POST',
-				data: {'manStartDate' : manDate, 'podtCode': podtCode },
-				success: function(datas){
-					data = JSON.parse(datas);
-					console.log(data);
-					//console.log((JSON.parse(datas)).result);
-					gridCommand.resetData(data.result);
-					gridCommand.refreshLayout();
-				},
-				error: function(reject){
-					console.log('reject: '+ reject);
-				}
-			})
+			
 		})
 		
 		

@@ -124,7 +124,14 @@ div#OverallSize {
 			 },
 			 {
 			   header: '자재단가',
-			   name: 'rscPrc'
+			   name: 'rscPrc',
+				formatter(value) {
+					if(value.value != null && value.value != '' ){
+						  return value.value.toString().replace(/\B(?<!\.\d*)(?=(\d{3})+(?!\d))/g, ",");
+					}else{
+						return value.value ;
+					}
+	            }
 			},
 			 {
 			   header: '업체',
@@ -132,7 +139,14 @@ div#OverallSize {
 			},
 			{
 			 header: '재고',
-			 name: 'rscCnt'
+			 name: 'rscCnt',
+				formatter(value) {
+					if(value.value != null && value.value != '' ){
+						  return value.value.toString().replace(/\B(?<!\.\d*)(?=(\d{3})+(?!\d))/g, ",");
+					}else{
+						return value.value ;
+					}
+	            }
 			}
 			];
 				

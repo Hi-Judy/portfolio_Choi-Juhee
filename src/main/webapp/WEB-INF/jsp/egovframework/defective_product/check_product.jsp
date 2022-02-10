@@ -95,17 +95,38 @@
 			{
 				header : '작업완료량' ,
 				name : 'manQnt' ,
-				align : 'center'
+				align : 'center',
+	 			formatter(value) {
+					if (value.value != null && value.value != '') {
+						return value.value.toString().replace(/\B(?<!\.\d*)(?=(\d{3})+(?!\d))/g, ",") ;	
+					} else {
+						return value.value ;
+					}				
+				} 
 			} ,
 			{
 				header : '불량량' ,
 				name : 'defQnt' ,
-				align : 'center'
+				align : 'center',
+	 			formatter(value) {
+					if (value.value != null && value.value != '') {
+						return value.value.toString().replace(/\B(?<!\.\d*)(?=(\d{3})+(?!\d))/g, ",") ;	
+					} else {
+						return value.value ;
+					}				
+				} 
 			} ,
 			{
 				header : '입고량' ,
 				name : 'podtInput' ,
-				align : 'center'				
+				align : 'center',
+	 			formatter(value) {
+					if (value.value != null && value.value != '') {
+						return value.value.toString().replace(/\B(?<!\.\d*)(?=(\d{3})+(?!\d))/g, ",") ;	
+					} else {
+						return value.value ;
+					}				
+				} 				
 			}
 		]
 		
@@ -181,7 +202,14 @@
 			{
 				header : '불량량' ,
 				name : 'defQnt' ,
-				align : 'center'				
+				align : 'center',
+	 			formatter(value) {
+					if (value.value != null && value.value != '') {
+						return value.value.toString().replace(/\B(?<!\.\d*)(?=(\d{3})+(?!\d))/g, ",") ;	
+					} else {
+						return value.value ;
+					}				
+				} 				
 			}
 		]
 		

@@ -12,6 +12,10 @@
 			and podt_code = #{podtCode}
 		</if>
 		
+		<if test="status != null">
+			and podt_etc = #{status}
+		</if>
+		
 		<if test="manDatestart != null">
 			<![CDATA[
 				and to_char(man_date , 'yyyy-MM-dd') >= #{manDatestart}

@@ -58,12 +58,23 @@ public class ManCommandController {
 	}
 	
 	//이전 생산지시 조회
-	@PostMapping("/selectPreCommand")
-	public String selectPreCommand(ManCommandVO commandVO, Model model) {
-		model.addAttribute("result", service.selectPreCommand(commandVO));
-		System.out.println("이전 생산 지시 조회: "+ service.selectPreCommand(commandVO));
+	@GetMapping("/selectPreCommand/{planNoDetail}/{podtCode}")
+	public String selectPreCommand(@PathVariable String planNoDetail, 
+								   @PathVariable String podtCode,
+								   ManCommandVO commandVO, 
+								   Model model) {
+		Map<String, List<ManCommandVO>> maps = new HashMap<>();
+		maps.put("contents", service.selectPreCommand(commandVO));
 		
+		Map<String, Object> map = new HashMap<>();
+		map.put("data", maps);
+		
+		model.addAttribute("result", true);
+		model.addAttribute("data", maps);
+		
+		System.out.println("이전 생산 지시 조회: "+ service.selectPreCommand(commandVO));
 		return "jsonView";
+		
 	}
 	
 	//자재코드에 해당하는 자재LOT 조회

@@ -55,18 +55,15 @@ public class ResourceStoreServiceImpl implements ResourceStoreService{
 
 	@Override
 	public void modifyStore(ModifyVO<ResourcesStoreVO> mvo) {
-		if(mvo.getUpdatedRows() != null) {
-			for(ResourcesStoreVO vo :mvo.getUpdatedRows()) {
-				mapper.insertResourcesStore(vo);
-				mapper.updateResourcesStore(vo);
-			}
-		}
 		if(mvo.getCreatedRows() != null) {
 			for(ResourcesStoreVO vo :mvo.getCreatedRows()) {
-				if(vo.getIstCnt() != "") {
+				if(vo.getIstCnt() != "" && vo.getRscLot() == "") {
 					mapper.insertResourcesInventoryIn(vo);
-				}else if(vo.getOstCnt() != "") {
+				}else if(vo.getOstCnt() != "" && vo.getRscLot() == "") {
 					mapper.insertResourcesInventoryOut(vo);
+				}else if(vo.getRscLot() != "") {
+					mapper.insertResourcesStore(vo);
+					mapper.updateResourcesStore(vo);
 				}
 			}
 		}

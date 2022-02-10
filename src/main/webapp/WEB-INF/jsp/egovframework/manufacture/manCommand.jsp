@@ -20,6 +20,12 @@
 </script>
 <script src="https://code.jquery.com/ui/1.13.0/jquery-ui.js"></script>
 
+<style>
+.'tui-datepicker'{
+	document.getElementsByClassName('tui-datepicker')[0].style = "position: relative";
+	document.getElementsByClassName('tui-datepicker')[0].style = " z-index:100000"; 
+}
+</style>
 </head>
 <body>
 	<h2>생산지시서 작성</h2>
@@ -28,19 +34,17 @@
 	<!-- 작성일자, 지시명 입력 -->
 	<div class="writeDate">
 		<p style="display: inline-block;">작성일자</p>
-
 		<input id="writeFromDate" type="date" name="from"
 			style="display: inline-block;">
-	</div>
 
-	<div class="commandName">
-		<p style="display: inline-block;">생산지시명</p>
+		<p style="display: inline-block; margin-left: 20px;">생산지시명</p>
 		<input id="txtCommandName" style="display: inline-block;">
 	</div>
+
 	<br>
 
 	<!-- 생산계획 조회 -->
-	<div class="planDate">
+	<div class="planDate" style="float: left; display: inline-block;">
 		<p style="display: inline-block;">계획기간</p>
 		<input id="planFromDate" type="date" name="from"
 			style="display: inline-block;">
@@ -65,19 +69,11 @@
 		<div id="gridEmp"></div>
 	</div>
 
-	<!-- 자재&설비 조회 -->
-	<div>
-		<p style="display: inline-block;">제품코드</p>
-		<input id="txtPodt">
-		<button type="button" id="btnSelectRes">자재 조회</button>
-		<button type="button" id="btnSelectFac">설비 조회</button>
-		<button type="button" id="btnPreCommand">이전 생산지시 조회</button>
-	</div>
 
 	<!-- 이전 생산 지시 그리드 -->
 	<br>
 	<div>생산 지시 내역</div>
-	<div id = "gridPreCommand"></div>
+	<div id="gridPreCommand"></div>
 	<br>
 
 	<!-- 메인화면 그리드 -->
@@ -87,10 +83,12 @@
 
 	<!-- 자재조회 그리드 -->
 	<div>자재</div>
-	<div id="gridResource" class="col-sm-6" style="float: left; margin-right: 2%"></div>
+	<div id="gridResource" class="col-sm-6"
+		style="float: left; margin-right: 2%"></div>
 
 	<!-- 자재LOT 조회 그리드 -->
-	<div id="gridResLOT" class="col-sm-5" style="float: left; margin-right: 6%"></div>
+	<div id="gridResLOT" class="col-sm-5"
+		style="float: left; margin-right: 6%"></div>
 
 
 	<!-- 설비조회 그리드 -->
@@ -104,20 +102,20 @@
 		<button type="button" id="btnDeleteCommand">삭제</button>
 		<button type="button" id="btnInit">초기화</button>
 	</div>
-	
-	
+
+
 	<!-- 생산 지시 히든 그리드 -->
 	<div id="gridInsertCommand" style="display: none;"></div>
-	
+
 	<!-- 생산 지시 히든 그리드 -->
 	<div id="gridInsertCommandDetail" style="display: none;"></div>
 
 	<!-- 계획디테일 테이블에 '생산지시중'으로 변경 히든 그리드 -->
 	<div id="girdUpdatePlanStatus" style="display: none;"></div>
-	
+
 	<!-- 자재 테이블에 출고량, 생산지시디테일 번호 추가 히든 그리드 -->
 	<div id="gridUpdateRes" style="display: none;"></div>
-	
+
 	<!-- 생산 자재 LOT 테이블에 값 추가 히든 그리드 -->
 	<div id="gridInsertLot" style="display: none;"></div>
 
@@ -154,15 +152,15 @@
 				"확인" : function(ev) { //확인 버튼 눌렀을 때 체크된 값에 해당하는 데이터를 gridMain에 뿌려준다.
 							
 					console.log('확인완료');
-					console.log(checkedPlanDetail[0].podtCode);
-					console.log(checkedPlanDetail[0].planNoDetail);
+					//console.log(checkedPlanDetail[0].podtCode);
+					//console.log(checkedPlanDetail[0].planNoDetail);
 					
 					//메인그리드
 					fetch("${pageContext.request.contextPath}/selectManPlanDetail/"
 							+checkedPlanDetail[0].planNoDetail+"/"+checkedPlanDetail[0].podtCode)
 					.then((response) => response.json())
 					.then((data)=>{
-						console.log(data.data.contents);
+						//console.log(data.data.contents);
 						
 						//확인 버튼 눌렀을 때 체크된 값에 해당하는 데이터를 gridMain에 뿌려준다.
 						gridMain.resetData(data.data.contents);
@@ -174,23 +172,23 @@
 					
 					//이전 생산 지시 그리드
 					let podtCode = gridManPlan.getValue(ev.rowKey, 'podtCode');
-					console.log(gridManPlan.getValue(ev.rowKey, 'podtCode'));
-
-					$.ajax({
-						url : '${pageContext.request.contextPath}/selectPreCommand',
-						method : 'POST',
-						data : {'podtCode' : podtCode},
-						dataType : 'JSON',
-						success : function(datas) {
-							PreCommandData = datas;
-							console.log(PreCommandData);
-							gridPreCommand.resetData(PreCommandData.result);
-							gridPreCommand.resetOriginData();
-						},
-						error : function(reject) {
-							console.log(reject);
-						}
+					let planNoDetail = gridManPlan.getValue(ev.rowKey, 'planNoDetail');
+					
+					//console.log(gridManPlan.getValue(ev.rowKey, 'podtCode'));
+					//console.log(gridManPlan.getValue(ev.rowKey, 'planNoDetail'));
+					
+					fetch("${pageContext.request.contextPath}/selectPreCommand/"
+							+checkedPlanDetail[0].planNoDetail+"/"+checkedPlanDetail[0].podtCode)
+					.then((response) => response.json())
+					.then((data)=>{
+						console.log(data.data.contents);
+						
+						//확인 버튼 눌렀을 때 체크된 값에 해당하는 데이터를 gridMain에 뿌려준다.
+						gridPreCommand.resetData(data.data.contents);
+						gridPreCommand.resetOriginData();
+					
 					})
+					
 					
 					dialogManPlan.dialog("close");
 				},
@@ -230,6 +228,12 @@
 		
 		//******************************생산계획 그리드******************************
 		let data;
+		
+		//계획일자 초기값 
+	    var d = new Date();
+	    var nd = new Date(d.getFullYear(), d.getMonth(), d.getDate() - 7);
+	    document.getElementById('planFromDate').value = nd.toISOString().slice(0, 10);
+	    document.getElementById('planToDate').value = d.toISOString().slice(0, 10);
 
 		//생산계획 조회 버튼 클릭
 		$('#btnSearchManPlan').click(function() {
@@ -238,8 +242,8 @@
 			let planFromDate = document.querySelector('#planFromDate').value;
 			let planToDate = document.querySelector('#planToDate').value;
 
-			console.log(planFromDate);
-			console.log(planToDate);
+			//console.log(planFromDate);
+			//console.log(planToDate);
 
 			dialogManPlan.dialog("open");
 			$.ajax({
@@ -255,6 +259,10 @@
 					gridManPlan.resetData(data.result);
 					gridManPlan.resetOriginData();
 					gridManPlan.refreshLayout();
+					
+					if(data.result.length == 0){
+						alert("계획기간에 상응하는 정보가 없습니다.");
+					}
 				},
 				error : function(reject) {
 					console.log('reject: ' + reject);
@@ -294,6 +302,14 @@
 			{
 				header : '주문량',
 				name : 'ordQnt'
+			}, 
+			{
+				header : '기지시량',
+				name : 'pileQnt'
+			}, 
+			{
+				header : '미지시량',
+				name : 'pendingQnt'
 			}, 
 			{
 				header : '납기일자',
@@ -354,10 +370,10 @@
 			
 			let r = gridResource.getData(); //자재 그리드 전체 데이터(배열형태)
 			
-			let a = gridMain.getValue(0,'manGoalPerday'); //메인 그리드의 일 목표 생산량의 값
+			let manGoalPerday = gridMain.getValue(0,'manGoalPerday'); //메인 그리드의 일 목표 생산량의 값
 
 			for (i of r){
-				gridResource.setValue(i.rowKey, 'resUsage', (i.resUsage*1*a)/100);
+				gridResource.setValue(i.rowKey, 'resUsage', (i.resUsage*1*manGoalPerday)/100);
 			}
 			
 		})
@@ -369,7 +385,7 @@
 		gridMain.on('click', function(ev){
 			
 			let podtCode = gridMain.getValue(ev.rowKey, 'podtCode');
-			console.log(gridMain.getValue(ev.rowKey, 'podtCode'));
+			//console.log(gridMain.getValue(ev.rowKey, 'podtCode'));
 			
 			//자재조회
 			gridResource.refreshLayout();
@@ -403,6 +419,19 @@
 					facData = datas;
 					gridFacility.resetData(facData.result);
 					gridFacility.resetOriginData();
+					
+					let facList = gridFacility.getData(); //설비 그리드 전체 데이터(배열형태)
+					//console.log(facList);
+					
+					for (i of facList){
+						console.log(i);
+						
+						let facStatus1 = gridFacility.getValue(i.rowKey,'facStatus');
+						
+						if( facStatus1 == 'N'){
+							gridFacility.setValue(i.rowKey, 'facStatus', null);
+						}
+					}
 				},
 				error : function(reject) {
 					console.log(reject);
@@ -411,7 +440,7 @@
 			
 			
 			//사원컬럼 클릭
-			console.log(gridMain.getValue(ev["rowKey"], "empId"));
+			//console.log(gridMain.getValue(ev["rowKey"], "empId"));
 			
 			if(ev["columnName"] == "empId" && gridMain.getValue(ev["rowKey"], "empId") == null){
 				dialogEmp.dialog("open");
@@ -420,7 +449,7 @@
 			fetch("${pageContext.request.contextPath}/selectEmp")
 			.then((response) => response.json())
 			.then((data)=>{
-				console.log(data.data.contents);
+				//console.log(data.data.contents);
 				
 				gridEmp.resetData(data.data.contents)
 				gridEmp.refreshLayout();
@@ -607,13 +636,12 @@
 
 		//자재 그리드에서 한 행 클릭
 		gridResource.on('click', function(ev) {
-			console.log('자재 LOT 테스트');
+			//console.log('자재 LOT 테스트');
 			checkedResLot = gridResLOT.getCheckedRows();
-			console.log(gridResource.getValue(ev.rowKey, 'resCode'));
-
+			//console.log(gridResource.getValue(ev.rowKey, 'resCode'));
+			
 			let podtCode = gridResource.getValue(ev.rowKey, 'podtCode');
-			//dialogResLOT.dialog("open");
-
+			
 			$.ajax({
 				url : '${pageContext.request.contextPath}/selectResLot',
 				method : 'POST',
@@ -623,12 +651,10 @@
 				dataType : 'JSON',
 				success : function(datas) {
 					resLotData = datas;
-					console.log(resLotData);
 					gridResLOT.resetData(resLotData.result);
 					gridResLOT.resetOriginData();
 					gridUpdateRes.resetData(resLotData.result);
 					gridInsertLot.resetData(resLotData.result);
-					console.log(resLotData.result);
 
 				},
 				error : function(reject) {
@@ -648,11 +674,43 @@
 		      bodyHeight : 230,
 		})
 		
-		gridResLOT.on('editingFinish', (ev) => { 
+		//LOT 그리드에서 출고량에 값 입력한 후 이벤트(자재소요량이랑 출고량이랑 수 안맞을 때 alert)	
+		gridResLOT.on('editingFinish', (ev) => { // 
 			gridUpdateRes.resetData(gridResLOT.getData());
-		});
 			
+			let r = gridResource.getData(); //자재 그리드 전체 데이터(배열형태)
+			let l = gridResLOT.getData();
+			let flag = false;
+			let sumCnt=0;
+			for(i of r){
+				let resCode1 = gridResource.getValue(i.rowKey, 'resCode'); //자재 그리드의 자재코드
+				let resUsage = gridResource.getValue(i.rowKey, 'resUsage'); //자재 그리드의 소요량
+				
+				for(j of l){
+					let resCode2 = gridResLOT.getValue(j.rowKey, 'resCode'); //자재 그리드의 자재코드
+					let ostCnt = gridResLOT.getValue(j.rowKey, 'ostCnt'); //자재 LOT 그리드의 출고량
+					let rscCnt = gridResLOT.getValue(j.rowKey, 'rscCnt'); //자재 LOT 그리드의 재고량
+					
+					if(resCode1 == resCode2){
+						sumCnt=sumCnt*1+j.rscCnt*1;
+						if(j.rscCnt<j.ostCnt){
+							gridResLOT.setValue(j.rowKey,'ostCnt','');
+							alert("해당 LOT의 자재가 부족합니다. 다음 LOT를 이용해주세요.");
+						}
+					}
+					
+				}
+				if(resUsage > sumCnt){
+					flag = true;
+				}
+				sumCnt=0;
+			}
+			if(flag){
+				alert("해당 자재가 부족합니다. 일 목표 생산량을 확인해주세요.");
+			}
+		});
 		
+
 		
 		
 		//******************************이전 생산 지시 그리드******************************
@@ -683,23 +741,19 @@
 			}, 
 			{
 				header : '일 목표 생산량',
-				name : 'manGoalPerday',
-				editor : 'text'
+				name : 'manGoalPerday'
 			}, 
 			{
 				header : '작업일',
-				name : 'manStartDate',
-				editor : 'datePicker'
+				name : 'manStartDate'
 			}, 
 			{
 				header : '사번',
-				name : 'empId',
-				editor : 'text'
+				name : 'empId'
 			}, 
 			{
 				header : '비고',
-				name : 'manEtc',
-				editor : 'text'
+				name : 'comEtc'
 			},
 			{
 				header : '비고',
@@ -885,15 +939,54 @@
 		//******************************버튼 클릭 이벤트******************************
 		//초기화 버튼 이벤트
 		btnInit.addEventListener("click", function() {
+			let writeFromDate = document.getElementById('writeFromDate');
+			let txtCommandName = document.getElementById('txtCommandName');
+			
+			writeFromDate.value = '';
+			txtCommandName.value = '';
+			
 			gridMain.resetData([{}]);
 			gridResource.resetData([{}]);
 			gridFacility.resetData([{}]);
 			gridPreCommand.resetData([{}]);
+			gridResLOT.resetData([{}]);
 		})
 		
 		
 		//저장버튼 이벤트
 		btnSaveCommand.addEventListener("click", function(){
+			
+			//******************************입력값 체크******************************
+			let writeFromDate2 = document.getElementById('writeFromDate'); //작성일자
+			if(writeFromDate2.value == null || writeFromDate2.value == ""){
+				alert("작성일자를 입력해주세요.");
+				return;
+			}
+			
+			if(gridMain.getValue(0,"manGoalPerday") == null){
+				alert("일목표 생산량을 입력해주세요.");
+				return;
+			}
+			if(gridMain.getValue(0, "planStartdate") == null){
+				alert("작업일을 입력해주세요.");
+				return;
+			}
+			if(gridMain.getValue(0, "empId") == null){
+				alert("사번을 입력해주세요.");
+				return;
+			}
+			
+			let manGoalPerday = gridMain.getValue(0,'manGoalPerday'); //메인 그리드의 일 목표 생산량의 값
+			let manPerday = gridMain.getValue(0, 'manPerday'); //메인그리드의 일생산량(하루 생산 가능한 수량)
+					
+			console.log(manGoalPerday);
+			console.log(manPerday);
+			
+			if(manPerday < manGoalPerday){
+				alert("하루 생산가능한 수량이 초과했습니다.");
+				return;
+			}
+			
 			let writeFromDate = document.getElementById('writeFromDate').value;
 			let commandName = document.getElementById('txtCommandName').value;
 			//console.log(writeFromDate);
@@ -904,6 +997,42 @@
 			//console.log(gridInsertCommand.getValue(0, 'comDate'));
 			//console.log(gridInsertCommand.getValue(0, 'comName'));
 			
+				
+			//******************************자재*****************************
+			let r = gridResource.getData(); //자재 그리드 전체 데이터(배열형태)
+			let l = gridResLOT.getData(); //자재 Lot 그리드 전체 데이터(배열형태)
+			let resUsage;
+			let ostCnt;
+			let resCode2;
+			let sumCnt=0;
+			let ostSum = 0; //출고량 합계
+			let flag = false;
+			for(i of r){
+				let resCode1 = gridResource.getValue(i.rowKey, 'resCode'); //자재 그리드의 자재코드
+				resUsage = gridResource.getValue(i.rowKey, 'resUsage'); //자재 그리드의 소요량
+
+				for(k of l){
+					resCode2 = gridResLOT.getValue(k.rowKey, 'resCode'); //자재 LOT 그리드의 자재코드
+					ostCnt = gridResLOT.getValue(k.rowKey, 'ostCnt'); //자재 LOT 그리드의 출고량
+					
+					if(resCode1 == resCode2 && ostCnt != null){ //자재그리드의 자재코드 = 자재LOT그리드의 자재코드
+																//자재 LOT 그리드의 출고량에 값이 있을 때
+							ostSum = ostSum*1+ ostCnt*1; 
+						
+					}
+				}
+				//console.log('ostSum : '+ostSum);
+				//console.log('resUsage : '+resUsage);
+				//console.log('');
+				if(resUsage != ostSum){ //자재소요량이 출고량 합계와 같지 않을 경우
+					flag=true;
+				}
+				ostSum = 0;
+			}
+			if(flag){
+				alert("자재소요량과 출고량 합계가 맞지 않습니다.");
+			}
+			
 			let a = {}; //a 객체 만들기
 			a.command = gridInsertCommand.getData(); //a 객체에 command라는 키로 gridInsertCommand 데이터 넣기.
 			a.commandDetail = gridInsertCommandDetail.getData();
@@ -911,22 +1040,60 @@
 			a.plan = girdUpdatePlanStatus.getData();
 			a.resLot = gridInsertLot.getData();
 			
-			console.log(a);
+			//console.log(a);
 			
-			$.ajax({
-				url: '${pageContext.request.contextPath}/hidden',
-				dataType: 'JSON',
-				method: 'POST',
-				data: JSON.stringify(a), //a데이터를 넘겨준다.
-				contentType: 'application/json',
-				success: function(){
-					alert("완료");
+ 			
+			//******************************설비******************************
+			let facList = gridFacility.getData(); //설비 그리드 전체 데이터(배열형태)
+			console.log(facList);
+			let aaa = 0;
+			
+			for (i of facList){
+				//console.log(i);
+				
+				let facCode1 = gridFacility.getValue(i.rowKey,'facCode');
+				let facStatus1 = gridFacility.getValue(i.rowKey,'facStatus');
+				
+				if( ( gridFacility.getValue(i.rowKey,'facStatus') ) == 'N'){
+					gridFacility.setValue(i.rowKey, 'facStatus', null);
 				}
-			})
+				
+				for(j of facList){
+					let facCode2 = gridFacility.getValue(j.rowKey,'facCode');
+					let facStatus2 = gridFacility.getValue(j.rowKey,'facStatus');
+					
+					if( facCode1 == facCode2
+						&& 	
+						facStatus1 == facStatus2 
+						&& 
+						facStatus1 == null
+						&&
+						facStatus2 == null
+					){
+						aaa = 1;	
+					}
+				}
+					
+			}
+			if(aaa == 1){
+				alert ("지시를 못내립니다. 설비부족");
+			}else{
+				$.ajax({
+					url: '${pageContext.request.contextPath}/hidden',
+					dataType: 'JSON',
+					method: 'POST',
+					data: JSON.stringify(a), //a데이터를 넘겨준다.
+					contentType: 'application/json',
+					success: function(){
+						
+						alert("생산지시서가 저장되었습니다.");
+					}
+				})
+			}
 			
 		})
 		
 	</script>
-	
+
 </body>
 </html>

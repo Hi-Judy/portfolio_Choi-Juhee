@@ -67,29 +67,27 @@ div.right {
    </div>
 
    
-   <div id=OverallSize style="width: 1515px;">
+   <div id="OverallSize" style="width: 1515px;">
       <div class="left">
-         <span style="font-size: 1.5em; color: blue"> 사용자재 관리 </span>
-          <span style="float: right; margin-top: 5px; color: rgb(158, 158, 158);">
+         <span style="font-size: 1.5em; color: #25396f"> 사용자재 관리 </span>
+          <span style="float: right;  color: rgb(158, 158, 158);">
             <button id="btnLeftAdd" type="button" class="btn">추가</button> &nbsp;
             <button id="btnLeftDel" type="button" class="btn">삭제</button>
-         </span> <br> <br>
+         </span> <br>
 
-         <!-- style="overflow:scroll; width:504px; height:500px; " -->
          <div id="MatGrid"
-            style="border-top: 3px solid #168; width: 835px; "></div>
+            style="border-top: 3px solid #168; width: 835px; margin-top: 10px;"></div>
       </div>
 
       <div class="right">
-         <span style="font-size: 1.5em; color: blue"> 공정흐름 관리 </span>
-         <span style="float: right; margin-top: 5px; color: rgb(158, 158, 158);">
+         <span style="font-size: 1.5em; color: #25396f"> 공정흐름 관리 </span>
+         <span style="float: right;  color: rgb(158, 158, 158);">
             <button id="btnRightAdd" type="button" class="btn">추가</button> &nbsp;
             <button id="btnRightDel" type="button" class="btn">삭제</button>
          </span>
          <br>
-         <br>
 
-         <div id="ProcGrid" style="border-top: 3px solid #168;"></div>
+         <div id="ProcGrid" style="border-top: 3px solid #168; margin-top: 10px;"></div>
 
       </div>
 		
@@ -137,6 +135,7 @@ toastr.options = {
         "tapToDismiss": false
       }
       
+	  tui.Grid.setLanguage('ko');
 	  //-------- 도움말 모달 ----------
 	  var helpModal = $( "#helpModal" ).dialog({
 	    autoOpen : false ,
@@ -322,7 +321,7 @@ toastr.options = {
       			var CRUD = MatGrid.getValue(ev.rowKey ,'crud'); 
       			if ( CRUD != null && CRUD != ''){ 
       				//success: 성공(초록) , info:정보(하늘색) , warning:경고(주황) , error:에러(빨강)
-      				toastr["warning"]("저장된 자재코드는 수정이 불가능합니다.")
+      				alert("저장된 자재코드는 수정이 불가능합니다 ")
       				ev.stop();
       			}
       		}
@@ -367,7 +366,7 @@ toastr.options = {
                          {
                          if(MatGrid.getValue(ev.rowKey , 'resCode') == rst.resCode)
                             {
-                               toastr["warning"]("이미 입력한 코드입니다.", rst.code);
+                        	   alert("이미 입력한 코드입니다." + rst.code);
                                chkCodeId = false;
                                MatGrid.setValue(ev.rowKey , 'resCode'  , '');
                                 MatGrid.setValue(ev.rowKey , 'codeName' , '');
@@ -399,7 +398,7 @@ toastr.options = {
                 if(CodeName != null ){
                    Metadata = CodeName.codeName;
                 }else{
-                   toastr["warning"]("자재명이 없는 코드입니다.")
+                	alert("자재명이 없는 코드입니다.")
                 }
              },
              error: function(err) {
@@ -429,7 +428,7 @@ toastr.options = {
               if(MatUnit != null ){
             	  Unitdata = MatUnit.rscUnit;
               }else{
-                 toastr["warning"]("자재단위가 없는 코드입니다.")
+            	  alert("자재단위가 없는 코드입니다.")
               }
            },
           error: function(err) {
@@ -478,7 +477,7 @@ toastr.options = {
       			var CRUD = ProcGrid.getValue(ev.rowKey ,'crud'); 
       			if ( CRUD != null && CRUD != ''){ 
       				//success: 성공(초록) , info:정보(하늘색) , warning:경고(주황) , error:에러(빨강)
-      				toastr["warning"]("저장된 공정코드는 수정이 불가능합니다.")
+      				alert("등록된 공정코드는 수정이 불가능합니다.")
       				ev.stop();
       			}
       		}
@@ -530,7 +529,7 @@ toastr.options = {
                           {
                           if(ProcGrid.getValue(ev.rowKey , 'procCode') == rst.procCode)
                              {
-                                toastr["warning"]("이미 선택된 공정입니다");
+                        	  	alert("이미 등록된 공정입니다");
                                 chkCodeId = false;
                                 ProcGrid.setValue(ev.rowKey , 'procCode'  , '');
                                 ProcGrid.setValue(ev.rowKey , 'codeName' , '');
@@ -561,7 +560,7 @@ toastr.options = {
              if(CoNm != null ){
             	 PrNmData = CoNm.codeName;
              }else{
-                toastr["warning"]("공정명이 없는 코드입니다")
+            	 alert("공정명이 없는 코드입니다")
              }
           },
           error: function(err) {
@@ -715,7 +714,7 @@ toastr.options = {
   	   
  	  	if(proIdValue == '' || proIdValue == null)
  	   		{
- 		   		toastr["warning"]("조회된 BOM정보가 없습니다")
+ 	  			alert("조회된 BOM정보가 없습니다")
  	   		}
  	   		else
  	   		{
@@ -836,7 +835,7 @@ toastr.options = {
 	     		MatInput.forEach( (rst) => {
 	    			 if(rst.resCode == null || rst.resCode == '' || rst.resCode == undefined || rst.procCode == null || rst.procCode == '')
 	    			 {
-	    				toastr["error"]("필수입력코드 미입력");  
+	    				alert("필수입력코드 미입력");  
 						return false; 
 	    			 }
 	    			 else
@@ -887,7 +886,7 @@ toastr.options = {
    	     		MatUpdate.forEach( (rst) => {
 	   	     		 if(rst.resCode == null || rst.resCode == '' || rst.resCode == undefined || rst.procCode == null || rst.procCode == '')
 	    			 {
-	    				toastr["error"]("필수입력코드 미입력");  
+	   	     			alert("필수입력코드 미입력");  
 						return false; 
 	    			 }
 	    			 else
@@ -961,7 +960,6 @@ toastr.options = {
    	    		 contentType : 'application/json;',
    	             async : false, 
    	             success: (datas) => {
-   	            	 console.log(datas);
    	            	 toastr["success"]("자재 삭제 완료"); 
    	             },
    	             error: (err) => {

@@ -37,7 +37,7 @@
 			<option value="미진행">미진행</option>
 			<option value="진행중">진행중</option>
 			<option value="완료">완료</option>
-			<option value="미생산완료">미생산완료</option>
+			<option value="미생산출하">미생산출하</option>
 		</select>
 		<span style="margin : 20px;">업체명</span><input id="txtCusName" style="background-color: #d2e5eb;" readonly>
 		<span style="margin : 20px;">업체코드</span><input id="txtCusCode" style="margin-left : 20px;">&nbsp;<button type="button" id="btnSearch" class="btn">업체코드검색</button>

@@ -9,7 +9,7 @@
 		       T.RSC_TST_NO,
 		       T.DEF_CODE,
 			   T.RTNGD_NO,
-			   T.RTNGD_DATE,
+			   TO_CHAR(T.RTNGD_DATE, 'yyyy-MM-dd') RTNGD_DATE,
 		       FN_GET_RSC_UNIT(T.RSC_CODE) AS RSC_UNIT,
 			   FN_GET_RSC_PRC(T.RSC_CODE) AS RSC_PRC, 
 		       FN_GET_CODE_NAME(T.RSC_CODE) AS RSC_NAME,
