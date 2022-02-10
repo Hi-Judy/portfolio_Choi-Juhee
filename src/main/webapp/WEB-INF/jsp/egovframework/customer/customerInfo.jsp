@@ -171,6 +171,8 @@
 		} 
 	}) ;
 	
+
+	
 	$("#btnAdd").on("click" , function() {
 		grid.appendRow({}) ;
 	})
@@ -197,8 +199,18 @@
 		let insertPhone = insertData[0].cusPhone ;
 		let codeDesct ;
 		
-		if (insertCode == null || insertName == null || insertPhone == null) {
-			alert('입력값을 확인하세요') ;
+		if (insertCode == null) {
+			alert('업체코드를 확인하세요') ;
+			return ;
+		}
+		
+		if (insertName == null) {
+			alert('업체명을 입력하세요') ;
+			return ;
+		}
+		
+		if (insertPhone == null) {
+			alert('연락처를 입력하세요') ;
 			return ;
 		}
 		

@@ -455,6 +455,11 @@
 					return ;
 				}
 				
+				if (procCode == null) {
+					alert('공정코드를 선택하세요') ;
+					return ;
+				}
+				
 				if (facOutput == null) {
 					alert('UPH를 입력하세요') ;
 					return ;
@@ -462,11 +467,6 @@
 				
 				if (facRuntime == null) {
 					alert('가동시간을을 입력하세요') ;
-					return ;
-				}
-				
-				if (procCode == null) {
-					alert('공정코드를 선택하세요') ;
 					return ;
 				}
 				

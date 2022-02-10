@@ -72,16 +72,16 @@
 	
 	<div id="helpDialog" title="도움말">
 		<br>
+		제품코드 : 제품을 선택하면 자동으로 입력됩니다.<br><br>
 		제품명 : 제품코드를 검색해서 검색결과를 선택하면 자동으로 입력됩니다.<br><br>
 		제품코드검색 : 검색어를 포함한 제품명으로 제품코드를 검색합니다.<br><br>
 		조회 : 조건 없이 조회하면 전체목록을 조회합니다.<br><br>
 		추가 : <br>
-		&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;제품코드 : 제품을 선택하면 자동으로 입력됩니다.<br>
 		&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;제품명 : 제품코드를 선택 시 자동으로 입력됩니다.<br>
 		&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;출고량 : 선택한 Lot의 재고량보다 큰 값을 입력하면 저장할 수 없습니다.<br>
 		&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;완제품Lot : 해당 Lot에 재고가 남아있는 번호만 선택가능합니다.<br>
 		&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;조회 버튼을 먼저 눌러야 선택 가능한 Lot번호가 조회됩니다.<br>
-		&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;모든 값을 다 입력해야 저장이 가능합니다.<br><br>
+		&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<br><br>
 		초기화 : 입력한 조회 조건을 초기화합니다.<br><br>
 		Lot 번호 : 부여된 Lot번호를 클릭하면 상세정보를 조회합니다.<br><br>		
 		QR코드 : Lot번호에 대한 정보를 조회할 수 있는 QR코드를 조회합니다.<br>
@@ -465,6 +465,8 @@
 	})
 	
 	$("#btnInsert").on("click" , function() {		
+		grid.blur() ;
+		
 		let insertDatas = grid.getModifiedRows() ;
 		let insertData = insertDatas.createdRows ;
 		
@@ -544,8 +546,23 @@
 				let insertEtc = insertData[0].podtEtc ;
 				let insertLot = insertData[0].podtLot ;
 				
-				if (insertCode == null || insertDate == null || insertInput == null || insertOutput == null || insertCode == null) {
-					alert('입력값을 확인하세요') ;
+				if (insertCode == null) {
+					alert('제품코드를 입력하세요') ;
+					return ;
+				}
+				
+				if (insertDate == null) {
+					alert('작업일자를 입력하세요') ;
+					return ;
+				}
+				
+				if (insertOutput == null) {
+					alert('출고량을 입력하세요') ;
+					return ;
+				}
+				
+				if (insertLot == null) {
+					alert('Lot번호를 선택하세요') ;
 					return ;
 				}
 				
