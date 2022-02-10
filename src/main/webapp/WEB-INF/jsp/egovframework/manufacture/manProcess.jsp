@@ -54,10 +54,11 @@
 				
 				<p style="display: inline-block; margin-left : 100px;">생산지시번호 : </p>
 				<p id="comCode" style="display: inline-block;"></p>
+				
+				<button type="button" id="btnInit" class="btn" style="display: inline-block; float : right; margin : 5px;">초기화</button>
+				<button type="button" id="btnStart" class="btn" style="display: inline-block; float : right; margin : 5px;">시작</button>
 			</div>
 			
-			<button type="button" id="btnInit" class="btn" style="display: inline-block; float : right; margin : 5px;">초기화</button>
-			<button type="button" id="btnStart" class="btn" style="display: inline-block; float : right; margin : 5px;">시작</button>
 			</div>
 			
 		</div>

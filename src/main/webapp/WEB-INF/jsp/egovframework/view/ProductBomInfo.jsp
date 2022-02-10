@@ -65,14 +65,14 @@ div.right {
 	
 	   </div>
    </div>
-
+	<br>
    
    <div id="OverallSize" style="width: 1515px;">
       <div class="left">
-         <span style="font-size: 1.5em; color: #25396f"> 사용자재 관리 </span>
+         <span style="font-size: 1.5em; color: #25396f"> 제품별 소모자재 관리 </span>
           <span style="float: right;  color: rgb(158, 158, 158);">
-            <button id="btnLeftAdd" type="button" class="btn">추가</button> &nbsp;
-            <button id="btnLeftDel" type="button" class="btn">삭제</button>
+            <button id="btnLeftAdd" type="button" class="btn">자재추가</button> &nbsp;
+            <button id="btnLeftDel" type="button" class="btn">선택삭제</button>
          </span> <br>
 
          <div id="MatGrid"
@@ -82,8 +82,8 @@ div.right {
       <div class="right">
          <span style="font-size: 1.5em; color: #25396f"> 공정흐름 관리 </span>
          <span style="float: right;  color: rgb(158, 158, 158);">
-            <button id="btnRightAdd" type="button" class="btn">추가</button> &nbsp;
-            <button id="btnRightDel" type="button" class="btn">삭제</button>
+            <button id="btnRightAdd" type="button" class="btn">공정추가</button> &nbsp;
+            <button id="btnRightDel" type="button" class="btn">전체삭제</button>
          </span>
          <br>
 
