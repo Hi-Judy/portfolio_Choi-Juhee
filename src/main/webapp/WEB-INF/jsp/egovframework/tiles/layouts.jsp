@@ -194,6 +194,11 @@ function makesidebar(){
 		}
 }
 </script>
+	<div id="div_load_image"
+		style="position: absolute; top: 50%; left: 50%; width: 0px; height: 0px; z-index: 9999; background: #f0f0f0; filter: alpha(opacity = 50); opacity: alpha*0.5; margin: auto; padding: 0; text-align: center; display:none;">
+		<img src=<c:url value='/images/egovframework/com/main/loding.gif' />
+			style="width: 100px; height: 100px;">
+	</div>
 	<tiles:insertAttribute name="tiles_side_bar" />
 	<div id="wraper" class="margin3">
 		<div id="header">

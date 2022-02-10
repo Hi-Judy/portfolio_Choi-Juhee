@@ -17,12 +17,6 @@
 </head>
 
 <body>
-	<div id="div_load_image"
-		style="position: absolute; top: 50%; left: 50%; width: 0px; height: 0px; z-index: 9999; background: #f0f0f0; filter: alpha(opacity = 50); opacity: alpha*0.5; margin: auto; padding: 0; text-align: center; display:none;">
-		<img src=<c:url value='/images/egovframework/com/main/loding.gif' />
-			style="width: 100px; height: 100px;">
-	</div>
-
 	<div id="title" style="margin-left : 10px;"><h3 style="color : #054148; font-weight : bold">생산계획서 조회</h3></div>
 	
 	<div id="top" style="height : 160px; padding : 10px;">
@@ -138,12 +132,9 @@
 				editor: 'text'
 			}
 		]
-		
-		
 		//생산계획조회 버튼 클릭이벤트
 		$('#btnSearchManPlan').click(function(){
 			console.log('생산계획 조회');
-			$("#div_load_image").show();
 			let manDate = document.querySelector('#txtManDate').value;
 			let podtCode = document.querySelector('#txtPdotCode').value;
 			
@@ -154,6 +145,7 @@
 				alert("계획일자나 제품코드를 입력해주세요.");
 			}
 			else{
+				$("#div_load_image").show();
 				$.ajax({
 					url: '${pageContext.request.contextPath}/manufacture/selectManufacturePlan',
 					method: 'POST',
@@ -161,6 +153,7 @@
 					dataType: 'JSON',
 					success: function(datas){
 						console.log(datas);
+						document.querySelector('#div_load_image').style='display:none;'
 						
 						gridMain.resetData(datas.result);
 						gridMain.refreshLayout();
@@ -193,7 +186,8 @@
 			el : document.getElementById('gridMain'),
 			data : dataSourceMain, //컨트롤러에서 리턴된 결과를 dataSource에 담아서 보여준다.
 			columns : columnsMain,
-			rowHeaders : ['checkbox']
+			rowHeaders : ['checkbox'],
+			hideLoadingBar: false
 		});
 		
 		//메인 그리드에서 체크된 계획
