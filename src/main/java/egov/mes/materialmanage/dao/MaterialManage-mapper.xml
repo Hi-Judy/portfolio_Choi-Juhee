@@ -38,7 +38,7 @@ where group_code = 'cus' AND code_desct = '구매처'
 </select>
 
 <select id="selectpmonth" resultType="egov.mes.materialmanage.dao.MaterialManageVO">
-select to_number(to_char(store_date , 'MM'))+1 pmonth from resource_store where rsc_code =#{rscCode} group by to_number(to_char(store_date , 'MM'))+1 
+select (select to_number(to_char(store_date , 'MM'))+1 pmonth from resource_store where rsc_code =#{rscCode} group by to_number(to_char(store_date , 'MM'))+1) from dual 
 
 </select>
 
@@ -68,7 +68,7 @@ group by to_char(store_date , 'MM')
           ,0 
     from dual d 
     where 1=1
-    <if test="list != null and list.length != 0"> 
+    <if test="list != null and list.size != 0"> 
     and level not in 
     <foreach collection="list" item="vo" open="(" close=")" separator=",">
 	      	${vo.pmonth}
