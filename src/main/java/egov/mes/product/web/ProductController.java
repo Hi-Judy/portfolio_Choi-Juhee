@@ -33,9 +33,9 @@ public class ProductController {
 		if (product.getManDateend().equals("1910-12-25")) {
 			product.setManDateend(null) ;
 		}
-		if (product.getStatus().equals("null")) {
-			product.setStatus(null) ;
-		}
+		/*
+		 * if (product.getStatus().equals("null")) { product.setStatus(null) ; }
+		 */
 		
 		List<ProductVO> list = service.podtList(product) ;
 		ModelAndView jsonView = new ModelAndView("jsonView") ;
