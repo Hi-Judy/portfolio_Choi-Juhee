@@ -43,10 +43,9 @@
 				style="display: inline-block; margin-left: 10px;">조회</button>
 			
 			<div>
-				<p style="display: inline-block; margin-left : 5px;">작업일 : </p>
-				<p id="manDate" style="display: inline-block;"></p>
-				
-				<p style="display: inline-block; margin-left : 100px;">제품코드 : </p>
+
+
+				<p style="display: inline-block; margin-left : 5px;">제품코드 : </p>
 				<p id="podtCode" style="display: inline-block;"></p>
 		
 				<p style="display: inline-block; margin-left : 100px;">제품명 : </p>
@@ -160,14 +159,14 @@
 					.then((response) => response.json())
 					.then((data)=> {
 						console.log(data.data.contents);
-						//console.log(data.data.contents[0].podtCode);
+						console.log(data.data.contents[0].podtCode);
+						console.log(data.data.contents[0].comCode);
 						gridProcess.resetData(data.data.contents) //파싱한 결과 = data
 						gridProcess.refreshLayout();
 						
 						let mandate = document.querySelector("#txtManDate").value; //작업일 인풋태그 입력값
 						//console.log(mandate);
 						
-						document.getElementById("manDate").innerHTML = mandate
 						document.getElementById("podtCode").innerHTML = data.data.contents[0].podtCode
 						document.getElementById("podtName").innerHTML = data.data.contents[0].podtName
 						document.getElementById("comCode").innerHTML = data.data.contents[0].comCode
@@ -393,7 +392,6 @@
 			let txtManDate = document.getElementById('txtManDate');
 			txtManDate.value = '';
 			
-			$("#manDate").empty();
 			$("#podtCode").empty();
 			$("#podtName").empty();
 			$("#comCode").empty();
