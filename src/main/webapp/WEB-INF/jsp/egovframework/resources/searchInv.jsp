@@ -106,25 +106,28 @@ div#OverallSize {
 <body>
 
 <div id="gridRsc"></div>
+
 <script type="text/javascript">
+	
+	//-------- 자재조회 모달 ----------
 
 	//그리드(자재 발주 페이지에서 사용)
 	var columnsRsc = [
-			{
-			  header: '자재코드',
-			  name: 'rscCode'
-			},
-			{
-			  header: '자재명',
-			  name: 'rscName'
-			 },
-			 {
-			   header: '자재단위',
-			   name: 'rscUnit'
-			 }
-			];
+						{
+						  header: '자재코드',
+						  name: 'rscCode'
+						},
+						{
+						  header: '자재명',
+						  name: 'rscName'
+						 },
+						 {
+						   header: '자재단위',
+						   name: 'rscUnit'
+						 }
+					];
 				
-	//ajax(api)로 값 받아오는 거 
+	//메인 그리드 api
 	var dataSourceRsc = {
 		  api: {
 		    readData: { 
@@ -135,21 +138,19 @@ div#OverallSize {
 		  contentType: 'application/json'
 		};
 	
-
+	//자재조회 그리드 설정
 	var gridRsc = new Grid({
 		  el: document.getElementById('gridRsc'),
 		  data:dataSourceRsc,
 		  columns:columnsRsc
 		});
 	
-	
 	//리스트에서 선택한 값 가지고 오기
 	gridRsc.on("dblclick", (ev) => {
-		console.log(gridRsc.getValue(ev["rowKey"],'rscCode'))
 		grid.setValue(rscRowKey, "rscCode", gridRsc.getValue(ev["rowKey"],'rscCode'), false)
 		grid.setValue(rscRowKey, "rscName", gridRsc.getValue(ev["rowKey"],'rscName'), false)
 		grid.setValue(rscRowKey, "rscUnit", gridRsc.getValue(ev["rowKey"],'rscUnit'), false)
-		dialog3.dialog("close");
+		dialogRsc.dialog("close");
 	});
 
 

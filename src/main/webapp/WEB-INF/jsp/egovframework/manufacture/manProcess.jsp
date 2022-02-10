@@ -1,5 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <!DOCTYPE html>
 <html>
 <head>
@@ -31,7 +32,7 @@
 		<h4 style="margin-left: 10px">생산 현황</h4>
 	</div>	
 	
-	<div id="top" style="height : 230px; padding : 10px;">
+	<div id="top" style="height : 150px; padding : 10px;">
 		<!-- 생산지시서 조회 -->
 		<div >
 			<p style="display: inline-block; margin-left : 5px; margin-top : 10px;">작업일</p>
@@ -42,21 +43,21 @@
 				style="display: inline-block; margin-left: 10px;">조회</button>
 			
 			<div>
-				
+
+
 				<p style="display: inline-block; margin-left : 5px;">제품코드 : </p>
 				<p id="podtCode" style="display: inline-block;"></p>
-				<br>
 		
-				<p style="display: inline-block; margin-left : 5px;">제품명 : </p>
+				<p style="display: inline-block; margin-left : 100px;">제품명 : </p>
 				<p id="podtName" style="display: inline-block;"></p>
-				<br>
 				
-				<p style="display: inline-block; margin-left : 5px;">생산지시번호 : </p>
+				<p style="display: inline-block; margin-left : 100px;">생산지시번호 : </p>
 				<p id="comCode" style="display: inline-block;"></p>
+				
+				<button type="button" id="btnInit" class="btn" style="display: inline-block; float : right; margin : 5px;">초기화</button>
+				<button type="button" id="btnStart" class="btn" style="display: inline-block; float : right; margin : 5px;">시작</button>
 			</div>
 			
-			<button type="button" id="btnInit" class="btn" style="display: inline-block; float : right; margin : 5px;">초기화</button>
-			<button type="button" id="btnStart" class="btn" style="display: inline-block; float : right; margin : 5px;">시작</button>
 			</div>
 			
 		</div>
@@ -64,8 +65,14 @@
 	<br>
 
 	<div id="OverallSize" style="height: 525px; margin-left : 10px;">
+	
 		<!-- 공정현황 그리드 -->
 		<div id="gridProcess" style=" border-top: 3px solid #168;"></div>
+		
+		<div id="image" align="center">
+			<img id="stopImg" src="<c:url value='/images/egovframework/com/process/04.jpg'/>" style="width : 800px; height : auto; display: block;">
+			<img id="moveImg" src="<c:url value='/images/egovframework/com/process/03.gif'/>" style="width : 800px; height : auto; display: none;">
+		</div>
 	</div>
 
 	<!-- 생산지시서 조회 모달 -->
@@ -255,8 +262,6 @@
 			checkedCommand = gridManCommand.getCheckedRows();
 		})
 		
-		
-		
 		//******************************공정현황 그리드******************************
 		//공정현황 컬럼
 		const columnsProcess = [
@@ -311,8 +316,7 @@
 			rowHeaders : [ 'rowNum' ],
 	         bodyHeight: 430
 		})
-		
-		
+		 		
 		
 		//******************************공정시작 버튼******************************
 		let processData;
@@ -340,9 +344,24 @@
 				}
 			})
 			
+			$("#stopImg").css("display","none") ;
+			$("#moveImg").css("display","block") ;
+			
 		})
-		
-		
+		/*
+		gridProcess.on("afterChange" , (ev) => {
+			console.log('ev.changes[0]') ;
+			console.log(ev.changes[0]) ;
+			if(ev.changes[0].columnName=="cusType"){ 
+				if(gridProcess.getRowAt(gridProcess.getData().length-1).cusPhone!=null){
+					console.log(grid.getRowAt(grid.getData().length-1).cusPhone);
+				}else{
+					console.log(grid.getRowAt(grid.getData().length-1).cusPhone);
+				}
+			} 
+			
+		})
+		*/
 		//******************************생산현황 화면 reset******************************
 		function resetProcess(){
 			fetch('${pageContext.request.contextPath}/selectProcList',{
@@ -356,9 +375,12 @@
 			})
 			.then((response) => response.json())
 			.then((data)=> {
-				console.log(data.result);
 				gridProcess.resetData(data.result) //파싱한 결과 = data
 				gridProcess.refreshLayout();
+				if(data.result[data.result.length-1].manEndtime != null){
+					$("#stopImg").css("display","block") ;
+					$("#moveImg").css("display","none") ;					
+				}
 				resetProcess(); //재귀함수
 			})
 			
@@ -375,6 +397,8 @@
 			$("#comCode").empty();
 			
 			gridProcess.resetData([{}]);
+			$("#stopImg").css("display","block") ;
+			$("#moveImg").css("display","none") ;					
 		})
 		
 		//------------ 도움말 버튼 이벤트 ---------------
@@ -382,7 +406,8 @@
 	 	 	helpModal.dialog("open") ;
 	 	 })
 			
-	tui.Grid.applyTheme('default', themesOptions);			
+	tui.Grid.applyTheme('default', themesOptions);		
+		
 	</script>
 
 </body>

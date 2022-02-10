@@ -161,10 +161,19 @@
 			  columns
 			});
 		
-		//저장버튼 클릭시
-		saveResourcesStore.addEventListener("click", function(){
-			grid.request('modifyData'); 
-		});
+		
+	//저장버튼 클릭 -> 유효성 검사
+	//LOT 번호 미입력 -> alert 창으로 경고
+	saveResourcesStore.addEventListener("click", function(){
+		for(let i=0; i<grid.getRowCount(); i++){
+			if(grid.getValue(i, "rscLot") != null && grid.getValue(i, "rscLot") != 0){
+				 grid.request('modifyData');
+			}else {
+				 alert("자재 LOT를 입력해주세요")
+				 break;
+			}
+		}
+	});
 		
 	//저장시 데이터 다시 읽어서 수정한 품목(입고 완료한) 사라지게
 	grid.on("response",function(){

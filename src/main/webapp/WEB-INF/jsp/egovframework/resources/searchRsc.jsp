@@ -67,90 +67,93 @@
 	border-right: 1px solid black;
 	border-radius: 5px; 
 	background-color: ghostwhite;
-}
-/*탑을 위에 먼저넣고 해야함 */
-div#OverallSize {
-	width: 1500px;
-	height: 600px;	/*전체높이*/
-	margin-top: 10px; /*위에서 부터 벌어질 크기*/
-}
-/* 버튼 클래스 */
-.btn {
-   color: white;
-   border-radius: 5px;
-   background-color: #007b88;
-   padding: 2px 15px;
-   padding: 5px 30px;
-}
-  
-/* 도움말 버튼 */
-.bi-question-circle {
-	font-size : 25px ;
-	width : 25px ;
-	height : 25px ;
-}
-  
-/* 재철이형 돋보기 버튼 스타일 */
-.bi-search {
-   font-size : 20px ;
-   width : 20px ;
-   height : 20px ;
-}
-   
-.inpBC{
-	text-align:center;
-	background-color: #d2e5eb; 
-}
+	}
+	/*탑을 위에 먼저넣고 해야함 */
+	div#OverallSize {
+		width: 1500px;
+		height: 600px;	/*전체높이*/
+		margin-top: 10px; /*위에서 부터 벌어질 크기*/
+	}
+	/* 버튼 클래스 */
+	.btn {
+	   color: white;
+	   border-radius: 5px;
+	   background-color: #007b88;
+	   padding: 2px 15px;
+	   padding: 5px 30px;
+	}
+	  
+	/* 도움말 버튼 */
+	.bi-question-circle {
+		font-size : 25px ;
+		width : 25px ;
+		height : 25px ;
+	}
+	  
+	/* 재철이형 돋보기 버튼 스타일 */
+	.bi-search {
+	   font-size : 20px ;
+	   width : 20px ;
+	   height : 20px ;
+	}
+	   
+	.inpBC{
+		text-align:center;
+		background-color: #d2e5eb; 
+	}
 </style>
 </head>
 <body>
 
 <div id="gridRsc"></div>
+
 <script type="text/javascript">
+
+	//-------- 자재조회 모달 ----------
 
 	//그리드(자재 발주 페이지에서 사용)
 	var columnsRsc = [
-			{
-			  header: '자재코드',
-			  name: 'rscCode'
-			},
-			{
-			  header: '자재명',
-			  name: 'rscName'
-			 },
-			 {
-			   header: '자재단위',
-			   name: 'rscUnit'
-			 },
-			 {
-			   header: '자재단가',
-			   name: 'rscPrc',
-				formatter(value) {
-					if(value.value != null && value.value != '' ){
-						  return value.value.toString().replace(/\B(?<!\.\d*)(?=(\d{3})+(?!\d))/g, ",");
-					}else{
-						return value.value ;
-					}
-	            }
-			},
-			 {
-			   header: '업체',
-			   name: 'sucName'
-			},
-			{
-			 header: '재고',
-			 name: 'rscCnt',
-				formatter(value) {
-					if(value.value != null && value.value != '' ){
-						  return value.value.toString().replace(/\B(?<!\.\d*)(?=(\d{3})+(?!\d))/g, ",");
-					}else{
-						return value.value ;
-					}
-	            }
-			}
-			];
+						{
+							header: '자재코드',
+							name: 'rscCode'
+						},
+						{
+							header: '자재명',
+							name: 'rscName'
+						 },
+						 {
+							header: '자재단위',
+							name: 'rscUnit'
+						 },
+						 {
+							header: '자재단가',
+							name: 'rscPrc',
+							formatter(value) {
+								if(value.value != null && value.value != '' ){
+									  return value.value.toString().replace(/\B(?<!\.\d*)(?=(\d{3})+(?!\d))/g, ",");
+								}else{
+									return value.value ;
+								}
+				            }
+						 },
+						 {
+							header: '업체',
+							name: 'sucName'
+						},
+						{
+							header: '재고',
+							name: 'rscCnt',
+							formatter(value) {
+								if(value.value != null && value.value != '' ){
+									  return value.value.toString().replace(/\B(?<!\.\d*)(?=(\d{3})+(?!\d))/g, ",");
+								}else{
+									return value.value ;
+								}
+				            }
+						}
+					];
 				
-	//ajax(api)로 값 받아오는 거 
+	//메인 그리드 api
 	var dataSourceRsc = {
 		  api: {
 		    readData: { 
@@ -161,13 +164,12 @@ div#OverallSize {
 		  contentType: 'application/json'
 		};
 	
-
+	//자재조회 그리드 설정
 	var gridRsc = new Grid({
 		  el: document.getElementById('gridRsc'),
 		  data:dataSourceRsc,
 		  columns:columnsRsc
 		});
-	
 	
 	//리스트에서 선택한 값 가지고 오기
 	gridRsc.on("dblclick", (ev) => {
@@ -177,7 +179,7 @@ div#OverallSize {
 		grid.setValue(rscRowKey, "rscUnit", gridRsc.getValue(ev["rowKey"],'rscUnit'), false)
 		grid.setValue(rscRowKey, "rscPrc", gridRsc.getValue(ev["rowKey"],'rscPrc'), false)
 		grid.setValue(rscRowKey, "sucName", gridRsc.getValue(ev["rowKey"],'sucName'), false)
-		dialog3.dialog("close");
+		dialogRsc.dialog("close");
 	});
 
 

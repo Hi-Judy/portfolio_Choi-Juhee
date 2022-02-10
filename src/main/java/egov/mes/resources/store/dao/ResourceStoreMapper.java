@@ -11,6 +11,7 @@ public interface ResourceStoreMapper {
 	List<ResourcesStoreVO> findResourcesInventory(ResourcesStoreVO vo);
 	List<ResourcesStoreVO> resourceStoreInventory(ResourcesStoreVO vo);
 	List<ResourcesStoreVO> rscStoreInv(ResourcesStoreVO vo);
+	List<ResourcesStoreVO> findResourcesPlan(ResourcesStoreVO vo);			//자재발주 페이지에서 생산계획 조회
 	int insertResourcesStore(ResourcesStoreVO vo);
 	int updateResourcesStore(ResourcesStoreVO vo);
 	int insertResourcesInventoryIn(ResourcesStoreVO vo);

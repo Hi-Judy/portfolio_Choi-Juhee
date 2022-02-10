@@ -156,5 +156,15 @@ public class ResourceStoreController {
       return "jsonView";
 	}
 	
+	//자재발주 페이지에서 생산계획 조회
+	@RequestMapping("rscOrderPlan")
+	public String rscOrderPlan(Model model, ResourcesStoreVO vo) {
+	  model.addAttribute("result",true);
+      Map<String,Object> map = new HashMap<String,Object>();
+      map.put("contents", service.findResourcesPlan(vo));
+      model.addAttribute("data", map);
+	  System.out.println("================자재발주 페이지에서 생산계획 조회================");
+      return "jsonView";
+	}
 }
 	

@@ -19,11 +19,20 @@
 			</span>
 		</div>
 	</div>
-		<div id="dialog-form-rsc" title="자재 검색"></div>
-		<div id="dialog-form-order" title="미입고 검색"></div>
+	
+		<!-- 메인화면 그리드(insert) -->
 		<div id="OverallSize" style="margin-left: 10px;"><br>
 			<div id="grid" style="border-top: 3px solid #168; width: 1500px;"></div>
-		</div>
+			<br>
+			<br>
+			<!-- 메인화면 그리드(생산계획조회) -->
+			<h5 style="color: #25396f; style="margin-left: 10px">생산필요자재</h5>		
+			<div id="gridPlan" style="border-top: 3px solid #168; width: 1500px;"></div>
+		</div>	
+	
+		<!-- 모달 -->
+		<div id="dialog-form-rsc" title="자재 검색"></div>
+		<div id="dialog-form-order" title="미입고 검색"></div>
 		
 	<!-- 도움말 모달입니다. -->
 	<div id="helpModal" title="도움말">
@@ -101,7 +110,7 @@
 		});
 
 	
-	//-------- 메인그리드 ----------
+	//-------- 메인그리드(발주 insert) ----------
 	var Grid = tui.Grid;
 	Grid.applyTheme('default');
 	
@@ -167,6 +176,7 @@
 						  editor: 'datePicker'
 						}	
 					];
+	
 	//메인 그리드 api
 	var dataSource = {
 		  api: {
@@ -220,29 +230,106 @@
 	});
 	
 	//저장 버튼 클릭 -> 유효성 검사 
-	//발주량 미입력 -> alert 창으로 경고
+	//발주량,입고요청일 미입력 -> alert 창으로 경고
 	//발주량 입력 -> 저장
+	//continue /break /return /switch ? case default 
 	btnSaveOrder.addEventListener("click", function(){
 		for(let i=0; i<grid.getRowCount(); i++){
-			if(grid.getValue(i, "rscTotal") != null && grid.getValue(i, "rscTotal") != 0){
-				 console.log("IF");
-				 console.log(grid.getValue(i, "rscTotal"));
+			if(grid.getValue(i, "rscTotal") != null && grid.getValue(i, "rscTotal") != 0 && grid.getValue(i, "istReqDate") != null){
 				 grid.request('modifyData');
+			}else {
+				 alert("발주량 & 입고요청일을 입력해주세요")
 				 break;
-			}else if(grid.getValue(i, "rscTotal") == null && grid.getValue(i, "rscTotal") == 0){
-				 console.log("else if");
-				 console.log(grid.getValue(i, "rscTotal"));
-				 alert("발주량을 입력해주세요")
-				 break;
-			}	
+			}
 		}
 	});
 	
 	//저장시 데이터 다시 읽어서 수정한 품목(입고 완료한) 사라지게
 	grid.on("response",function(){
 		grid.clear();
-	})
-
+	});
+	
+	
+	//-------- 메인그리드(계획완료 select) ----------
+	var columnsPlan= [
+					 {
+					    header: '자재코드',
+					    name: 'rscCode'
+					  },
+					  {
+					    header: '자재명',
+					    name: 'rscName'
+					  },
+					  {
+						header: '단위',
+						name: 'rscUnit'
+					  },
+					  {
+						header: '단가',
+						name: 'rscPrc',
+						formatter(value) {
+							if(value.value != null && value.value != '' ){
+								return value.value.toString().replace(/\B(?<!\.\d*)(?=(\d{3})+(?!\d))/g, ",");
+							}else{
+								return value.value ;
+							}
+						}
+					   },
+						{
+						  header: '계획수량',
+						  name: 'sumofPlan',
+						  formatter(value) {
+								if(value.value != null && value.value != '' ){
+									return value.value.toString().replace(/\B(?<!\.\d*)(?=(\d{3})+(?!\d))/g, ",");
+								}else{
+									return value.value ;
+								}
+							}
+						},
+						{
+						  header: '재고량',
+						  name: 'rscCnt',
+							formatter(value) {
+								if(value.value != null && value.value != '' ){
+									return value.value.toString().replace(/\B(?<!\.\d*)(?=(\d{3})+(?!\d))/g, ",");
+								}else{
+									return value.value ;
+								}
+							}
+						},
+						{
+							header: '안전재고',
+							name: 'rscSfinvc',
+							formatter(value) {
+								if(value.value != null && value.value != '' ){
+									return value.value.toString().replace(/\B(?<!\.\d*)(?=(\d{3})+(?!\d))/g, ",");
+								}else{
+									return value.value ;
+								}
+							}
+						}
+					];
+	
+	//메인 그리드 api
+	var dataSourcePlan = {
+		  api: {
+			  readData: { 
+			    	url: 'rscOrderPlan', 
+			    	method: 'GET'
+			    	}
+		  	},
+		  initialRequest : false,
+		  contentType: 'application/json'
+		};
+	
+	//메인 그리드 설정
+	var gridPlan = new Grid({
+		  el: document.getElementById('gridPlan'),
+		  data: dataSourcePlan,
+		  columns: columnsPlan
+		});
+	
+	gridPlan.readData();
 </script>
 </body>
 </html>
