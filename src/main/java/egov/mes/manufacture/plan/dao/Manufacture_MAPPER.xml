@@ -6,9 +6,11 @@
 <!-- 생산계획서 조회(생산계획서 조회 페이지) -->
 <select id="selectManufacturePlan" resultType="egov.mes.manufacture.plan.dao.ManufacturePlanVO">
 	select a.podt_code, prod_detail(a.podt_code) podtName, 
-           a.man_plan_date, a.plan_period, a.plan_startdate, a.plan_complete,
+           to_char(a.man_plan_date,'yyyy-MM-dd') manPlanDate, a.plan_period, 
+           to_char(a.plan_startdate,'yyyy-MM-dd') planStartDate , a.plan_complete,
            a.man_perday, plan_etc,
-           b.ord_code, b.ord_qnt, b.ord_duedate
+           b.ord_code, b.ord_qnt, 
+           to_char(b.ord_duedate,'yyyy-MM-dd') ordDueDate
 	from man_plan_view a join ord_detail_view b
 	on a.ord_code = b.ord_code
 	where 1=1
