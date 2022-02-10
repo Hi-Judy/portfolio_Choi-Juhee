@@ -4,7 +4,7 @@
 <html>
 <head>
 <meta charset="UTF-8">
-<title>Insert title here</title>
+<title>생산계획 상세조회</title>
 <link rel="stylesheet" href="https://uicdn.toast.com/tui.date-picker/latest/tui-date-picker.css" />
 <link rel="stylesheet" href="https://uicdn.toast.com/tui-grid/latest/tui-grid.css" />
 <link rel="stylesheet" href="//code.jquery.com/ui/1.13.0/themes/base/jquery-ui.css">
@@ -53,12 +53,12 @@
 	<br>
 	<div id="OverallSize" style="margin-left : 10px;">
 		<!-- 메인화면 그리드 -->
-		<div id = "gridMain"></div>
+		<div id = "gridMain" style=" border-top: 3px solid #168;"></div>
 		<br>
 		
 		<!-- 자재조회 그리드 -->
 		<h5 style="color: #25396f;">자재조회</h5>
-		<div id="gridResource"></div>
+		<div id="gridResource" style=" border-top: 3px solid #168;"></div>
 	</div>	
 	
 	<!--  --------------- 도움말 --------------- -->
@@ -328,7 +328,7 @@
 			
 		})
 				
-		//------------ 도움말 버튼 이벤트 ---------------
+	//------------ 도움말 버튼 이벤트 ---------------
  	 helpBtn.addEventListener('mouseover' , () => {
  	 	helpModal.dialog("open") ;
  	 })

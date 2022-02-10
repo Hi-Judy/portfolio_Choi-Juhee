@@ -93,14 +93,14 @@
 	</div>
 	<br>
 	
-	<div id="OverallSize" style="margin-left : 10px;">
+	<div id="OverallSize" style="margin-left : 10px; height: 575px;">
 		<!-- 메인화면 그리드 -->
-		<div id = "gridMain"></div>
+		<div id = "gridMain" style="border-top: 3px solid #168;"></div>
 		<br>
 		
 		<!-- 자재조회 그리드 -->
 		<h5 style="color: #25396f;">자재조회</h5>
-		<div id="gridResource" style = " z-index:1; position: relative"></div>
+		<div id="gridResource" style = " z-index:1; position: relative; border-top: 3px solid #168;"></div>
 	</div>
 	
 	<!--  --------------- 달력 --------------- -->
