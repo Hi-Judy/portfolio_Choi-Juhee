@@ -184,22 +184,6 @@ div#OverallSize {
 		});
 	
 	
-	//리스트에서 선택한 값 가지고 오기
-	//var ordrNo = [];
-	
-	gridOrder.on("check", (ev) => {
-		//grid.appendRow({'rscCode':gridOrder.getValue(ev["rowKey"],'rscCode'),
-						//'rscName':gridOrder.getValue(ev["rowKey"],'rscName'),
-						//'rscUnit':gridOrder.getValue(ev["rowKey"],'rscUnit'),
-						//'rscCnt':gridOrder.getValue(ev["rowKey"],'rscCnt'),
-						//'rscPrc':gridOrder.getValue(ev["rowKey"],'rscPrc'),
-						//'sucName':gridOrder.getValue(ev["rowKey"],'sucName'),
-						//'istReqDate':gridOrder.getValue(ev["rowKey"],'istReqDate')
-						//});
-		
-		//ordrNo[ev.rowKey] = gridOrder.getValue(ev["rowKey"],'ordrNo');
-		
-	});
 </script>
 </body>
 </html>

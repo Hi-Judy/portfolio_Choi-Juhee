@@ -109,17 +109,17 @@ div#OverallSize {
 
 	//자재입고검사 페이지에서 불량 체크 
 	var columnsRtn = [
-			{
-			  header: '불량코드',
-			  name: 'defCode'
-			},
-			{
-			  header: '불량명',
-			  name: 'defName'
-			 }
-			];
+						{
+							header: '불량코드',
+							name: 'defCode'
+						},
+						{
+							header: '불량명',
+							name: 'defName'
+						 }
+						];
 	
-	//ajax(api)로 값 받아오는 거 
+	//메인 그리드 api
 	var dataSourceRtn = {
 		  api: {
 		    readData: { 
@@ -130,6 +130,7 @@ div#OverallSize {
 		  contentType: 'application/json'
 		};
 	
+	//자재조회 그리드 설정
 	var gridRtn = new Grid({
 		  el: document.getElementById('gridRtn'),
 		  data:dataSourceRtn,

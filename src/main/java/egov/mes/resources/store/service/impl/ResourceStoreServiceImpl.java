@@ -52,6 +52,12 @@ public class ResourceStoreServiceImpl implements ResourceStoreService{
 	public List<ResourcesStoreVO> rscStoreInv(ResourcesStoreVO vo) {
 		return mapper.rscStoreInv(vo);
 	}
+	
+	//자재발주 페이지에서 생산계획 조회
+	@Override
+	public List<ResourcesStoreVO> findResourcesPlan(ResourcesStoreVO vo) {
+		return mapper.findResourcesPlan(vo);
+	}
 
 	@Override
 	public void modifyStore(ModifyVO<ResourcesStoreVO> mvo) {
@@ -68,5 +74,7 @@ public class ResourceStoreServiceImpl implements ResourceStoreService{
 			}
 		}
 	}
+
+
 
 }

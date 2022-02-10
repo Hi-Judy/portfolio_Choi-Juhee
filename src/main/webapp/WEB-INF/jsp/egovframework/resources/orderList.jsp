@@ -144,7 +144,14 @@
 	//-------- 업체조회 모달 ----------
 	let dialogSuc = $("#dialog-form-suc").dialog({
 			autoOpen: false,
-			modal: true
+			modal: true,
+			width : 600 ,
+			height : 600,
+			buttons: {
+				"닫기" : function() {
+					dialogSuc.dialog("close") ;
+				}
+			},
 		});
 	
 	//업체조회 모달창 오픈 
@@ -158,8 +165,6 @@
 	
 	//모달창(업체조회)에서 클릭한 값 가지고 와서 input 태그에 넣고 모달 닫기
 	function clickSuc(sucCode, sucName){
-		console.log(sucCode);
-		console.log(sucName);
 		$("#txtSuc1").val(sucCode);
 		$("#txtSuc2").val(sucName);
 		dialogSuc.dialog("close");
@@ -318,12 +323,12 @@
 	//엑셀버튼 클릭시 파일로 저장
 	$("#btnXlsx").on("click", function () {
 		
-		})
+		});
 	
 	//------------------ 도움말 버튼 이벤트 -----------------------
 	helpBtn.addEventListener('mouseover' , () => {
 		helpModal.dialog("open") ;
-	})		
+	});
 	
 	tui.Grid.applyTheme('default', themesOptions);
 </script>

@@ -14,5 +14,6 @@ public interface ResourceStoreService {
 	List<ResourcesStoreVO> findResourcesInventory(ResourcesStoreVO vo);
 	List<ResourcesStoreVO> resourceStoreInventory(ResourcesStoreVO vo);
 	List<ResourcesStoreVO> rscStoreInv(ResourcesStoreVO vo);
+	List<ResourcesStoreVO> findResourcesPlan(ResourcesStoreVO vo);			//자재발주 페이지에서 생산계획 조회
 	void modifyStore(ModifyVO<ResourcesStoreVO> mvo);
 }

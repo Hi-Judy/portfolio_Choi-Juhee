@@ -67,61 +67,63 @@
 	border-right: 1px solid black;
 	border-radius: 5px; 
 	background-color: ghostwhite;
-}
-/*탑을 위에 먼저넣고 해야함 */
-div#OverallSize {
-	width: 1500px;
-	height: 600px;	/*전체높이*/
-	margin-top: 10px; /*위에서 부터 벌어질 크기*/
-}
-/* 버튼 클래스 */
-.btn {
-   color: white;
-   border-radius: 5px;
-   background-color: #007b88;
-   padding: 2px 15px;
-   padding: 5px 30px;
-}
-  
-/* 도움말 버튼 */
-.bi-question-circle {
-	font-size : 25px ;
-	width : 25px ;
-	height : 25px ;
-}
-  
-/* 재철이형 돋보기 버튼 스타일 */
-.bi-search {
-   font-size : 20px ;
-   width : 20px ;
-   height : 20px ;
-}
-   
-.inpBC{
-	text-align:center;
-	background-color: #d2e5eb; 
-}
+	}
+	/*탑을 위에 먼저넣고 해야함 */
+	div#OverallSize {
+		width: 1500px;
+		height: 600px;	/*전체높이*/
+		margin-top: 10px; /*위에서 부터 벌어질 크기*/
+	}
+	/* 버튼 클래스 */
+	.btn {
+	   color: white;
+	   border-radius: 5px;
+	   background-color: #007b88;
+	   padding: 2px 15px;
+	   padding: 5px 30px;
+	}
+	  
+	/* 도움말 버튼 */
+	.bi-question-circle {
+		font-size : 25px ;
+		width : 25px ;
+		height : 25px ;
+	}
+	  
+	/* 재철이형 돋보기 버튼 스타일 */
+	.bi-search {
+	   font-size : 20px ;
+	   width : 20px ;
+	   height : 20px ;
+	}
+	   
+	.inpBC{
+		text-align:center;
+		background-color: #d2e5eb; 
+	}
 </style>
 </head>
 <body>
 
-<div id="gridSuc">
-</div>
+<div id="gridSuc"></div>
+
 <script type="text/javascript">
+
+	//-------- 업체조회 모달 ----------
 
 	//그리드
 	var columnsSuc = [
-			{
-			 header:'업체코드',
-			 name: 'sucCode'
-			},
-			{
-			 header: '업체명',
-			 name: 'sucName'
-			 }
-			];
+						{
+							header:'업체코드',
+							name: 'sucCode'
+						},
+						{
+							header: '업체명',
+							name: 'sucName'
+						 }
+					];
 				
-	//ajax(api)로 값 받아오는 거 
+	//메인 그리드 api
 	var dataSourceSuc = {
 		  api: {
 		    readData: { 
@@ -132,29 +134,20 @@ div#OverallSize {
 		  contentType: 'application/json'
 		};
 	
+	//업체조회 그리드 설정
 	var gridSuc = new Grid({
 		  el: document.getElementById('gridSuc'),
 		  data: dataSourceSuc,
 		  columns: columnsSuc
 		});
 	
-	//리스트에서 선택한 값 가지고 오기...$(여기 어떻게 쓰지? )
+	//리스트에서 선택한 값 메인 그리드에 넘겨준다
 	gridSuc.on("dblclick", (ev) => {
 		var sucCode = gridSuc.getValue(ev["rowKey"],'sucCode');
 		var sucName = gridSuc.getValue(ev["rowKey"],'sucName');
-		//var suc = gridSuc.getValue(ev["rowKey"],ev["columnName"]);
 		clickSuc(sucCode, sucName)
+		clickSuc2(sucCode, sucName)
 	});
-	
-	
-	/* gridSuc.on('click' , (ev) => {
-		//selection 옵션을 주고 얘들을 세팅해야 클릭했을떄 색상이 바뀌고 색상이 사라지고 한다.
-		gridSuc.setSelectionRange({
-	    	start: [ev.rowKey, 0],
-	    	end: [ev.rowKey, gridSuc.getColumns().length-1]
-	    }); 
-	    
-	}) */
 
 </script>
 </body>
