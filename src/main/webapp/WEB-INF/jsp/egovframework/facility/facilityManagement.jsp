@@ -70,10 +70,10 @@
 		설비코드검색 : 검색어를 포함한 설비명으로 설비코드를 검색합니다.<br><br>
 		조회 : 조건 없이 조회하면 전체목록을 조회합니다.<br><br>
 		추가 : <br>
-		&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;설비번호 : 설비명을 선택하면 저장시 자동으로 입력됩니다.<br>
+		&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;설비번호 : 설비명을 선택하고 저장시에 자동으로 입력됩니다.<br>
 		&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;설비코드 : 설비명을 선택 시 자동으로 입력됩니다.<br>
-		&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;공정명 : 설비명을 선택 시 자동으로 입력됩니다.<br>
-		&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;모든 값을 다 입력해야 저장이 가능합니다.<br><br>
+		&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;공정명 : 공정코드를 선택 시 자동으로 입력됩니다.<br>
+		&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;설비명, 공정코드, UPH, 가동시간을 입력해야 등록이 가능합니다.<br>
 		초기화 : 입력한 조회 조건을 초기화합니다.
 	</div>
 <script>
@@ -445,8 +445,28 @@
 				let facRuntime = inserted[i].facRuntime ;
 				let procCode = inserted[i].procCode ;
 				
-				if (facStatus == null || facCode == null || facOutput == null || facRuntime == null || procCode == null) {
-					alert('입력값을 확인하세요') ;
+				if (facStatus == null) {
+					alert('가동상태를 입력하세요') ;
+					return ;
+				}
+				
+				if (facCode == null) {
+					alert('설비명을 선택하세요') ;
+					return ;
+				}
+				
+				if (facOutput == null) {
+					alert('UPH를 입력하세요') ;
+					return ;
+				}
+				
+				if (facRuntime == null) {
+					alert('가동시간을을 입력하세요') ;
+					return ;
+				}
+				
+				if (procCode == null) {
+					alert('공정코드를 선택하세요') ;
 					return ;
 				}
 				
