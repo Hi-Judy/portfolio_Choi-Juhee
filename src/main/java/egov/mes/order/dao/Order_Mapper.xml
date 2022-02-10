@@ -44,7 +44,7 @@
 	
 	<select id="orderSelect" resultType="egov.mes.order.dao.OrderVO">
 		select t.ord_no , t.ord_code , t.podt_code , fn_get_code_name(t.podt_code) as code_name , t.ord_qnt , 
-		       (select podt_qnt from product where podt_code = t.podt_code) as podt_qnt
+		       (select podt_qnt from product where podt_code = t.podt_code) as podtQnt
         from trade_info t
         where ord_code = #{ordCode}
 	</select>
