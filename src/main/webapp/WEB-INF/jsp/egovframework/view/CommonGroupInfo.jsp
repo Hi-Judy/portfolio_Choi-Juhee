@@ -5,10 +5,9 @@
 <html lang="ko" dir="ltr">
 <head>
 <meta charset="utf-8">
-<title>HTML CSS Left Right Split</title>
+<title>공통자료 관리</title>
 
 <style>
-
 
 
 div.left {
@@ -55,21 +54,18 @@ div.right {
 
 		</div>
 	</div>
-
+	<br>
+	
 	<div id="OverallSize" style="margin-left: 13px;">
 		<div class="left">
-			<span style="font-size: 1.5em; color: blue"> 코드 </span>
-			<br>
-			<br>
+			<h5 style="color: #25396f;">그룹 목록</h5>
 
-			<div id="grid" style="border-top: 3px solid #168; width: 504px; "></div>
+			<div id="grid" style="border-top: 3px solid #168; width: 504px; margin-top: 15px;"></div>
 		</div>
 
 		<div class="right">
-			<span style="font-size: 1.5em; color: blue"> 상세보기 </span> <br>
-			<br>
-
-			<div id="grid2" style="border-top: 3px solid #168;"></div>
+			<h5 style="color: #25396f;">그룹코드 상세보기</h5>
+			<div id="grid2" style="border-top: 3px solid #168; margin-top: 15px;"></div>
 
 		</div>
 	</div>
@@ -306,7 +302,7 @@ var helpModal = $( "#helpModal" ).dialog({
     			if ( CRUD != null && CRUD != ''){ //crud
     			
     				//success: 성공(초록) , info:정보(하늘색) , warning:경고(주황) , error:에러(빨강)
-    				alert('변경할수없는 코드 입니다.')
+    				alert('등록된 코드는 수정이 불가능합니다')
     				
     				//현재 펑션을 멈춤
                     ev.stop();

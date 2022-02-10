@@ -111,7 +111,7 @@ div.Gridright {
 				<div>
 					<span> 현 공정에서 가동중인 설비 </span>
 					<button id="FacDataDelete" type="button" class="btn"
-						style="float: right; margin-bottom: 5px;">삭제</button>
+						style="float: right; margin-bottom: 5px;">설비빼기</button>
 				</div>
 				<div id="FacGrid3"></div>
 				<!-- style="border-top: 3px solid #168;" -->
@@ -122,7 +122,7 @@ div.Gridright {
 				<div>
 					<span> 비가동(가동준비) 설비 </span>
 					<button id="dataflowBtn" type="button" class="btn"
-						style="float: right; margin-bottom: 5px;">추가</button>
+						style="float: right; margin-bottom: 5px;">설비추가</button>
 				</div>
 				<div id="FacGrid2"></div>
 				<!-- style="border-top: 3px solid #168;" -->
