@@ -1,5 +1,5 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
-    pageEncoding="UTF-8"%>
+	pageEncoding="UTF-8"%>
 <!DOCTYPE html>
 <html>
 <head>
@@ -7,87 +7,98 @@
 <title>자재재고 조회</title>
 
 <style type="text/css">
-.ui-state-active, .ui-widget-content .ui-state-active, .ui-widget-header .ui-state-active, a.ui-button:active, .ui-button:active, .ui-button.ui-state-active:hover {
-    border: 1px solid #007b88;
-    background: #007b88;
-    font-weight: normal;
-    color: #ffffff;
+.ui-state-active, .ui-widget-content .ui-state-active, .ui-widget-header .ui-state-active,
+	a.ui-button:active, .ui-button:active, .ui-button.ui-state-active:hover
+	{
+	border: 1px solid #007b88;
+	background: #007b88;
+	font-weight: normal;
+	color: #ffffff;
 }
 </style>
 </head>
 <body>
-	<div style="width : 1500px ;">
+	<div style="width: 1500px;">
 		<span style="float: right;">
-			<button type="button" id="helpBtn" style="border : none; background-color : #f2f7ff; color : #007b88; float : right ;">
+			<button type="button" id="helpBtn"
+				style="border: none; background-color: #f2f7ff; color: #007b88; float: right;">
 				<i class="bi bi-question-circle"></i>
 			</button>
 		</span>
 		<h4 style="margin-left: 10px; margin-bottom: 25px;">자재재고 조회</h4>
 	</div>
-	<div id="tabs" style="margin-left: 10px; width : 1500px ; height: 810px;">
+	<div id="tabs" style="margin-left: 10px; width: 1500px; height: 810px;">
 		<ul>
 			<li><a href="#tabs-1">안전 재고</a></li>
 			<li><a href="#tabs-2">LOT별 재고</a></li>
 		</ul>
-		
+
 		<!-- 안전재고 -->
-		<div id="tabs-1" style="margin-left:10px; padding-top: 0px; padding-left: 0px; padding-right: 0px; padding-bottom: 0px;">	
+		<div id="tabs-1"
+			style="margin-left: 10px; padding-top: 0px; padding-left: 0px; padding-right: 0px; padding-bottom: 0px;">
 			<div id="top" style="width: 1450px; height: 90px;">
-				<div style="margin-top : 5px;  margin-left: 8px;">
-					자재명 <input id="txtRsc2" class="inpBC" readonly>
-					자재코드 <input id="txtRsc1">
-					<button id="btnFindRsc" style="border : none; background-color :#f8f8ff; color : #007b88;" >
+				<div style="margin-top: 5px; margin-left: 8px;">
+					자재명 <input id="txtRsc2" class="inpBC" readonly> 자재코드 <input
+						id="txtRsc1">
+					<button id="btnFindRsc"
+						style="border: none; background-color: #f8f8ff; color: #007b88;">
 						<i class="bi bi-search"></i>
-					</button>&nbsp;&nbsp;&nbsp;
-					<br>
+					</button>
+					&nbsp;&nbsp;&nbsp; <br>
 				</div>
 				<div id="dialog-form-rsc" title="자재 검색"></div>
-				<div  style="float:right;margin-bottom: 0px;margin-top: 7px;margin-right: 10px;">
+				<div
+					style="float: right; margin-bottom: 0px; margin-top: 7px; margin-right: 10px;">
 					<button id="btnSelect" class="btn">조회</button>
 					<button id="btn_reset" type="reset" class="btn">초기화</button>
 					<button class="btn">엑셀</button>
 				</div>
-			</div>	
+			</div>
 			<br>
-			<div id="gridRsc1" style="border-top: 3px solid #168; height: 800px; width: 1450px; margin-left: 10px;"></div>
+			<div id="gridRsc1"
+				style="border-top: 3px solid #168; height: 800px; width: 1450px; margin-left: 10px;"></div>
 		</div>
-		
+
 		<!-- LOT별 재고 -->
-		<div id="tabs-2"  style="margin-left:10px; padding-top: 0px; padding-left: 0px; padding-right: 0px; padding-bottom: 0px;">
+		<div id="tabs-2"
+			style="margin-left: 10px; padding-top: 0px; padding-left: 0px; padding-right: 0px; padding-bottom: 0px;">
 			<div id="top" style="width: 1450px; height: 90px;">
-				<div style="margin-top : 5px;  margin-left: 8px;">
-					자재명 <input id="txtRscLot2" class="inpBC" readonly>
-					자재코드 <input id="txtRscLot1">
-					<button id="btnFindRscLot" style="border : none; background-color :#f8f8ff; color : #007b88;" >
+				<div style="margin-top: 5px; margin-left: 8px;">
+					자재명 <input id="txtRscLot2" class="inpBC" readonly> 자재코드 <input
+						id="txtRscLot1">
+					<button id="btnFindRscLot"
+						style="border: none; background-color: #f8f8ff; color: #007b88;">
 						<i class="bi bi-search"></i>
-					</button>&nbsp;&nbsp;&nbsp;
-					<br>
+					</button>
+					&nbsp;&nbsp;&nbsp; <br>
 				</div>
 				<div id="dialog-form-rsc-Lot" title="자재 검색"></div>
-				<div style="float:right;margin-bottom: 0px;margin-top: 7px;margin-right: 10px;">
+				<div
+					style="float: right; margin-bottom: 0px; margin-top: 7px; margin-right: 10px;">
 					<button id="btnSelectLot" class="btn">조회</button>
 					<button id="btn_reset_Lot" type="reset" class="btn">초기화</button>
 					<button class="btn">엑셀</button>
-				</div>	
+				</div>
 			</div>
 			<br>
-			<div id="gridRscLot" style="border-top: 3px solid #168; height: 600px; width: 1450px; margin-left: 10px;"></div>
+			<div id="gridRscLot"
+				style="border-top: 3px solid #168; height: 600px; width: 1450px; margin-left: 10px;"></div>
 		</div>
-	</div>	
-	
+	</div>
+
 	<!-- 도움말 모달입니다. -->
 	<div id="helpModal" title="도움말">
 		<hr>
-		새자료 : 화면에 보여지고있는 자재정보를 없에고 등록모드 로 바뀝니다.<br><br>
-		자재재고조회 : 선택된 자재의 전년도 이월량 밑 올해 내역들을 볼수있습니다.<br><br>
-		저장 : "담당관리자" , "입고업체" , "입고단가" 들을 <br>
-		&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-		새롭게 수정해서 저장할수있습니다.<br><br>
-		LOT정보가 없는 자재들은 자재재고조회 밑 LOT정보 조회가 불가능합니다.<br><br>
-		LOT추가 밑 더 자세한 자재관리는 자재관리 탭에서 진행해주세요.
+		새자료 : 화면에 보여지고있는 자재정보를 없에고 등록모드 로 바뀝니다.<br>
+		<br> 자재재고조회 : 선택된 자재의 전년도 이월량 밑 올해 내역들을 볼수있습니다.<br>
+		<br> 저장 : "담당관리자" , "입고업체" , "입고단가" 들을 <br>
+		&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 새롭게 수정해서
+		저장할수있습니다.<br>
+		<br> LOT정보가 없는 자재들은 자재재고조회 밑 LOT정보 조회가 불가능합니다.<br>
+		<br> LOT추가 밑 더 자세한 자재관리는 자재관리 탭에서 진행해주세요.
 	</div>
-	
-<script type="text/javascript">
+
+	<script type="text/javascript">
 	//그리드 한글로 변환
 	tui.Grid.setLanguage('ko');
 
@@ -184,17 +195,6 @@
 						header: '단위',
 						name: 'rscUnit'
 					   },
-					   {
-					     header: '안전재고',
-						 name: 'rscSfinvc',
-							formatter(value) {
-								if(value.value != null && value.value != '' ){
-									  return value.value.toString().replace(/\B(?<!\.\d*)(?=(\d{3})+(?!\d))/g, ",");
-								}else{
-									return value.value ;
-								}
-				            }
-						},
 						{
 						  header: '재고',
 						  name: 'rscCnt',
@@ -207,15 +207,19 @@
 				            }
 						},
 						{
-						  header: '미달량',
-						  name: 'shortage',
+							header: '안전재고',
+							name: 'rscSfinvc',
 							formatter(value) {
 								if(value.value != null && value.value != '' ){
-									  return value.value.toString().replace(/\B(?<!\.\d*)(?=(\d{3})+(?!\d))/g, ",");
+									return value.value.toString().replace(/\B(?<!\.\d*)(?=(\d{3})+(?!\d))/g, ",");
 								}else{
 									return value.value ;
 								}
-				            }
+					    	}
+						},
+						{
+						  header: '미달량',
+						  name: 'shortage'
 						}
 					];
 	
@@ -257,13 +261,21 @@
 					
 		});
 		
-		//그리드 안전재고 - 재고량 = 미달량 
-		grid.on("onGridUpdated", function(ev){
-			for(i=0; i<grid.getRowCount(); i++){
-				let gr = grid.getValue(i, "rscSfinvc")-grid.getValue(i, "rscCnt")
-				grid.setValue(i, "shortage", gr.toString().replace(/\B(?<!\.\d*)(?=(\d{3})+(?!\d))/g, ","));
+	//그리드 재고 - 안전재고  = 미달량 
+	grid.on("onGridUpdated", function(ev){
+		for(i=0; i<grid.getRowCount(); i++){
+			let gr1 = grid.getValue(i, "rscCnt")-grid.getValue(i, "rscSfinvc")
+			let gr = Math.round(gr1);
+			console.log(gr)
+			if(gr < 0){
+				let a =(gr*-1)
+				grid.setValue(i, "shortage", a.toString().replace(/\B(?<!\.\d*)(?=(\d{3})+(?!\d))/g, ","));
+			}else{
+				grid.setValue(i, "shortage", 0);
 			}
-		});
+			
+		}
+	});
 		
 
 //-----------------------------------자재 LOT별 재고-----------------------------------

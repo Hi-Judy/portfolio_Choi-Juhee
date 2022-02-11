@@ -4,7 +4,7 @@
 <html>
 <head>
 <meta charset="UTF-8">
-<title>자재반품 조회</title>
+<title>자재불량 조회</title>
 </head>
 <body>
 	<div style="width : 1500px ;">
@@ -13,12 +13,12 @@
 				<i class="bi bi-question-circle"></i>
 			</button>
 		</span>
-		<h4 style="margin-left: 10px">자재반품 조회</h4>
+		<h4 style="margin-left: 10px">자재불량 조회</h4>
 	</div>
 	<div id="top" style="height: 190px;">
 		<div style="margin-top : 15px;  margin-left: 10px;">
 			<span>
-			반품일자  <input id="txtOrde1" type="date" data-role="datebox" data-options='{"mode": "calbox"}'> 
+			검사일자  <input id="txtOrde1" type="date" data-role="datebox" data-options='{"mode": "calbox"}'> 
 			  ~ 	<input id="txtOrde2" type="date" data-role="datebox" data-options='{"mode": "calbox"}'><br>
 			</span> 
 			<div style="margin-top: 10px;">
@@ -178,13 +178,13 @@
 	
 	var columns = [
 					{
-						header: '반품일자',
+						header: '검사일자',
 						name: 'rtngdDate',
 						sortable: true,
 						sortingType: 'desc'
 					},
 					{
-						header: '반품번호',
+						header: '불량번호',
 						name: 'rtngdNo',
 						sortable: true,
 						sortingType: 'desc'
@@ -223,7 +223,7 @@
 						}
 					},
 					{
-						header: '반품량',
+						header: '불량량',
 						name: 'rtngdCnt',
 						formatter(value) {
 							if(value.value != null && value.value != '' ){
