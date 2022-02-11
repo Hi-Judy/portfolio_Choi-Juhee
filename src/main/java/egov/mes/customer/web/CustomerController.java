@@ -22,14 +22,12 @@ public class CustomerController {
 	}
 	
 	@RequestMapping("customerList")
-	public ModelAndView customerList(@PathVariable String cusCode , String cusType , CustomerVO customer) {
-		if (cusCode.equals("null")) {
+	public ModelAndView customerList(CustomerVO customer) {
+		if (customer.getCusCode().equals("null")) {
 			customer.setCusCode(null) ;	
 		}
 		
-		System.out.println(cusType);
-		
-		if (cusType.equals("buy")) {
+		if (customer.getCusType().equals("buy")) {
 	        customer.setCusType("판매처") ;
 		} else {
 			customer.setCusType("구매처") ;

@@ -34,10 +34,10 @@
 		<span style="margin : 20px;">업체명</span><input id="txtCusName" style="margin-top : 10px; background-color: #d2e5eb;" readonly> 
 		<span style="margin : 20px;">업체코드</span><input id="txtCusCode">&nbsp;<button type="button" id="btnSearch" style="border : none; background-color : #f8f8ff; color : #007b88;"><i class="bi bi-search"></i></button>
 		<label for="buy" style=" margin-left: 20px;">판매처</label> 	
-		<input type="radio" name="cusType" value="buy" checked>
+		<input type="radio" name="cusType" id="buy" value="buy" checked>
 		
 		<label for="sell" style=" margin-left: 10px;">구매처</label> 	
-		<input type="radio" name="cusType" value="sell" >		
+		<input type="radio" name="cusType" id="sell" value="sell" >		
 		<br>
 		<button type="button" id="clearBtn" class="btn" style="float : right; margin : 5px;">초기화</button>
 		<button type="button" id="btnInsert" class="btn" style="float : right; margin : 5px;">저장</button>
@@ -140,10 +140,7 @@
 	
 	$('#listBtn').click(function () {
 		let cusCode = $("#txtCusCode").val() ;
-		
 		let cusType = $("input[name=cusType]:checked").val() ;
-		
-		console.log(cusType) ;
 		
  		if (cusCode == '') {
 			cusCode = 'null' ;
@@ -196,8 +193,10 @@
 		if(ev.columnName == 'cusCode') {
 			if(code == '제품 구매 고객') {
 				grid.setValue(ev.rowKey , 'cusType' , '판매처') ;
+				$("#buy").prop('checked' , true) ;
 			} else {
 				grid.setValue(ev.rowKey , 'cusType' , '구매처') ;
+				$("#sell").prop('checked' , true) ;
 			}
 		}
 	})
@@ -207,6 +206,7 @@
 		
 		let insertDatas = grid.getModifiedRows() ;
 		let insertData = insertDatas.createdRows ;
+		
 		let insertCode = insertData[0].cusCode ;
 		let insertName = insertData[0].codeName ;
 		let insertPhone = insertData[0].cusPhone ;
@@ -235,6 +235,12 @@
 			codeDesct = '구매처' ;
 		}
 		
+		if (codeDesct == '판매처') {
+			$("#buy").prop('checked' , true) ;
+		} else {
+			$("#sell").prop('checked' , true) ;
+		}
+		
 		$.ajax({
 			url : 'customerInsert' ,
 			data : {
@@ -247,8 +253,15 @@
 			success : function(datas) {
 				alert('저장완료되었습니다') ;
 				
+				let cusType = '' ;
+				
+				if (codeDesct == '판매처') {
+					cusType = 'buy' ;
+				} else {
+					cusType = 'sell' ;
+				}
+				
 				let cusCode = 'null' ;
-				let cusType = 'null' ;
 				
 				$.ajax({
 					url : 'customerList' ,
@@ -285,11 +298,11 @@
 	})
 	
 	$("#btnDelete").on("click" , function() {
-		console.log(rowCodes) ;
 		let ok = 1 ;
 		for (let i = 0 ; i < rowCodes.length ; i++) {
 			if (rowCodes[i] != null) {
 				let cusCode = rowCodes[i] ;
+				let cusType = $("input[name=cusType]:checked").val() ;
 				
 				$.ajax({
 					url : 'deleteCustomer/' + cusCode ,
@@ -298,7 +311,6 @@
 						ok = 2 ;
 						
 						let cusCode = 'null' ;
-						let cusType = 'null' ;
 						
 						$.ajax({
 							url : 'customerList' ,
@@ -483,6 +495,7 @@
 				dialog2.dialog("close") ;
 				
 				let cusCode = $("#txtCusCode").val() ;
+				let cusType = $("input[name=cusType]:checked").val() ;
 				
 				if (cusCode == '') {
 					cusCode = 'null' ;
@@ -493,7 +506,8 @@
 					dataType : 'json' ,
 					async : false ,
 					data : {
-						cusCode : cusCode 
+						cusCode : cusCode ,
+						cusType : cusType
 					} ,
 					success : function(datas) {
 						data = datas.data ;
@@ -574,6 +588,13 @@
 		}
 		
 		let cusCode = data[ev.rowKey].cusCode ;
+		let cusType = data[ev.rowKey].cusType ;
+		
+		if (cusType == '판매처') {
+			cusType = 'buy' ;
+		} else {
+			cusType = 'sell' ;
+		}
 		
 		dialog2.dialog("open") ;
 		grid3.refreshLayout() ;
@@ -591,13 +612,15 @@
 			error : function(reject) {
 				console.log(reject) ;
 			}
-		}).done( function() {
+		})
+ 		.done( function() {
  			$.ajax({
  				url : 'customerList' ,
  				dataType : 'json' ,
  				async : false ,
  				data : {
- 					cusCode : cusCode
+ 					cusCode : cusCode ,
+ 					cusType : cusType
  				} ,
  				success : function(datas) {
  					data4 = datas.data ;
@@ -609,7 +632,7 @@
  					console.log(reject) ;
  				}
  			}) 
- 		})
+ 		}) 
 	})
 	
 	const grid3 = new Grid({
