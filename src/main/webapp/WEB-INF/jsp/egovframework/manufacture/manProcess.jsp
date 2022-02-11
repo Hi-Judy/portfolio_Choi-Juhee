@@ -308,6 +308,10 @@
 			{
 				header : '종료시간',
 				name : 'manEndtime'
+			}, 
+			{
+				header : '불량량',
+				name : 'defQnt'
 			}
 			
 		]
@@ -325,7 +329,7 @@
 		
 		gridProcess.on('onGridUpdated', function(){
 			for(let i=0; i<gridProcess.getRowCount(); i++){
-				if(gridProcess.getValue(i, 'manQnt') != 0){
+				if(gridProcess.getValue(i, 'manQnt') != null){
 					btnStart.disabled = true;
 				}
 			}

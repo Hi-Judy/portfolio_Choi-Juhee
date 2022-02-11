@@ -376,7 +376,13 @@
 				header : '불량량',
 				name : 'defQnt',
 				align : 'center',
-				formatter(value) { return value.value.toString().replace(/\B(?<!\.\d*)(?=(\d{3})+(?!\d))/g, ",") ;}
+				formatter(value) { 
+		        	if(value.value != null && value.value != '' && value.value != "null"){
+		        		return value.value.toString().replace(/\B(?<!\.\d*)(?=(\d{3})+(?!\d))/g, ",") ;
+		        	}else{
+		        		return value.value ;  
+		        	}
+	        	}
 			} 
 		]
 		

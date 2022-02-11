@@ -773,7 +773,8 @@
 					
 					if(resCode1 == resCode2){
 						sumCnt=sumCnt*1+j.rscCnt*1;
-						if(j.rscCnt<j.ostCnt){
+						console.log(typeof(j.rscCnt)+ ' '+typeof(j.ostCnt));
+						if(j.rscCnt*1<j.ostCnt*1){
 							gridResLOT.setValue(j.rowKey,'ostCnt','');
 							alert("해당 LOT의 자재가 부족합니다. 다음 LOT를 이용해주세요.");
 						}
@@ -1062,7 +1063,7 @@
 			console.log(manGoalPerday);
 			console.log(manPerday);
 			
-			if(manPerday < manGoalPerday){
+			if(manPerday*1 < manGoalPerday*1){
 				alert("하루 생산가능한 수량이 초과했습니다.");
 				return;
 			}

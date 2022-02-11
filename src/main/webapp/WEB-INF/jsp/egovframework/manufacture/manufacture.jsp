@@ -547,12 +547,7 @@
 				align : 'center',
 				width: 150
 			},
-			{
-				header: '작업기간',
-				name: 'planPeriod',
-				editor: 'text',
-				align : 'center'
-			},
+			
 			{
 				header: '작업시작일',
 				name: 'planStartDate',
@@ -697,22 +692,8 @@
 		//******************************버튼이벤트 모음******************************
 		//저장 버튼 이벤트
 		btnSavePlan.addEventListener("click", function(){
-			let txtPlanDate = document.getElementById('txtManDate');
-			let txtPlanName = document.getElementById('txtPlanName');
-			console.log(txtPlanDate.value);
-			console.log(txtPlanName.value);
-			//console.log(txtPlanDate.type);
-		
- 			if(txtPlanDate.value == null || txtPlanDate.value == ""){
-				alert("계획일자를 입력해주세요.");
-				//gridMain.request('modifyData');
-			} 
- 			if(txtPlanName.value == null || txtPlanName.value == ""){
-				alert("계획명을 입력해주세요.");
-				//gridMain.request('modifyData'); 
-			} 
- 			
- 			let updateDatas = gridMain.getModifiedRows() ;
+			
+			let updateDatas = gridMain.getModifiedRows() ;
  	        let updateData = updateDatas.updatedRows ;
  	      
  		 	for(let i=0; i< updateData.length; i++){
@@ -721,33 +702,54 @@
 
  		 		if(gridMain.getValue(i, "planStartDate") == null){
 					alert("작업시작일을 입력해주세요.");
+					gridMain.blur();
 					return;
 					//gridMain.request('modifyData'); 					
 				} else if(gridMain.getValue(i, "planComplete") == null){
 					alert("작업종료일을 입력해주세요.");
+					gridMain.blur();
 					return;
 					//gridMain.request('modifyData'); 		
-				} else{
-					gridMain.request('modifyData'); 		
-				}
-			} 
- 			
+				} 
+			}
+ 		 	
+ 		 	
+			let txtPlanDate = document.getElementById('txtManDate').value;
+			let txtPlanName = document.getElementById('txtPlanName').value;
+			console.log(txtPlanDate);
+			console.log(txtPlanName);
+			//console.log(txtPlanDate.type);
+			
 			let a = gridMain.getCheckedRows();
 			console.log(a);
 			
 			for(i of a){
 				console.log(i);
-				gridMain.setValue(i.rowKey, 'manPlanDate', txtPlanDate.value);
-				gridMain.setValue(i.rowKey, 'manPlanName', txtPlanName.value);
+				gridMain.setValue(i.rowKey, 'manPlanDate', txtPlanDate);
+				gridMain.setValue(i.rowKey, 'manPlanName', txtPlanName);
 				console.log(gridMain.getValue(i.rowKey,'manPlanDate'));
 				console.log(gridMain.getValue(i.rowKey,'manPlanName'));
 			}
 			
+			
 			//console.log("!!SAVE!!")
-			gridMain.blur();
+			
 			//gridMain에서 modifyData 요청 -> dataSourceMain의 modifyData 안의 url로 간다.
 			
 		
+ 			if(txtPlanDate == null || txtPlanDate == ""){
+				alert("계획일자를 입력해주세요.");
+				return;
+				//gridMain.request('modifyData');
+			} 
+ 			if(txtPlanName == null || txtPlanName == ""){
+				alert("계획명을 입력해주세요.");
+				return;
+				//gridMain.request('modifyData'); 
+			}
+ 			
+ 				gridMain.request('modifyData'); 
+ 			
 			
 		});
 		

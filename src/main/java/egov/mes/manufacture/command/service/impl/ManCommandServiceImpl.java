@@ -107,10 +107,11 @@ public class ManCommandServiceImpl implements ManCommandService{
 		if(voList.size() != 0) { //VO에 담긴 자재코드에 값이 있으면
 			
 			for(ManCommandVO vo : voList) {//VO에 담긴 자재코드 갯수 만큼 for문. 안에서 쿼리돌기
-				vo.setComCode(resSeq);
-				System.out.println("자재테이블 추가: " + voList);
-				
-				mapper.insertRes(vo);
+				if(vo.getOstCnt() != null) {
+					vo.setComCode(resSeq);
+					System.out.println("자재테이블 추가: " + voList);
+					mapper.insertRes(vo);
+				}
 			}
 		}
 		

@@ -135,7 +135,7 @@
 
 <!-- 브라우저 화면에 보여줄 진행공정 테이블 -->
 <select id="selectProcList" resultType="egov.mes.manufacture.process.dao.ManProcessVO">
-	select c.man_startTime as manStarttime, c.man_endTime as manEndtime, c.man_qnt,
+	select c.man_startTime as manStarttime, c.man_endTime as manEndtime, c.man_qnt,c.def_qnt,
            d.fac_code, prod_detail(d.fac_code) as facName, 
            d.proc_code, prod_detail(d.proc_code) as procName,
            e.man_goalperday as manGoalPerday,
@@ -160,7 +160,7 @@
 	
 	where c.com_Code = #{comCode}
 	
-	group by c.man_startTime, c.man_endTime, c.man_qnt, 
+	group by c.man_startTime, c.man_endTime, c.man_qnt, c.def_qnt,
 			 d.fac_code, d.proc_code, e.man_goalperday,
 			 f.emp_id, f.emp_name
 	order by d.proc_Code
@@ -308,10 +308,10 @@
 <!-- 생산중 & 생산완료 제품에 해당하는 공정 정보 -->
 <select id="findProcess" resultType="egov.mes.manufacture.process.dao.ManProcessVO">
 	select c.man_goalperday, c.podt_code, prod_detail(c.podt_code) as podtName, c.com_code, c.com_etc,
-               d.fac_code, prod_detail(d.fac_code) as facName, 
-               d.proc_code, prod_detail(d.proc_code) as procName,
-               e.man_qnt, e.man_starttime, e.man_endtime,
-               f.emp_id, f.emp_name
+           d.fac_code, prod_detail(d.fac_code) as facName, 
+           d.proc_code, prod_detail(d.proc_code) as procName,
+           e.man_qnt, e.man_starttime, e.man_endtime, e.def_qnt,
+           f.emp_id, f.emp_name
                
     from manufacture_command_d c join manufacture_process e
     on c.com_code = e.com_code
@@ -336,7 +336,7 @@
 
 	group by c.man_goalperday, c.podt_code, c.com_code, c.com_etc,
                      d.fac_code,  d.proc_code, 
-                     e.man_qnt,  e.man_starttime, e.man_endtime,
+                     e.man_qnt,  e.man_starttime, e.man_endtime, e.def_qnt,
                      f.emp_id, f.emp_name
 	order by d.proc_code
 </select>
