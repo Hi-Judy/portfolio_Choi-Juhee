@@ -318,7 +318,7 @@
 			    	method: 'GET'
 			    	}
 		  	},
-		  initialRequest : false,
+		  //initialRequest : false,
 		  contentType: 'application/json'
 		};
 	
