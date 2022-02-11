@@ -12,9 +12,9 @@
 			and podt_code = #{podtCode}
 		</if>
 		
-		<if test="status != null">
+<!-- 		<if test="status != null">
 			and podt_etc = #{status}
-		</if>
+		</if> -->
 		
 		<if test="manDatestart != null">
 			<![CDATA[
@@ -45,7 +45,7 @@
 	</select>
 	
 	<insert id="insertInOut">
-		{ call p_insert_lotno(#{podtCode},#{manDate},#{podtInput},#{podtOutput},#{podtEtc},#{podtLot}) }
+		{ call p_insert_lotno(#{qntInfono},#{podtCode},#{manDate},#{podtInput},#{podtOutput},#{podtEtc},#{podtLot}) }
 	</insert>
 	
 	<update id="updateLotno" statementType="CALLABLE">
