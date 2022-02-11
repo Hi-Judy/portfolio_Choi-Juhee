@@ -33,7 +33,7 @@
 	
 	<div id="top" style="height : 165px; padding : 10px;">
 		<span style="margin : 20px;">설비명</span><input id="txtFacName" style="margin-top : 10px; margin-left : 23px; background-color: #d2e5eb;" readonly>
-		<span style="margin : 20px;">설비코드</span><input id="txtfacCode">&nbsp;<button type="button" id="btnSearch" class="btn">설비코드검색</button>
+		<span style="margin : 20px;">설비코드</span><input id="txtfacCode">&nbsp;<button type="button" id="btnSearch" style="border : none; background-color : #f8f8ff; color : #007b88;"><i class="bi bi-search"></i></button>
 		<br><br>
 		<span style="margin : 20px;">설비상태</span>
 		<select id="selectStatus">

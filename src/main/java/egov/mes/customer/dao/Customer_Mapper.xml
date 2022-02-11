@@ -11,6 +11,10 @@
 			and cus_code = #{cusCode}
 		</if>
 		
+		<if test="cusType != null">
+			and cus_type = #{cusType}
+		</if>
+		
 		order by cus_code ASC
 	</select>
 	

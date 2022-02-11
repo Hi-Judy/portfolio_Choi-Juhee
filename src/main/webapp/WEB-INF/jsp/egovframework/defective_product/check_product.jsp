@@ -40,7 +40,9 @@
 		<p style="display:inline-block;"> ~ </p>
 		<input id = "txtToDate" type="date" name="to" style="display:inline-block;">
 		<br>
-		<button type="button" id="btnClear" class="btn" style="float : right; margin : 5px;">초기화</button>	
+		<button type="button" id="btnClear" class="btn" style="float : right; margin : 5px;">초기화</button>
+		<button type="button" id="btnFacDate" class="btn" style="float : right; margin : 5px;">월별 불량</button>
+		<button type="button" id="btnFacProc" class="btn" style="float : right; margin : 5px;">공정별 불량</button>	
 		<button type="button" id="btnList" class="btn" style="float : right; margin : 5px;">조회</button>
 	</div>
 
@@ -51,6 +53,11 @@
 		<div><h5 style="color : #007b88;">불량내역</h5></div>
 		<div id = "defD" style="border-top: 3px solid #168;"></div>
 	</div>	
+	
+	<div id="defChart" title="불량 수량 그래프" style="text-align: center;">
+		<div align="center"><h5 id="defTitle" style="color : #007b88;">불량 수량 그래프 조회</h5></div>
+		<div id="chart"></div>
+	</div>
 	
 	<div id="helpDialog" title="도움말">
 		<br>
@@ -64,6 +71,7 @@
 	<script>
 		// 메인그리드
 		var Grid = tui.Grid ;
+		const Chart = toastui.Chart;
 		
 		themesOptions = { 
 	            selection: {    background: '#007b88',     border: '#004082'  },//  <- 클릭한 셀 색상변경 border(테두리색) , background (백그라운드)
@@ -81,6 +89,104 @@
 	            }
 		};
 		
+		const el = document.getElementById('chart');
+		
+		var data = {
+		  categories: [],
+		  series: [
+		    {
+		      name: '불량수',
+		      data: []
+		    }
+		  ]
+		};
+		
+		var options = {
+		  chart: { width: 600, height: 400 },
+		  series : {
+			  stack : true ,
+		      dataLabels: { visible: true }
+		  }
+		};
+		
+		const chart4 = Chart.barChart({ el, data, options });
+		
+		$("#btnFacProc").on("click" , function() {
+			$("#chart").empty() ;
+			data.categories = [] ;
+			data.series[0].data = [] ;
+			dialogDefProc.dialog("open") ;
+			$("#defTitle").text('공정별 불량 수량 조회(누적)') ;
+			$.ajax({
+				url : 'chartData' ,
+				dataType : "json" ,
+				success : function(datas) {					
+					for (let i = 0 ; i < datas.chartData.length ; i++) {
+						data.categories.push(datas.chartData[i].procCode) ;
+						data.series[0].data.push(Number(datas.chartData[i].defQnt)) ;
+					} ;								
+					
+					const chart2 = Chart.barChart({ el , data , options }) ;
+									
+				} ,
+				error : function(reject) {
+					console.log(reject) ;
+				}
+				
+			})
+		}) ;
+		
+		$("#btnFacDate").on("click" , function() {
+			$("#chart").empty() ;
+			data.categories = [] ;
+			data.series[0].data = [] ;
+			dialogDefDate.dialog("open") ;
+			$("#defTitle").text('월별 불량 수량 조회(현재연도)') ;
+			$.ajax({
+				url : 'chartData2' ,
+				dataType : "json" ,
+				success : function(datas) {					
+ 					for (let i = 0 ; i < datas.chartData2.length ; i++) {
+						data.categories.push(datas.chartData2[i].manDate + '월') ;
+						data.series[0].data.push(Number(datas.chartData2[i].defQnt)) ;
+					} ;	 						
+					
+					const chart3 = Chart.barChart({ el , data , options }) ;
+									
+				} ,
+				error : function(reject) {
+					console.log(reject) ;
+				}
+				
+			})
+		}) ;
+		
+		//공정별 불량 모달
+		let dialogDefProc = $("#defChart").dialog({
+			autoOpen: false, 
+			modal: true,
+			height: 600,
+		    width: 650,
+			buttons: {
+				"닫기" : function(){
+					dialogDefProc.dialog("close") ;
+				}
+			}		    
+		});
+		
+		//월별 불량 모달
+		let dialogDefDate = $("#defChart").dialog({
+			autoOpen: false, 
+			modal: true,
+			height: 600,
+		    width: 650,
+			buttons: {
+				"닫기" : function(){
+					dialogDefDate.dialog("close") ;
+				}
+			}		    
+		});
+		
 		const columns = [
 			{
 				header : '지시코드' ,
@@ -93,7 +199,7 @@
 				align : 'center'
 			} ,
 			{
-				header : '작업완료량' ,
+				header : '지시량' ,
 				name : 'manQnt' ,
 				align : 'center',
 	 			formatter(value) {
@@ -130,7 +236,7 @@
 			}
 		]
 		
-		let data ;
+		let data3 ;
 		
 		$("#btnList").on('click' , function() {
 			let fromDate = $("#txtFromDate").val() ;
@@ -153,8 +259,8 @@
 				} ,
 				async : false ,
 				success : function(datas) {
-					data = datas.checklist ;
-					grid.resetData(data) ;
+					data3 = datas.checklist ;
+					grid.resetData(data3) ;
 					grid.resetOriginData ;
 				} ,
 				error : function(reject) {
@@ -168,7 +274,7 @@
 			rowHeaders : [
 				{ type : 'rowNum' }
 			] ,
-			data : data ,
+			data : data3 ,
 			columns : columns ,
 			bodyHeight : 250 ,
 	 		pageOptions: {
@@ -217,7 +323,7 @@
 		
 		// 메인그리드 누르면 불량내역 나오게
 		grid.on('click' , (ev) => {
-			let comCode = data[ev.rowKey].comCode ;
+			let comCode = data3[ev.rowKey].comCode ;
 			
 			$.ajax({
 				url : 'defList' ,

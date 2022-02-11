@@ -35,7 +35,7 @@
 		<span style="margin : 20px;">납기일자</span><input id="dueDateStart" type="date" style="margin-top : 10px;"><span> ~ </span><input id="dueDateEnd" type="date">
 		<br><br>
 		<span style="margin : 20px;">고객명</span><input id="txtCusName" style="margin-left : 15px; background-color: #d2e5eb;" readonly>
-		<span style="margin : 20px;">고객코드</span><input id="txtCusCode">&nbsp;<button type="button" id="btnSearch2" class="btn">고객코드검색</button>
+		<span style="margin : 20px;">고객코드</span><input id="txtCusCode">&nbsp;<button type="button" id="btnSearch" style="border : none; background-color : #f8f8ff; color : #007b88;"><i class="bi bi-search"></i></button>
 		<br>
 		<button type="button" id="clearBtn" class="btn" style="float : right; margin : 5px;">초기화</button>
 		<button type="button" id="listBtn" class="btn" style="float : right; margin : 5px;">조회</button>
@@ -46,7 +46,7 @@
 		<div id="info" style="border-top: 3px solid #168;"></div>
 	</div>
 	
-	<div id="findCustomer" title="고객검색"">
+	<div id="findCustomer" title="업체검색"">
 		<input id="cusName">&nbsp;<button id="btnCusSearch" class="btn">검색</button>
 		<div id="cusResult"></div>
 	</div>

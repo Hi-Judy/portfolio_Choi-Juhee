@@ -40,7 +40,7 @@
 			<option value="미생산출하">미생산출하</option>
 		</select>
 		<span style="margin : 20px;">업체명</span><input id="txtCusName" style="background-color: #d2e5eb;" readonly>
-		<span style="margin : 20px;">업체코드</span><input id="txtCusCode" style="margin-left : 20px;">&nbsp;<button type="button" id="btnSearch" class="btn">업체코드검색</button>
+		<span style="margin : 20px;">업체코드</span><input id="txtCusCode" style="margin-left : 20px;">&nbsp;<button type="button" id="btnSearch" style="border : none; background-color : #f8f8ff; color : #007b88;"><i class="bi bi-search"></i></button>
 		<br>	
 		<span style="margin : 20px;">접수일자</span>&nbsp;&nbsp;&nbsp;&nbsp;<input id="ordDateStart" type="date"><span> ~ </span><input id="ordDateEnd" type="date" style="margin-right : 60px;">
 		<span style="margin : 20px;">납기일자</span>&nbsp;&nbsp;&nbsp;<input id="dueDateStart" type="date"><span> ~ </span><input id="dueDateEnd" type="date">
@@ -60,7 +60,7 @@
 		</div>
 	</div>
 	
-	<div id="findCustomer" title="고객검색"">
+	<div id="findCustomer" title="업체검색"">
 		<input id="cusName">&nbsp;<button id="btnCusSearch" class="btn">검색</button>
 		<div id="cusResult"></div>
 	</div>
