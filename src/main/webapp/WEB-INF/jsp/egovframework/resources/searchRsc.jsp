@@ -140,17 +140,7 @@
 							header: '업체',
 							name: 'sucName'
 						},
-						{
-							header: '재고',
-							name: 'rscCnt',
-							formatter(value) {
-								if(value.value != null && value.value != '' ){
-									  return value.value.toString().replace(/\B(?<!\.\d*)(?=(\d{3})+(?!\d))/g, ",");
-								}else{
-									return value.value ;
-								}
-				            }
-						}
+				
 					];
 				
 	//메인 그리드 api
@@ -168,19 +158,20 @@
 	var gridRsc = new Grid({
 		  el: document.getElementById('gridRsc'),
 		  data:dataSourceRsc,
-		  columns:columnsRsc
+		  columns:columnsRsc,
+		  rowHeaders: ['checkbox'],
 		});
 	
 	//리스트에서 선택한 값 가지고 오기
-	gridRsc.on("dblclick", (ev) => {
-		console.log(gridRsc.getValue(ev["rowKey"],'rscCode'))
-		grid.setValue(rscRowKey, "rscCode", gridRsc.getValue(ev["rowKey"],'rscCode'), false)
-		grid.setValue(rscRowKey, "rscName", gridRsc.getValue(ev["rowKey"],'rscName'), false)
-		grid.setValue(rscRowKey, "rscUnit", gridRsc.getValue(ev["rowKey"],'rscUnit'), false)
-		grid.setValue(rscRowKey, "rscPrc", gridRsc.getValue(ev["rowKey"],'rscPrc'), false)
-		grid.setValue(rscRowKey, "sucName", gridRsc.getValue(ev["rowKey"],'sucName'), false)
-		dialogRsc.dialog("close");
-	});
+// 	gridRsc.on("dblclick", (ev) => {
+// 		console.log(gridRsc.getValue(ev["rowKey"],'rscCode'))
+// 		grid.setValue(rscRowKey, "rscCode", gridRsc.getValue(ev["rowKey"],'rscCode'), false)
+// 		grid.setValue(rscRowKey, "rscName", gridRsc.getValue(ev["rowKey"],'rscName'), false)
+// 		grid.setValue(rscRowKey, "rscUnit", gridRsc.getValue(ev["rowKey"],'rscUnit'), false)
+// 		grid.setValue(rscRowKey, "rscPrc", gridRsc.getValue(ev["rowKey"],'rscPrc'), false)
+// 		grid.setValue(rscRowKey, "sucName", gridRsc.getValue(ev["rowKey"],'sucName'), false)
+// 		dialogRsc.dialog("close");
+// 	});
 
 
 </script>

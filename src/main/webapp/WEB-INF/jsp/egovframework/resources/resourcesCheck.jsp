@@ -229,12 +229,16 @@
 		)}
 	});
 	
+	
+	//
+	
 	//테이블에서 셀 편집을 종료했을때 검사량, 합격량이 null이 아니면 검사량 - 합격량 = 불량량 구해준다
 	grid.on("editingFinish", function(ev){
 		if(grid.getValue(ev["rowKey"], "rscTstCnt")!=null && grid.getValue(ev["rowKey"], "rscPassCnt")!=null){
 			grid.setValue(ev["rowKey"],"rscDefCnt",grid.getValue(ev["rowKey"], "rscTstCnt")-grid.getValue(ev["rowKey"], "rscPassCnt"));
 		}
 	});
+	
 	
 	//저장버튼 클릭시 -> 유효성 검사
 	//값 미입력(발주량,입고량,검사량,합격량) -> alert 창으로 경고

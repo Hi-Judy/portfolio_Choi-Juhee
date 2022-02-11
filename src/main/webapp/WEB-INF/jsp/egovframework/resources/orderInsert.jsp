@@ -73,8 +73,14 @@
 			heigth : 500,
 			width : 900,
 			buttons: {
+				"확인" : function (){
+					for(i=0; i <gridRsc.getCheckedRows().length; i++ ){
+							grid.appendRow(gridRsc.getCheckedRows()[i]);
+					}
+					dialogRsc.dialog("close");
+				},
 				"닫기" : function() {
-					dialogRsc.dialog("close") ;
+					dialogRsc.dialog("close");
 				}
 			},
 		});
@@ -206,21 +212,26 @@
 	});
 	
 	//그리드 columnName = rscCode 클릭시 자재조회 모달 오픈
-	grid.on("click", function(ev){
-		if(ev["columnName"]=="rscCode"){
-			rscRowKey=ev["rowKey"];
-				dialogRsc.dialog("open");
+// 	grid.on("click", function(ev){
+// 		if(ev["columnName"]=="rscCode"){
+// 			rscRowKey=ev["rowKey"];
+// 				dialogRsc.dialog("open");
 		
-		$("#dialog-form-rsc").load("recList",
-				function(){
-					console.log("자재 조회 모달 로드됨")
-			}
-		)}	
-	});
+// 		$("#dialog-form-rsc").load("recList",
+// 				function(){
+// 					console.log("자재 조회 모달 로드됨")
+// 			}
+// 		)}	
+// 	});
 
 	//추가 버튼 클릭
 	btnAdd.addEventListener("click", function(){
-		grid.appendRow({});
+		dialogRsc.dialog("open");
+		$("#dialog-form-rsc").load("recList",
+				function(){
+					console.log("자재 조회 모달 로드됨")
+			})
+		//grid.appendRow({});
 	});
 
 	//삭제 버튼 클릭
@@ -234,14 +245,15 @@
 	//발주량 입력 -> 저장
 	//continue /break /return /switch ? case default 
 	btnSaveOrder.addEventListener("click", function(){
-		for(let i=0; i<grid.getRowCount(); i++){
-			if(grid.getValue(i, "rscTotal") != null && grid.getValue(i, "rscTotal") != 0 && grid.getValue(i, "istReqDate") != null){
+// 		for(let i=0; i<grid.getRowCount(); i++){
+// 			if(grid.getValue(i, "rscTotal") == null && grid.getValue(i, "rscTotal") == 0 && grid.getValue(i, "istReqDate") == null){
+// 				 alert("발주량 & 입고요청일을 입력해주세요")
+// 				 break;
+// 			}else {
 				 grid.request('modifyData');
-			}else {
-				 alert("발주량 & 입고요청일을 입력해주세요")
-				 break;
-			}
-		}
+				 alert("정상처리 되었습니다");
+// 			}
+// 		}
 	});
 	
 	//저장시 데이터 다시 읽어서 수정한 품목(입고 완료한) 사라지게

@@ -70,8 +70,14 @@
 			heigth : 500,
 			width : 900,
 			buttons: {
+				"확인" : function (){
+					for(i=0; i <gridRsc.getCheckedRows().length; i++ ){
+							grid.appendRow(gridRsc.getCheckedRows()[i]);
+					}
+					dialogRsc.dialog("close");
+				},
 				"닫기" : function() {
-					dialogRsc.dialog("close") ;
+					dialogRsc.dialog("close");
 				}
 			},
 		});
@@ -108,6 +114,23 @@
 						name: 'rscUnit'
 					},
 					{
+						header: '입출고 구분',
+						name: 'storeFlag',
+						editor: {
+							type:'select',
+							options: {
+								listItems: [
+											{ text: '정산입고', value: '정산입고' },
+											{ text: '정산출고', value: '정산출고' },
+									]
+							}
+						}
+					},
+					{
+						header: '자재LOT',
+						name: 'rscLot'
+					},
+					{
 						header: '입고량',
 						name: 'istCnt',
 						editor: 'text',
@@ -131,23 +154,7 @@
 							}
 				        }
 					},
-					{
-						header: '자재LOT',
-						name: 'rscLot'
-					},
-					{
-						header: '입출고 구분',
-						name: 'storeFlag',
-						editor: {
-							type:'select',
-							options: {
-								listItems: [
-											{ text: '정산입고', value: '정산입고' },
-											{ text: '정산출고', value: '정산출고' },
-									]
-							}
-						}
-					}, 
+					
 				];
 	
 	//메인 그리드 api
@@ -188,21 +195,28 @@
 	});
 	
 	//columnName = rscCode 그리드 클릭시 자재리스트 출력
-	grid.on("click", function(ev){
-		if(ev["columnName"]=="rscCode"){
-			rscRowKey=ev["rowKey"];
-				dialogRsc.dialog("open");
+// 	grid.on("click", function(ev){
+// 		if(ev["columnName"]=="rscCode"){
+// 			rscRowKey=ev["rowKey"];
+// 				dialogRsc.dialog("open");
 	
-		$("#dialog-form-rsc").load("recList",
-			function(){
-				console.log("자재조회 모달 로드됨")
-			}
-		)}
-	});	
+// 		$("#dialog-form-rsc").load("recList",
+// 			function(){
+// 				console.log("자재조회 모달 로드됨")
+// 			}
+// 		)}
+// 	});	
+	
+	
 	
 	//추가 버튼
 	btnAdd.addEventListener("click", function(){
-		grid.appendRow({});
+		dialogRsc.dialog("open");
+		$("#dialog-form-rsc").load("recList",
+				function(){
+					console.log("자재 조회 모달 로드됨")
+			})
+		//grid.appendRow({});
 	});
 	
 	//삭제 버튼
