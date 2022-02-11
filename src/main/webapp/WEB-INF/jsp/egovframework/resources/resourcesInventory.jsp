@@ -12,7 +12,6 @@
 		<div>
 			<span style="margin-top: 13px; float: left;"></span>
 			<span style="float: right; margin-top: 4.5px;">
-				<button id="btnSelectInventory" class="btn">조회</button> &nbsp;&nbsp;
 				<button id="btnAdd" class="btn">추가</button>	 &nbsp;&nbsp;
 				<button id="btnDel" class="btn">삭제</button> &nbsp;&nbsp;
 				<button id="btnSaveInventory" class="btn">저장</button> &nbsp;&nbsp;
@@ -49,7 +48,7 @@
 	tui.Grid.setLanguage('ko');
 	
 	var code;
-	
+	var row;
 	//-------- 도움말 모달 ----------
 	var helpModal = $( "#helpModal" ).dialog({
 	 autoOpen : false ,
@@ -190,6 +189,7 @@
 		$("#dialog-form-inventory").load("resourcesInventoryIn",
 			function(){console.log("로드됨");
 				code=grid.getValue(ev["rowKey"], 'rscCode');
+				row=ev["rowKey"];
 			})
 		}
 	});

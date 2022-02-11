@@ -9,7 +9,6 @@
 <body>
 <div id="gridInvIn"></div>
 <script type="text/javascript">
-
 	var code2;
 	$(function(){
 		code2=code;
@@ -84,8 +83,8 @@
 	
 	
 	//리스트에서 선택한 값 가지고 오기
-	gridInvIn.on("dblclick", (ev) => {
-			grid.setValue(grid.getRowCount()-1, "rscLot", gridInvIn.getValue(ev["rowKey"],'rscLot'), false)
+	gridInvIn.on("dblclick", (ev1) => {
+			grid.setValue(row, "rscLot", gridInvIn.getValue(ev1["rowKey"],'rscLot'), false)
 			dialoginventory.dialog("close");
 	});
 

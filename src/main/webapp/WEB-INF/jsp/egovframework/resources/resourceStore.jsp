@@ -76,6 +76,7 @@
 
 	//미입고조회 모달 오픈
 	$("#findResourcesStore").on("click", function(){
+		grid.clear();
 		dialogIn.dialog("open");
 		$("#dialog-form-store").load("searchResourceStore",
 				function(){
@@ -177,9 +178,9 @@
 	});
 		
 	//저장시 데이터 다시 읽어서 수정한 품목(입고 완료한) 사라지게
-	grid.on("response",function(){
-		grid.clear();
-	})
+// 	grid.on("response",function(){
+// 		grid.clear();
+// 	})
 	
 	//삭제 버튼 클릭
 	deleteRscStore.addEventListener("click", function(){

@@ -143,7 +143,8 @@
 		                            IST_CNT,
 		                            OST_CNT,
 		                            STORE_DATE,
-		                            STORE_FLAG)
+		                            STORE_FLAG,
+		                            STORE_ETC)
 		                    VALUES( F_CODE_MAKER('RI'),
 		                            #{rscCode},
 		                            'Y',
@@ -151,27 +152,30 @@
 		                            #{istCnt},
 		                            0,
 		                            SYSDATE,
-		                            #{storeFlag})
+		                            #{storeFlag},
+		                            '정산입고')
 	</insert>
 	
 	<!-- 정산 출고 -->
 	<insert id="insertResourcesInventoryOut">
 		INSERT INTO RESOURCE_STORE( STORE_NO,
-                            RSC_CODE,
-                            IST_FLAG,
-                            RSC_LOT,
-                            IST_CNT,
-                            OST_CNT,
-                            STORE_DATE,
-                            STORE_FLAG)
-                    VALUES( F_CODE_MAKER('RO'),
-                            #{rscCode},
-                            'Y',
-                            #{rscLot},
-                            0,
-                            #{ostCnt},
-                            SYSDATE,
-                            #{storeFlag})
+		                            RSC_CODE,
+		                            IST_FLAG,
+		                            RSC_LOT,
+		                            IST_CNT,
+		                            OST_CNT,
+		                            STORE_DATE,
+		                            STORE_FLAG,
+		                            STORE_ETC)
+		                    VALUES( F_CODE_MAKER('RO'),
+		                            #{rscCode},
+		                            'Y',
+		                            #{rscLot},
+		                            0,
+		                            #{ostCnt},
+		                            SYSDATE,
+		                            #{storeFlag},
+		                            '정산출고')
 	</insert>
 	
 	<!-- 자재 LOT 조정 조회 -->

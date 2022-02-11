@@ -108,6 +108,7 @@
 	
 	//미검사조회 모달 오픈
 	$("#btnSelectOrder").on("click", function(){
+		grid.clear();
 		dialogOrder.dialog("open");
 		$("#dialog-form-order").load("searchOrderList",
 				function(){
@@ -226,6 +227,7 @@
 
 	//추가 버튼 클릭
 	btnAdd.addEventListener("click", function(){
+		grid.clear();
 		dialogRsc.dialog("open");
 		$("#dialog-form-rsc").load("recList",
 				function(){
@@ -245,21 +247,24 @@
 	//발주량 입력 -> 저장
 	//continue /break /return /switch ? case default 
 	btnSaveOrder.addEventListener("click", function(){
-// 		for(let i=0; i<grid.getRowCount(); i++){
-// 			if(grid.getValue(i, "rscTotal") == null && grid.getValue(i, "rscTotal") == 0 && grid.getValue(i, "istReqDate") == null){
-// 				 alert("발주량 & 입고요청일을 입력해주세요")
-// 				 break;
-// 			}else {
-				 grid.request('modifyData');
-				 alert("정상처리 되었습니다");
-// 			}
-// 		}
+		console.log(createdRows());
+		for(let i=0; i<grid.getRowCount(); i++){
+			if(grid.getValue(i, "rscTotal") == 0){
+ 				 alert("발주량을 입력해주세요")
+				 continue;
+ 			}else if(grid.getValue(i, "istReqDate") == null ){
+ 				alert("입고요청일을 입력해주세요")
+ 				continue;
+ 			}else {
+ 				 grid.request('modifyData');
+ 			}
+ 		}
 	});
 	
 	//저장시 데이터 다시 읽어서 수정한 품목(입고 완료한) 사라지게
-	grid.on("response",function(){
-		grid.clear();
-	});
+// 	grid.on("response",function(){
+// 		grid.clear();
+// 	});
 	
 	
 	//-------- 메인그리드(계획완료 select) ----------

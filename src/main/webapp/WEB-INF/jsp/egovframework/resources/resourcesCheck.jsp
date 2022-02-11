@@ -84,6 +84,7 @@
 	
 	//미검사조회 모달 오픈
 	$("#findResourcesCheck").on("click", function(){
+		grid.clear();
 		dialogOrder.dialog("open");
 		$("#dialog-form-check").load("searchOrderList",
 				function(){
@@ -246,17 +247,20 @@
 	//발주량보다 입고량,검사량,합격량이 크면 -> alert 창으로 경고
 	//불량량 != 0인데 불량코드가 null이면 -> alert 창으로 경고
 	saveResourcesCheck.addEventListener("click", function(){
-		if((grid.getValue(grid.getRowCount()-1, "rscCnt")) != (grid.getValue(grid.getRowCount()-1, "rscIstCnt"))){
-			alert("발주량과 입고량이 일치하지 않습니다")
-		}else if((grid.getValue(grid.getRowCount()-1, "rscCnt")) == (grid.getValue(grid.getRowCount()-1, "rscIstCnt"))){
-		  	grid.request('modifyData');
-		}
+// 		if((grid.getValue(grid.getRowCount()-1, "rscCnt")) != (grid.getValue(grid.getRowCount()-1, "rscIstCnt"))){
+// 			alert("발주량과 입고량이 일치하지 않습니다")
+// 			//break;
+// 		}else if((grid.getValue(grid.getRowCount()-1, "rscCnt")) == (grid.getValue(grid.getRowCount()-1, "rscIstCnt"))){
+// 		  	grid.request('modifyData');
+// 			alert("정상적으로 처리되었습니다");
+// 		}
+		grid.request('modifyData');
 	}) 
 
 	//저장시 데이터 다시 읽어서 수정한 품목(입고 완료한) 사라지게
-	grid.on("response",function(){
-		grid.clear();
-	})
+// 	grid.on("response",function(){
+// 		grid.clear();
+// 	})
 	
 	//삭제 버튼 클릭
 	delRscCheck.addEventListener("click", function(){

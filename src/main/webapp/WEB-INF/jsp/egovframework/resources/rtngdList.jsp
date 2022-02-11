@@ -42,7 +42,6 @@
 			<div style="float:right;margin-bottom: 0px;margin-top: 15px;margin-right: 10px;">
 				<button id="btnSelect" class="btn">조회</button>
 				<button id="btn_reset" type="reset" class="btn">초기화</button>
-				<button class="btn" id="btnXlsx">엑셀</button>
 			</div>
 		</div>
 	</div>
@@ -322,11 +321,6 @@
 			})
 			
 		})
-		
-	//엑셀버튼 클릭시 파일로 저장
-	$("#btnXlsx").on("click", function () {
-		
-		});
 		
 	//------------------ 도움말 버튼 이벤트 -----------------------
 	helpBtn.addEventListener('mouseover' , () => {

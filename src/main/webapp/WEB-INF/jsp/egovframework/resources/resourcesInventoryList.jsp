@@ -32,7 +32,6 @@
 			<div style="float:right;margin-bottom: 0px;margin-top: 15px;margin-right: 10px;">
 				<button id="btnSelect" class="btn">조회</button>
 				<button id="btn_reset" type="reset" class="btn">초기화</button>
-				<button class="btn">엑셀</button>
 			</div>
 		</div>
 	</div>

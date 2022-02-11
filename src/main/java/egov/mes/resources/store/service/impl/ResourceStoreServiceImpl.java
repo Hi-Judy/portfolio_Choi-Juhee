@@ -63,14 +63,21 @@ public class ResourceStoreServiceImpl implements ResourceStoreService{
 	public void modifyStore(ModifyVO<ResourcesStoreVO> mvo) {
 		if(mvo.getCreatedRows() != null) {
 			for(ResourcesStoreVO vo :mvo.getCreatedRows()) {
-				if(vo.getIstCnt() != "" && vo.getRscLot() == "") {
-					mapper.insertResourcesInventoryIn(vo);
-				}else if(vo.getOstCnt() != "" && vo.getRscLot() == "") {
-					mapper.insertResourcesInventoryOut(vo);
-				}else if(vo.getRscLot() != "") {
+				System.out.println(vo.getStoreFlag());
+				if(vo.getStoreFlag()==null) {
+					System.out.println("여긴 아님");
 					mapper.insertResourcesStore(vo);
 					mapper.updateResourcesStore(vo);
-				}
+				}else {
+				if(vo.getStoreFlag().equals("정산입고")) {
+					System.out.println("정산입고");
+					mapper.insertResourcesInventoryIn(vo);
+				}else if(vo.getStoreFlag().equals("정산출고")) {
+					System.out.println("정산출고");
+					mapper.insertResourcesInventoryOut(vo);
+				}}
+					
+				
 			}
 		}
 	}
