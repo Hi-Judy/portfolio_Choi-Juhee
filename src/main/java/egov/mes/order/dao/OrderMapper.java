@@ -10,4 +10,5 @@ public interface OrderMapper {
 	List<OrderVO> orderSelect(OrderVO order) ;
 	int noManRelease(OrderVO order) ;
 	List<OrderVO> noManSelect(OrderVO order) ;
+	List<OrderVO> findLot(OrderVO order) ;
 }
