@@ -592,7 +592,7 @@ toastr.options = {
 	    	     	 try{
 	    	    		 if(ProcInput[a].procCode == null || ProcInput[a].procCode == '' || ProcInput[a].procCode == undefined)
 	    	    			{
-	    	    				toastr["error"]("공정코드 미입력");  
+	    	    				toastr["error"]("필수코드 미입력");  
 	    						return false; 
 	    	    			}
 	    	    			 else
