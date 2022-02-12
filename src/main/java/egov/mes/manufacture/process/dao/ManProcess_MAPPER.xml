@@ -3,6 +3,15 @@
 
 <mapper namespace="egov.mes.manufacture.process.dao.ManProcessMapper">
 
+<!-- 종료시간 sysdate로 업데이트 (중지버튼) -->
+<update id="changeStop">
+	update manufacture_process 
+	set man_endTime = sysdate
+	where com_code = #{comCode}
+	and proc_code = #{procCode}
+
+</update>
+
 <!-- 이전공정의 종료시간 구하기 -->
 <select id="selectPreEndTime" resultType="egov.mes.manufacture.process.dao.ManProcessVO">
 	select p.man_endTime 
@@ -275,7 +284,7 @@
 </select>
 
 
-<!-- 주기적으로 진행공정 테이블을 조회 -->
+<!-- 주기적으로 진행공정 테이블을 조회, 전공정의 불량량 합계 조회 -->
 <select id="selectProcTable" resultType="egov.mes.manufacture.process.dao.ManProcessVO">
 	select MAN_NO, 
 		   PROC_CODE, 

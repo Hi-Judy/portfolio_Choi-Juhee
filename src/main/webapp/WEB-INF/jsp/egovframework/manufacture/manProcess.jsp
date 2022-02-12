@@ -56,6 +56,8 @@
 				
 				<button type="button" id="btnInit" class="btn" style="display: inline-block; float : right; margin : 5px;">초기화</button>
 				<button type="button" id="btnStart" class="btn" style="display: inline-block; float : right; margin : 5px;">시작</button>
+				<button type="button" id="btnStop" class="btn" style="display: inline-block; float : right; margin : 5px;">중지</button>
+				<button type="button" id="btnReStart" class="btn" style="display: inline-block; float : right; margin : 5px;">재시작</button>
 			</div>
 			
 			</div>
@@ -151,7 +153,9 @@
 			width : 900,
 			buttons : {
 				"확인" : function() {
-					console.log("확인 테스트");
+					//console.log("확인 테스트");
+					console.log(checkedCommand[0].podtCode);
+					console.log(checkedCommand[0].comCode);
 					console.log(checkedCommand[0].comEtc);
 					fetch("${pageContext.request.contextPath}/selectProcess/"
 							+checkedCommand[0].podtCode+ "/" +checkedCommand[0].comCode + "/" +checkedCommand[0].comEtc )
@@ -159,13 +163,14 @@
 					.then((response) => response.json())
 					.then((data)=> {
 						console.log(data.data.contents);
-						console.log(data.data.contents[0].podtCode);
-						console.log(data.data.contents[0].comCode);
+						//console.log(data.data.contents[0].podtCode);
+						//console.log(data.data.contents[0].comCode);
 						gridProcess.resetData(data.data.contents) //파싱한 결과 = data
 						gridProcess.refreshLayout();
 						
 						let mandate = document.querySelector("#txtManDate").value; //작업일 인풋태그 입력값
 						//console.log(mandate);
+						
 						
 						document.getElementById("podtCode").innerHTML = data.data.contents[0].podtCode
 						document.getElementById("podtName").innerHTML = data.data.contents[0].podtName
@@ -230,7 +235,7 @@
 					})
 				}).then((response) => response.json() )//컨트롤러에서 가져온 result를 json으로 파싱
 				.then((data)=> {
-					console.log(data.result);
+					//console.log(data.result);
 					
 					if(data.result.length == 0){
 						alert("상응하는 정보가 없습니다.");
@@ -241,6 +246,7 @@
 						gridManCommand.resetData(data.result) //파싱한 결과 = data
 						gridManCommand.refreshLayout();
 						
+						resetProcess();
 						
 					}
 					
@@ -327,12 +333,54 @@
 		
 		let btnStart = document.getElementById("btnStart");
 		
-		gridProcess.on('onGridUpdated', function(){
+		gridProcess.on('onGridUpdated', function(){				
 			for(let i=0; i<gridProcess.getRowCount(); i++){
 				if(gridProcess.getValue(i, 'manQnt') != null){
 					btnStart.disabled = true;
+				}else{
+					btnStart.disabled = false;
 				}
 			}
+			let def = 0;
+			
+		   for(let j=0; j<gridProcess.getData().length; j++){
+				let manQnt = gridProcess.getValue(j, 'manQnt'); //현재공정의 생산량
+				let defQnt = gridProcess.getValue(j, 'defQnt'); //현재공정의 불량량
+				let procCode = gridProcess.getValue(j, 'procCode'); //현재공정의 공정코드
+				let manGoalPerday = gridProcess.getValue(j, 'manGoalPerday') ;
+				
+				let procCode2 = gridProcess.getValue(j-1, 'procCode'); //현재공정의 공정코드
+				let manQnt2 = gridProcess.getValue(j-1, 'manQnt'); //전공정의 불량량
+				let defQnt2 = gridProcess.getValue(j-1, 'defQnt'); //전공정의 생산량
+				
+				//def += defQnt;
+				
+				let prevQnt = gridProcess.getValue(j-1,'manQnt') ;
+				
+				if (defQnt != null) {
+					if (procCode == 'PROC001') {
+						gridProcess.setValue(j, 'manQnt', ( (manGoalPerday*1) - (defQnt*1) ) );
+					} else if ( procCode >= 'PROC002') {
+						gridProcess.setValue(j, 'manQnt', ( (prevQnt*1) - (defQnt*1) ) );
+						if (procCode >= 'PROC009') {
+							gridProcess.setValue(j, 'manQnt', prevQnt );
+						}
+					}
+				}
+				
+/* 				gridProcess.setValue(j, 'manQnt', ( (manQnt*1) - (defQnt*1) ) ); //생산량 - 불량량
+				
+				let prevQnt = gridProcess.getValue(j-1,'manQnt') ;
+				
+				gridProcess.setValue(j, 'manQnt', prevQnt); */
+				/* if( defQnt2 != null ){ // 이전공정의 불량량이 null이 아니라면
+					
+					let prevQnt = gridProcess.getValue(j-1,'manQnt') ;
+					
+					gridProcess.setValue(j, 'manQnt', prevQnt);
+					console.log(manQnt);
+				} */
+			} 
 
 		})
 		 		
@@ -341,8 +389,8 @@
 		let processData;
 		
 		$("#btnStart").click(function(){
-			console.log('공정시작버튼 클릭');
-			console.log(document.getElementById("podtCode").innerHTML);
+			//console.log('공정시작버튼 클릭');
+			//console.log(document.getElementById("podtCode").innerHTML);
 			
 			$.ajax({ //시작버튼 클릭 -> 제품에 해당하는 공정 조회 -> 그 공정갯수만큼 진행공정 테이블에 insert
 				url: '${pageContext.request.contextPath}/selectProc',
@@ -354,7 +402,7 @@
 				dataType: 'JSON',
 				contentType: 'application/json',
 				success: function(datas){
-					console.log("진행공정 테이블 값 추가 성공");
+					//console.log("진행공정 테이블 값 추가 성공");
 					resetProcess();
 					
 				},
@@ -419,6 +467,50 @@
 			$("#stopImg").css("display","block") ;
 			$("#moveImg").css("display","none") ;					
 		})
+		
+		
+		
+		//******************************중지 버튼******************************
+		btnStop.addEventListener('click', function(){
+			
+			let pLIST = gridProcess.getData();
+			let arr = [];
+			
+			let sumDef = 0;
+			
+			for( i of pLIST){
+				
+				if( (i.manGoalPerday*1) != (i.manQnt*1) + (i.sumDef*1) ){
+					arr.push( i );
+				}
+				
+				sumDef = sumDef + i.defQnt;
+			}
+		
+			$.ajax({
+				url: '${pageContext.request.contextPath}/changeStop',
+				method: 'POST',
+				data : JSON.stringify( arr ),
+				dataType: 'JSON',
+				contentType: 'application/json',
+				success: function(datas){
+					//console.log("진행공정 테이블 값 추가 성공");
+					resetProcess();
+					
+				},
+				error: function(reject){
+					console.log(reject)
+				}
+			})
+			
+		})
+		
+		
+		
+		
+		//******************************초기화 버튼******************************
+		
+		
 		
 		//------------ 도움말 버튼 이벤트 ---------------
 	 	 helpBtn.addEventListener('mouseover' , () => {
