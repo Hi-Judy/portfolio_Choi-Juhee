@@ -54,7 +54,6 @@
 				<div  style="float:right;margin-bottom: 0px;margin-top: 7px;margin-right: 10px;">
 					<button id="btnStoreInSelect"  class="btn">조회</button>
 					<button id="btnStoreInreset" type="reset" class="btn">초기화</button>
-					<button  class="btn">엑셀</button>
 				</div>
 			</div>
 			<br>
@@ -84,7 +83,6 @@
 					<div style="float:right;margin-bottom: 0px;margin-top: 7px;margin-right: 10px;">
 						<button id="btnStoreOutSelect" class="btn">조회</button>
 						<button id="btnStoreOutreset" type="reset" class="btn">초기화</button>
-						<button class="btn">엑셀</button>
 					</div>
 				</div>
 				<br>	
@@ -499,7 +497,7 @@
 			var rscCode = $("#txtStoreOutRsc1").val();
 			var sucCode = $("#txtStoreOutSuc1").val();
 			var storeDate = $("#txtStoreOut1").val();
-			var storeDate2 = $("#txtStoreOut2").val();	
+			var storeDate2 = $("#txtStoreOut2").val();
 			$.ajax({
 				url :'resourceStoreOutList',
 				data: {'rscCode' : rscCode, 'sucCode': sucCode, 'storeDate':storeDate, 'storeDate2':storeDate2 },

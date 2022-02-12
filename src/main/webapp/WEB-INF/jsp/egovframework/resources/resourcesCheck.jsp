@@ -72,6 +72,16 @@
 					for(i=0; i <gridOrder.getCheckedRows().length; i++ ){
 						if(grid.findRows({ordrNo : gridOrder.getCheckedRows()[i].ordrNo}).length == 0) {
 							grid.appendRow(gridOrder.getCheckedRows()[i]);
+							
+							console.log(gridOrder.getCheckedRows()[i]);
+							console.log(gridOrder.getCheckedRows()[i].rowKey);
+		
+							grid.setValue(gridOrder.getCheckedRows()[i].rowKey, "rscIstCnt", gridOrder.getCheckedRows()[i].rscCnt);
+							grid.setValue(gridOrder.getCheckedRows()[i].rowKey, "rscTstCnt", gridOrder.getCheckedRows()[i].rscCnt);
+							grid.setValue(gridOrder.getCheckedRows()[i].rowKey, "rscPassCnt", "");
+							grid.setValue(gridOrder.getCheckedRows()[i].rowKey, "defCode", "");
+							grid.setValue(gridOrder.getCheckedRows()[i].rowKey, "rscDefCnt", "0");
+							//grid.setValue(i, "rscPassCnt", grid.getValue(i,"rscCnt"));
 						}
 					}
 					dialogOrder.dialog("close");
@@ -84,6 +94,7 @@
 	
 	//미검사조회 모달 오픈
 	$("#findResourcesCheck").on("click", function(){
+		grid.clear();
 		dialogOrder.dialog("open");
 		$("#dialog-form-check").load("searchOrderList",
 				function(){
@@ -130,7 +141,6 @@
 					{
 						header: '입고량',
 						name: 'rscIstCnt',
-						editor: 'text',
 						formatter(value) {
 							if(value.value != null && value.value != '' ){
 								return value.value.toString().replace(/\B(?<!\.\d*)(?=(\d{3})+(?!\d))/g, ",");
@@ -142,7 +152,6 @@
 					{
 						header: '검사량',
 						name: 'rscTstCnt',
-						editor: 'text',
 						formatter(value) {
 							if(value.value != null && value.value != '' ){
 								return value.value.toString().replace(/\B(?<!\.\d*)(?=(\d{3})+(?!\d))/g, ",");
@@ -244,19 +253,55 @@
 	//값 미입력(발주량,입고량,검사량,합격량) -> alert 창으로 경고
 	//발주량 != 입고량 != 검사량  -> alert 창으로 경고
 	//발주량보다 입고량,검사량,합격량이 크면 -> alert 창으로 경고
-	//불량량 != 0인데 불량코드가 null이면 -> alert 창으로 경고
+	//불량량 != 0인데 불량코드가 null이면 -> alert 창으로 경고 getRowAt(rowIdx)
 	saveResourcesCheck.addEventListener("click", function(){
-		if((grid.getValue(grid.getRowCount()-1, "rscCnt")) != (grid.getValue(grid.getRowCount()-1, "rscIstCnt"))){
-			alert("발주량과 입고량이 일치하지 않습니다")
-		}else if((grid.getValue(grid.getRowCount()-1, "rscCnt")) == (grid.getValue(grid.getRowCount()-1, "rscIstCnt"))){
-		  	grid.request('modifyData');
+		for(let i=0; i<grid.getRowCount(); i++){
+			
+			console.log(grid.getData());
+			
+			if(grid.getValue(i,'rscPassCnt') == ''){
+				alert("합격량을 입력해주세요");
+				return;
+			}
+			if(grid.getValue(i,'rscDefCnt') != "0" ){
+				console.log(grid.getValue(i,'rscDefCnt'));
+				alert("불량코드를 입력해주세요");
+				return;
+			}
 		}
-	}) 
+		grid.request('modifyData');
+	});
+		
+// 		var j = 0;
+// 		for(let i=0; i<grid.getRowCount(); i++){
+// 			if((grid.getValue(i, "rscCnt")) != (grid.getValue(i, "rscTstCnt"))){
+// 				console.log(grid.getValue(i, "rscCnt"));
+// 				alert("발주량과 검사량이 일치하지 않습니다");
+// 				j=0;
+// 				break;
+// 			}else if( (grid.getValue(i, "rscDefCnt")) != 0 ){
+// 				if(grid.getValue(i, "defCode") == null){
+// 					alert("불량코드를 입력해주세요");
+// 					j=0;
+// 					break;
+// 				}else{
+// 					j=1;
+// 					break;
+// 				}
+// 			}else{
+// 				j=1;
+// 			}
+// 		}
+// 		console.log(j);
+// 		if(j==1){
+// 			grid.request('modifyData');
+// 		}
+// 	}) 
 
 	//저장시 데이터 다시 읽어서 수정한 품목(입고 완료한) 사라지게
-	grid.on("response",function(){
-		grid.clear();
-	})
+// 	grid.on("response",function(){
+// 		grid.clear();
+// 	})
 	
 	//삭제 버튼 클릭
 	delRscCheck.addEventListener("click", function(){

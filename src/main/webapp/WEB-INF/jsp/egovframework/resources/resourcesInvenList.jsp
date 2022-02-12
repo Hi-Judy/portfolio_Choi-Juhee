@@ -29,7 +29,7 @@
 	</div>
 	<div id="tabs" style="margin-left: 10px; width: 1500px; height: 810px;">
 		<ul>
-			<li><a href="#tabs-1">안전 재고</a></li>
+			<li><a href="#tabs-1">자재별 재고</a></li>
 			<li><a href="#tabs-2">LOT별 재고</a></li>
 		</ul>
 
@@ -51,7 +51,6 @@
 					style="float: right; margin-bottom: 0px; margin-top: 7px; margin-right: 10px;">
 					<button id="btnSelect" class="btn">조회</button>
 					<button id="btn_reset" type="reset" class="btn">초기화</button>
-					<button class="btn">엑셀</button>
 				</div>
 			</div>
 			<br>
@@ -77,7 +76,6 @@
 					style="float: right; margin-bottom: 0px; margin-top: 7px; margin-right: 10px;">
 					<button id="btnSelectLot" class="btn">조회</button>
 					<button id="btn_reset_Lot" type="reset" class="btn">초기화</button>
-					<button class="btn">엑셀</button>
 				</div>
 			</div>
 			<br>
