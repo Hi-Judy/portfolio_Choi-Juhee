@@ -212,6 +212,10 @@
 		}
 	});
 	
+	grid.on("successResponse", function(){
+		 alert("dddd")
+	})
+	
 	//그리드 columnName = rscCode 클릭시 자재조회 모달 오픈
 // 	grid.on("click", function(ev){
 // 		if(ev["columnName"]=="rscCode"){
@@ -247,18 +251,25 @@
 	//발주량 입력 -> 저장
 	//continue /break /return /switch ? case default 
 	btnSaveOrder.addEventListener("click", function(){
-		console.log(createdRows());
+		var j =0;
 		for(let i=0; i<grid.getRowCount(); i++){
 			if(grid.getValue(i, "rscTotal") == 0){
+				console.log(grid.getValue(i, "rscTotal"));
  				 alert("발주량을 입력해주세요")
-				 continue;
+ 				 j=0
+				 break;
  			}else if(grid.getValue(i, "istReqDate") == null ){
- 				alert("입고요청일을 입력해주세요")
- 				continue;
+ 				console.log(grid.getValue(i, "istReqDate"));
+ 				//alert("입고요청일을 입력해주세요")
+ 				j=0;
+ 				break;
  			}else {
- 				 grid.request('modifyData');
+ 				j=1;
  			}
  		}
+		if (j==1){
+			grid.request('modifyData');
+		}
 	});
 	
 	//저장시 데이터 다시 읽어서 수정한 품목(입고 완료한) 사라지게

@@ -244,6 +244,10 @@
 						sortable: true,
 						sortingType: 'desc'
 					},
+					{
+						header: '자재상태',
+						name: 'rscSt'
+					},
 				];
 			
 	

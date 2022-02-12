@@ -35,5 +35,6 @@ public class ResourcesOrderVO {
 	String rscPrc;
 	String code;
 	String codeName;
+	String rscSt;
 	
 }
