@@ -39,4 +39,5 @@ public class ManufacturePlanVO {
 
 	String comCode ; //달력용
 	String manStartdate ; //달력용
+	String manGoalperday ; //달력용
 }

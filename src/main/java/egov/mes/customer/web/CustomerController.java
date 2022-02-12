@@ -21,11 +21,18 @@ public class CustomerController {
 		return "customer/customerInfo.tiles" ;
 	}
 	
-	@RequestMapping("customerList/{cusCode}")
-	public ModelAndView customerList(@PathVariable String cusCode , CustomerVO customer) {
-		if (cusCode.equals("null")) {
+	@RequestMapping("customerList")
+	public ModelAndView customerList(CustomerVO customer) {
+		if (customer.getCusCode().equals("null")) {
 			customer.setCusCode(null) ;	
 		}
+		
+		if (customer.getCusType().equals("buy")) {
+	        customer.setCusType("판매처") ;
+		} else {
+			customer.setCusType("구매처") ;
+		}
+		
 		List<CustomerVO> list = service.customerList(customer) ;
 		ModelAndView jsonView = new ModelAndView("jsonView") ;
 		jsonView.addObject("data" , list) ;

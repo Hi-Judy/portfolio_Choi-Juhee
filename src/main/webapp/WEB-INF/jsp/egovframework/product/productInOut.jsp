@@ -33,7 +33,7 @@
 	
 	<div id="top" style="height : 160px; padding : 10px;">
 		<span style="margin : 20px;">제품명</span><input id="txtPodtName" style="margin-top : 10px; margin-left : 20px; background-color: #d2e5eb;" readonly>
-		<span style="margin : 20px;">제품코드</span><input id="txtPodtCode">&nbsp;<button type="button" id="btnSearch" class="btn">제품코드검색</button>
+		<span style="margin : 20px;">제품코드</span><input id="txtPodtCode">&nbsp;<button type="button" id="btnSearch" style="border : none; background-color : #f8f8ff; color : #007b88;"><i class="bi bi-search"></i></button>
 		<br><br>
 		<span style="margin : 20px;">작업일자</span><input id="manDatestart" type="date"><span> ~ </span><input id="manDateend" type="date">
 		<br>

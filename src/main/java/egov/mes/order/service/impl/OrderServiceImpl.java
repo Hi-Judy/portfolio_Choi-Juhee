@@ -34,4 +34,9 @@ public class OrderServiceImpl implements OrderService{
 		return mapper.noManSelect(order) ;
 	}
 
+	@Override
+	public List<OrderVO> findLot(OrderVO order) {
+		return mapper.findLot(order) ;
+	}
+
 }

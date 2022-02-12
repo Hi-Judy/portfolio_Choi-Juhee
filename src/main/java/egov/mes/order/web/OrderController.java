@@ -84,4 +84,13 @@ public class OrderController {
 		jsonView.addObject("nomanlist" , list) ;
 		return jsonView ;
 	}
+	
+	@RequestMapping("findLot")
+	public ModelAndView findLot(OrderVO order) {
+		List<OrderVO> list = service.findLot(order) ;
+		
+		ModelAndView jsonView = new ModelAndView("jsonView") ;
+		jsonView.addObject("findlot" , list) ;
+		return jsonView ;
+	}
 }

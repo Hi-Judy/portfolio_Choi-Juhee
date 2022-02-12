@@ -78,4 +78,15 @@
 		order by ord_code ASC
 	</select>
 	
+	<select id="findLot" resultType="egov.mes.order.dao.OrderVO">
+		select ord_code , podt_code , fn_get_code_name(podt_code) as codeName , man_date , podt_lot 
+		from product_qnt_info pqi
+		join manufacture_command mc
+		on pqi.com_code = mc.com_code
+		join manufacture_plan mp
+		on mp.man_plan_no = mc.man_plan_no
+		where pqi.podt_etc != '작년'
+		and mp.ord_code = #{ordCode}
+	</select>
+	
 </mapper>

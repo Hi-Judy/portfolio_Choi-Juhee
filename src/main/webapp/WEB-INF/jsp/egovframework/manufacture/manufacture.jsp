@@ -187,27 +187,24 @@
       			  
       			  let calendarEl = document.getElementById('calendar') ;
       			  
-      			  console.log(list) ;
-      			  console.log(typeof list) ;
-      			  
       			  let events = list.map(function(item) {
       				  if (item.comCode.substr(1,9)%3 == 0) {
       					return {
-        					  title : '지시번호 ' + item.comCode ,
+        					  title : item.comCode + ' / ' + item.manGoalperday ,
         					  start : item.manStartdate ,
         					  end : item.ordDuedate ,
         					  color : '#007b88' 
        				  	}
       				  } else if (item.comCode.substr(1,9)%3 == 1) {
       					return {
-        					  title : '지시번호 ' + item.comCode ,
+      						  title : item.comCode + ' / ' + item.manGoalperday ,
         					  start : item.manStartdate ,
         					  end : item.ordDuedate ,
         					  color : '#007b88c7' 
       				  	}
       				  } else {
       					return {
-        					  title : '지시번호 ' + item.comCode ,
+      						  title : item.comCode + ' / ' + item.manGoalperday ,
         					  start : item.manStartdate ,
         					  end : item.ordDuedate ,
         					  color : '#007b8887' 

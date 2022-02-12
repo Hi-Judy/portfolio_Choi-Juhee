@@ -29,4 +29,6 @@ public class OrderVO {
 	String podtCode ;
 	String ordQnt ;
 	String podtQnt ;
+	String manDate ;
+	String podtLot ;
 }

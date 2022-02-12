@@ -40,7 +40,7 @@
 			<option value="미생산출하">미생산출하</option>
 		</select>
 		<span style="margin : 20px;">업체명</span><input id="txtCusName" style="background-color: #d2e5eb;" readonly>
-		<span style="margin : 20px;">업체코드</span><input id="txtCusCode" style="margin-left : 20px;">&nbsp;<button type="button" id="btnSearch" class="btn">업체코드검색</button>
+		<span style="margin : 20px;">업체코드</span><input id="txtCusCode" style="margin-left : 20px;">&nbsp;<button type="button" id="btnSearch" style="border : none; background-color : #f8f8ff; color : #007b88;"><i class="bi bi-search"></i></button>
 		<br>	
 		<span style="margin : 20px;">접수일자</span>&nbsp;&nbsp;&nbsp;&nbsp;<input id="ordDateStart" type="date"><span> ~ </span><input id="ordDateEnd" type="date" style="margin-right : 60px;">
 		<span style="margin : 20px;">납기일자</span>&nbsp;&nbsp;&nbsp;<input id="dueDateStart" type="date"><span> ~ </span><input id="dueDateEnd" type="date">
@@ -60,11 +60,14 @@
 		</div>
 	</div>
 	
-	<div id="findCustomer" title="고객검색"">
+	<div id="findCustomer" title="업체검색"">
 		<input id="cusName">&nbsp;<button id="btnCusSearch" class="btn">검색</button>
 		<div id="cusResult"></div>
 	</div>
 	
+	<div id="LotView" title="Lot조회">
+		<div id="findLot"></div>
+	</div>	
 	
 	<div id="helpDialog" title="도움말">
 		<br>
@@ -518,18 +521,61 @@
 		} 
 	}) ;
 	
-/* 	let dialog2 = $("#tradeDetail").dialog({
+	const columns4 = [
+		{
+			header : '주문코드' ,
+			name : 'ordCode' ,
+			align: 'center'
+		} ,
+		{
+			header : '제품코드' ,
+			name : 'podtCode' ,
+			align: 'center'
+		} ,
+		{
+			header : '제품명' ,
+			name : 'codeName' ,
+			align: 'center'
+		} ,
+		{
+			header : '생산일자' ,
+			name : 'manDate' ,
+			align: 'center'
+		} ,
+		{
+			header : '재고Lot번호' ,
+			name : 'podtLot' , 
+			align: 'center'
+		}
+	] ;
+	
+	let data4 ;
+	
+	const grid4 = new Grid ({
+		el : document.getElementById('findLot') ,
+		rowHeaders: [
+			{ type : 'rowNum' }
+		] ,
+		data : data4 ,
+		columns : columns4 ,
+		bodyHeight : 250 ,
+ 		pageOptions: {
+		    useClient: true,
+		    perPage: 5
+		} 
+	}) ;
+	
+ 	let dialog2 = $("#LotView").dialog({
 		autoOpen : false ,
 		modal : true ,
-		width : 800 ,
-		height : 400 ,
+		width : 600 ,
+		height : 600 ,
 		buttons : {
 			"닫기" : function() {
 				dialog2.dialog("close") ;
-				grid.clear() ;
 			}
 		}
-	}) */
+	}) 
 	
 	let dialog3 = $("#helpDialog").dialog({
 		autoOpen : false ,
@@ -541,6 +587,29 @@
 				dialog3.dialog("close") ;
 			}
 		},
+	})
+	
+	grid3.on('click' , (ev) => {
+		let ordCode = data3[ev.rowKey].ordCode ;
+		
+		$.ajax({
+			url : 'findLot/' ,
+			dataType : 'json' ,
+			async : false ,
+			data : {
+				ordCode : ordCode
+			} ,
+			success : function(datas) {
+				data4 = datas.findlot ;
+				grid4.resetData(data4) ;
+				grid4.resetOriginData() ;
+			} ,
+			error : function(reject) {
+				console.log(reject) ;
+			}
+		})		
+		dialog2.dialog("open") ;
+		grid4.refreshLayout();
 	})
 	
 	$("#helpBtn").on("mouseover" , function() {
