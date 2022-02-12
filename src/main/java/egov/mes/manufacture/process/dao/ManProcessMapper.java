@@ -55,9 +55,6 @@ public interface ManProcessMapper {
 	//진행공정 테이블에 insert
 	int insertProcess(ManProcessVO processVO);
 	
-	//생산중 & 생산완료 제품에 해당하는 공정 정보
-	List<ManProcessVO> findProcess(ManProcessVO processVO);
-	
 	//지시된 제품에 해당하는 공정 조회
 	List<ManProcessVO> selectProcess(ManProcessVO processVO);
 

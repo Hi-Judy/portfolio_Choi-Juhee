@@ -43,7 +43,7 @@ public class ManProcessServiceImpl implements ManProcessService {
 	public ManProcessVO selectProc(ManProcessVO processVO) {
 		List<ManProcessVO> pList = new ArrayList<>();
 		pList = mapper.selectProc(processVO);
-		//System.out.println("pList: "+pList);
+		System.out.println("pList: "+pList);
 		
 		for(ManProcessVO pVO : pList) {
 			pVO.setPodtCode(processVO.getPodtCode());
@@ -86,7 +86,7 @@ public class ManProcessServiceImpl implements ManProcessService {
 			
 			if (Integer.parseInt(processVO.getManGoalqnt()) > Integer.parseInt(processVO.getManQnt()) ) {
 				
-				ManProcessVO secondQnt = mapper.selectSecondQnt(processVO); 
+				ManProcessVO secondQnt = mapper.selectSecondQnt(processVO); //해당 공정의 10초당 생산량
 				
 				processVO.setManQnt(String.valueOf((Integer.parseInt(secondQnt.getQntPer10Second()) 
 						+ Integer.parseInt(processVO.getManQnt()) ) ) ); 
@@ -98,12 +98,11 @@ public class ManProcessServiceImpl implements ManProcessService {
 						mapper.updateManQnt(processVO);
 					} else {
 						mapper.updateSecondQnt(processVO);
-						
 					}
 					
 				}else if(mapper.selectPreManQnt(processVO) != null 
 						&& 
-						Integer.parseInt((mapper.selectPreManQnt(processVO)).getManQnt()) >= 
+						Integer.parseInt( (mapper.selectPreManQnt(processVO)).getManQnt() ) >= 
 							Integer.parseInt(processVO.getManQnt() ) ) {
 				
 					mapper.updateSecondQnt(processVO);
@@ -129,21 +128,15 @@ public class ManProcessServiceImpl implements ManProcessService {
 	//생산지시서 조회
 	@Override
 	public List<ManProcessVO> selectCommand(ManProcessVO processVO) {
-		return mapper.selectCommand(processVO);
+	return mapper.selectCommand(processVO);
 	}
 
 	
 	//지시된 제품에 해당하는 공정 조회
 	@Override
 	public List<ManProcessVO> selectProcess(ManProcessVO processVO) {
-		System.out.println("지시된 제품에 해당하는 공정 VO: "+ processVO);
-		
-		if(processVO.getComEtc().equals("지시완료")) { //생산지시 전이면
-			return mapper.selectProcess(processVO);
-		}else { //생산중이나 생산완료이면
-			return mapper.findProcess(processVO);
-		}
-		
+		//System.out.println("impl: "+processVO);
+		return mapper.selectProcess(processVO);
 	}
 
 
