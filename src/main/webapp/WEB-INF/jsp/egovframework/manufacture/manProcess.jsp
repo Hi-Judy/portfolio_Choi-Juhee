@@ -362,7 +362,16 @@
 						gridProcess.setValue(j, 'manQnt', ( (manGoalPerday*1) - (defQnt*1) ) );
 					} else if ( procCode >= 'PROC002') {
 						gridProcess.setValue(j, 'manQnt', ( (prevQnt*1) - (defQnt*1) ) );
-						if (procCode >= 'PROC009') {
+						if (procCode >= 'PROC008') {
+							gridProcess.setValue(j, 'manQnt', prevQnt );
+						}
+					}
+				} else {
+					if (procCode == 'PROC001') {
+						gridProcess.setValue(j, 'manQnt', ( (manGoalPerday*1) - 0 ) );
+					} else if ( procCode >= 'PROC002') {
+						gridProcess.setValue(j, 'manQnt', ( (prevQnt*1) - 0 ) );
+						if (procCode >= 'PROC008') {
 							gridProcess.setValue(j, 'manQnt', prevQnt );
 						}
 					}

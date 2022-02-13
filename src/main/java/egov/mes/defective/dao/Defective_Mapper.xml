@@ -53,8 +53,8 @@
 	
 	<select id="checkProductList" resultType="egov.mes.defective.dao.DefectiveVO">
 		select distinct com_code , man_date , man_qnt , 
-			(select max(def_qnt) from manufacture_process where com_code = com_code) as defQnt , 
-			(man_qnt-(select max(def_qnt) from manufacture_process where com_code = com_code)) as podtInput 
+			(f_find_def(com_code)) as defQnt , 
+			(man_qnt-f_find_def(com_code)) as podtInput 
 		from manufacture_process 
 		where def_qnt is not null
 		

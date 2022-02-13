@@ -38,8 +38,8 @@
 		<span style="margin : 20px;">설비상태</span>
 		<select id="selectStatus">
 			<option value="" selected>선택</option>
-			<option value="가동">가동</option>
-			<option value="비가동">비가동</option>
+			<option value="Y">가동</option>
+			<option value="N">비가동</option>
 		</select>
 		<span style="margin : 20px;">점검일자</span><input id="checkDateStart" type="date"><span> ~ </span><input id="checkDateEnd" type="date">
 		<br>
@@ -133,8 +133,8 @@
 				type : 'select' ,
 				options : {
 					listItems : [
-						{ text : 'Y' , value : 'Y' } ,
-						{ text : 'N' , value : 'N' } 	
+						{ text : '가동' , value : 'Y' } ,
+						{ text : '비가동' , value : 'N' } 	
 					]
 				}
 			} ,
