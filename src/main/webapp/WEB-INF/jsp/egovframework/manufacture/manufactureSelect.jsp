@@ -216,7 +216,6 @@
 				alert("계획일자나 제품코드를 입력해주세요.");
 			}
 			else{
-				$("#div_load_image").show();
 				$.ajax({
 					url: '${pageContext.request.contextPath}/manufacture/selectManufacturePlan',
 					method: 'POST',
@@ -224,8 +223,6 @@
 					dataType: 'JSON',
 					success: function(datas){
 						console.log(datas);
-						document.querySelector('#div_load_image').style='display:none;'
-						
 						gridMain.resetData(datas.result);
 						gridMain.refreshLayout();
 						
