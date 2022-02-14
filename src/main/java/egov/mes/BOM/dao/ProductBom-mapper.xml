@@ -133,7 +133,7 @@
 <delete id="ResDelete" parameterType="egov.mes.BOM.dao.ProductBomVO">
 	delete 
 	from Prdt_bom_res
-	where res_code = #{resCode}
+	where res_code = #{resCode} AND podt_code = #{podtCode}
 </delete>
 
 <delete id="ResAllDelete" parameterType="egov.mes.BOM.dao.ProductBomVO">
