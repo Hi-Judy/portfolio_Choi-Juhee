@@ -101,6 +101,12 @@
 		text-align:center;
 		background-color: #d2e5eb; 
 	}
+	.ui-state-active, .ui-widget-content .ui-state-active, .ui-widget-header .ui-state-active, a.ui-button:active, .ui-button:active, .ui-button.ui-state-active:hover {
+    border: 1px solid #007b88;
+    background: #007b88;
+    font-weight: normal;
+    color: #ffffff;
+}
 </style>
 </head>
 <body>

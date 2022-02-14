@@ -71,16 +71,15 @@
 				"확인" : function (){
 					for(i=0; i <gridOrder.getCheckedRows().length; i++ ){
 						if(grid.findRows({ordrNo : gridOrder.getCheckedRows()[i].ordrNo}).length == 0) {
-							grid.appendRow(gridOrder.getCheckedRows()[i]);
-							
-							console.log(gridOrder.getCheckedRows()[i]);
-							console.log(gridOrder.getCheckedRows()[i].rowKey);
+							let a = gridOrder.getCheckedRows()[i]
+							a.rowKey = i;
+							grid.appendRow(a);
 		
-							grid.setValue(gridOrder.getCheckedRows()[i].rowKey, "rscIstCnt", gridOrder.getCheckedRows()[i].rscCnt);
-							grid.setValue(gridOrder.getCheckedRows()[i].rowKey, "rscTstCnt", gridOrder.getCheckedRows()[i].rscCnt);
-							grid.setValue(gridOrder.getCheckedRows()[i].rowKey, "rscPassCnt", "");
-							grid.setValue(gridOrder.getCheckedRows()[i].rowKey, "defCode", "");
-							grid.setValue(gridOrder.getCheckedRows()[i].rowKey, "rscDefCnt", "0");
+							grid.setValue(i, "rscIstCnt", a.rscCnt);
+							grid.setValue(i, "rscTstCnt", a.rscCnt);
+							grid.setValue(i, "rscPassCnt", "");
+							grid.setValue(i, "defCode", "");
+							grid.setValue(i, "rscDefCnt", "0");
 							//grid.setValue(i, "rscPassCnt", grid.getValue(i,"rscCnt"));
 						}
 					}
@@ -255,22 +254,34 @@
 	//발주량보다 입고량,검사량,합격량이 크면 -> alert 창으로 경고
 	//불량량 != 0인데 불량코드가 null이면 -> alert 창으로 경고 getRowAt(rowIdx)
 	saveResourcesCheck.addEventListener("click", function(){
+		var j = 0;
 		for(let i=0; i<grid.getRowCount(); i++){
-			
-			console.log(grid.getData());
-			
 			if(grid.getValue(i,'rscPassCnt') == ''){
-				alert("합격량을 입력해주세요");
-				return;
-			}
-			if(grid.getValue(i,'rscDefCnt') != "0" ){
-				console.log(grid.getValue(i,'rscDefCnt'));
-				alert("불량코드를 입력해주세요");
-				return;
+				console.log("합격량 입력")
+				alert("합격량을 입력해주세요.");
+				 j=0
+				 break;
+			}else if(grid.getValue(i,'rscTstCnt') != grid.getValue(i,'rscPassCnt')){
+				console.log("검사량이랑 합격량이랑 같지 않으면 들어온다")
+				if(grid.getValue(i,'defCode') == ''){
+					console.log("불량량이랑 합격량이랑 같지 않으면 들어온다===코드가 null")
+					alert("불량코드를 입력해주세요.");
+					j=0 
+					break;
+				}else{
+					j=1
+					break;
+				}
+			}else{
+				j=1;
 			}
 		}
-		grid.request('modifyData');
+		if(j==1){
+			grid.request('modifyData');
+		}
 	});
+	
+	
 		
 // 		var j = 0;
 // 		for(let i=0; i<grid.getRowCount(); i++){

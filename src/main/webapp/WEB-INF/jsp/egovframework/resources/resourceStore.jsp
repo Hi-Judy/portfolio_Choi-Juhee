@@ -63,7 +63,9 @@
 			"확인" : function (){
 				for(i=0; i <gridIn.getCheckedRows().length; i++ ){
 					if(grid.findRows({ordrNo : gridIn.getCheckedRows()[i].ordrNo}).length == 0) {
-						grid.appendRow(gridIn.getCheckedRows()[i]);
+						let a = gridIn.getCheckedRows()[i]
+						a.rowKey = i;
+						grid.appendRow(a);
 					}
 				}
 				dialogIn.dialog("close");
