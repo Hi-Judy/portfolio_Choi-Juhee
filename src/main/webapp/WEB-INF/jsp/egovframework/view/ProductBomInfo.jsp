@@ -932,6 +932,7 @@ toastr.options = {
       	 var num = 0 ;	
       	 var MU ;
       	 var MatDeltData = new Array();
+      	 var podtCode = document.getElementById('proIdInp')
    	     	 try{
    	     		MatDelete.forEach( (rst) => {
    	    			 if(rst.resCode == null || rst.resCode == '' || rst.resCode == undefined)
@@ -941,11 +942,14 @@ toastr.options = {
    	    			 }
    	    			 else
    	    				 {
-   	    				MU = { resCode : rst.resCode }
+   	    				console.log(rst)
+   	    				MU = { resCode : rst.resCode ,
+   	    					   podtCode : podtCode.value }
 	   	    				 
 	   	    				MatDeltData.push(MU);
 	   		    			   num++ ;
    	    				 }
+   	    			console.log(MatDeltData)
    	    		 });
    	    		 
    	    	 }catch (err) {
