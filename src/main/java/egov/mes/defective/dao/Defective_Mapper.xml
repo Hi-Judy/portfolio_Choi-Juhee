@@ -4,7 +4,7 @@
 	
 	<!-- 일자별 제품찾기 -->
 	<select id="findPodtCode" resultType="egov.mes.defective.dao.DefectiveVO">
-		select to_char(man_date,'yyyy-MM-dd') as manDate , podt_code , proc_code , fn_get_code_name(proc_code) as procName , fn_get_code_name(podt_code) as podtName 
+		select man_date , podt_code , proc_code , fn_get_code_name(proc_code) as procName , fn_get_code_name(podt_code) as podtName 
 		from defective_product_info
 		where 1=1
 		
@@ -52,7 +52,7 @@
 	</select>
 	
 	<select id="checkProductList" resultType="egov.mes.defective.dao.DefectiveVO">
-		select distinct com_code , man_date , man_qnt , 
+		select distinct com_code , to_char(man_date,'yyyy-mm-dd') as manDate , man_qnt , 
 			(f_find_def(com_code)) as defQnt , 
 			(man_qnt-f_find_def(com_code)) as podtInput 
 		from manufacture_process 
