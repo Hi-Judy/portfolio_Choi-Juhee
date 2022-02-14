@@ -19,6 +19,20 @@ public class ManufactureServiceImpl implements ManufactureService {
 	@Autowired
 	private ManufactureMapper manMapper;
 
+	//계획 삭제 후 계획 다시 작성
+	@Override
+	public int updatePlan(ManufacturePlanVO planVo) {
+		manMapper.updatePlan(planVo);
+		return 0;
+	}
+	
+	//생산계획 삭제
+	@Override
+	public int deletePlan(ManufacturePlanVO palnVO) {
+		manMapper.deletePlan(palnVO);
+		return 0;
+	}
+
 	//생산계획 조회
 	@Override
 	public List<Map<String, String>> selectManPlan(ManufacturePlanVO planVo) {
@@ -120,8 +134,6 @@ public class ManufactureServiceImpl implements ManufactureService {
 	public List<ManufacturePlanVO> selectCal(ManufacturePlanVO planVo) {
 		return manMapper.selectCal(planVo) ;
 	}
-	
-	
 
 	
 }

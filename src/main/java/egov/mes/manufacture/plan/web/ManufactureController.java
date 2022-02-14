@@ -29,7 +29,26 @@ public class ManufactureController {
 	public String conManufacture() {
 		return "manufacture/manufacture.tiles";
 	}
-
+	
+	//계획 삭제 후 계획 다시 작성
+	@PostMapping("manufacture/updatePlan")
+	public String updatePlan(@RequestBody ManufacturePlanVO planVO, Model model) {
+		model.addAttribute("result", manService.updatePlan(planVO));
+		System.out.println("생산계획 삭제후 다시 작성: "+manService.updatePlan(planVO));
+		
+		return "jsonView";
+	}
+	
+	//생산계획 삭제
+	@PostMapping("/manufacture/deletePlan")
+	public String deletePlan(ManufacturePlanVO planVO, Model model) {
+		
+		model.addAttribute("result", manService.deletePlan(planVO));
+		System.out.println("생산계획 삭제: " + manService.deletePlan(planVO));
+		return "jsonView";
+	}
+	
+	
 	// 생산계획 조회
 	@PostMapping("/manufacture/manPlan")
 	public String selectManPlan(ManufacturePlanVO planVO, Model model) {
@@ -125,9 +144,9 @@ public class ManufactureController {
 	public String modifyDataInsert(@RequestBody ModifyVO<ManufacturePlanVO> list, Model model) {
 //		System.out.println("!!!!생산계획추가^^!!!!!!!!!!!!!" + list);
 //		System.out.println("!!!!생산계획 주문상태 수정^^!!!!!!!!!!!!!" + list);
+		System.out.println("!!!!생산계획삭제^^!!!!!!!!!!!!!"+list);
 		manService.insertPlan(list);
 
-		// System.out.println("!!!!생산계획삭제^^!!!!!!!!!!!!!"+list);
 		model.addAttribute("result", true);
 
 		return "jsonView";

@@ -9,6 +9,12 @@ import egovframework.rte.psl.dataaccess.mapper.Mapper;
 @Mapper("manufactureMapper")
 public interface ManufactureMapper {
 	
+	//계획 삭제 후 계획 다시 작성
+	int updatePlan(ManufacturePlanVO planVo);
+	
+	//계획 삭제시 계획취소로 변경
+	int updateOrdStatus2(ManufacturePlanVO planVo);
+	
 	//생산계획 디테일 조회(조회페이지)
 	List<ManufacturePlanVO> selectManufactureDetail(ManufacturePlanVO planVo);
 	

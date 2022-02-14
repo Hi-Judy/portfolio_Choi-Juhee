@@ -3,6 +3,20 @@
 
 <mapper namespace="egov.mes.manufacture.command.dao.ManCommandMapper">
 
+<!-- 해당 지시의 소요자재 -->
+<select id="findResource" resultType="egov.mes.manufacture.command.dao.ManCommandVO">
+	select a.podt_code, a.res_usage,
+            b.rsc_code as resCode, prod_detail(b.rsc_code) as rscName,
+            b.store_etc,  b.ost_cnt
+           
+	from Prdt_bom_res a join resource_store b
+	on a.res_code = b.rsc_code
+	where b.store_etc = #{comCode}
+	and ost_cnt is not null
+	and a.podt_code = #{podtCode}
+</select>
+
+
 <!-- 사원 조회 -->
 <select id="selectEmp" resultType="egov.mes.manufacture.command.dao.ManCommandVO">
 	select emp_id, emp_name, etc 
@@ -28,7 +42,8 @@
 
 <!-- 생산지시서 조회(지시서 조회 페이지) -->
 <select id="selectCommand" resultType="egov.mes.manufacture.command.dao.ManCommandVO">
-	select COM_CODE, MAN_STARTDATE, COM_NAME,
+	select COM_CODE, COM_NAME, 
+		   to_char(MAN_STARTDATE, 'yyyy-MM-dd') as manStartDate,
 		   PODT_CODE, prod_detail(podt_code) podtName, 
 		   MAN_GOALPERDAY, ORD_QNT, COM_ETC
 	from man_command_view
@@ -38,8 +53,12 @@
 		and podt_code = #{podtCode}
 	</if>
 	
-	<if test = ' manStartDate != null and manStartDate != "" '>
-		and man_startdate = #{manStartDate}
+	<if test = "startDate != null"> 
+			and to_char(man_startdate, 'rrrr-MM-dd') >= #{startDate}
+	</if>
+	
+	<if test= "endDate != null">
+		and #{endDate} >=  to_char(man_startdate, 'rrrr-MM-dd')
 	</if>
 	
 	order by com_code
@@ -138,7 +157,9 @@
 <!-- 이전 생산지시 조회 -->
 <select id="selectPreCommand" resultType="egov.mes.manufacture.command.dao.ManCommandVO">
 	select a.podt_code, prod_detail(a.podt_code) podtName, a.ord_qnt, 
-		   a.ord_duedate, a.man_goalperday, a.man_startdate, a.com_etc, a.emp_id,
+		   to_char(a.ord_duedate,'yyyy-MM-dd') as ordDuedate, 
+		   a.man_goalperday, a.com_etc, a.emp_id,
+		   to_char(a.man_startdate,'yyyy-MM-dd') as manStartDate,
 	       b.plan_period, b.man_perday, b.plan_etc, b.plan_no_detail, b.man_plan_no    
 	from man_command_view a left join manufacture_plan_d b
 	on a.podt_code = b.podt_code
@@ -196,19 +217,20 @@
 <!-- 지시가 없는 생산계획 디테일 조회 (생산지시서 관리 페이지) -->
 <select id="selectManPlan" resultType="egov.mes.manufacture.command.dao.ManCommandVO">
 	select a.podt_code, prod_detail(a.podt_code) podtName, a.man_plan_name, 
-		   a.man_plan_date, a.plan_no_detail, a.man_plan_no, a.plan_etc
+		   to_char(a.man_plan_date, 'yyyy-MM-dd') as manPlanDate, 
+		   a.plan_no_detail, a.man_plan_no, a.plan_etc
 	from man_plan_view a left outer join manufacture_command b
 	on a.man_plan_no = b.man_plan_no
-	where a.plan_etc ='계획완료'
-	or a.plan_etc ='생산지시중'
-
-		<if test = "planFromDate != null"> 
-			and to_char(a.man_plan_date, 'yyyy-MM-dd') >= #{planFromDate}
-		</if>
-		
-		<if test= "planToDate != null">
-			and #{planToDate} >=  to_char(a.man_plan_date, 'yyyy-MM-dd')
-		</if>
+	where (a.plan_etc ='계획완료'
+	or a.plan_etc ='생산지시중')
+	
+	<if test = "startDate != null" > 
+		and to_char(a.man_plan_date, 'rrrr-MM-dd') >= #{startDate}
+	</if>
+	
+	<if test= "endDate != null">
+		and #{endDate} >=  to_char(a.man_plan_date, 'rrrr-MM-dd')
+	</if>
 	
 	order by a.man_plan_no
 </select>
@@ -216,9 +238,10 @@
 
 <!-- 생산계획 디테일 상세 조회(생산지시서 관리 페이지) -->
 <select id="selectManPlanDetail" resultType="egov.mes.manufacture.command.dao.ManCommandVO">
-	select a.podt_code,  a.ord_duedate,
+	select a.podt_code, to_char(a.ord_duedate, 'yyyy-MM-dd') as ordDuedate,
 	       b.plan_no_detail, b.podt_code, prod_detail(b.podt_code) podtName, 
-	       b.ord_qnt, b.plan_period, b.man_plan_no, b.plan_startdate,
+	       b.ord_qnt, b.plan_period, b.man_plan_no, 
+	       to_char(b.plan_startdate, 'yyyy-MM-dd') as planStartdate,
 	       
 	       (select DISTINCT man_perday 
 	        from manufacture_plan_d 

@@ -6,7 +6,8 @@ import egovframework.rte.psl.dataaccess.mapper.Mapper;
 
 @Mapper("manCommandMapper")
 public interface ManCommandMapper {
-	
+	//해당 지시의 소요자재
+	List<ManCommandVO> findResource(ManCommandVO commandVO);
 
 	//사원조회
 	List<ManCommandVO> selectEmp(ManCommandVO commandVO);
