@@ -822,7 +822,7 @@
 		
 		if (columnname != null) {
 			
-			let comCode = columnname.slice(0,10) ;
+			let comCode = columnname.slice(1,11) ;
 			
 			$("#result").val(comCode) ;
       

@@ -4,7 +4,7 @@
 
 	<select id="facilityList" resultType="egov.mes.facility.dao.FacilityVO">
 		select fs.fac_no , fn_get_code_name(fs.fac_code) as codeName , fs.fac_code , 
-		    fs.fac_status , fs.fac_cause , fs.fac_checkdate , fs.fac_output , fs.fac_runtime ,
+		    fs.fac_status , fs.fac_cause , to_char(fs.fac_checkdate,'yyyy-mm-dd') as facCheckdate , fs.fac_output , fs.fac_runtime ,
 		    fp.proc_code , fn_get_code_name(fp.proc_code) as procName
 		from facility_status fs
 	    join facility_process fp

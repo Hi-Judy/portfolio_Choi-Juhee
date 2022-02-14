@@ -543,7 +543,7 @@
 			align: 'center'
 		} ,
 		{
-			header : '재고Lot번호' ,
+			header : 'Lot번호' ,
 			name : 'podtLot' , 
 			align: 'center'
 		}
