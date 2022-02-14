@@ -5,6 +5,18 @@
 <head>
 <meta charset="UTF-8">
 <title>자재 LOT재고 조정 조회</title>
+<style type="text/css">
+.in
+	{
+		color: #002bff;
+		font-weight: bold;
+}
+.out
+	{
+		color: #f10000;
+		font-weight: bold;
+}
+</style>
 </head>
 <body>
 	<div style="width : 1500px ;">
@@ -162,6 +174,12 @@
 					    header: '단위',
 					    name: 'rscUnit'
 					},
+					{
+						header: '자재LOT',
+						name: 'rscLot',
+						sortable: true,
+						sortingType: 'desc'
+					},
 				    {
 						header: '입고량',
 						name: 'istCnt',
@@ -184,16 +202,6 @@
 								}
 							}
 					},
-					{
-						header: '자재LOT',
-						name: 'rscLot',
-						sortable: true,
-						sortingType: 'desc'
-					},
-					{
-						header: '비고',
-						name: 'storeEtc'
-					}
 				];
 	
 	//메인 그리드 api
@@ -221,13 +229,11 @@
 			    columnContent: {
 			    	istCnt: {
 			        template(summary) {
-			        	console.log(summary);
 			        	return '입고량: ' + (summary.sum*1).toString().replace(/\B(?<!\.\d*)(?=(\d{3})+(?!\d))/g, ",");
 			        }
 			      },
 			      ostCnt: {
 				        template(summary) {
-				        	console.log(summary);
 				        	return '출고량: ' + (summary.sum*1).toString().replace(/\B(?<!\.\d*)(?=(\d{3})+(?!\d))/g, ",");
 				        }
 				      },
@@ -241,8 +247,7 @@
 		grid.setSelectionRange({
 	    	start: [ev.rowKey, 0],
 	    	end: [ev.rowKey, grid.getColumns().length-1]
-	    }); 
-	    
+	    })
 	});
 
 	//조회버튼 클릭시 input 태그의 값을 넘겨서 원하는 데이터를 가지고 온다
@@ -257,9 +262,25 @@
 			}).done(function(da){
 				var datalist = JSON.parse(da);
 				grid.resetData(datalist["data"]["contents"]);
+
 			})
-					
 		});
+	
+	grid.on("onGridUpdated", function(ev){
+		for(i=0; i<grid.getRowCount(); i++){
+			if(grid.getValue(i, "storeFlag") == '정산입고'){
+				console.log(grid.getValue(i, "storeFlag"))
+				grid.addCellClassName(i, 'storeFlag', 'in')
+			}else if(grid.getValue(i, "storeFlag") == '정산출고'){
+				console.log(grid.getValue(i, "storeFlag"))
+				grid.addCellClassName(i, 'storeFlag', 'out')
+			}
+		}
+
+	})
+	
+	//if  storeFlag == '정산입고' - 빨강 //  storeFlag == '정산출고' - 파랑
+	//addRowClassName(rowKey, className) 
 	
 //------------------ 도움말 버튼 이벤트 -----------------------
 helpBtn.addEventListener('mouseover' , () => {

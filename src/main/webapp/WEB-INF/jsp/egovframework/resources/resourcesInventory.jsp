@@ -71,7 +71,9 @@
 			buttons: {
 				"확인" : function (){
 					for(i=0; i <gridRsc.getCheckedRows().length; i++ ){
-							grid.appendRow(gridRsc.getCheckedRows()[i]);
+						let a = gridRsc.getCheckedRows()[i]
+						a.rowKey = i;
+						grid.appendRow(a);
 					}
 					dialogRsc.dialog("close");
 				},

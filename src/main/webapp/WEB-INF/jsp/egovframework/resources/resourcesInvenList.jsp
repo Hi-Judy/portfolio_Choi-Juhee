@@ -15,6 +15,12 @@
 	font-weight: normal;
 	color: #ffffff;
 }
+.ab
+	{
+		color: #ff1004;
+		font-weight: bold;
+}
+
 </style>
 </head>
 <body>
@@ -38,8 +44,8 @@
 			style="margin-left: 10px; padding-top: 0px; padding-left: 0px; padding-right: 0px; padding-bottom: 0px;">
 			<div id="top" style="width: 1450px; height: 90px;">
 				<div style="margin-top: 5px; margin-left: 8px;">
-					자재명 <input id="txtRsc2" class="inpBC" readonly> 자재코드 <input
-						id="txtRsc1">
+					자재명 <input id="txtRsc2" class="inpBC" readonly>
+					자재코드 <input id="txtRsc1">
 					<button id="btnFindRsc"
 						style="border: none; background-color: #f8f8ff; color: #007b88;">
 						<i class="bi bi-search"></i>
@@ -63,8 +69,8 @@
 			style="margin-left: 10px; padding-top: 0px; padding-left: 0px; padding-right: 0px; padding-bottom: 0px;">
 			<div id="top" style="width: 1450px; height: 90px;">
 				<div style="margin-top: 5px; margin-left: 8px;">
-					자재명 <input id="txtRscLot2" class="inpBC" readonly> 자재코드 <input
-						id="txtRscLot1">
+					자재명 <input id="txtRscLot2" class="inpBC" readonly>
+					자재코드 <input id="txtRscLot1">
 					<button id="btnFindRscLot"
 						style="border: none; background-color: #f8f8ff; color: #007b88;">
 						<i class="bi bi-search"></i>
@@ -268,6 +274,8 @@
 			if(gr < 0){
 				let a =(gr*-1)
 				grid.setValue(i, "shortage", a.toString().replace(/\B(?<!\.\d*)(?=(\d{3})+(?!\d))/g, ","));
+				//grid.addRowClassName(i, 'ab')
+				grid.addCellClassName(i, 'shortage', 'ab')
 			}else{
 				grid.setValue(i, "shortage", 0);
 			}

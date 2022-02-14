@@ -5,6 +5,13 @@
 <head>
 <meta charset="UTF-8">
 <title>자재 발주 관리</title>
+<style type="text/css">
+.ab
+	{
+		color: #ff1004;
+		font-weight: bold;
+}
+</style>
 </head>
 <body>
 	<h4 style="margin-left: 10px">자재 발주 관리</h4>
@@ -75,7 +82,9 @@
 			buttons: {
 				"확인" : function (){
 					for(i=0; i <gridRsc.getCheckedRows().length; i++ ){
-							grid.appendRow(gridRsc.getCheckedRows()[i]);
+						let a = gridRsc.getCheckedRows()[i]
+						a.rowKey = i;
+						grid.appendRow(a);
 					}
 					dialogRsc.dialog("close");
 				},
@@ -95,7 +104,9 @@
 				"확인" : function (){
 					for(i=0; i <gridOrder.getCheckedRows().length; i++ ){
 						if(grid.findRows({ordrNo : gridOrder.getCheckedRows()[i].ordrNo}).length == 0) {
-							grid.appendRow(gridOrder.getCheckedRows()[i]);
+							let a = gridOrder.getCheckedRows()[i]
+							a.rowKey = i;
+							grid.appendRow(a);
 						}
 					}
 					dialogOrder.dialog("close");
@@ -213,7 +224,7 @@
 	});
 	
 	grid.on("successResponse", function(){
-		 alert("dddd")
+		alert('저장완료되었습니다');
 	})
 	
 	//그리드 columnName = rscCode 클릭시 자재조회 모달 오픈
@@ -237,7 +248,6 @@
 				function(){
 					console.log("자재 조회 모달 로드됨")
 			})
-		//grid.appendRow({});
 	});
 
 	//삭제 버튼 클릭
@@ -252,15 +262,13 @@
 	//continue /break /return /switch ? case default 
 	btnSaveOrder.addEventListener("click", function(){
 		var j =0;
-		for(let i=0; i<grid.getRowCount(); i++){
+		for(let i=0; i<grid.getRowCount(); i++){	
 			if(grid.getValue(i, "rscTotal") == 0){
-				console.log(grid.getValue(i, "rscTotal"));
- 				 alert("발주량을 입력해주세요")
+ 				 alert("발주량을 입력해주세요.")
  				 j=0
 				 break;
  			}else if(grid.getValue(i, "istReqDate") == null ){
- 				console.log(grid.getValue(i, "istReqDate"));
- 				//alert("입고요청일을 입력해주세요")
+ 				alert("입고요청일을 입력해주세요.")
  				j=0;
  				break;
  			}else {
@@ -280,43 +288,21 @@
 	
 	//-------- 메인그리드(계획완료 select) ----------
 	var columnsPlan= [
-					 {
-					    header: '자재코드',
-					    name: 'rscCode'
-					  },
-					  {
-					    header: '자재명',
-					    name: 'rscName'
-					  },
-					  {
-						header: '단위',
-						name: 'rscUnit'
-					  },
-					  {
-						header: '단가',
-						name: 'rscPrc',
-						formatter(value) {
-							if(value.value != null && value.value != '' ){
-								return value.value.toString().replace(/\B(?<!\.\d*)(?=(\d{3})+(?!\d))/g, ",");
-							}else{
-								return value.value ;
-							}
-						}
-					   },
-						{
-						  header: '계획수량',
-						  name: 'sumofPlan',
-						  formatter(value) {
-								if(value.value != null && value.value != '' ){
-									return value.value.toString().replace(/\B(?<!\.\d*)(?=(\d{3})+(?!\d))/g, ",");
-								}else{
-									return value.value ;
-								}
-							}
-						},
-						{
-						  header: '재고량',
-						  name: 'rscCnt',
+						 {
+						    header: '자재코드',
+						    name: 'rscCode'
+						  },
+						  {
+						    header: '자재명',
+						    name: 'rscName'
+						  },
+						  {
+							header: '단위',
+							name: 'rscUnit'
+						  },
+						  {
+							header: '단가',
+							name: 'rscPrc',
 							formatter(value) {
 								if(value.value != null && value.value != '' ){
 									return value.value.toString().replace(/\B(?<!\.\d*)(?=(\d{3})+(?!\d))/g, ",");
@@ -324,18 +310,41 @@
 									return value.value ;
 								}
 							}
-						},
-						{
-							header: '안전재고',
-							name: 'rscSfinvc',
-							formatter(value) {
-								if(value.value != null && value.value != '' ){
-									return value.value.toString().replace(/\B(?<!\.\d*)(?=(\d{3})+(?!\d))/g, ",");
-								}else{
-									return value.value ;
+						   },
+							{
+							  header: '계획수량',
+							  name: 'sumofPlan',
+							  formatter(value) {
+									if(value.value != null && value.value != '' ){
+										return value.value.toString().replace(/\B(?<!\.\d*)(?=(\d{3})+(?!\d))/g, ",");
+									}else{
+										return value.value ;
+									}
 								}
-							}
-						}
+							},
+							{
+								header: '안전재고',
+								name: 'rscSfinvc',
+								formatter(value) {
+									if(value.value != null && value.value != '' ){
+										return value.value.toString().replace(/\B(?<!\.\d*)(?=(\d{3})+(?!\d))/g, ",");
+									}else{
+										return value.value ;
+									}
+								}
+							},
+							{
+							  header: '재고량',
+							  name: 'rscCnt',
+								formatter(value) {
+									if(value.value != null && value.value != '' ){
+										return value.value.toString().replace(/\B(?<!\.\d*)(?=(\d{3})+(?!\d))/g, ",");
+									}else{
+										return value.value ;
+									}
+								}
+							},
+
 					];
 	
 	//메인 그리드 api
@@ -356,6 +365,17 @@
 		  data: dataSourcePlan,
 		  columns: columnsPlan
 		});
+	
+	gridPlan.on("onGridUpdated", function(ev){
+		for(i=0; i<gridPlan.getRowCount(); i++){
+			if(gridPlan.getValue(i, "sumofPlan")*1 > gridPlan.getValue(i, "rscCnt")*1){
+				gridPlan.addCellClassName(i, 'rscCnt', 'ab')
+			}else if(gridPlan.getValue(i, "rscSfinvc")*1 > gridPlan.getValue(i, "rscCnt")*1){
+				gridPlan.addCellClassName(i, 'rscCnt', 'ab')
+			}
+		}
+	})
+	
 	
 	gridPlan.readData();
 </script>
