@@ -59,13 +59,13 @@
 	<div id="OverallSize" style="margin-bottom: 0px;height: 300px; margin-left:10px;">
 		<div style="float: left; width: 50% ;">	
 			<!-- 선택된 지시 그리드 -->
-			<h5 style="color: #25396f;">그리드1번</h5>
+			<h5 style="color: #25396f;">지시 기본 정보</h5>
 			<div id="gridSelCommand"   style=" border-top: 3px solid #168;"></div>
 		</div>
 			
 		<div style="float: right; width: 45% ;">
 			<!-- 자재 LOT 조회 그리드 -->
-			<h5 style="color: #25396f;">그리드2번</h5>
+			<h5 style="color: #25396f;">자재정보</h5>
 			<div id="gridResLot"    style="border-top: 3px solid #168;"></div>
 		</div>
 		<br>
@@ -74,7 +74,7 @@
 	
 	<br>		
 	<!---- 공정이동 그리드 ---->
-	<h5 style="color: #25396f; margin-left:10px;">그리드3번</h5>
+	<h5 style="color: #25396f; margin-left:10px;">공정정보</h5>
 	<div id="gridMovement"   style="width:1500px; margin-left:10px; border-top: 3px solid #168;"></div>
 	
 	<!-- 생산지시서 조회 모달 -->
@@ -85,14 +85,8 @@
 	<!--  --------------- 도움말 --------------- -->
 	<div id="helpModal" title="도움말">
 		<hr>
-		돋보기 버튼을 눌러서 제품코드를 조회 후 클릭하면 선택이 됩니다.<br><br>
-		관리단위 : 제품이 공정전체를 돌아서 한번 나오는양 <br><br>
-		공정흐름관리 : 왼쪽끝 점들을 클릭드로우 하여 위치를이동할수있고<br>
-		&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-		위치가 이동되면 공정들의 순서를 변경할수 있습니다.<br><br>
-		BOM삭제 : 선택된 제품코드 를 기준으로 등록된 "사용자재" , "공정흐름"<br>
-		&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-		들의 데이터들을 초기화 할수있습니다.<br>
+		작업일자나 생산상태를 선택하고 조회버튼을 클릭합니다. <br><br>
+		원하는 지시를 선택하면 해당 지시의 공정 정보를 확인할 수 있습니다.<br><br>
 	</div>
 	<script>
 	//옵션세팅

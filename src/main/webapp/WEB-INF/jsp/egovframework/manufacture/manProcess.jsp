@@ -85,14 +85,9 @@
 	<!--  --------------- 도움말 --------------- -->
 	<div id="helpModal" title="도움말">
 		<hr>
-		돋보기 버튼을 눌러서 제품코드를 조회 후 클릭하면 선택이 됩니다.<br><br>
-		관리단위 : 제품이 공정전체를 돌아서 한번 나오는양 <br><br>
-		공정흐름관리 : 왼쪽끝 점들을 클릭드로우 하여 위치를이동할수있고<br>
-		&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-		위치가 이동되면 공정들의 순서를 변경할수 있습니다.<br><br>
-		BOM삭제 : 선택된 제품코드 를 기준으로 등록된 "사용자재" , "공정흐름"<br>
-		&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-		들의 데이터들을 초기화 할수있습니다.<br>
+		작업일을 입력하고 조회버튼을 눌러 원하는 생산지시를 선택합니다.<br><br>
+		지시완료인 공정을 선택하면 시작버튼을 눌러 공정을 시작합니다. <br><br>
+		생산중이거나 생산완료인 지시는 시작버튼을 누를 수 없습니다. <br>
 	</div>
 
 	<script>
@@ -347,26 +342,32 @@
 				let manQnt = gridProcess.getValue(j, 'manQnt'); //현재공정의 생산량
 				let defQnt = gridProcess.getValue(j, 'defQnt'); //현재공정의 불량량
 				let procCode = gridProcess.getValue(j, 'procCode'); //현재공정의 공정코드
-				let manGoalPerday = gridProcess.getValue(j, 'manGoalPerday') ;
+				let manGoalPerday = gridProcess.getValue(j, 'manGoalPerday') ; //목표량
 				
-				let procCode2 = gridProcess.getValue(j-1, 'procCode'); //현재공정의 공정코드
-				let manQnt2 = gridProcess.getValue(j-1, 'manQnt'); //전공정의 불량량
-				let defQnt2 = gridProcess.getValue(j-1, 'defQnt'); //전공정의 생산량
+				let procCode2 = gridProcess.getValue(j-1, 'procCode'); //전공정의 공정코드
+				let defQnt2 = gridProcess.getValue(j-1, 'defQnt'); //전공정의 불량량
 				
-				//def += defQnt;
-				
-				let prevQnt = gridProcess.getValue(j-1,'manQnt') ;
+				let prevQnt = gridProcess.getValue(j-1,'manQnt') ;  //전공정의 생산량
 				
 				if (defQnt != null) {
-					if (procCode == 'PROC001') {
-						gridProcess.setValue(j, 'manQnt', ( (manGoalPerday*1) - (defQnt*1) ) );
-					} else if ( procCode >= 'PROC002') {
-						gridProcess.setValue(j, 'manQnt', ( (prevQnt*1) - (defQnt*1) ) );
-						if (procCode >= 'PROC009') {
-							gridProcess.setValue(j, 'manQnt', prevQnt );
-						}
-					}
-				}
+		               if (procCode == 'PROC001') {
+		                  gridProcess.setValue(j, 'manQnt', ( (manGoalPerday*1) - (defQnt*1) ) );
+		               } else if ( procCode >= 'PROC002') {
+		                  gridProcess.setValue(j, 'manQnt', ( (prevQnt*1) - (defQnt*1) ) );
+		                  if (procCode >= 'PROC008') {
+		                     gridProcess.setValue(j, 'manQnt', prevQnt );
+		                  }
+		               }
+		            } else {
+		               if (procCode == 'PROC001') {
+		                  gridProcess.setValue(j, 'manQnt', ( (manGoalPerday*1) - 0 ) );
+		               } else if ( procCode >= 'PROC002') {
+		                  gridProcess.setValue(j, 'manQnt', ( (prevQnt*1) - 0 ) );
+		                  if (procCode >= 'PROC008') {
+		                     gridProcess.setValue(j, 'manQnt', prevQnt );
+		                  }
+		               }
+		            }
 				
 /* 				gridProcess.setValue(j, 'manQnt', ( (manQnt*1) - (defQnt*1) ) ); //생산량 - 불량량
 				

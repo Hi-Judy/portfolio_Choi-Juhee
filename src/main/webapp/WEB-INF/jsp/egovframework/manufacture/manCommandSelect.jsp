@@ -26,13 +26,18 @@
 	</div>
 	<div id="top" style="height : 160px; padding : 10px;">
 		<div class = "selectCommand">
+			<div style="">
 			<!-- 작업일자별로 조회 -->
 			<p style="display:inline-block; margin-left : 20px; margin-top : 10px;">작업일자</p>
-			<input id = "txtManDate" type="date" name="manDate" style="display:inline-block; margin-left : 10px;">
-			<br>
+			
+			<!-- 조회할 작업 기간 입력 -->
+				<input id = "txtFromDate" type="date" name="from" style="margin-left:10px; display:inline-block; ">
+				<p style="display:inline-block;"> ~ </p>
+				<input id = "txtToDate" type="date" name="to" style="display:inline-block;">
+			</div>	
 			
 			<!-- 제품코드별로 조회 -->
-			<p style="display: inline-block; margin-left : 20px;">제품코드</p>
+			<p style="margin-top:5px; display: inline-block; margin-left : 20px;">제품코드</p>
 			<input id="txtPodtCode" style="display: inline-block; margin-left : 10px; width: 163px;">
 			<br>
 			<button type="button" id="btnInit" class="btn" style="float : right; margin : 5px;">초기화</button>
@@ -44,19 +49,19 @@
 	<div id="OverallSize" style="margin-left : 10px;">
 		<!-- 생산지시 조회 그리드 -->
 		<div id="gridCommand" style="border-top: 3px solid #168;"></div>
+		<br>
+		
+		<!-- 자재조회 그리드 -->
+		<h5 style="color: #25396f;">자재조회</h5>
+		<div id="gridResource" style=" border-top: 3px solid #168;"></div>
+		
 	</div>
 	
 	<!--  --------------- 도움말 --------------- -->
 	<div id="helpModal" title="도움말">
 		<hr>
-		돋보기 버튼을 눌러서 제품코드를 조회 후 클릭하면 선택이 됩니다.<br><br>
-		관리단위 : 제품이 공정전체를 돌아서 한번 나오는양 <br><br>
-		공정흐름관리 : 왼쪽끝 점들을 클릭드로우 하여 위치를이동할수있고<br>
-		&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-		위치가 이동되면 공정들의 순서를 변경할수 있습니다.<br><br>
-		BOM삭제 : 선택된 제품코드 를 기준으로 등록된 "사용자재" , "공정흐름"<br>
-		&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-		들의 데이터들을 초기화 할수있습니다.<br>
+		작업일자나 제품코드를 입력한 후 생산지시조회 버튼을 클릭합니다. <br><br>
+		조회된 지시 중 한 건을 클릭하여 해당 지시의 소요 자재를 확입합니다. <br><br>
 	</div>	
 	
 	
@@ -108,6 +113,13 @@
 					  border: 'red'
 				  }
 		});
+		
+		
+		//******************************작업기간 기본값******************************
+	    var d = new Date();
+	    var nd = new Date(d.getFullYear(), d.getMonth(), d.getDate() - 7);
+	    document.getElementById('txtFromDate').value = nd.toISOString().slice(0, 10);
+	    document.getElementById('txtToDate').value = d.toISOString().slice(0, 10);
 		
 		
 		//******************************생산지시 조회 그리드******************************
@@ -164,21 +176,27 @@
 		$('#searchCommand').click(function(){
 			console.log('생산지시 조회');
 			
-			let manDate = document.querySelector('#txtManDate').value;
+			let startDate = document.querySelector('#txtFromDate').value;
+			let endDate = document.querySelector('#txtToDate').value;
+			
 			let podtCode = document.querySelector('#txtPodtCode').value;
 			
-			console.log(manDate);
+			console.log(startDate);
+			console.log(endDate);
 			console.log(podtCode);
 			
-				
-			if(manDate != "" || podtCode != ""){
+			
+			if(startDate == "" && podtCode == "" ){
+				alert("작성일자나 제품코드를 입력해주세요.");
+			
+			}else if(startDate != "" || podtCode != ""){
 				//gridCommand.readData(1, {'manStartDate': manDate, 'podtCode': podtCode}, true );
 				gridCommand.refreshLayout();
 				
 				$.ajax({
 					url: '${pageContext.request.contextPath}/selectCommand',
 					method: 'POST',
-					data: {'manStartDate' : manDate, 'podtCode': podtCode },
+					data: {'startDate' : startDate, 'endDate': endDate, 'podtCode': podtCode },
 					success: function(datas){
 						data = JSON.parse(datas);
 						console.log(data);
@@ -194,11 +212,7 @@
 						console.log('reject: '+ reject);
 					}
 				})
-			}else{
-				alert("작업일자를 입력하세요.")
 			}
-			
-			
 		})
 		
 		
@@ -207,8 +221,84 @@
 			el: document.getElementById('gridCommand'),
 			data: null,
 			columns: columnsCommand,
-			rowHeaders: ['rowNum']
+			rowHeaders: ['checkbox']
 		})
+		
+		
+		//메인 그리드에서 체크된 계획
+		let checkedCommand;
+		
+		//메인 그리드에서 클릭된 계획의 행을 가져온다.
+		gridCommand.on('click', function(ev){
+			checkedCommand = gridCommand.getCheckedRows();
+			
+			console.log(checkedCommand[0].podtCode);
+			console.log(checkedCommand[0].comCode);
+			
+			fetch("${pageContext.request.contextPath}/findResource/"
+					+checkedCommand[0].podtCode + "/" + checkedCommand[0].comCode )
+			.then((response) => response.json())
+			.then((data)=> {
+				
+				console.log(data.data.contents);
+				gridResource.resetData(data.data.contents);
+				
+			})
+		})
+		
+		
+		//******************************자재 조회 그리드******************************
+		//자재 조회 모달 컬럼
+		const columnsResource = [
+			{
+				header:'제품코드',
+				name: 'podtCode'
+			},
+			{
+				header:'자재코드',
+				name: 'resCode'
+			},
+			{
+				header: '자재명',
+				name: 'rscName'
+			},
+			{
+				header:'소요량',
+				name: 'resUsage'
+			},
+			{
+				header: '출고량',
+				name: 'ostCnt'
+			}
+		]
+		
+		
+		//자재조회 그리드 내용
+		const gridResource = new Grid({
+			el: document.getElementById('gridResource'),
+			data: null,
+			columns: columnsResource,
+			rowHeaders: ['rowNum'],
+	         bodyHeight: 240
+		})
+		
+		gridResource.on('onGridUpdated', function(){
+			
+			//let resList = gridResource.getData(); //자재그리드 전체 데이터
+			//console.log(resList);
+			
+			checkedCommand = gridCommand.getCheckedRows();
+			console.log(checkedCommand[0].manGoalPerday);
+			for(let i=0; i<gridResource.getRowCount(); i++ ){
+				//console.log(i)
+				let resUsage = gridResource.getValue(i,'resUsage');
+				//console.log(resUsage);
+				
+				gridResource.setValue(i, 'resUsage', (resUsage*1*checkedCommand[0].manGoalPerday)/100);
+			}	
+			
+		});
+		
 		
 		
 		//******************************초기화 버튼 클릭******************************

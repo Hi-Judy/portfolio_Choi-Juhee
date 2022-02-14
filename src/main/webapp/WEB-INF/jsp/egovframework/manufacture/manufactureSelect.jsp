@@ -17,7 +17,7 @@
 </head>
 
 <body>
-	<div id="title" style="margin-left : 10px;"><h3 style="color : #054148; font-weight : bold">생산계획서 조회</h3></div>
+
 	<div style="width : 1500px ;">
 		<span style="float: right;">
 			<button type="button" id="helpBtn" style="border : none; background-color : #f2f7ff; color : #007b88; float : right ;">
@@ -28,16 +28,21 @@
 	</div>
 	
 	<div id="top" style="height : 110px; padding : 10px;">
-	
 		
-			<!-- 계획일자별로 조회 -->
-			<p style="display:inline-block; margin-left : 5px; margin-top : 5px;">계획일자</p>
-			<input id = "txtManDate" type="date" name="from" style="display:inline-block; margin-left : 10px; width: 165px;">
-			<br>			
+		<div>
+		<!-- 계획일자별로 조회 -->
+		<p style="display:inline-block; margin-left : 5px; margin-top : 5px;">계획일자</p>
+		
+		<!-- 조회할 계획 기간 입력 -->
+			<input id = "txtFromDate" type="date" name="from" style="margin-left:10px; display:inline-block; ">
+			<p style="display:inline-block;"> ~ </p>
+			<input id = "txtToDate" type="date" name="to" style="display:inline-block;">
+		</div>	
+			
 		<div>	
-			<!-- 제품코드별로 조회 -->
-			<p style="display:inline-block; margin-left : 5px; ">제품코드</p>
-			<input id = "txtPdotCode" style="display: inline-block; margin-left : 10px; width: 165px;">
+			 <!-- 제품코드별로 조회 -->
+		 	<p style="display:inline-block; margin-left : 5px; ">제품코드</p>
+			<input id = "txtPdotCode" style="display: inline-block; margin-left : 10px; width: 165px;"> 
 			
 			<!-- 버튼모음 -->
 			<button type="button" id="btnInit" 			class="btn" style="float : right; margin : 5px;">초기화</button>
@@ -59,14 +64,8 @@
 	<!--  --------------- 도움말 --------------- -->
 	<div id="helpModal" title="도움말">
 		<hr>
-		돋보기 버튼을 눌러서 제품코드를 조회 후 클릭하면 선택이 됩니다.<br><br>
-		관리단위 : 제품이 공정전체를 돌아서 한번 나오는양 <br><br>
-		공정흐름관리 : 왼쪽끝 점들을 클릭드로우 하여 위치를이동할수있고<br>
-		&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-		위치가 이동되면 공정들의 순서를 변경할수 있습니다.<br><br>
-		BOM삭제 : 선택된 제품코드 를 기준으로 등록된 "사용자재" , "공정흐름"<br>
-		&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-		들의 데이터들을 초기화 할수있습니다.<br>
+		계획일자나 제품코드를 입력한 후 생산계획조회 버튼을 클릭합니다.<br><br>
+		조회된 계획 중 한 건을 클릭하여 해당 제품의 소요 자재를 확인합니다. <br><br>
 	</div>
 	
 	<script>
@@ -115,6 +114,13 @@
 					  border: 'red'
 				  }
 		});
+		
+		
+		//******************************계획기간 기본값******************************
+	    var d = new Date();
+	    var nd = new Date(d.getFullYear(), d.getMonth(), d.getDate() - 7);
+	    document.getElementById('txtFromDate').value = nd.toISOString().slice(0, 10);
+	    document.getElementById('txtToDate').value = d.toISOString().slice(0, 10);
 		
 		
 		//******************************메인 그리드******************************
@@ -193,16 +199,20 @@
 				align : 'center' 
 			}
 		]
+		
 		//생산계획조회 버튼 클릭이벤트
 		$('#btnSearchManPlan').click(function(){
 			console.log('생산계획 조회');
-			let manDate = document.querySelector('#txtManDate').value;
+			let startDate = document.querySelector('#txtFromDate').value;
+			let endDate = document.querySelector('#txtToDate').value;
+			
 			let podtCode = document.querySelector('#txtPdotCode').value;
 			
-			console.log(manDate);
+			console.log(startDate);
+			console.log(endDate);
 			console.log(podtCode);
 			
-			if(manDate == "" && podtCode == "" ){
+			if(startDate == "" && podtCode == "" ){
 				alert("계획일자나 제품코드를 입력해주세요.");
 			}
 			else{
@@ -210,7 +220,7 @@
 				$.ajax({
 					url: '${pageContext.request.contextPath}/manufacture/selectManufacturePlan',
 					method: 'POST',
-					data: {'manPlanDate' : manDate, 'podtCode': podtCode },
+					data: {'startDate' : startDate, 'endDate': endDate, 'podtCode': podtCode },
 					dataType: 'JSON',
 					success: function(datas){
 						console.log(datas);

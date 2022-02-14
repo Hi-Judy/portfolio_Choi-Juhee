@@ -35,6 +35,9 @@ public class ManCommandVO {
 	String pileQnt; //기지시량
 	String pendingQnt; //미지시량
 	
+	String startDate; //작업일 조회 
+	String endDate; //작업일 조회 
+	
 	
 	//자재
 	String resCode; //자재코드
