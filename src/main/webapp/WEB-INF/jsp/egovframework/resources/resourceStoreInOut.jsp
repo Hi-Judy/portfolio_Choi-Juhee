@@ -32,9 +32,9 @@
   
 	 	 <!-- 입고 -->
 		<div id="tabs-1" style="margin-left:10px; padding-top: 0px; padding-left: 0px; padding-right: 0px; padding-bottom: 0px;">
-			<div id="top" style="width: 1450px; height:170px;">
-				<div style="margin-top : 5px;  margin-left: 8px;">
-					입고일자	<input id="txtStoreIn1" type="date" data-role="datebox" data-options='{"mode": "calbox"}'>
+			<div id="top" style="width: 1450px; height:170px; padding : 10px;" >
+				<div style="margin-top : 5px;  margin-left: 8px; ">
+					입고일자	<input id="txtStoreIn1" type="date" data-role="datebox" data-options='{"mode": "calbox"}' >
 					~ 	  	<input id="txtStoreIn2" type="date" data-role="datebox" data-options='{"mode": "calbox"}'><br>
 					업체명		&nbsp;&nbsp;&nbsp;<input id="txtStoreInSuc2" class="inpBC" readonly>
 					업체코드	<input id="txtStoreInSuc1">
@@ -62,7 +62,7 @@
   
 	    <!-- 출고 -->
 		<div id="tabs-2" style="margin-left:10px; padding-top: 0px; padding-left: 0px; padding-right: 0px; padding-bottom: 0px;">
-			<div id="top" style="width: 1450px; height:170px;">
+			<div id="top" style="width: 1450px; height:170px;  padding : 10px;">
 				<div style="margin-top : 5px;  margin-left: 8px;">
 					출고일자	<input id="txtStoreOut1" type="date" data-role="datebox" data-options='{"mode": "calbox"}'>
 					  ~   	<input id="txtStoreOut2" type="date" data-role="datebox" data-options='{"mode": "calbox"}'><br>

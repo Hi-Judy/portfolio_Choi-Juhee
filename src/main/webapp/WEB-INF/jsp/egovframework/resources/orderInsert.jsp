@@ -14,7 +14,14 @@
 </style>
 </head>
 <body>
-	<h4 style="margin-left: 10px">자재 발주 관리</h4>
+	<div style="width : 1500px ;">
+		<span style="float: right;">
+			<button type="button" id="helpBtn" style="border : none; background-color : #f2f7ff; color : #007b88; float : right ;">
+				<i class="bi bi-question-circle"></i>
+			</button>
+		</span>
+		<h4 style="margin-left: 10px">자재 발주 관리</h4>
+	</div>
 	<div id="top">
 		<div>
 			<span style="margin-top: 13px; float: left;"></span>
@@ -33,7 +40,7 @@
 			<br>
 			<br>
 			<!-- 메인화면 그리드(생산계획조회) -->
-			<h5 style="color: #25396f; style="margin-left: 10px">생산필요자재</h5>		
+			<h5 style="color: #25396f; style="margin-left: 10px;">생산필요자재</h5>		
 			<div id="gridPlan" style="border-top: 3px solid #168; width: 1500px;"></div>
 		</div>	
 	

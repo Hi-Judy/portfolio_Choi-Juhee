@@ -275,8 +275,7 @@
 			    columnContent: {
 			      rtngdCnt: {
 			        template(summary) {
-			        	console.log(summary);
-			        	return '반품량: ' + summary.sum;
+			        	return '반품량: ' + (summary.sum*1).toString().replace(/\B(?<!\.\d*)(?=(\d{3})+(?!\d))/g, ",");
 			        }
 			      }
 			    }
