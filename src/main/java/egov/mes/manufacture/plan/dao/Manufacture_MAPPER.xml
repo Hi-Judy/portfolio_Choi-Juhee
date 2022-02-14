@@ -3,11 +3,31 @@
 
 <mapper namespace="egov.mes.manufacture.plan.dao.ManufactureMapper">
 
+<!-- 삭제 후 계획 다시 작성 -->
+<update id="updatePlan" parameterType="egov.mes.manufacture.plan.dao.ManufacturePlanVO">
+	update manufacture_plan_d
+	set plan_startdate = #{planStartDate},
+	    plan_complete = #{planComplete},
+	    plan_etc = '계획완료'
+	where podt_code = #{podtCode}
+	and plan_etc = '계획취소'
+</update>
+
+<!-- 계획 삭제시 상태값 변경 -->
+<update id="deletePlan" parameterType="egov.mes.manufacture.plan.dao.ManufacturePlanVO">
+	update manufacture_plan_d
+	set plan_etc = '계획취소'
+	where man_plan_no = #{manPlanNo}
+	and podt_code = #{podtCode}
+</update>
+
 <!-- 생산계획서 조회(생산계획서 조회 페이지) -->
 <select id="selectManufacturePlan" resultType="egov.mes.manufacture.plan.dao.ManufacturePlanVO">
 	select a.podt_code, prod_detail(a.podt_code) podtName, 
-           to_char(a.man_plan_date,'yyyy-MM-dd') manPlanDate, a.plan_period, 
-           to_char(a.plan_startdate,'yyyy-MM-dd') planStartDate , a.plan_complete,
+           to_char(a.man_plan_date,'yyyy-MM-dd') manPlanDate,
+           a.plan_period, 
+           to_char(a.plan_startdate,'yyyy-MM-dd') planStartDate , 
+           to_char(a.plan_complete, 'yyyy-MM-dd') planComplete,
            a.man_perday, plan_etc,
            b.ord_code, b.ord_qnt, 
            to_char(b.ord_duedate,'yyyy-MM-dd') ordDueDate
@@ -20,8 +40,12 @@
 		and a.podt_code = #{podtCode}
 	</if>
 	
-	<if test = ' manPlanDate != null and manPlanDate != "" '>
-		and a.man_plan_date = #{manPlanDate}
+	<if test = "startDate != null"> 
+			and to_char(a.man_plan_date, 'rrrr-MM-dd') >= #{startDate}
+	</if>
+	
+	<if test= "endDate != null">
+		and #{endDate} >=  to_char(a.man_plan_date, 'rrrr-MM-dd')
 	</if>
 	
 	order by a.podt_code
@@ -29,11 +53,12 @@
 
 
 <!-- 조회된 생산계획서 삭제. (생산디테일 삭제) -->
-<delete id="deletePlan" parameterType="egov.mes.manufacture.plan.dao.ManufacturePlanVO">
+<!-- <delete id="deletePlan" parameterType="egov.mes.manufacture.plan.dao.ManufacturePlanVO">
 	delete 
 	from manufacture_plan_d
 	where man_plan_no = #{manPlanNo}
-</delete>
+	and podt_code = #{podtCode}
+</delete> -->
 
 
 <!-- 생산계획 데이터 추가 -->
@@ -46,31 +71,35 @@
 	values( f_code_maker('P'),
 			#{ordCode},
 			(select cus_code from order_management where ord_code = #{ordCode}),
-			#{manPlanName},
-			#{manPlanDate} )	
+			(select SUBSTR(sysdate, 4, 7)||' '||'계획'|| 
+				(select count(man_plan_date) +1
+			 	 from manufacture_plan 
+             	 where man_plan_date = to_char(sysdate,'yy/mm/dd') )
+             from dual),
+			to_date(#{manPlanDate}, 'yyyy-MM--dd') )	
 </insert>
 
 
 <!-- 생산계획 디테일 데이터 추가 -->
 <insert id="insertPlanDetail" statementType="CALLABLE">
-		insert into manufacture_plan_d ( PLAN_NO_DETAIL,
-										 PODT_CODE,
-										 MAN_PLAN_NO,
-										 PLAN_STARTDATE,
-										 PLAN_PERIOD,
-										 MAN_PERDAY,
-										 PLAN_ETC,
-										 ORD_QNT,
-										 PLAN_COMPLETE )
-		values( (select nvl(max(PLAN_NO_DETAIL),0)+1 from manufacture_plan_d),
-				#{podtCode},
-				(select nvl(max(MAN_PLAN_NO),0) from manufacture_plan),
-				#{planStartDate},
-				to_date(#{planComplete}, 'yyyy-MM-dd') - to_date(#{planStartDate},'yyyy-MM-dd') + 1 ,
-				#{manPerday},
-				'계획완료',
-				#{ordQnt},
-				#{planComplete} )
+	insert into manufacture_plan_d ( PLAN_NO_DETAIL,
+									 PODT_CODE,
+									 MAN_PLAN_NO,
+									 PLAN_STARTDATE,
+									 PLAN_PERIOD,
+									 MAN_PERDAY,
+									 PLAN_ETC,
+									 ORD_QNT,
+									 PLAN_COMPLETE )
+	values( (select nvl(max(PLAN_NO_DETAIL),0)+1 from manufacture_plan_d),
+			#{podtCode},
+			(select nvl(max(MAN_PLAN_NO),0) from manufacture_plan),
+			to_date(#{planStartDate}, 'yyyy-MM-dd'),
+			to_date(#{planComplete}, 'yyyy-MM-dd') - to_date(#{planStartDate},'yyyy-MM-dd') + 1 ,
+			#{manPerday},
+			'계획완료',
+			#{ordQnt},
+			to_date(#{planComplete}, 'yyyy-MM-dd') )
 </insert>
 
 
@@ -84,25 +113,31 @@
 
 <!-- 생산계획 조회 -->
 <select id = "selectManPlan" resultType="egov.mes.manufacture.plan.dao.ManufacturePlanVO">
-	select a.man_plan_no, a.man_plan_name, a.man_plan_date, 
-		   a.podt_code, prod_detail(a.podt_code) podtName, a.plan_etc
+	select a.man_plan_no, a.man_plan_name, 
+		   to_char(a.man_plan_date, 'yyyy-MM-dd') as manPlanDate, 
+		   a.ord_code, a.podt_code,
+		   prod_detail(a.podt_code) podtName, a.plan_etc
 	from man_plan_view a join order_management b
     on a.ord_code = b.ord_code
+	where 1=1
+	<if test = "startDate != null"> 
+		and to_char(a.man_plan_date, 'rrrr-MM-dd') >= #{startDate}
+	</if>
 	
-		<if test = "startDate != null"> 
-			and to_char(a.man_plan_date, 'rrrr-MM-dd') >= #{startDate}
-		</if>
-		<if test= "endDate != null">
-			and #{endDate} >=  to_char(a.man_plan_date, 'rrrr-MM-dd')
-		</if>
+	<if test= "endDate != null">
+		and #{endDate} >=  to_char(a.man_plan_date, 'rrrr-MM-dd')
+	</if>
 	order by a.man_plan_no
 </select>
 
 
 <!-- 생산계획 디테일 조회 -->
 <select id="selectManPlanDetail" resultType="egov.mes.manufacture.plan.dao.ManufacturePlanVO">
-	select a.man_plan_no, a.podt_code, prod_detail(a.podt_code) podtName, a.man_plan_date,
-		   a.plan_startdate, a.plan_period, a.plan_etc, a.plan_complete, 
+	select a.man_plan_no, a.podt_code, prod_detail(a.podt_code) podtName, 
+		   to_char(a.man_plan_date, 'yyyy-MM-dd') as manPlanDate,
+		   to_char(a.plan_startdate, 'yyyy-MM-dd') as planStartDate,
+		   a.plan_period, a.plan_etc, 
+		   to_char(a.plan_complete, 'yyyy-MM-dd') as planComplete, 
 		   (select min(d.output_of_day)
 		    from process_flowInfo c join ( select a.fac_no, a.fac_code, a.fac_output/a.fac_runtime*24 as output_of_day,
                                                                         b.proc_code
@@ -124,20 +159,22 @@
 <!-- 자재 조회 -->
 <select id="selectRes" resultType="egov.mes.manufacture.plan.dao.ManufacturePlanVO">
 
-select a.podt_code, prod_detail(a.podt_code) podtName, a.res_usage, 
-	   b.rsc_code, sum(b.rsc_cnt) as rscCnt
-from prdt_bom_res a join r_qnt b
-on a.res_code = b.rsc_code
-where a.podt_code = #{podtCode}
-group by a.podt_code, a.res_usage,  b.rsc_code
-order by b.rsc_code
+	select a.podt_code, prod_detail(a.podt_code) podtName, a.res_usage, 
+		   b.rsc_code, sum(b.rsc_cnt) as rscCnt
+	from prdt_bom_res a join r_qnt b
+	on a.res_code = b.rsc_code
+	where a.podt_code = #{podtCode}
+	group by a.podt_code, a.res_usage,  b.rsc_code
+	order by b.rsc_code
 
 </select>
 
 
 <!-- 미계획 내역 조회 -->
 <select id="selectPlan" resultType="egov.mes.manufacture.plan.dao.ManufacturePlanVO">
-	select a.ord_code, a.ord_duedate, a.ord_status, a.cus_code, 
+	select a.ord_code, 
+		   to_char(a.ord_duedate,'yyyy-MM-dd') as ordDuedate, 
+		   a.ord_status, a.cus_code, 
 		   a.ord_qnt, a.podt_code, b.code_name podtName
     from ord_detail_view a join common_code b
     on a.podt_code = b.code
@@ -148,15 +185,17 @@ order by b.rsc_code
 
 <!-- 미계획 내역 메인화면에 넣어주기 -->
 <select id="selectPlanToMain" resultType="egov.mes.manufacture.plan.dao.ManufacturePlanVO">
-	select ord_code, ord_qnt, ord_duedate, ord_status, podt_code, prod_detail(podt_code) podtName,
-	(select min(d.output_of_day)
-		     from process_flowInfo c join ( select a.fac_no, a.fac_code, a.fac_output/a.fac_runtime*24 as output_of_day,
-                                                        b.proc_code
-                                              from facility_status a join facility_process b
-                                              on a.fac_no = b.fac_no
-                                              where a.fac_status='Y') d
-			 on c.proc_code = d.proc_code
-			 where c.podt_code = #{podtCode}) as manPerday
+	select ord_code, ord_qnt,
+		   to_char(ord_duedate,'yyyy-MM-dd') as ordDuedate, 
+		   ord_status, podt_code, prod_detail(podt_code) podtName,
+			(select min(d.output_of_day)
+				     from process_flowInfo c join ( select a.fac_no, a.fac_code, a.fac_output/a.fac_runtime*24 as output_of_day,
+		                                                       b.proc_code
+		                                             from facility_status a join facility_process b
+		                                             on a.fac_no = b.fac_no
+		                                             where a.fac_status='Y') d
+					 on c.proc_code = d.proc_code
+					 where c.podt_code = #{podtCode}) as manPerday
 	from ord_detail_view 
 	where ord_status = '미진행'
 	and ord_code = #{ordCode}
@@ -166,4 +205,5 @@ order by b.rsc_code
 <select id="selectCal" resultType="egov.mes.manufacture.plan.dao.ManufacturePlanVO">
 	select com_code , to_char(man_startdate,'yyyy-MM-dd') as manStartdate , man_goalperday from manufacture_command_d 
 </select>
+
 </mapper>

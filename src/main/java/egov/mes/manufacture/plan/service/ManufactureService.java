@@ -9,6 +9,12 @@ import egov.mes.manufacture.plan.dao.ModifyVO;
 
 public interface ManufactureService {
 	
+	//계획 삭제 후 계획 다시 작성
+	int updatePlan(ManufacturePlanVO planVo);
+	
+	//생산계획 삭제
+	int deletePlan(ManufacturePlanVO palnVO);
+	
 	//생산계획 디테일 조회(조회페이지)
 	List<ManufacturePlanVO> selectManufactureDetail(ManufacturePlanVO planVo);
 	

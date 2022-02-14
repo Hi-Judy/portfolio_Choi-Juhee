@@ -17,6 +17,11 @@ public class ManCommandServiceImpl implements ManCommandService{
 	@Autowired
 	private ManCommandMapper mapper;
 	
+	//해당 지시의 소요자재
+	@Override
+	public List<ManCommandVO> findResource(ManCommandVO commandVO) {
+		return mapper.findResource(commandVO);
+	}
 	
 	//지시가 없는 생산계획 디테일 조회(생산지시 관리 페이지)
 	@Override
@@ -145,7 +150,6 @@ public class ManCommandServiceImpl implements ManCommandService{
 	public List<ManCommandVO> selectEmp(ManCommandVO commandVO) {
 		return mapper.selectEmp(commandVO);
 	}
-	
 	
 
 }

@@ -57,14 +57,8 @@
 		<!--  --------------- 도움말 --------------- -->
 	<div id="helpModal" title="도움말">
 		<hr>
-		돋보기 버튼을 눌러서 제품코드를 조회 후 클릭하면 선택이 됩니다.<br><br>
-		관리단위 : 제품이 공정전체를 돌아서 한번 나오는양 <br><br>
-		공정흐름관리 : 왼쪽끝 점들을 클릭드로우 하여 위치를이동할수있고<br>
-		&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-		위치가 이동되면 공정들의 순서를 변경할수 있습니다.<br><br>
-		BOM삭제 : 선택된 제품코드 를 기준으로 등록된 "사용자재" , "공정흐름"<br>
-		&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-		들의 데이터들을 초기화 할수있습니다.<br>
+		제품별로 실적을 조회할지 월별로 조회할지 상태를 선택합니다.<br><br>
+		조회버튼을 클릭하면 선택값에 따른 생산지시가 조회됩니다. <br><br>
 	</div>
 	<script>
 	//옵션세팅

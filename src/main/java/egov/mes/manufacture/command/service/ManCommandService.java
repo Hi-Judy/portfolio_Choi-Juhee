@@ -6,6 +6,8 @@ import java.util.Map;
 import egov.mes.manufacture.command.dao.ManCommandVO;
 
 public interface ManCommandService {
+	//해당 지시의 소요자재
+	List<ManCommandVO> findResource(ManCommandVO commandVO);
 	
 	//사원조회
 	List<ManCommandVO> selectEmp(ManCommandVO commandVO);

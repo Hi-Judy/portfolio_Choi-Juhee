@@ -43,11 +43,11 @@
 		<!-- 생산계획 조회 -->
 		<div class="planDate" style="float: left; display: inline-block;">
 			<p style="display: inline-block;">계획기간</p>
-			<input id="planFromDate" type="date" name="from"
+			<input id="txtFromDate" type="date" name="from"
 				style="display: inline-block;">
 	
 			<p style="display: inline-block;">~</p>
-			<input id="planToDate" type="date" name="to"
+			<input id="txtToDate" type="date" name="to"
 				style="display: inline-block;">
 	
 			<button class="btn" type="button" id="btnSearchManPlan"
@@ -76,7 +76,6 @@
 
 
 			<div style="float: right; ">
-				<button class="btn" type="button" id="btnSelectCommand">조회</button>
 				<button class="btn" type="button" id="btnSaveCommand">저장</button>
 				<button class="btn" type="button" id="btnDeleteCommand">삭제</button>
 				<button class="btn" type="button" id="btnInit">초기화</button>
@@ -154,14 +153,22 @@
 	<!--  --------------- 도움말 --------------- -->
 	<div id="helpModal" title="도움말">
 		<hr>
-		돋보기 버튼을 눌러서 제품코드를 조회 후 클릭하면 선택이 됩니다.<br><br>
-		관리단위 : 제품이 공정전체를 돌아서 한번 나오는양 <br><br>
-		공정흐름관리 : 왼쪽끝 점들을 클릭드로우 하여 위치를이동할수있고<br>
-		&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-		위치가 이동되면 공정들의 순서를 변경할수 있습니다.<br><br>
-		BOM삭제 : 선택된 제품코드 를 기준으로 등록된 "사용자재" , "공정흐름"<br>
-		&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-		들의 데이터들을 초기화 할수있습니다.<br>
+		계획기간 입력 후 계획조회버튼을 클릭해 원하는 계획을 선택합니다. <br>
+		선택된 계획정보를 바탕으로 작성일자 입력 후 지시서를 작성합니다. <br><br>
+		
+		조회된 계획정보를 클릭하면 같은 계획번호 아래 작업기간에 따라 <br>
+		이전에 쓴 생산지시서를 조회할 수 있습니다. <br><br>
+		
+		지시서를 작성할 때 일생산량을 기반으로 일목표 생산량을 입력합니다. <br>
+		입력된 일목표 생산량에 따라 필요한 자재목록과 자재소요량이 조회됩니다.<br>
+		자재목록을 클릭 후 조회된 자재 LOT 목록에서 원하는 자재의 출고량을 입력합니다. <br><br>
+		
+		계획서에 있는 작업일을 변경하고 싶다면 작업일 칸에 원하는 일자를 선택합니다.<br>
+		사번칸을 클릭해 지시서를 쓰는 사원의 사번을 선택합나다. <br><br>
+		
+		조회된 계획정보를 클릭하면 제품에 해당하는 설비와 공정이 조회됩니다.<br><br>
+		저장버튼을 눌러 생산지시서를 저장합니다.
+		
 	</div>
 	
 	<script>
@@ -214,6 +221,16 @@
 			}
 		});
 		
+		
+		//******************************작성일자 기본값******************************
+		document.getElementById('writeFromDate').value = new Date().toISOString().substring(0, 10);
+		
+		
+		//******************************계획기간 기본값****************************** 
+	    var d = new Date();
+	    var nd = new Date(d.getFullYear(), d.getMonth(), d.getDate() - 7);
+	    document.getElementById('txtFromDate').value = nd.toISOString().slice(0, 10);
+	    document.getElementById('txtToDate').value = d.toISOString().slice(0, 10);
 		
 		
 		//******************************생산계획 모달******************************
@@ -305,31 +322,23 @@
 		
 		//******************************생산계획 그리드******************************
 		let data;
-		
-		//계획일자 초기값 
-	    var d = new Date();
-	    var nd = new Date(d.getFullYear(), d.getMonth(), d.getDate() - 7);
-	    document.getElementById('planFromDate').value = nd.toISOString().slice(0, 10);
-	    document.getElementById('planToDate').value = d.toISOString().slice(0, 10);
 
 		//생산계획 조회 버튼 클릭
 		$('#btnSearchManPlan').click(function() {
 			//console.log('생산계획조회 테스트');
 
-			let planFromDate = document.querySelector('#planFromDate').value;
-			let planToDate = document.querySelector('#planToDate').value;
+			let startDate = document.querySelector('#txtFromDate').value;
+			let endDate = document.querySelector('#txtToDate').value;
+			
+			console.log(startDate);
+			console.log(endDate);
 
-			//console.log(planFromDate);
-			//console.log(planToDate);
-
+				
 			dialogManPlan.dialog("open");
 			$.ajax({
 				url : '${pageContext.request.contextPath}/selectManPlan',
 				method : 'POST',
-				data : {
-					'planFromDate' : planFromDate,
-					'planToDate' : planToDate
-				},
+				data : {'startDate' : startDate, 'endDate': endDate},
 				dataType : 'JSON',
 				success : function(datas) {
 					data = datas;
@@ -505,6 +514,8 @@
 						console.log(i);
 						
 						let facStatus1 = gridFacility.getValue(i.rowKey,'facStatus');
+						
+						gridFacility.setValue(i.rowKey, 'facStatus', "가동");
 						
 						if( facStatus1 == 'N'){
 							gridFacility.setValue(i.rowKey, 'facStatus', null);
@@ -748,7 +759,7 @@
 			el : document.getElementById('gridResLOT'),
 			data : resLotData,
 			columns : columnsResLOT,
-			rowHeaders : [ 'rowNum' ],
+			rowHeaders : [ 'checkbox' ],
 			scrollY:true,
 		      minBodyHeight : 230,
 		      bodyHeight : 230,
@@ -1119,7 +1130,7 @@
 			a.commandDetail = gridInsertCommandDetail.getData();
 			a.res = gridUpdateRes.getData();
 			a.plan = girdUpdatePlanStatus.getData();
-			a.resLot = gridInsertLot.getData();
+			a.resLot = gridInsertLot.getModifiedRows().updatedRows;
 			
 			//console.log(a);
 			

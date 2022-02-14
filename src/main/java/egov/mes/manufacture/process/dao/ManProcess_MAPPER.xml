@@ -295,7 +295,8 @@
 		   nvl(MAN_QNT,0) as manQnt,
 		   PODT_CODE, 
 		   EMP_NO, 
-		   MAN_DATE
+		   MAN_DATE,
+		   nvl(DEF_QNT,0) as defQnt
 	from manufacture_process 
 	where man_starttime is not null 
 	and MAN_ENDTIME is null
@@ -319,7 +320,7 @@
 	select c.man_goalperday, c.podt_code, prod_detail(c.podt_code) as podtName, c.com_code, c.com_etc,
            d.fac_code, prod_detail(d.fac_code) as facName, 
            d.proc_code, prod_detail(d.proc_code) as procName,
-           e.man_qnt, e.man_starttime, e.man_endtime, e.def_qnt,
+           e.man_qnt, e.man_starttime, e.man_endtime, nvl(e.DEF_QNT,0) as defQnt,
            f.emp_id, f.emp_name
                
     from manufacture_command_d c join manufacture_process e

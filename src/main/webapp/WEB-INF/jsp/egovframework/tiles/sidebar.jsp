@@ -66,10 +66,10 @@
 						<li class="submenu-item "><a href="manCommand">생산 지시 관리</a></li>
 						<li class="submenu-item "><a href="manCommandSelect">생산 지시 상세 조회</a></li>
 
-						<li class="submenu-item "><a href="manProcess">생산 현황 조회</a></li>
+						<li class="submenu-item "><a href="manProcess">생산 현황 관리</a></li>
 						<li class="submenu-item "><a href="manMovement">공정이동표</a></li>
 						<li class="submenu-item "><a href="checkProduct">불량 검사</a></li>
-						<li class="submenu-item "><a href="manPerformance">생산실적관리</a></li>
+						<li class="submenu-item "><a href="manPerformance">생산실적조회</a></li>
 								
 
 					</ul></li>

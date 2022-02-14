@@ -59,10 +59,10 @@
 		</div>
 	
 		<!-- 계획명 입력 -->
-		<div class="planName">
+<!-- 		<div class="planName">
 			<p style="display:inline-block; margin-left : 5px;">생산계획명</p>
 			<input id = "txtPlanName" style="display:inline-block; margin-left : 10px;">
-		</div>	
+		</div>	 -->
 			
 		<!-- 미계획 모달 -->
 		<div id = "dialog-form-plan" title="미계획 내역 조회" > 
@@ -73,7 +73,7 @@
 		<button type="button" id="btnSearchPlan" class="btn" style="float : left; margin : 5px;">미계획 조회</button>
 		<button type="button" id="btnSearchManPlan" class="btn" style="float : left; margin : 5px;">생산계획 조회</button>
 		<button type="button" id="btnInit" class="btn" style="float : right; margin : 5px;">초기화</button>
-		<!-- <button type="button" id="btnDeletePlan" class="btn" style="float : right; margin : 5px;">삭제</button> -->
+		<button type="button" id="btnDeletePlan" class="btn" style="float : right; margin : 5px;">삭제</button>
 		<button type="button" id="btnCal" class="btn" style="float : right; margin : 5px;">월별 계획 조회</button>
 		<button type="button" id="btnSavePlan" class="btn" style="float : right; margin : 5px;">저장</button>
 	</div>
@@ -113,14 +113,14 @@
 	<!--  --------------- 도움말 --------------- -->
 	<div id="helpModal" title="도움말">
 		<hr>
-		돋보기 버튼을 눌러서 제품코드를 조회 후 클릭하면 선택이 됩니다.<br><br>
-		관리단위 : 제품이 공정전체를 돌아서 한번 나오는양 <br><br>
-		공정흐름관리 : 왼쪽끝 점들을 클릭드로우 하여 위치를이동할수있고<br>
-		&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-		위치가 이동되면 공정들의 순서를 변경할수 있습니다.<br><br>
-		BOM삭제 : 선택된 제품코드 를 기준으로 등록된 "사용자재" , "공정흐름"<br>
+		미계획 조회 버튼을 눌러 작성하고싶은 주문을 선택합니다.<br><br>
+		작업시작일과 작업종료일, 계획일자를 입력합니다. <br><br>
+		저장버튼을 눌러 계획서를 저장합니다.<br><br>
+
+		생산계획 조회 버튼을 눌러 기간을 입력하고 계획서를 조회합니다.<br><br>
+		조회한 계획서를 삭제하고 싶으면 체크하고 삭제버튼을 누릅니다.<br><br>
+		삭제한 계획을 다시 작성하고 싶다면 생산계획 조회버튼을 눌러 '계획 취소'된 계획을 선택합니다.<br><br>
 		&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-		들의 데이터들을 초기화 할수있습니다.<br>
 	</div>
 	<script> 
 	//옵션세팅
@@ -240,7 +240,16 @@
 				  }
 		});
 		
+		//******************************계획일자 기본값******************************
+		document.getElementById('txtManDate').value = new Date().toISOString().substring(0, 10);
 		
+		
+		//******************************계획기간 기본값******************************
+	    var d = new Date();
+	    var nd = new Date(d.getFullYear(), d.getMonth(), d.getDate() - 7);
+	    document.getElementById('txtFromDate').value = nd.toISOString().slice(0, 10);
+	    document.getElementById('txtToDate').value = d.toISOString().slice(0, 10);
+	    
 		
 		//******************************미계획 모달******************************
 		//미계획 모달 설정해주기
@@ -386,8 +395,8 @@
 						gridMain.resetData(data.data.contents);
 					
 					})
-				
 					dialogManPlan.dialog("close");
+					gridMain.refreshLayout();
 				},
 				"취소" : function(){
 					//console.log('취소');
@@ -398,6 +407,11 @@
 		
 		//생산계획조회 컬럼
 		const columnsManPlan = [
+			{
+				header:'주문번호',
+				name: 'ordCode',
+				align : 'center'
+			},
 			{
 				header:'생산계획번호',
 				name: 'manPlanNo',
@@ -620,7 +634,6 @@
 		
 		
 		
-		
 		//******************************자재조회 그리드******************************
 		//자재 조회 모달 컬럼
 		const columnsResource = [
@@ -712,26 +725,52 @@
  		 	
  		 	
 			let txtPlanDate = document.getElementById('txtManDate').value;
-			let txtPlanName = document.getElementById('txtPlanName').value;
-			console.log(txtPlanDate);
-			console.log(txtPlanName);
-			//console.log(txtPlanDate.type);
+			//console.log(txtPlanDate);
 			
 			let a = gridMain.getCheckedRows();
-			console.log(a);
+			//console.log(a);
 			
 			for(i of a){
 				console.log(i);
 				gridMain.setValue(i.rowKey, 'manPlanDate', txtPlanDate);
-				gridMain.setValue(i.rowKey, 'manPlanName', txtPlanName);
-				console.log(gridMain.getValue(i.rowKey,'manPlanDate'));
-				console.log(gridMain.getValue(i.rowKey,'manPlanName'));
+				//console.log(gridMain.getValue(i.rowKey,'manPlanDate'));
 			}
 			
-			
-			//console.log("!!SAVE!!")
-			
-			//gridMain에서 modifyData 요청 -> dataSourceMain의 modifyData 안의 url로 간다.
+			let planStartDate = gridMain.getCheckedRows()[0].planStartDate;
+			let planComplete = gridMain.getCheckedRows()[0].planComplete;
+			let planEtc = gridMain.getCheckedRows()[0].planEtc;
+			let podtCode = gridMain.getCheckedRows()[0].podtCode;
+
+			if(planEtc == "계획취소"){
+				
+				$.ajax({
+					url: '${pageContext.request.contextPath}/manufacture/updatePlan',
+					method: 'POST',
+					data: JSON.stringify({
+							'planStartDate' : planStartDate, 
+							'planComplete': planComplete , 
+							'planEtc': planEtc,
+							'podtCode' : podtCode
+						  }),
+					dataType: 'JSON',
+					contentType:'application/json',
+					success: function(datas){
+						console.log("생산계획 조회 모달안에서 생산계획 조회");
+						/* data = datas;
+						console.log(data);
+						gridMain.resetData(data.result);
+						gridMain.resetOriginData();
+						gridMain.refreshLayout(); */
+						
+						alert("계획서가 다시 작성되었습니다.");
+					},
+					error: function(reject){
+						console.log('reject: '+ reject);
+					}
+				})
+			}else{
+				gridMain.request('modifyData'); 
+			}
 			
 		
  			if(txtPlanDate == null || txtPlanDate == ""){
@@ -739,22 +778,43 @@
 				return;
 				//gridMain.request('modifyData');
 			} 
- 			if(txtPlanName == null || txtPlanName == ""){
-				alert("계획명을 입력해주세요.");
-				return;
-				//gridMain.request('modifyData'); 
-			}
  			
- 				gridMain.request('modifyData'); 
+ 			
  			
 			
 		});
 		
 		
-/* 		//삭제 버튼 이벤트
+		//삭제 버튼 이벤트
 		btnDeletePlan.addEventListener("click", function(){
-			gridMain.removeCheckedRows(true); //저절로 modify안에 deletedRows에 들어간다.
-		}); */
+			//gridMain.removeCheckedRows(true); //저절로 modify안에 deletedRows에 들어간다.
+			let manPlanNo = gridManPlan.getCheckedRows()[0].manPlanNo;
+			let podtCode = gridManPlan.getCheckedRows()[0].podtCode;
+			let planEtc = gridManPlan.getCheckedRows()[0].planEtc;
+			
+			if(planEtc != '생산지시중'){
+				
+				$.ajax({
+					url: '${pageContext.request.contextPath}/manufacture/deletePlan',
+					method: 'POST',
+					data: {'manPlanNo' : manPlanNo, 'podtCode': podtCode  },
+					dataType: 'JSON',
+					success: function(datas){
+						console.log("생산계획 삭제");
+						data = datas;
+						console.log(data);
+						gridMain.removeCheckedRows();
+						alert("삭제 성공");
+					},
+					error: function(reject){
+						console.log('reject: '+ reject);
+					}
+				})
+			}else {
+				alert("지시가 들어간 계획은 삭제할 수 없습니다.")
+			}
+			
+		});
 		
 		//초기화 버튼 이벤트
 		btnInit.addEventListener("click", function(){
