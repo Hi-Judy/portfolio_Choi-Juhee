@@ -109,6 +109,7 @@ div#OverallSize {
 <body>
 <script>
 window.addEventListener('load',function(){
+	$("#div_load_image").hide();
 	if(sessionStorage.getItem("MenuList") != null){
 		makesidebar();
 	}else{
@@ -131,6 +132,18 @@ window.addEventListener('load',function(){
 	var b = 'a[href=\\/'+SelectedMenu.chkUrl+']';
 	var a = document.querySelector(b).parentElement.parentElement;
 	a.style="display:block;";
+	
+	$(document).ajaxStart(function () { 
+		console.log("asd");
+		//$("#div_load_image").show();
+		document.querySelector('#div_load_image').style='display:block';
+	}); 
+	$(document).ajaxStop(function () {
+		console.log("zxc");
+			document.querySelector('#div_load_image').style='display:none';
+		//$("#div_load_image").hide();
+	});
+
 });
 
 
@@ -141,7 +154,7 @@ function Selected(element)  {
 	  }
 }
 
-function makesidebar(){	
+function makesidebar(){
 	list = JSON.parse(sessionStorage.getItem("MenuList"));
 	var menu = document.querySelector('.menu');
 	var ul=$('<ul></ul>');
@@ -193,11 +206,16 @@ function makesidebar(){
 			})
 		}
 }
+
 </script>
-	<div id="div_load_image"
-		style="position: absolute; top: 50%; left: 50%; width: 0px; height: 0px; z-index: 9999; background: #f0f0f0; filter: alpha(opacity = 50); opacity: alpha*0.5; margin: auto; padding: 0; text-align: center; display:none;">
-		<img src=<c:url value='/images/egovframework/com/main/loding.gif' />
-			style="width: 100px; height: 100px;">
+	<div id="div_load_image" style='display:none'>
+		<div 
+			style="position: absolute; top: 50%; left: 50%; width: 0px; height: 0px; 
+			z-index: 9999; background: #f0f0f0; filter: alpha(opacity = 50); 
+			opacity: alpha*0.5; margin: auto; padding: 0; text-align: center;">
+			<img src=<c:url value='/images/egovframework/com/main/loding.gif' />
+				style="width: 100px; height: 100px;">
+		</div>
 	</div>
 	<tiles:insertAttribute name="tiles_side_bar" />
 	<div id="wraper" class="margin3">

@@ -270,12 +270,12 @@ $.ajax({
 		var spcCode 	= document.getElementById("suplcomCodeInp") //입고업체코드
 		var spcName		= document.getElementById("suplcomName") //입고업체명
       Grid.on('click' , (ev) => {
+  		document.querySelector('#div_load_image').style='display:block';
 		
     	 var RscCode = MaterialList[ev.rowKey].rscCode
     	 $.ajax({
     		   url : './Details/'+ RscCode ,
     		   dataType : 'json',
-    		   async : false,
     		}).done( (rsts) => {	
     			//인풋태그에 값넣어주기
     			rcCode.value = "" ;	
@@ -316,6 +316,7 @@ $.ajax({
     			if(FindData.length == 0){
     				toastr["info"]("LOT 미할당 자재입니다"); 
     			}
+    			document.querySelector('#div_load_image').style='display:none';
     		})
       })
       
