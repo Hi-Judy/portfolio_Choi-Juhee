@@ -33,13 +33,11 @@
 	<!-- 도움말 모달입니다. -->
 	<div id="helpModal" title="도움말">
 		<hr>
-		새자료 : 화면에 보여지고있는 자재정보를 없에고 등록모드 로 바뀝니다.<br><br>
-		자재재고조회 : 선택된 자재의 전년도 이월량 밑 올해 내역들을 볼수있습니다.<br><br>
-		저장 : "담당관리자" , "입고업체" , "입고단가" 들을 <br>
-		&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-		새롭게 수정해서 저장할수있습니다.<br><br>
-		LOT정보가 없는 자재들은 자재재고조회 밑 LOT정보 조회가 불가능합니다.<br><br>
-		LOT추가 밑 더 자세한 자재관리는 자재관리 탭에서 진행해주세요.
+		미입고 조회 : 검사한 품목을 선택하여 LOT 번호 부여가 가능합니다<br><br>
+		저장 : LOT번호 기입 후 저장하면 최종입고입니다<br><br>
+		발주 후 검사한 자재에 LOT 번호를 부여하고 최종 입고하는 페이지입니다
+		<br><br>
+		<hr>
 	</div>
 	
 <script type="text/javascript">
@@ -195,6 +193,11 @@
 	deleteRscStore.addEventListener("click", function(){
 		grid.removeCheckedRows(true);
 	}) 	
+	
+		//------------------ 도움말 버튼 이벤트 -----------------------
+	helpBtn.addEventListener('mouseover' , () => {
+		helpModal.dialog("open") ;
+	});
 </script>
 </body>
 </html>

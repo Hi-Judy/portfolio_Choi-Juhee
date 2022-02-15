@@ -36,12 +36,12 @@
 				<div style="margin-top : 5px;  margin-left: 8px; ">
 					입고일자	<input id="txtStoreIn1" type="date" data-role="datebox" data-options='{"mode": "calbox"}' >
 					~ 	  	<input id="txtStoreIn2" type="date" data-role="datebox" data-options='{"mode": "calbox"}'><br>
-					업체명		&nbsp;&nbsp;&nbsp;<input id="txtStoreInSuc2" class="inpBC" readonly>
+					업체명		&nbsp;&nbsp;&nbsp;<input id="txtStoreInSuc2" class="inpBC" readonly style="border:0.5px solid gray;">
 					업체코드	<input id="txtStoreInSuc1">
 					<button id="btnStoreInSuc"  style="border : none; background-color :#f8f8ff; color : #007b88;" >
 						<i class="bi bi-search"></i>
 					</button>&nbsp;&nbsp;&nbsp; <br>
-					자재명		&nbsp;&nbsp;&nbsp;<input id="txtStoreInRsc2" class="inpBC" readonly>
+					자재명		&nbsp;&nbsp;&nbsp;<input id="txtStoreInRsc2" class="inpBC" readonly style="border:0.5px solid gray;">
 					자재코드	<input id="txtStoreInRsc1">
 					<button id="btnStoreInRsc" style="border : none; background-color :#f8f8ff; color : #007b88;" >
 						<i class="bi bi-search"></i>
@@ -66,13 +66,13 @@
 				<div style="margin-top : 5px;  margin-left: 8px;">
 					출고일자	<input id="txtStoreOut1" type="date" data-role="datebox" data-options='{"mode": "calbox"}'>
 					  ~   	<input id="txtStoreOut2" type="date" data-role="datebox" data-options='{"mode": "calbox"}'><br>
-					업체명		&nbsp;&nbsp;&nbsp;<input id="txtStoreOutSuc2" class="inpBC" readonly>
+					업체명		&nbsp;&nbsp;&nbsp;<input id="txtStoreOutSuc2" class="inpBC" readonly style="border:0.5px solid gray;">
 					업체코드	<input id="txtStoreOutSuc1">
 					<button id="btnStoreOutSuc" style="border : none; background-color :#f8f8ff; color : #007b88;" >
 						<i class="bi bi-search"></i>
 					</button>&nbsp;&nbsp;&nbsp;
 					<br>
-					자재명		&nbsp;&nbsp;&nbsp;<input id="txtStoreOutRsc2" class="inpBC" readonly>
+					자재명		&nbsp;&nbsp;&nbsp;<input id="txtStoreOutRsc2" class="inpBC" readonly style="border:0.5px solid gray;">
 					자재코드	<input id="txtStoreOutRsc1">
 					<button id="btnStoreOutRsc" style="border : none; background-color :#f8f8ff; color : #007b88;" >
 						<i class="bi bi-search"></i>
@@ -93,13 +93,11 @@
 	<!-- 도움말 모달입니다. -->
 	<div id="helpModal" title="도움말">
 		<hr>
-		새자료 : 화면에 보여지고있는 자재정보를 없에고 등록모드 로 바뀝니다.<br><br>
-		자재재고조회 : 선택된 자재의 전년도 이월량 밑 올해 내역들을 볼수있습니다.<br><br>
-		저장 : "담당관리자" , "입고업체" , "입고단가" 들을 <br>
-		&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-		새롭게 수정해서 저장할수있습니다.<br><br>
-		LOT정보가 없는 자재들은 자재재고조회 밑 LOT정보 조회가 불가능합니다.<br><br>
-		LOT추가 밑 더 자세한 자재관리는 자재관리 탭에서 진행해주세요.
+		조회 : 최종 입고한 자재 조회가 가능합니다<br><br>
+		초기화 : 입/출고 일자, 업체명 ,조건 초기화가 가능합니다<br><br>
+		입/출고 일자 업체코드, 자재코드를 입력하여 원하는 조건 검색하는 페이지입니다
+		<br><br>
+		<hr>
 	</div>
 	
 <script type="text/javascript">

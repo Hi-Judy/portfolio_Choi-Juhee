@@ -102,7 +102,8 @@ div#OverallSize {
    
 .inpBC{
 	text-align:center;
-	background-color: #d2e5eb; 
+	background-color: #d2e5eb;
+	border:0.5px solid gray;
 }
 </style>
 </head>
