@@ -22,14 +22,14 @@
 			  ~ 	<input id="txtOrde2" type="date" data-role="datebox" data-options='{"mode": "calbox"}'><br>
 			</span> 
 			<div style="margin-top: 10px;">
-				업체명	&nbsp;&nbsp;&nbsp;<input id="txtSuc2" class="inpBC" readonly>&nbsp;&nbsp;&nbsp;&nbsp;
+				업체명	&nbsp;&nbsp;&nbsp;<input id="txtSuc2" class="inpBC" readonly style="border:0.5px solid gray;">&nbsp;&nbsp;&nbsp;&nbsp;
 				업체코드	<input id="txtSuc1">
 				<button id="btnFindSuc" style="border : none; background-color :#f8f8ff; color : #007b88;">
 					<i class="bi bi-search"></i>
 				</button>
 			</div>
 			<div style="margin-top: 10px;">
-				자재명	&nbsp;&nbsp;&nbsp;<input id="txtRsc2" class="inpBC" readonly>&nbsp;&nbsp;&nbsp;&nbsp;
+				자재명	&nbsp;&nbsp;&nbsp;<input id="txtRsc2" class="inpBC" readonly style="border:0.5px solid gray;">&nbsp;&nbsp;&nbsp;&nbsp;
 				자재코드	<input id="txtRsc1">
 				<button id="btnFindRsc" style="border : none; background-color :#f8f8ff; color : #007b88;">
 					<i class="bi bi-search"></i>
@@ -53,13 +53,11 @@
 	<!-- 도움말 모달입니다. -->
 	<div id="helpModal" title="도움말">
 		<hr>
-		새자료 : 화면에 보여지고있는 자재정보를 없에고 등록모드 로 바뀝니다.<br><br>
-		자재재고조회 : 선택된 자재의 전년도 이월량 밑 올해 내역들을 볼수있습니다.<br><br>
-		저장 : "담당관리자" , "입고업체" , "입고단가" 들을 <br>
-		&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-		새롭게 수정해서 저장할수있습니다.<br><br>
-		LOT정보가 없는 자재들은 자재재고조회 밑 LOT정보 조회가 불가능합니다.<br><br>
-		LOT추가 밑 더 자세한 자재관리는 자재관리 탭에서 진행해주세요.
+		조회 : 불량 자재 조회가 가능합니다<br><br>
+		초기화 : 검사일자, 업체명 ,자재 초기화가 가능합니다<br><br>
+		검사일자, 업체코드, 자재코드를 입력하여 원하는 조건 검색하는 페이지입니다
+		<br><br>
+		<hr>
 	</div>
 	
 <script type="text/javascript">
@@ -275,8 +273,7 @@
 			    columnContent: {
 			      rtngdCnt: {
 			        template(summary) {
-			        	console.log(summary);
-			        	return '반품량: ' + summary.sum;
+			        	return '반품량: ' + (summary.sum*1).toString().replace(/\B(?<!\.\d*)(?=(\d{3})+(?!\d))/g, ",");
 			        }
 			      }
 			    }

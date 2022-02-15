@@ -44,7 +44,7 @@
 			style="margin-left: 10px; padding-top: 0px; padding-left: 0px; padding-right: 0px; padding-bottom: 0px;">
 			<div id="top" style="width: 1450px; height: 90px;">
 				<div style="margin-top: 5px; margin-left: 8px;">
-					자재명 <input id="txtRsc2" class="inpBC" readonly>
+					자재명 <input id="txtRsc2" class="inpBC" readonly style="border:0.5px solid gray;">
 					자재코드 <input id="txtRsc1">
 					<button id="btnFindRsc"
 						style="border: none; background-color: #f8f8ff; color: #007b88;">
@@ -69,7 +69,7 @@
 			style="margin-left: 10px; padding-top: 0px; padding-left: 0px; padding-right: 0px; padding-bottom: 0px;">
 			<div id="top" style="width: 1450px; height: 90px;">
 				<div style="margin-top: 5px; margin-left: 8px;">
-					자재명 <input id="txtRscLot2" class="inpBC" readonly>
+					자재명 <input id="txtRscLot2" class="inpBC" readonly style="border:0.5px solid gray;">
 					자재코드 <input id="txtRscLot1">
 					<button id="btnFindRscLot"
 						style="border: none; background-color: #f8f8ff; color: #007b88;">
@@ -93,13 +93,11 @@
 	<!-- 도움말 모달입니다. -->
 	<div id="helpModal" title="도움말">
 		<hr>
-		새자료 : 화면에 보여지고있는 자재정보를 없에고 등록모드 로 바뀝니다.<br>
-		<br> 자재재고조회 : 선택된 자재의 전년도 이월량 밑 올해 내역들을 볼수있습니다.<br>
-		<br> 저장 : "담당관리자" , "입고업체" , "입고단가" 들을 <br>
-		&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 새롭게 수정해서
-		저장할수있습니다.<br>
-		<br> LOT정보가 없는 자재들은 자재재고조회 밑 LOT정보 조회가 불가능합니다.<br>
-		<br> LOT추가 밑 더 자세한 자재관리는 자재관리 탭에서 진행해주세요.
+		조회 : 자재재고 조회가 가능합니다<br><br>
+		초기화 : 자재명 초기화가 가능합니다<br><br>
+		자재별 재고, LOT별 재고 조회하는 페이지입니다
+		<br><br>
+		<hr>
 	</div>
 
 	<script type="text/javascript">

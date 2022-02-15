@@ -14,7 +14,14 @@
 </style>
 </head>
 <body>
-	<h4 style="margin-left: 10px">자재 발주 관리</h4>
+	<div style="width : 1500px ;">
+		<span style="float: right;">
+			<button type="button" id="helpBtn" style="border : none; background-color : #f2f7ff; color : #007b88; float : right ;">
+				<i class="bi bi-question-circle"></i>
+			</button>
+		</span>
+		<h4 style="margin-left: 10px">자재 발주 관리</h4>
+	</div>
 	<div id="top">
 		<div>
 			<span style="margin-top: 13px; float: left;"></span>
@@ -33,7 +40,7 @@
 			<br>
 			<br>
 			<!-- 메인화면 그리드(생산계획조회) -->
-			<h5 style="color: #25396f; style="margin-left: 10px">생산필요자재</h5>		
+			<h5 style="color: #25396f; style="margin-left: 10px;">생산필요자재</h5>		
 			<div id="gridPlan" style="border-top: 3px solid #168; width: 1500px;"></div>
 		</div>	
 	
@@ -44,13 +51,12 @@
 	<!-- 도움말 모달입니다. -->
 	<div id="helpModal" title="도움말">
 		<hr>
-		새자료 : 화면에 보여지고있는 자재정보를 없에고 등록모드 로 바뀝니다.<br><br>
-		자재재고조회 : 선택된 자재의 전년도 이월량 밑 올해 내역들을 볼수있습니다.<br><br>
-		저장 : "담당관리자" , "입고업체" , "입고단가" 들을 <br>
-		&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-		새롭게 수정해서 저장할수있습니다.<br><br>
-		LOT정보가 없는 자재들은 자재재고조회 밑 LOT정보 조회가 불가능합니다.<br><br>
-		LOT추가 밑 더 자세한 자재관리는 자재관리 탭에서 진행해주세요.
+		미검사 조회 : 미검사 품목을 선택하여 수정, 삭제가 가능합니다<br><br>
+		추가 : 발주 가능한 자재를 선택하여 발주가 가능합니다<br><br>
+		저장 : 발주수량, 입고요청일 기입 후 저장하면 발주가 가능합니다<br><br>
+		생산필요자재 목록을 조회하여 부족한 자재를 발주하는 페이지입니다
+		<br><br>
+		<hr>
 	</div>
 
 <script type="text/javascript">
@@ -376,6 +382,10 @@
 		}
 	})
 	
+	//------------------ 도움말 버튼 이벤트 -----------------------
+	helpBtn.addEventListener('mouseover' , () => {
+		helpModal.dialog("open") ;
+	});
 	
 	gridPlan.readData();
 </script>

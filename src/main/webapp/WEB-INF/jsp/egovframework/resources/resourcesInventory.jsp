@@ -7,7 +7,14 @@
 <title>재고 조정 관리</title>
 </head>
 <body>
-	<h4 style="margin-left: 10px">재고 조정 관리</h4>
+	<div style="width : 1500px ;">
+		<span style="float: right;">
+			<button type="button" id="helpBtn" style="border : none; background-color : #f2f7ff; color : #007b88; float : right ;">
+				<i class="bi bi-question-circle"></i>
+			</button>
+		</span>
+		<h4 style="margin-left: 10px">재고 조정 관리</h4>
+	</div>
 	<div id="top">
 		<div>
 			<span style="margin-top: 13px; float: left;"></span>
@@ -33,13 +40,11 @@
 	<!-- 도움말 모달입니다. -->
 	<div id="helpModal" title="도움말">
 		<hr>
-		새자료 : 화면에 보여지고있는 자재정보를 없에고 등록모드 로 바뀝니다.<br><br>
-		자재재고조회 : 선택된 자재의 전년도 이월량 밑 올해 내역들을 볼수있습니다.<br><br>
-		저장 : "담당관리자" , "입고업체" , "입고단가" 들을 <br>
-		&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-		새롭게 수정해서 저장할수있습니다.<br><br>
-		LOT정보가 없는 자재들은 자재재고조회 밑 LOT정보 조회가 불가능합니다.<br><br>
-		LOT추가 밑 더 자세한 자재관리는 자재관리 탭에서 진행해주세요.
+		추가 : 조정할 재고를 선택 가능합니다<br><br>
+		저장 : 입출고 구분, 자재 LOT, 입/출고 기입 후 저장이 가능합니다<br><br>
+		실재고와 맞지 않는 부분은 조정해주는 페이지입니다.
+		<br><br>
+		<hr>
 	</div>
 
 <script type="text/javascript">
@@ -234,6 +239,11 @@
 	//저장시 데이터 다시 읽어서 수정한 품목(입고 완료한) 사라지게
 	grid.on("response",function(){
 		grid.clear();
+	});
+	
+	//------------------ 도움말 버튼 이벤트 -----------------------
+	helpBtn.addEventListener('mouseover' , () => {
+		helpModal.dialog("open") ;
 	});
 	
 </script>
