@@ -154,8 +154,8 @@
 				name: 'ordQnt'
 			},
 			{
-				header: '비고(사번)',
-				name: 'manEtc'
+				header: '사번',
+				name: 'empId'
 			}
 			
 		]

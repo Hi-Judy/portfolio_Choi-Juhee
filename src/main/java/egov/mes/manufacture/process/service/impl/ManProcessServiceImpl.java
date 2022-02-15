@@ -139,5 +139,11 @@ public class ManProcessServiceImpl implements ManProcessService {
 		return mapper.selectProcess(processVO);
 	}
 
+	//생산중 & 생산완료 제품에 해당하는 공정 정보
+	@Override
+	public List<ManProcessVO> findProcess(ManProcessVO processVO) {
+		return mapper.findProcess(processVO);
+	}
+
 
 }

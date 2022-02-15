@@ -48,6 +48,30 @@ public class ManProcessController {
 	}
 	
 	
+	//생산중 & 생산완료 제품에 해당하는 공정 정보
+	@GetMapping("/findProcess/{podtCode}/{comCode}/{comEtc}")
+	public String findProcess(@PathVariable String podtCode, 
+							 @PathVariable String comCode,
+							 @PathVariable String comEtc,
+							 ManProcessVO processVO,
+							 Model model) {
+		
+		//System.out.println(processVO);
+		Map<String, List<ManProcessVO>> maps = new HashMap<>();
+		maps.put("contents", service.findProcess(processVO));
+		
+		//System.out.println("조회된 생산지시서 : "+ service.selectProcess(processVO));
+		Map<String, Object> map = new HashMap<>();
+		map.put("data", maps);
+		
+		model.addAttribute("result", true);
+		model.addAttribute("data", maps);
+		
+		
+		return "jsonView";
+	}
+	
+	
 	//지시된 제품에 해당하는 공정 조회
 	@GetMapping("/selectProcess/{podtCode}/{comCode}/{comEtc}")
 	public String selectedCommand(@PathVariable String podtCode, 

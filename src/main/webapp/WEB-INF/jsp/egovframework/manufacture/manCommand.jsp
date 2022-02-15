@@ -673,7 +673,7 @@
 			}, 
 			{
 				header : '공정명',
-				name : 'procCode'
+				name : 'procName'
 			}, 
 			{
 				header : '가동유무',

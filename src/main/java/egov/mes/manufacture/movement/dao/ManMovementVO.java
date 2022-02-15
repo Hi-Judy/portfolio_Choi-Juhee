@@ -27,4 +27,5 @@ public class ManMovementVO {
 	String rscCode; //자재코드
 	String rscName; //자재명
 	String rscLot; //자재로트
+	String ostCnt; //출고량
 }

@@ -7,7 +7,7 @@ import egov.mes.manufacture.movement.dao.ManMovementVO;
 public interface ManMovementService {
 	
 	//생산지시서 조회
-	List<ManMovementVO> selectCommand(ManMovementVO movementVO);
+	List<ManMovementVO> findCommand(ManMovementVO movementVO);
 	
 	//공정이동표 그리드 채우기
 	List<ManMovementVO> selectMovement(ManMovementVO movementVO);

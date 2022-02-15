@@ -8,7 +8,7 @@ import egovframework.rte.psl.dataaccess.mapper.Mapper;
 public interface ManMovementMapper {
 
 	//생산지시서 조회
-	List<ManMovementVO> selectCommand(ManMovementVO movementVO);
+	List<ManMovementVO> findCommand(ManMovementVO movementVO);
 	
 	//공정이동표 
 	List<ManMovementVO> selectMovement(ManMovementVO movementVO);
