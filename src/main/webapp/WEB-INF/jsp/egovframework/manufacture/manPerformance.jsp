@@ -28,7 +28,7 @@
 			<i class="bi bi-question-circle"></i>
 			</button>
 		</span>
-		<h4 style="margin-left: 10px">생산실적관리</h4>
+		<h4 style="margin-left: 10px">생산실적조회</h4>
 	</div>
 	
 	<!-- 생산실적관리 조회 기준 -->
@@ -156,7 +156,14 @@
 			{
 				header : '불량율',
 				name : 'defPercentage',
-				align : 'center'
+				align : 'center',
+				formatter(value) {
+	               if(value.value != null && value.value != '' ){
+	                    return value.value.toString().replace('.','0.') + '%';
+	               }else{
+	                  return value.value ;
+	               }
+		        }
 			}
 			
 		]
@@ -167,7 +174,7 @@
 			data: null,
 			columns: columnsPerformance,
 			rowHeaders : [ 'rowNum' ],
-	         bodyHeight: 500
+	        bodyHeight: 500
 		})
 		
 		gridPerformance.on('click' , (ev) => {

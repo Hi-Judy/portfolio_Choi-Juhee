@@ -321,6 +321,11 @@
 				header : '자재로트',
 				name : 'rscLot',
 				align : 'center'
+			},
+			{
+				header : '출고량',
+				name : 'ostCnt',
+				align : 'center'
 			}
 		]
 		

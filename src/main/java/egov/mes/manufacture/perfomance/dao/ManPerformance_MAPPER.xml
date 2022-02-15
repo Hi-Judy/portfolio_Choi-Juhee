@@ -5,13 +5,13 @@
 
 <!-- 제품별 불량율 조회 -->
 <select id="selectPodtDef" resultType="egov.mes.manufacture.perfomance.dao.ManPerformanceVO">
-	select ( select substr(replace(sysdate, '/', ''), 3,2)||'월' as monthCode from dual ),
+	select ( select substr(replace(sysdate, '/', ''), 3,2)||'월' from dual ) as monthCode,
 		   podt_code, 
            podtName,  
            manGoalqnt,  
            manQnt, 
            defQnt,
-           trunc( (defQnt/manQnt)*100,1) as defPercentage --제품별 불량율
+           to_number( trunc( (defQnt/manQnt)*100,1) ) as defPercentage --제품별 불량율
 	from (select podt_code, 
           prod_detail(podt_code) as podtName, 
           sum(man_goalqnt) as manGoalqnt, 
@@ -27,18 +27,17 @@
 <!-- 월별 불량율 조회 -->
 <select id="selectMonthDef" resultType="egov.mes.manufacture.perfomance.dao.ManPerformanceVO">
 	select monthCode,
-		   podt_code,
-		   prod_detail(podt_code) as podtName, 
-           manGoalqnt,
+		   manGoalqnt,
            manQnt, 
            defQnt, 
-           trunc( (defQnt/manQnt)*100,1) as defPercentage --월별 불량율
+           to_number( trunc( (defQnt/manQnt)*100,1) ) as defPercentage --월별 불량율
 	from (select substr(man_date, 0,5) as monthCode,
-          sum(man_goalqnt) as manGoalqnt, 
-          sum( ( man_goalqnt - nvl(def_qnt,0) ) ) as manQnt, 
-          sum( nvl(def_qnt,0) ) defQnt
-         from manufacture_process
-         group by substr(man_date, 0,5))
+                  sum(man_goalqnt) as manGoalqnt, 
+                  sum( ( man_goalqnt - nvl(def_qnt,0) ) ) as manQnt, 
+                  sum( nvl(def_qnt,0) ) defQnt
+                 from manufacture_process
+                 group by substr(man_date, 0,5)
+            ) 
 	order by monthCode
 </select>
 

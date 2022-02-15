@@ -45,7 +45,7 @@
 	select COM_CODE, COM_NAME, 
 		   to_char(MAN_STARTDATE, 'yyyy-MM-dd') as manStartDate,
 		   PODT_CODE, prod_detail(podt_code) podtName, 
-		   MAN_GOALPERDAY, ORD_QNT, COM_ETC
+		   MAN_GOALPERDAY, ORD_QNT, COM_ETC, EMP_ID
 	from man_command_view
 	where 1=1
 	
@@ -216,7 +216,7 @@
 
 <!-- 지시가 없는 생산계획 디테일 조회 (생산지시서 관리 페이지) -->
 <select id="selectManPlan" resultType="egov.mes.manufacture.command.dao.ManCommandVO">
-	select a.podt_code, prod_detail(a.podt_code) podtName, a.man_plan_name, 
+	select DISTINCT a.podt_code, prod_detail(a.podt_code) podtName, a.man_plan_name, 
 		   to_char(a.man_plan_date, 'yyyy-MM-dd') as manPlanDate, 
 		   a.plan_no_detail, a.man_plan_no, a.plan_etc
 	from man_plan_view a left outer join manufacture_command b
@@ -245,23 +245,28 @@
 	       
 	       (select DISTINCT man_perday 
 	        from manufacture_plan_d 
-	        where podt_code = b.podt_code) as manPerday,
+	        where podt_code = b.podt_code
+            and plan_no_detail = #{planNoDetail}) as manPerday,
 	        
-		   (select sum(a.man_goalperday)
-		   	from man_command_view a join man_plan_view b
+		   ( select nvl(sum(a.man_goalperday), 0)
+		   	from man_command_view a right join man_plan_view b
 			on a.man_plan_no = b.man_plan_no
-			and b.plan_no_detail = #{planNoDetail}) as pileQnt ,
+            and a.podt_code = b.podt_code
+			where b.plan_no_detail = #{planNoDetail}
+            and b.podt_code =  #{podtCode}) as pileQnt ,
 			
-		   (select (b.ord_qnt - ( sum(a.man_goalperday) ) ) 
-			from  man_command_view a join man_plan_view b
+		   (select nvl( (b.ord_qnt - ( sum(a.man_goalperday) ) ), 0)  
+			from  man_command_view a right join man_plan_view b
 			on a.man_plan_no = b.man_plan_no
-			and b.plan_no_detail = #{planNoDetail}
+			and a.podt_code = b.podt_code
+			where b.plan_no_detail = #{planNoDetail}
+			and b.podt_code =  #{podtCode}
 			group by b.ord_qnt) as pendingQnt
 	
 	from ord_detail_view a join man_plan_view b
 	on a.ord_code = b.ord_code
     where a.podt_code = b.podt_code
-    and a.podt_code= #{podtCode}
+    and a.podt_code=  #{podtCode}
     and b.plan_no_detail = #{planNoDetail}
     
 </select>

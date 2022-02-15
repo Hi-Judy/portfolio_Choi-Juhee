@@ -55,9 +55,9 @@
 				<p id="comCode" style="display: inline-block;"></p>
 				
 				<button type="button" id="btnInit" class="btn" style="display: inline-block; float : right; margin : 5px;">초기화</button>
-				<button type="button" id="btnStart" class="btn" style="display: inline-block; float : right; margin : 5px;">시작</button>
-				<button type="button" id="btnStop" class="btn" style="display: inline-block; float : right; margin : 5px;">중지</button>
 				<button type="button" id="btnReStart" class="btn" style="display: inline-block; float : right; margin : 5px;">재시작</button>
+				<button type="button" id="btnStop" class="btn" style="display: inline-block; float : right; margin : 5px;">중지</button>
+				<button type="button" id="btnStart" class="btn" style="display: inline-block; float : right; margin : 5px;">시작</button>
 			</div>
 			
 			</div>
@@ -152,26 +152,50 @@
 					console.log(checkedCommand[0].podtCode);
 					console.log(checkedCommand[0].comCode);
 					console.log(checkedCommand[0].comEtc);
-					fetch("${pageContext.request.contextPath}/selectProcess/"
-							+checkedCommand[0].podtCode+ "/" +checkedCommand[0].comCode + "/" +checkedCommand[0].comEtc )
-											
-					.then((response) => response.json())
-					.then((data)=> {
-						console.log(data.data.contents);
-						//console.log(data.data.contents[0].podtCode);
-						//console.log(data.data.contents[0].comCode);
-						gridProcess.resetData(data.data.contents) //파싱한 결과 = data
-						gridProcess.refreshLayout();
-						
-						let mandate = document.querySelector("#txtManDate").value; //작업일 인풋태그 입력값
-						//console.log(mandate);
-						
-						
-						document.getElementById("podtCode").innerHTML = data.data.contents[0].podtCode
-						document.getElementById("podtName").innerHTML = data.data.contents[0].podtName
-						document.getElementById("comCode").innerHTML = data.data.contents[0].comCode
 					
-					})
+					if(checkedCommand[0].comEtc == "지시완료"){
+						
+						fetch("${pageContext.request.contextPath}/selectProcess/"
+								+checkedCommand[0].podtCode+ "/" +checkedCommand[0].comCode + "/" +checkedCommand[0].comEtc )
+												
+						.then((response) => response.json())
+						.then((data)=> {
+							console.log(data.data.contents);
+							//console.log(data.data.contents[0].podtCode);
+							//console.log(data.data.contents[0].comCode);
+							gridProcess.resetData(data.data.contents) //파싱한 결과 = data
+							gridProcess.refreshLayout();
+							
+							let mandate = document.querySelector("#txtManDate").value; //작업일 인풋태그 입력값
+							//console.log(mandate);
+							
+							
+							document.getElementById("podtCode").innerHTML = data.data.contents[0].podtCode
+							document.getElementById("podtName").innerHTML = data.data.contents[0].podtName
+							document.getElementById("comCode").innerHTML = data.data.contents[0].comCode
+						
+						})
+					} else{
+						fetch("${pageContext.request.contextPath}/findProcess/"
+								+checkedCommand[0].podtCode+ "/" +checkedCommand[0].comCode + "/" +checkedCommand[0].comEtc )
+												
+						.then((response) => response.json())
+						.then((data)=> {
+							console.log(data.data.contents);
+							//console.log(data.data.contents[0].podtCode);
+							//console.log(data.data.contents[0].comCode);
+							gridProcess.resetData(data.data.contents) //파싱한 결과 = data
+							gridProcess.refreshLayout();
+							
+							let mandate = document.querySelector("#txtManDate").value; //작업일 인풋태그 입력값
+							//console.log(mandate);
+							
+							
+							document.getElementById("podtCode").innerHTML = data.data.contents[0].podtCode
+							document.getElementById("podtName").innerHTML = data.data.contents[0].podtName
+							document.getElementById("comCode").innerHTML = data.data.contents[0].comCode
+						})
+					}
 					
 					dialogCommand.dialog("close");
 				},

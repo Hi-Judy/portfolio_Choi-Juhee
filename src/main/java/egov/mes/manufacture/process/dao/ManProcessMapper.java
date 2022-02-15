@@ -57,6 +57,9 @@ public interface ManProcessMapper {
 	
 	//지시된 제품에 해당하는 공정 조회
 	List<ManProcessVO> selectProcess(ManProcessVO processVO);
+	
+	//생산중 & 생산완료 제품에 해당하는 공정 정보
+	List<ManProcessVO> findProcess(ManProcessVO processVO);
 
 	//생산지시서 조회
 	List<ManProcessVO> selectCommand(ManProcessVO processVO);

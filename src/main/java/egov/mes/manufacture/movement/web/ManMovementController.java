@@ -34,7 +34,7 @@ public class ManMovementController {
 							  Model model) {
 		//System.out.println(movementVO);
 
-		model.addAttribute("result", service.selectCommand(movementVO));
+		model.addAttribute("result", service.findCommand(movementVO));
 		return "jsonView";
 	}
 	

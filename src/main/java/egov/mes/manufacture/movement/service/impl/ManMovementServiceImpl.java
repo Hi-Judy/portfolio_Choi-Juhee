@@ -17,8 +17,8 @@ public class ManMovementServiceImpl implements ManMovementService {
 
 	//생산지시서 조회
 	@Override
-	public List<ManMovementVO> selectCommand(ManMovementVO movementVO) {
-		return mapper.selectCommand(movementVO);
+	public List<ManMovementVO> findCommand(ManMovementVO movementVO) {
+		return mapper.findCommand(movementVO);
 	}
 
 	//공정이동표

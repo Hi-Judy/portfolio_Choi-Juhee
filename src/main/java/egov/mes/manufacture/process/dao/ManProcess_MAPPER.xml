@@ -144,7 +144,8 @@
 
 <!-- 브라우저 화면에 보여줄 진행공정 테이블 -->
 <select id="selectProcList" resultType="egov.mes.manufacture.process.dao.ManProcessVO">
-	select c.man_startTime as manStarttime, c.man_endTime as manEndtime, c.man_qnt,c.def_qnt,
+	select c.man_startTime as manStarttime, c.man_endTime as manEndtime, 
+		   c.man_qnt, nvl(c.def_qnt, 0) as defQnt,
            d.fac_code, prod_detail(d.fac_code) as facName, 
            d.proc_code, prod_detail(d.proc_code) as procName,
            e.man_goalperday as manGoalPerday,
