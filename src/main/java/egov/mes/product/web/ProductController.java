@@ -33,9 +33,6 @@ public class ProductController {
 		if (product.getManDateend().equals("1910-12-25")) {
 			product.setManDateend(null) ;
 		}
-		/*
-		 * if (product.getStatus().equals("null")) { product.setStatus(null) ; }
-		 */
 		
 		List<ProductVO> list = service.podtList(product) ;
 		ModelAndView jsonView = new ModelAndView("jsonView") ;
@@ -102,8 +99,6 @@ public class ProductController {
 		return jsonView ;
 	}
 	
-	// ↓테스트
-	
 	@RequestMapping("ProductTestPage")
 	public String productTest() {
 		return "product/product_test.tiles" ;
@@ -117,8 +112,6 @@ public class ProductController {
 		jsonView.addObject("producttest" , result) ;
 		return jsonView ;
 	}
-	
-	// ↑테스트
 	
 	@RequestMapping("viewQR/{comCode}")
 	public String productTest3(ProductVO product , Model model) {

@@ -269,6 +269,7 @@
 					dataType : 'json' ,
 					async : false ,
 					success : function(datas) {
+						document.querySelector('#div_load_image').style='display:none';
 						
 						// 조회 누를때마다 중복으로 안들어가도록 함
 						second.생산완료 = [] ;
@@ -407,7 +408,7 @@
 		let data = { podtEtc : '출하' , podtInput : '0'} ;
 		grid.appendRow(data) ;
 		
-		$.ajax({
+/* 		$.ajax({
 			url : 'selectOptions' ,
 			dataType : 'json' ,
 			async : false ,
@@ -454,7 +455,7 @@
 			error : function(reject) {
 				console.log(reject) ;
 			}
-		})
+		}) */
 	})
 	
 	$("#btnInsert").on("click" , function() {		

@@ -3,18 +3,14 @@
 <mapper namespace="egov.mes.product.dao.ProductMapper">
 	
 	<select id="podtList" resultType="egov.mes.product.dao.ProductVO">
-		select qnt_infono , podt_code , fn_get_code_name(podt_code) as codeName , man_date , podt_input , podt_output , podt_etc , podt_lot ,
-			   com_code
+		select qnt_infono , podt_code , fn_get_code_name(podt_code) as codeName , 
+				man_date , podt_input , podt_output , podt_etc , podt_lot , com_code
 		from product_qnt_info
 		where podt_etc != '작년'
 		
 		<if test="podtCode != null">
 			and podt_code = #{podtCode}
 		</if>
-		
-<!-- 		<if test="status != null">
-			and podt_etc = #{status}
-		</if> -->
 		
 		<if test="manDatestart != null">
 			<![CDATA[
@@ -45,7 +41,8 @@
 	</select>
 	
 	<insert id="insertInOut">
-		{ call p_insert_lotno(#{qntInfono},#{podtCode},#{manDate},#{podtInput},#{podtOutput},#{podtEtc},#{podtLot}) }
+		{ call p_insert_lotno(#{qntInfono},#{podtCode},#{manDate},#{podtInput},#{podtOutput},
+							  #{podtEtc},#{podtLot}) }
 	</insert>
 	
 	<update id="updateLotno" statementType="CALLABLE">
@@ -61,15 +58,14 @@
 		from product_qnt_info 
 		group by podt_code , podt_lot
 	</select>
-	
-	<!-- 테스트 -->
 	<insert id="productTest" statementType="CALLABLE">
 		{ call p_product_test(#{comCode},#{comNoDetail},#{podtCode},#{podtInput},#{podtOutput}) }
 	</insert>
 	
 	<select id="selectQR" resultType="egov.mes.product.dao.ProductVO">
-		select pqi.podt_code , fn_get_code_name(pqi.podt_code) as podtName , to_char(pqi.man_date,'yyyy-MM-dd') as manDate2 , pqi.com_code ,
-	    	mc.man_plan_no , mp.ord_code
+		select pqi.podt_code , fn_get_code_name(pqi.podt_code) as podtName , 
+				to_char(pqi.man_date,'yyyy-MM-dd') as manDate2 , pqi.com_code ,	mc.man_plan_no , 
+				mp.ord_code
 		from product_qnt_info pqi    
 		join manufacture_command mc
 		on pqi.com_code = mc.com_code
@@ -77,7 +73,6 @@
 		on mc.man_plan_no = mp.man_plan_no 
 		where pqi.com_code = #{comCode} 
 	</select>
-	<!-- 테스트 -->
 	
 	<select id="selectPodtOptions" resultType="egov.mes.product.dao.ProductVO">
 		select code , code_name from common_code where group_code = 'podt'
