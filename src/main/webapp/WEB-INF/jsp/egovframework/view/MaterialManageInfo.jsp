@@ -107,7 +107,7 @@ span.ui-dialog-title {
 			    
 			    <div style="width: 100%; margin-top: 15px;">
 				    <div style=" float: right;" >
-						<input id="MatInvenBtn" class="btn" type="button" value="월별 자재고 조회">
+						<input id="MatInvenBtn" class="btn" type="button" value="월별 자재 조회">
 					</div>	
 					<div id="grid2" style="border-top: 3px solid #168; width: 700px; height: 500px; float: left;"></div>
 				</div>
