@@ -32,7 +32,7 @@
 			// 우리조서버 52.86.104.126:8080
 			let code = '${code}' ;			
 			// 집
-			//let url = "http://192.168.0.8/yedamfinal2/viewQR /" + code ;
+			//let url = "http://192.168.0.8/yedamfinal2/viewQR/" + code ;
 			// 학원
 			//let url = "http://192.168.0.60/yedam_final2/viewQR/" + code ;
 			// 서버

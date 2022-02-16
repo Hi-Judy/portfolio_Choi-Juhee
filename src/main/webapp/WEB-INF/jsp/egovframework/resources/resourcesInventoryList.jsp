@@ -264,13 +264,12 @@
 			})
 		});
 	
+	//자재구분이 정산입고
 	grid.on("onGridUpdated", function(ev){
 		for(i=0; i<grid.getRowCount(); i++){
 			if(grid.getValue(i, "storeFlag") == '정산입고'){
-				console.log(grid.getValue(i, "storeFlag"))
 				grid.addCellClassName(i, 'storeFlag', 'in')
 			}else if(grid.getValue(i, "storeFlag") == '정산출고'){
-				console.log(grid.getValue(i, "storeFlag"))
 				grid.addCellClassName(i, 'storeFlag', 'out')
 			}
 		}

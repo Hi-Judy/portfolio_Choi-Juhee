@@ -85,7 +85,6 @@
 							grid.setValue(i, "rscPassCnt", "");
 							grid.setValue(i, "defCode", "");
 							grid.setValue(i, "rscDefCnt", "0");
-							//grid.setValue(i, "rscPassCnt", grid.getValue(i,"rscCnt"));
 						}
 					}
 					dialogOrder.dialog("close");

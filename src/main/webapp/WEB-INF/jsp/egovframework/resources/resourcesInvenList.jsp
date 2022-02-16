@@ -15,7 +15,7 @@
 	font-weight: normal;
 	color: #ffffff;
 }
-.ab
+.inven
 	{
 		color: #ff1004;
 		font-weight: bold;
@@ -272,8 +272,7 @@
 			if(gr < 0){
 				let a =(gr*-1)
 				grid.setValue(i, "shortage", a.toString().replace(/\B(?<!\.\d*)(?=(\d{3})+(?!\d))/g, ","));
-				//grid.addRowClassName(i, 'ab')
-				grid.addCellClassName(i, 'shortage', 'ab')
+				grid.addCellClassName(i, 'shortage', 'inven')
 			}else{
 				grid.setValue(i, "shortage", 0);
 			}
@@ -343,15 +342,36 @@
 						},
 						{
 							header: '입고량',
-							name: 'istCnt'
+							name: 'istCnt',
+							formatter(value) {
+								if(value.value != null && value.value != '' ){
+									  return value.value.toString().replace(/\B(?<!\.\d*)(?=(\d{3})+(?!\d))/g, ",");
+								}else{
+									return value.value ;
+								}
+				            }
 						},
 						{
 							header: '출고량',
-							name: 'ostCnt'
+							name: 'ostCnt',
+							formatter(value) {
+								if(value.value != null && value.value != '' ){
+									  return value.value.toString().replace(/\B(?<!\.\d*)(?=(\d{3})+(?!\d))/g, ",");
+								}else{
+									return value.value ;
+								}
+				            }
 						},
 						{
 							header: '재고',
-							name: 'rscCnt'
+							name: 'rscCnt',
+							formatter(value) {
+								if(value.value != null && value.value != '' ){
+									  return value.value.toString().replace(/\B(?<!\.\d*)(?=(\d{3})+(?!\d))/g, ",");
+								}else{
+									return value.value ;
+								}
+				            }
 						},
 					];
 	

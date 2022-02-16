@@ -6,7 +6,7 @@
 <meta charset="UTF-8">
 <title>자재 발주 관리</title>
 <style type="text/css">
-.ab
+.plan
 	{
 		color: #ff1004;
 		font-weight: bold;
@@ -91,6 +91,7 @@
 						let a = gridRsc.getCheckedRows()[i]
 						a.rowKey = i;
 						grid.appendRow(a);
+						grid.setValue(i, "rscCnt", "");
 					}
 					dialogRsc.dialog("close");
 				},
@@ -222,30 +223,15 @@
 		  columns
 		});
 	
-	//발주량 입력 -> 발주량 * 단가 = 합계 구해준다
+	
+	//발주량 입력시 발주량 * 단가 = 합계를 구해준다
 	grid.on("editingFinish",function(ev){
 		if(grid.getValue(ev["rowKey"], "rscPrc")!=null && grid.getValue(ev["rowKey"], "rscCnt")!=null){
 			grid.setValue(ev["rowKey"],"rscTotal",grid.getValue(ev["rowKey"], "rscPrc")*grid.getValue(ev["rowKey"], "rscCnt"));
 		}
 	});
 	
-	grid.on("successResponse", function(){
-		alert('저장완료되었습니다');
-	})
 	
-	//그리드 columnName = rscCode 클릭시 자재조회 모달 오픈
-// 	grid.on("click", function(ev){
-// 		if(ev["columnName"]=="rscCode"){
-// 			rscRowKey=ev["rowKey"];
-// 				dialogRsc.dialog("open");
-		
-// 		$("#dialog-form-rsc").load("recList",
-// 				function(){
-// 					console.log("자재 조회 모달 로드됨")
-// 			}
-// 		)}	
-// 	});
-
 	//추가 버튼 클릭
 	btnAdd.addEventListener("click", function(){
 		grid.clear();
@@ -265,11 +251,10 @@
 	//저장 버튼 클릭 -> 유효성 검사 
 	//발주량,입고요청일 미입력 -> alert 창으로 경고
 	//발주량 입력 -> 저장
-	//continue /break /return /switch ? case default 
 	btnSaveOrder.addEventListener("click", function(){
 		var j =0;
 		for(let i=0; i<grid.getRowCount(); i++){	
-			if(grid.getValue(i, "rscTotal") == 0){
+			if(grid.getValue(i, "rscCnt") == ""){
  				 alert("발주량을 입력해주세요.")
  				 j=0
 				 break;
@@ -372,12 +357,13 @@
 		  columns: columnsPlan
 		});
 	
+	//재고량이 계획수량과 안전재고보다 적으면 재고량 셀 색을 변경해준다 
 	gridPlan.on("onGridUpdated", function(ev){
 		for(i=0; i<gridPlan.getRowCount(); i++){
 			if(gridPlan.getValue(i, "sumofPlan")*1 > gridPlan.getValue(i, "rscCnt")*1){
-				gridPlan.addCellClassName(i, 'rscCnt', 'ab')
+				gridPlan.addCellClassName(i, 'rscCnt', 'plan')
 			}else if(gridPlan.getValue(i, "rscSfinvc")*1 > gridPlan.getValue(i, "rscCnt")*1){
-				gridPlan.addCellClassName(i, 'rscCnt', 'ab')
+				gridPlan.addCellClassName(i, 'rscCnt', 'plan')
 			}
 		}
 	})

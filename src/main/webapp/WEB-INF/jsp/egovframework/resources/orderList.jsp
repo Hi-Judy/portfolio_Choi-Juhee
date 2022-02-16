@@ -260,6 +260,7 @@
 		  contentType: 'application/json'
 		};
 	
+	
 	//메인 그리드 설정
 	var grid = new Grid({
 		  el: document.getElementById('grid'),
@@ -303,6 +304,7 @@
 	    end: [ev.rowKey, grid.getColumns().length-1]
 	   });     
 	})
+	
 
 	//조회버튼 클릭시 input 태그의 값을 넘겨서 원하는 데이터를 가지고 온다
 	$("#btnSelect").on("click", function(){
@@ -318,7 +320,6 @@
 				var datalist = JSON.parse(da);
 				grid.resetData(datalist["data"]["contents"]);
 			})
-					
 		})
 		
 	
