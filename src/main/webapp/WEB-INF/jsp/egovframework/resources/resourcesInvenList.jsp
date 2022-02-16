@@ -343,15 +343,36 @@
 						},
 						{
 							header: '입고량',
-							name: 'istCnt'
+							name: 'istCnt',
+							formatter(value) {
+								if(value.value != null && value.value != '' ){
+									  return value.value.toString().replace(/\B(?<!\.\d*)(?=(\d{3})+(?!\d))/g, ",");
+								}else{
+									return value.value ;
+								}
+				            }
 						},
 						{
 							header: '출고량',
-							name: 'ostCnt'
+							name: 'ostCnt',
+							formatter(value) {
+								if(value.value != null && value.value != '' ){
+									  return value.value.toString().replace(/\B(?<!\.\d*)(?=(\d{3})+(?!\d))/g, ",");
+								}else{
+									return value.value ;
+								}
+				            }
 						},
 						{
 							header: '재고',
-							name: 'rscCnt'
+							name: 'rscCnt',
+							formatter(value) {
+								if(value.value != null && value.value != '' ){
+									  return value.value.toString().replace(/\B(?<!\.\d*)(?=(\d{3})+(?!\d))/g, ",");
+								}else{
+									return value.value ;
+								}
+				            }
 						},
 					];
 	

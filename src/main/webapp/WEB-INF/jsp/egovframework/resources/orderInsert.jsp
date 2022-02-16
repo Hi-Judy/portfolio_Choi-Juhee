@@ -91,6 +91,7 @@
 						let a = gridRsc.getCheckedRows()[i]
 						a.rowKey = i;
 						grid.appendRow(a);
+						grid.setValue(i, "rscCnt", "");
 					}
 					dialogRsc.dialog("close");
 				},
@@ -265,11 +266,10 @@
 	//저장 버튼 클릭 -> 유효성 검사 
 	//발주량,입고요청일 미입력 -> alert 창으로 경고
 	//발주량 입력 -> 저장
-	//continue /break /return /switch ? case default 
 	btnSaveOrder.addEventListener("click", function(){
 		var j =0;
 		for(let i=0; i<grid.getRowCount(); i++){	
-			if(grid.getValue(i, "rscTotal") == 0){
+			if(grid.getValue(i, "rscCnt") == ""){
  				 alert("발주량을 입력해주세요.")
  				 j=0
 				 break;

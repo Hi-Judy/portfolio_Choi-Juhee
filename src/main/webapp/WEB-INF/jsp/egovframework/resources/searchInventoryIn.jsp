@@ -174,7 +174,7 @@ div#OverallSize {
 		  columns: columnsInvIn,
 		  pageOptions: {
 			    useClient: true,
-			    perPage: 15
+			    perPage: 10
 			} 
 		});
 	
