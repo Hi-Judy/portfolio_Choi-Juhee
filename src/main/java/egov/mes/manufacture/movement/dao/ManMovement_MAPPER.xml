@@ -26,9 +26,10 @@
 
 <!-- 공정이동표 -->
 <select id="selectMovement" resultType="egov.mes.manufacture.movement.dao.ManMovementVO">
-	select c.proc_code, prod_detail(c.proc_Code) as procName, 
+	select c.proc_code as procCode, prod_detail(c.proc_Code) as procName, 
 		   to_char(c.man_startTime,'yyyy-MM-dd') as manStartdate, 
-		   c.man_qnt, c.def_qnt,
+		   nvl(c.man_qnt, 0) as manQnt, 
+		   nvl(c.def_qnt, 0) as defQnt,
            d.emp_id, d.emp_name,
            e.podt_code, prod_detail(e.podt_code)as podtName, e.man_goalperday
 	from manufacture_process c join (select a.proc_code, prod_detail(a.proc_code),
@@ -42,7 +43,8 @@
 	join manufacture_command_d e
 	on c.com_code = e.com_code
 
-	where c.com_Code= #{comCode}                                       
+	where c.com_Code= #{comCode}    
+	order by c.proc_code                                   
 </select>
 
 
