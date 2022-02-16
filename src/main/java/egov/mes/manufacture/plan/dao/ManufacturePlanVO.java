@@ -20,7 +20,9 @@ public class ManufacturePlanVO {
 	
 	String manPlanNo; //계획번호
 	String manPlanName; //계획명
-	String manPlanDate; //계획일자
+	@DateTimeFormat(pattern = "yyyy-MM-dd")
+	@JsonFormat(pattern = "yyyy-MM-dd", timezone = "Asia/Seoul")
+	Date manPlanDate; //계획일자
 	
 	String planNoDetail; //계획디테일 번호
 	String planStartDate; //작업시작일
@@ -29,9 +31,12 @@ public class ManufacturePlanVO {
 	
 	String manPerday; //일 생산량
 	String planEtc; //비고
-	
-	String startDate; //계획기간조회 
-	String endDate; //계획기간조회
+	@DateTimeFormat(pattern = "yyyy-MM-dd")
+	@JsonFormat(pattern = "yyyy-MM-dd", timezone = "Asia/Seoul")
+	Date startDate; //계획기간조회 
+	@DateTimeFormat(pattern = "yyyy-MM-dd")
+	@JsonFormat(pattern = "yyyy-MM-dd", timezone = "Asia/Seoul")
+	Date endDate; //계획기간조회
 	
 	String facOutput; //설비당 생산량
 	String facRuntime; //설비당 소요시간
