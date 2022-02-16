@@ -137,6 +137,8 @@
 			}
 		});
 	
+		//******************************작업일자 기본값******************************
+		document.getElementById('txtManStartDate').value = new Date().toISOString().substring(0, 10);
 	
 		
 		//******************************생산지시조회 모달******************************
@@ -301,6 +303,7 @@
 			rowHeaders : [ 'rowNum' ],
 	         bodyHeight: 230
 		})
+
 		
 		
 		
@@ -347,7 +350,7 @@
 		const columnsMovement = [
 			{
 				header : '공정코드',
-				name : 'podtCode',
+				name : 'procCode',
 				align : 'center'
 			}, 
 			{
@@ -369,7 +372,13 @@
 				header : '작업완료량',
 				name : 'manQnt',
 				align : 'center',
-				formatter(value) { return value.value.toString().replace(/\B(?<!\.\d*)(?=(\d{3})+(?!\d))/g, ",") ;}
+				formatter(value) { 
+					if(value.value != null && value.value != '' && value.value != "null"){
+		        		return value.value.toString().replace(/\B(?<!\.\d*)(?=(\d{3})+(?!\d))/g, ",") ;
+		        	}else{
+		        		return value.value ;  
+		        	}
+				}
 			},
 			{
 				header : '불량량',
@@ -391,8 +400,55 @@
 			data: null,
 			columns: columnsMovement,
 			rowHeaders: ['rowNum'],
-	         bodyHeight: 290
+	         bodyHeight: 350
+	         
 			
+		})
+		
+		
+		//공정그리드 업데이트 이후		
+		gridMovement.on('onGridUpdated', function(){		
+			
+			let def = 0;
+			
+		    for(let j=0; j<gridMovement.getData().length; j++){
+				let manQnt = gridMovement.getValue(j, 'manQnt'); //현재공정의 생산량
+				let defQnt = gridMovement.getValue(j, 'defQnt'); //현재공정의 불량량
+				let procCode = gridMovement.getValue(j, 'procCode'); //현재공정의 공정코드
+				let manGoalPerday = gridSelCommand.getValue(0, 'manGoalperday') ; //목표량
+
+				console.log(manQnt);
+				console.log(defQnt);
+				console.log(procCode);
+				console.log(manGoalPerday);
+				
+				let procCode2 = gridMovement.getValue(j-1, 'procCode'); //전공정의 공정코드
+				let defQnt2 = gridMovement.getValue(j-1, 'defQnt'); //전공정의 불량량
+				
+				let prevQnt = gridMovement.getValue(j-1,'manQnt') ;  //전공정의 생산량
+				
+				if (defQnt != null) {
+	               if (procCode == 'PROC001') {
+	            	   gridMovement.setValue(j, 'manQnt', ( (manGoalPerday*1) - (defQnt*1) ) );
+	               } else if ( procCode >= 'PROC002') {
+	            	   gridMovement.setValue(j, 'manQnt', ( (prevQnt*1) - (defQnt*1) ) );
+	                  if (procCode >= 'PROC008') {
+	                	  gridMovement.setValue(j, 'manQnt', prevQnt );
+	                  }
+	               }
+	            } else {
+	               if (procCode == 'PROC001') {
+	            	   gridMovement.setValue(j, 'manQnt', ( (manGoalPerday*1) - 0 ) );
+	               } else if ( procCode >= 'PROC002') {
+	            	   gridMovement.setValue(j, 'manQnt', ( (prevQnt*1) - 0 ) );
+	                  if (procCode >= 'PROC008') {
+	                	  gridMovement.setValue(j, 'manQnt', prevQnt );
+	                  }
+	               }
+	            }
+
+			} 
+
 		})
 		//------------ 도움말 버튼 이벤트 ---------------
 	 	 helpBtn.addEventListener('mouseover' , () => {

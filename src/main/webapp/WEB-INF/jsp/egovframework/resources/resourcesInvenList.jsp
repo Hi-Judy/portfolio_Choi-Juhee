@@ -15,7 +15,7 @@
 	font-weight: normal;
 	color: #ffffff;
 }
-.ab
+.inven
 	{
 		color: #ff1004;
 		font-weight: bold;
@@ -272,8 +272,7 @@
 			if(gr < 0){
 				let a =(gr*-1)
 				grid.setValue(i, "shortage", a.toString().replace(/\B(?<!\.\d*)(?=(\d{3})+(?!\d))/g, ","));
-				//grid.addRowClassName(i, 'ab')
-				grid.addCellClassName(i, 'shortage', 'ab')
+				grid.addCellClassName(i, 'shortage', 'inven')
 			}else{
 				grid.setValue(i, "shortage", 0);
 			}

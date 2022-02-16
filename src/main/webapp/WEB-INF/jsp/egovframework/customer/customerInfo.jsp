@@ -481,6 +481,7 @@
 					contentType : 'application/json ; charset=utf-8;' , 
 					async : false ,
 					success : function(datas) {
+						document.querySelector('#div_load_image').style='display:none';
 						alert('수정완료되었습니다.') ;
 						data4 = datas.update ;
 						grid4.resetData(data4) ;
