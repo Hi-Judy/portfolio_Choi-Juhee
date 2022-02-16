@@ -16,7 +16,7 @@ public class ManMovementVO {
 	
 	//공정
 	String manQnt; //작업완료량
-	String prodCode; //공정코드
+	String procCode; //공정코드
 	String procName; //공정명
 	String empId; //사번
 	String empName; //사원명

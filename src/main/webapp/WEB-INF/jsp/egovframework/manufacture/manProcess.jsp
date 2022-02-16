@@ -139,6 +139,10 @@
 		});
 		
 		
+		//******************************작업일자 기본값******************************
+		document.getElementById('txtManDate').value = new Date().toISOString().substring(0, 10);
+		
+		
 		//******************************생산지시조회 모달******************************
 		//생산지시 조회 모달 설정
 		let dialogCommand = $("#dialog-form-manCommand").dialog({
@@ -149,9 +153,9 @@
 			buttons : {
 				"확인" : function() {
 					//console.log("확인 테스트");
-					console.log(checkedCommand[0].podtCode);
-					console.log(checkedCommand[0].comCode);
-					console.log(checkedCommand[0].comEtc);
+					//console.log(checkedCommand[0].podtCode);
+					//console.log(checkedCommand[0].comCode);
+					//console.log(checkedCommand[0].comEtc);
 					
 					if(checkedCommand[0].comEtc == "지시완료"){
 						
@@ -160,7 +164,7 @@
 												
 						.then((response) => response.json())
 						.then((data)=> {
-							console.log(data.data.contents);
+							//console.log(data.data.contents);
 							//console.log(data.data.contents[0].podtCode);
 							//console.log(data.data.contents[0].comCode);
 							gridProcess.resetData(data.data.contents) //파싱한 결과 = data
@@ -168,7 +172,6 @@
 							
 							let mandate = document.querySelector("#txtManDate").value; //작업일 인풋태그 입력값
 							//console.log(mandate);
-							
 							
 							document.getElementById("podtCode").innerHTML = data.data.contents[0].podtCode
 							document.getElementById("podtName").innerHTML = data.data.contents[0].podtName
@@ -181,7 +184,7 @@
 												
 						.then((response) => response.json())
 						.then((data)=> {
-							console.log(data.data.contents);
+							//console.log(data.data.contents);
 							//console.log(data.data.contents[0].podtCode);
 							//console.log(data.data.contents[0].comCode);
 							gridProcess.resetData(data.data.contents) //파싱한 결과 = data
@@ -189,7 +192,6 @@
 							
 							let mandate = document.querySelector("#txtManDate").value; //작업일 인풋태그 입력값
 							//console.log(mandate);
-							
 							
 							document.getElementById("podtCode").innerHTML = data.data.contents[0].podtCode
 							document.getElementById("podtName").innerHTML = data.data.contents[0].podtName
@@ -280,7 +282,7 @@
 			data: null,
 			columns: columnsCommand,
 			rowHeaders: ['checkbox'],
-	         bodyHeight: 300
+	        bodyHeight: 300
 			
 		})
 		
@@ -347,12 +349,12 @@
 			data : null,
 			columns : columnsProcess,
 			rowHeaders : [ 'rowNum' ],
-	         bodyHeight: 430
+	        bodyHeight: 430
 		})
 		
 		let btnStart = document.getElementById("btnStart");
 		
-		gridProcess.on('onGridUpdated', function(){				
+		gridProcess.on('onGridUpdated', function(){
 			for(let i=0; i<gridProcess.getRowCount(); i++){
 				if(gridProcess.getValue(i, 'manQnt') != null){
 					btnStart.disabled = true;
@@ -360,18 +362,19 @@
 					btnStart.disabled = false;
 				}
 			}
+			
 			let def = 0;
 			
 		   for(let j=0; j<gridProcess.getData().length; j++){
-				let manQnt = gridProcess.getValue(j, 'manQnt'); //현재공정의 생산량
-				let defQnt = gridProcess.getValue(j, 'defQnt'); //현재공정의 불량량
-				let procCode = gridProcess.getValue(j, 'procCode'); //현재공정의 공정코드
-				let manGoalPerday = gridProcess.getValue(j, 'manGoalPerday') ; //목표량
+				let manQnt = gridProcess.getValue(j, 'manQnt'); 
+				let defQnt = gridProcess.getValue(j, 'defQnt'); 
+				let procCode = gridProcess.getValue(j, 'procCode'); 
+				let manGoalPerday = gridProcess.getValue(j, 'manGoalPerday') ; 
 				
-				let procCode2 = gridProcess.getValue(j-1, 'procCode'); //전공정의 공정코드
-				let defQnt2 = gridProcess.getValue(j-1, 'defQnt'); //전공정의 불량량
+				let procCode2 = gridProcess.getValue(j-1, 'procCode'); 
+				let defQnt2 = gridProcess.getValue(j-1, 'defQnt'); 
 				
-				let prevQnt = gridProcess.getValue(j-1,'manQnt') ;  //전공정의 생산량
+				let prevQnt = gridProcess.getValue(j-1,'manQnt') ; 
 				
 				if (defQnt != null) {
 		               if (procCode == 'PROC001') {
@@ -382,42 +385,27 @@
 		                     gridProcess.setValue(j, 'manQnt', prevQnt );
 		                  }
 		               }
-		            } else {
-		               if (procCode == 'PROC001') {
-		                  gridProcess.setValue(j, 'manQnt', ( (manGoalPerday*1) - 0 ) );
-		               } else if ( procCode >= 'PROC002') {
-		                  gridProcess.setValue(j, 'manQnt', ( (prevQnt*1) - 0 ) );
-		                  if (procCode >= 'PROC008') {
-		                     gridProcess.setValue(j, 'manQnt', prevQnt );
-		                  }
-		               }
-		            }
+	            } else {
+	               if (procCode == 'PROC001') {
+	                  gridProcess.setValue(j, 'manQnt', ( (manGoalPerday*1) - 0 ) );
+	               } else if ( procCode >= 'PROC002') {
+	                  gridProcess.setValue(j, 'manQnt', ( (prevQnt*1) - 0 ) );
+	                  if (procCode >= 'PROC008') {
+	                     gridProcess.setValue(j, 'manQnt', prevQnt );
+	                  }
+	               }
+	            }
 				
-/* 				gridProcess.setValue(j, 'manQnt', ( (manQnt*1) - (defQnt*1) ) ); //생산량 - 불량량
-				
-				let prevQnt = gridProcess.getValue(j-1,'manQnt') ;
-				
-				gridProcess.setValue(j, 'manQnt', prevQnt); */
-				/* if( defQnt2 != null ){ // 이전공정의 불량량이 null이 아니라면
-					
-					let prevQnt = gridProcess.getValue(j-1,'manQnt') ;
-					
-					gridProcess.setValue(j, 'manQnt', prevQnt);
-					console.log(manQnt);
-				} */
 			} 
 
 		})
 		 		
 		
-		//******************************공정시작 버튼******************************
 		let processData;
 		
 		$("#btnStart").click(function(){
-			//console.log('공정시작버튼 클릭');
-			//console.log(document.getElementById("podtCode").innerHTML);
 			
-			$.ajax({ //시작버튼 클릭 -> 제품에 해당하는 공정 조회 -> 그 공정갯수만큼 진행공정 테이블에 insert
+			$.ajax({ 
 				url: '${pageContext.request.contextPath}/selectProc',
 				method: 'POST',
 				data : JSON.stringify( 
@@ -427,7 +415,6 @@
 				dataType: 'JSON',
 				contentType: 'application/json',
 				success: function(datas){
-					//console.log("진행공정 테이블 값 추가 성공");
 					resetProcess();
 					
 				},
@@ -440,40 +427,27 @@
 			$("#moveImg").css("display","block") ;
 			
 		})
-		/*
-		gridProcess.on("afterChange" , (ev) => {
-			console.log('ev.changes[0]') ;
-			console.log(ev.changes[0]) ;
-			if(ev.changes[0].columnName=="cusType"){ 
-				if(gridProcess.getRowAt(gridProcess.getData().length-1).cusPhone!=null){
-					console.log(grid.getRowAt(grid.getData().length-1).cusPhone);
-				}else{
-					console.log(grid.getRowAt(grid.getData().length-1).cusPhone);
-				}
-			} 
-			
-		})
-		*/
-		//******************************생산현황 화면 reset******************************
+
+		
 		function resetProcess(){
 			fetch('${pageContext.request.contextPath}/selectProcList',{
 				method: "POST",
 				headers: {
-					"Content-Type": "application/json" //json으로 포맷설정.
+					"Content-Type": "application/json" 
 				},
 				body: JSON.stringify(
-					{'comCode' : document.getElementById("comCode").innerHTML } //vo에 담긴 필드명 : 실제 들어갈 값
+					{'comCode' : document.getElementById("comCode").innerHTML } 
 				)
 			})
 			.then((response) => response.json())
 			.then((data)=> {
-				gridProcess.resetData(data.result) //파싱한 결과 = data
+				gridProcess.resetData(data.result) 
 				gridProcess.refreshLayout();
 				if(data.result[data.result.length-1].manEndtime != null){
 					$("#stopImg").css("display","block") ;
 					$("#moveImg").css("display","none") ;					
 				}
-				resetProcess(); //재귀함수
+				resetProcess(); 
 			})
 			
 		}
@@ -529,11 +503,6 @@
 			})
 			
 		})
-		
-		
-		
-		
-		//******************************초기화 버튼******************************
 		
 		
 		
