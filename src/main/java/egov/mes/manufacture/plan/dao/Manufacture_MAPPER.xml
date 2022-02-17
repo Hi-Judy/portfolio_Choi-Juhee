@@ -99,7 +99,8 @@
 			#{manPerday},
 			'계획완료',
 			#{ordQnt},
-			to_date(#{planComplete}, 'yyyy-MM-dd') )
+			<!--to_date(#{planComplete}, 'yyyy-MM-dd') )-->
+			to_date('2022-02-17', 'yyyy-MM-dd') )
 </insert>
 
 
