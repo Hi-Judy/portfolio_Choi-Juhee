@@ -76,7 +76,8 @@
 			 	 from manufacture_plan 
              	 where man_plan_date = to_char(sysdate,'yy/mm/dd') )
              from dual),
-			to_date(#{manPlanDate}, 'yyyy-MM--dd') )	
+			<!--to_date(#{manPlanDate}, 'yyyy-MM--dd') )	-->
+			to_date('2022-02-17', 'yyyy-MM-dd') )
 </insert>
 
 
